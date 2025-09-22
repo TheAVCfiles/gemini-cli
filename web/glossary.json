@@ -1,0 +1,162 @@
+[
+  {
+    "term": "Abutment",
+    "definition": "Structural member that supports the end of a bridge span or arch and transfers loads to the foundation.",
+    "sources": "MWRA SpecBook"
+  },
+  {
+    "term": "Access Hatch",
+    "definition": "Framed opening that provides entry to underground or confined utility spaces for inspection and maintenance.",
+    "sources": "MWRA SpecBook"
+  },
+  {
+    "term": "Activated Carbon",
+    "definition": "Highly porous carbon media used to remove taste, odor, and organic contaminants from process water.",
+    "sources": "Water Treatment Manual"
+  },
+  {
+    "term": "Aeration Basin",
+    "definition": "Tank in which air is introduced to encourage biological oxidation of wastewater contaminants.",
+    "sources": "Wastewater Operations Guide"
+  },
+  {
+    "term": "Backflow Preventer",
+    "definition": "Mechanical device installed on a service line to prevent reversal of flow and contamination of potable water systems.",
+    "sources": "Cross Connection Control Policy"
+  },
+  {
+    "term": "Baffle Wall",
+    "definition": "Vertical partition within a tank that directs flow and promotes mixing or settling.",
+    "sources": "MWRA SpecBook"
+  },
+  {
+    "term": "Cavitation",
+    "definition": "Formation and collapse of vapor bubbles in a liquid due to localized low pressure, often damaging pump impellers.",
+    "sources": "Pump Maintenance Manual"
+  },
+  {
+    "term": "Chloramine",
+    "definition": "Disinfection compound formed by combining chlorine and ammonia for persistent residual protection in distribution systems.",
+    "sources": "Water Quality Standards"
+  },
+  {
+    "term": "Clarifier",
+    "definition": "Settling basin designed to remove suspended solids from water or wastewater through gravity separation.",
+    "sources": "MWRA SpecBook"
+  },
+  {
+    "term": "Combined Sewer Overflow",
+    "definition": "Discharge point where stormwater and sanitary sewage overflow together during wet-weather events.",
+    "sources": "CSO Control Plan"
+  },
+  {
+    "term": "Dechlorination",
+    "definition": "Process that neutralizes chlorine residuals prior to discharge to protect aquatic life.",
+    "sources": "NPDES Permit"
+  },
+  {
+    "term": "Dewatering",
+    "definition": "Removal of groundwater or process water from an excavation or sludge prior to handling.",
+    "sources": "Construction Site Management"
+  },
+  {
+    "term": "Diffused Aeration",
+    "definition": "Method of introducing air bubbles through submerged diffusers to transfer oxygen into wastewater.",
+    "sources": "Wastewater Operations Guide"
+  },
+  {
+    "term": "Digester",
+    "definition": "Sealed tank where sludge undergoes anaerobic biological stabilization to reduce pathogens and odors.",
+    "sources": "MWRA SpecBook"
+  },
+  {
+    "term": "Emergency Generator",
+    "definition": "Backup power unit that automatically engages to maintain critical plant operations during outages.",
+    "sources": "Electrical Resiliency Plan"
+  },
+  {
+    "term": "Flocculation",
+    "definition": "Gentle mixing process that encourages aggregation of suspended particles into larger flocs for clarification.",
+    "sources": "Water Treatment Manual"
+  },
+  {
+    "term": "Grit Chamber",
+    "definition": "Channel or tank designed to remove heavy inorganic solids such as sand and gravel from influent wastewater.",
+    "sources": "Preliminary Treatment Standards"
+  },
+  {
+    "term": "Headworks",
+    "definition": "Initial stage of a treatment facility that screens, measures, and controls incoming flows.",
+    "sources": "MWRA SpecBook"
+  },
+  {
+    "term": "Influent",
+    "definition": "Wastewater or process water entering a treatment plant or individual treatment unit.",
+    "sources": "Wastewater Operations Guide"
+  },
+  {
+    "term": "Langelier Index",
+    "definition": "Indicator that estimates the scaling or corrosive potential of water based on pH, alkalinity, hardness, and temperature.",
+    "sources": "Water Quality Standards"
+  },
+  {
+    "term": "Launder",
+    "definition": "Trough or channel that collects clarified water flowing over weirs within a basin.",
+    "sources": "MWRA SpecBook"
+  },
+  {
+    "term": "Manhole",
+    "definition": "Underground structure that provides access to pipelines or conduit systems for maintenance and inspection.",
+    "sources": "MWRA SpecBook"
+  },
+  {
+    "term": "Nutrient Removal",
+    "definition": "Biological or chemical process that reduces nitrogen and phosphorus concentrations prior to effluent discharge.",
+    "sources": "NPDES Permit"
+  },
+  {
+    "term": "Odor Scrubber",
+    "definition": "Air treatment unit that removes odorous compounds using chemical or biological media before exhaust.",
+    "sources": "Odor Control Master Plan"
+  },
+  {
+    "term": "Primary Clarification",
+    "definition": "Sedimentation stage that removes settleable solids and floating material from raw wastewater before biological treatment.",
+    "sources": "Wastewater Operations Guide"
+  },
+  {
+    "term": "Reclaimed Water",
+    "definition": "Treated wastewater that meets quality requirements for beneficial reuse such as irrigation or industrial processes.",
+    "sources": "Water Reuse Policy"
+  },
+  {
+    "term": "Residuals",
+    "definition": "Solid or semi-solid material generated from water or wastewater treatment processes requiring further handling.",
+    "sources": "Residuals Management Plan"
+  },
+  {
+    "term": "Scada",
+    "definition": "Supervisory Control and Data Acquisition system used to monitor and control distributed plant equipment.",
+    "sources": "Instrumentation Standards"
+  },
+  {
+    "term": "Secondary Treatment",
+    "definition": "Biological process that removes dissolved and colloidal organics following primary clarification.",
+    "sources": "Wastewater Operations Guide"
+  },
+  {
+    "term": "Slurry",
+    "definition": "Pumpable mixture of water and suspended solids used for tunnel support, excavation, or waste transport.",
+    "sources": "Construction Site Management"
+  },
+  {
+    "term": "Turbidity",
+    "definition": "Measure of water clarity based on the scattering of light by suspended particles.",
+    "sources": "Water Quality Standards"
+  },
+  {
+    "term": "Ultraviolet Disinfection",
+    "definition": "Treatment step that uses UV radiation to inactivate pathogens without chemical additives.",
+    "sources": "MWRA SpecBook"
+  }
+]

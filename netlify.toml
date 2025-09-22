@@ -1,0 +1,19 @@
+[build]
+  publish = "web"
+  functions = "netlify/functions"
+
+[dev]
+  command = "npx http-server web --port=8888 --cors"
+  targetPort = 8888
+  port = 8888
+
+[[redirects]]
+  from = "/ask"
+  to = "/.netlify/functions/ask"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=60"
