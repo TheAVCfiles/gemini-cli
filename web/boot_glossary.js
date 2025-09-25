@@ -184,9 +184,9 @@ function parseCsv(text) {
       }
     }
     parts.push(current);
-    const term = termIdx > -1 ? parts[termIdx] : parts[0];
-    const definition = defIdx > -1 ? parts[defIdx] : parts[1] || "";
-    const sources = sourceIdx > -1 ? parts[sourceIdx] : parts[2] || "";
+    const term = parts[termIdx];
+    const definition = parts[defIdx];
+    const sources = sourceIdx > -1 ? parts[sourceIdx] : "";
     if (term && definition) {
       entries.push({ term: term.trim(), definition: definition.trim(), sources: (sources || "").trim() });
     }
