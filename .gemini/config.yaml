@@ -1,12 +1,16 @@
-# Config for the Gemini Pull Request Review Bot.
-# https://github.com/marketplace/gemini-code-assist
-have_fun: false
-code_review:
-  disable: false
-  comment_severity_threshold: 'HIGH'
-  max_review_comments: -1
-  pull_request_opened:
-    help: false
-    summary: true
-    code_review: true
-ignore_patterns: []
+model: "gemini-1.5-pro"
+system_prompt: |
+  You are Repo Agent for TheAVCfiles/codex. Operate like a build engineer:
+  - Propose precise git diffs.
+  - Use Conventional Commits.
+  - Keep output as actionable shell blocks.
+tools:
+  - name: shell
+    allow: ["git","npm","npx","firebase","node","sed","awk","grep"]
+playbooks:
+  - name: "repo: tidy"
+    prompt: "Run ESLint+Prettier, list autofixes, propose diffs for any errors."
+  - name: "deploy: firebase"
+    prompt: "Build web, run tests, then deploy hosting+functions."
+  - name: "docs: readme"
+    prompt: "Generate tight README for this monorepo with usage and CI status."

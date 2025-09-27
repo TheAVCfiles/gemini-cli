@@ -1,0 +1,8 @@
+{
+  "hosting": {
+    "public": "apps/web/public",
+    "ignore": ["firebase.json","**/.*","**/node_modules/**"],
+    "rewrites": [{ "source": "/agent/**", "function": "agent" }]
+  },
+  "functions": { "source": "functions" }
+}

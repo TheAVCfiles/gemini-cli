@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DeCrypt the Girl — Agent Console</title>
+  </head>
+  <body>
+    <h1>DeCrypt the Girl — Agent Console</h1>
+    <textarea id="prompt" rows="6" style="width:100%" placeholder="Ask the Repo Agent to do something…"></textarea>
+    <button id="run">Run</button>
+    <pre id="out"></pre>
+    <script type="module">
+      document.getElementById('run').onclick = async () => {
+        const prompt = document.getElementById('prompt').value;
+        const res = await fetch('/agent/run', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({prompt})});
+        document.getElementById('out').textContent = await res.text();
+      };
+    </script>
+  </body>
+</html>
