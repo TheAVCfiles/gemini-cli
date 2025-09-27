@@ -75,6 +75,8 @@ npm install -g @google/gemini-cli@nightly
 
 ## 📋 Key Features
 
+> 🆕 Need to bootstrap Firebase hosting for the demo stack? Follow the [Firebase Bootstrap Deployment Guide](./docs/firebase-bootstrap-guide.md) for a strict, click-by-click walkthrough of the entire workflow.
+
 ### Code Understanding & Generation
 
 - Query and edit large codebases
