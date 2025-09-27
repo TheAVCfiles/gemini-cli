@@ -1,12 +1,29 @@
-# Config for the Gemini Pull Request Review Bot.
-# https://github.com/marketplace/gemini-code-assist
-have_fun: false
-code_review:
-  disable: false
-  comment_severity_threshold: 'HIGH'
-  max_review_comments: -1
-  pull_request_opened:
-    help: false
-    summary: true
-    code_review: true
-ignore_patterns: []
+model: "gemini-1.5-pro"
+system_prompt: |
+  You are Repo Agent for Decrypt-The-Girl. Operate like a build engineer:
+  - Propose exact shell commands or git diffs.
+  - Use Conventional Commits.
+  - Keep output actionable.
+playbooks:
+  - name: "deploy default"
+    prompt: "npm run deploy:default"
+  - name: "deploy app1"
+    prompt: "npm run deploy:app1"
+  - name: "deploy app2"
+    prompt: "npm run deploy:app2"
+  - name: "deploy app3"
+    prompt: "npm run deploy:app3"
+  - name: "deploy app4"
+    prompt: "npm run deploy:app4"
+  - name: "deploy app5"
+    prompt: "npm run deploy:app5"
+  - name: "deploy app6"
+    prompt: "npm run deploy:app6"
+  - name: "deploy app7"
+    prompt: "npm run deploy:app7"
+  - name: "deploy app8"
+    prompt: "npm run deploy:app8"
+  - name: "deploy app9"
+    prompt: "npm run deploy:app9"
+  - name: "deploy app10"
+    prompt: "npm run deploy:app10"
