@@ -33,6 +33,8 @@ This documentation is organized into the following sections:
   - **[Web Fetch Tool](./tools/web-fetch.md):** Documentation for the `web_fetch` tool.
   - **[Web Search Tool](./tools/web-search.md):** Documentation for the `google_web_search` tool.
   - **[Memory Tool](./tools/memory.md):** Documentation for the `save_memory` tool.
+- **Examples:**
+  - **[Vertex AI Search integration](./examples/vertex-ai-search.md):** Step-by-step guidance for connecting Gemini CLI agents to Vertex AI Search.
 - **[Contributing & Development Guide](../CONTRIBUTING.md):** Information for contributors and developers, including setup, building, testing, and coding conventions.
 - **[NPM](./npm.md):** Details on how the project's packages are structured
 - **[Troubleshooting Guide](./troubleshooting.md):** Find solutions to common problems and FAQs.
