@@ -61,7 +61,7 @@ fi
 
 trap_cleanup=false
 
-if "$DOWNLOAD"; then
+if $DOWNLOAD; then
   if ! command -v curl >/dev/null 2>&1; then
     echo "curl is required when using --download." >&2
     exit 1
