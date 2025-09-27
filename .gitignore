@@ -2,4 +2,6 @@ node_modules
 .DS_Store
 .env
 .gcp/credentials.json
+key.json
+key.json.backup.*
 firebase-debug.log

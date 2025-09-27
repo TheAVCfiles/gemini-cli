@@ -11,7 +11,9 @@
     "format": "prettier -w .",
     "test": "vitest run",
     "agent": "node packages/agent/run.js",
-    "deploy": "firebase deploy --non-interactive"
+    "deploy": "firebase deploy --non-interactive",
+    "gcp:setup": "./gcp-setup.sh",
+    "gcp:bootstrap": "./gcp-bootstrap.sh"
   },
   "devDependencies": {
     "eslint": "^9.13.0",
