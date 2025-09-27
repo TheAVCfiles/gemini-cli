@@ -83,6 +83,10 @@ if $DOWNLOAD; then
 
   rm -rf "$PATCH_DIR"
   mkdir -p "$PATCH_DIR"
+  if unzip -Z1 "$tmp_zip" | grep -q -e '^/' -e '\.\.'; then
+    echo "Error: Archive contains invalid file paths (absolute or traversal)." >&2
+    exit 1
+  fi
   unzip -q "$tmp_zip" -d "$PATCH_DIR"
 else
   if [ ! -d "$PATCH_DIR" ]; then
