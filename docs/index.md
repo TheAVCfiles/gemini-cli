@@ -12,6 +12,7 @@ This documentation is organized into the following sections:
 
 - **Execution and Deployment**
   - **[Running locally and in sandboxes](./deployment.md):** Information for running Gemini CLI.
+  - **[Set up a fresh Firebase project](./firebase-project-setup.md):** Create a new Firebase project with Authentication, Realtime Database, Hosting, and Cloud Functions.
   - **[Firebase Hosting quick start](./firebase-hosting.md):** Deploy the MWRA glossary demo with a single Firebase project.
 - **[Architecture Overview](./architecture.md):** Understand the high-level design of Gemini CLI, including its components and how they interact.
 - **CLI Usage:** Documentation for `packages/cli`.
