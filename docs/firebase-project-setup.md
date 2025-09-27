@@ -94,7 +94,7 @@ This guide walks through creating a brand-new Firebase project and wiring up the
 
    admin.initializeApp({
      credential: admin.credential.cert(serviceAccount),
-     databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+     databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
    });
 
    const db = admin.database();
