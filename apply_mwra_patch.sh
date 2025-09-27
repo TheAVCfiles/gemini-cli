@@ -117,7 +117,7 @@ for required in \
   fi
 done
 
-if "$trap_cleanup"; then
+if $trap_cleanup; then
   trap - EXIT
   cleanup || true
 fi
