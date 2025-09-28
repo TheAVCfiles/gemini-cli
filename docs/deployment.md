@@ -12,24 +12,37 @@ There are several ways to run Gemini CLI. The option you choose depends on how y
 
 This is the recommended way for end-users to install Gemini CLI. It involves downloading the Gemini CLI package from the NPM registry.
 
-- **Global install:**
+#### One-off (no installation required)
 
-  ```bash
-  npm install -g @google/gemini-cli
-  ```
+```bash
+npx https://github.com/google-gemini/gemini-cli
+```
 
-  Then, run the CLI from anywhere:
+This command runs the most recent commit from the GitHub repository without installing anything globally. Use it when you want to try the CLI quickly or test a pending change.
 
-  ```bash
-  gemini
-  ```
+#### Global install (stable channel)
 
-- **NPX execution:**
+```bash
+npm install -g @google/gemini-cli
+```
 
-  ```bash
-  # Execute the latest version from NPM without a global install
-  npx @google/gemini-cli
-  ```
+Then, run the CLI from anywhere:
+
+```bash
+gemini
+```
+
+#### Preview or nightly channels
+
+To test upcoming releases, install one of the pre-release tags:
+
+```bash
+npm install -g @google/gemini-cli@preview
+# or
+npm install -g @google/gemini-cli@nightly
+```
+
+Use the `preview` tag for the weekly preview build and the `nightly` tag for the latest build from `main`.
 
 ---
 
