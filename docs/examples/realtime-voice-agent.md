@@ -81,13 +81,23 @@ Create `index.html` alongside the server file:
       } from "https://cdn.jsdelivr.net/npm/@openai/agents@latest/+esm";
 
       document.getElementById("start").onclick = async () => {
-        const { value: ephemeralKey } = await (await fetch("/token")).json();
-        const agent = new RealtimeAgent({
-          name: "Assistant",
-          instructions: "Be clear, kind, fast.",
-        });
-        const session = new RealtimeSession(agent);
-        await session.connect({ apiKey: ephemeralKey });
+        try {
+          const response = await fetch("/token");
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error('Failed to get token: ' + response.status + ' ' + errorText);
+          }
+          const { value: ephemeralKey } = await response.json();
+          const agent = new RealtimeAgent({
+            name: "Assistant",
+            instructions: "Be clear, kind, fast.",
+          });
+          const session = new RealtimeSession(agent);
+          await session.connect({ apiKey: ephemeralKey });
+        } catch (error) {
+          console.error("Failed to start voice agent:", error);
+          alert('Failed to start voice agent: ' + error.message);
+        }
       };
     </script>
   </body>
