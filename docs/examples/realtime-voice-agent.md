@@ -7,7 +7,7 @@ This guide walks through the fastest way to test OpenAI's Realtime API from an i
 The Marketplace trial that funds your OpenAI usage is tied to the project visible in the Gemini console. In the screenshot referenced in ChatGPT the project was `starry-argon-463819-a2`, so the first step is to make sure every `gcloud` command targets that project.
 
 ```bash
-gcloud config set project starry-argon-463819-a2
+gcloud config set project YOUR_PROJECT_ID
 ```
 
 If you want to double-check the services that are already enabled, list them explicitly:
