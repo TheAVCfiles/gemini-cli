@@ -4,6 +4,21 @@ This guide documents "Option C" — deploying the ready-to-run `mwra-glossary-fi
 project (for example, a personal "codex" sandbox) that hosts multiple front-ends under a single umbrella identity. The package
 contains everything required to serve the static glossary UI and proxy `/ask` requests through a token-protected Cloud Function.
 
+## Quick command summary
+
+If you have already customized the frontend and generated static assets (for example with `npm run build`, `next build`, or
+`astro build`), the Firebase CLI workflow is:
+
+```bash
+npm run build   # or next build / astro build / etc
+firebase login
+firebase init hosting  # When prompted, set the public directory to your build output (dist, out, etc.).
+firebase deploy
+```
+
+The sections below walk through the same process in more detail for the MWRA glossary starter kit, including configuring
+Hosting targets and HTTPS Functions.
+
 > **At a glance**
 >
 > * Works with the Firebase Spark (free) plan — no paid resources are required for the default configuration.
