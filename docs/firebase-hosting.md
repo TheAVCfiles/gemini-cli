@@ -89,11 +89,16 @@ Function config avoids checking secrets into version control.
 With dependencies installed and configuration applied, deploy both Hosting and Functions in one command:
 
 ```bash
+# Deploy both the static site and the Cloud Function
 firebase deploy --only hosting:codex-mwra,functions
+
+# Later updates that only touch the static assets can use:
+firebase deploy --only hosting:codex-mwra
 ```
 
-The CLI will upload the `web/` assets to Firebase Hosting and deploy the `/ask` HTTPS function. Because only `/ask` traffic hits
-the Function, most requests stay on the free Hosting tier.
+The first command uploads the `web/` assets to Firebase Hosting and deploys the `/ask` HTTPS function. Because only `/ask`
+traffic hits the Function, most requests stay on the free Hosting tier. The hosting-only variant is handy when you just update
+the static UI and do not need to redeploy the backend.
 
 ## 7. Test the deployment
 
@@ -108,7 +113,7 @@ Repeat the same workflow for each additional experience you want to add under th
 1. Download its Firebase-ready package.
 2. Apply a new Hosting target name, for example `firebase target:apply hosting codex-lab <another-site-id>`.
 3. Deploy with `firebase deploy --only hosting:codex-lab,functions` (or rename the `functions` folder if each app needs its own
-   backend).
+   backend). If you only changed static assets, you can shorten the command to `firebase deploy --only hosting:codex-lab`.
 
 Using Hosting targets keeps everything inside a single Firebase project while presenting each experience at a clean URL. This is
 ideal for the 10-site allowance in the free tier: you can deploy multiple demos without juggling extra projects.
