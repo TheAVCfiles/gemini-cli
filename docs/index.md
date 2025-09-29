@@ -33,6 +33,7 @@ This documentation is organized into the following sections:
   - **[Web Fetch Tool](./tools/web-fetch.md):** Documentation for the `web_fetch` tool.
   - **[Web Search Tool](./tools/web-search.md):** Documentation for the `google_web_search` tool.
   - **[Memory Tool](./tools/memory.md):** Documentation for the `save_memory` tool.
+  - **[MCP Quickstart](./tools/mcp-quickstart.md):** Step-by-step guide for connecting Toolbox and MCP Inspector.
 - **Examples:**
   - **[Vertex AI Search integration](./examples/vertex-ai-search.md):** Step-by-step guidance for connecting Gemini CLI agents to Vertex AI Search.
   - **[IntuitionLabs Ballet Bots curriculum assets](./intuitionlabs/README.md):** Reference materials for an arts-and-robotics learning program that leverages Gemini CLI for content generation.
