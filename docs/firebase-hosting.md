@@ -2,23 +2,28 @@
 
 This guide documents "Option C" — deploying the ready-to-run `mwra-glossary-firebase.zip` package into a single Firebase/GCP
 project (for example, a personal "codex" sandbox) that hosts multiple front-ends under a single umbrella identity. The package
-contains everything required to serve the static glossary UI and proxy `/ask` requests through a token-protected Cloud Function.
+contains everything required to serve the static glossary UI and proxy `/api/chat` requests through a token-protected Cloud Function.
 
 > **At a glance**
 >
 > * Works with the Firebase Spark (free) plan — no paid resources are required for the default configuration.
 > * One download, one install command, one `firebase deploy` to launch.
-> * Cloud Functions are only invoked for `/ask` so static page views stay on the free Hosting tier.
+> * Cloud Functions are only invoked for `/api/chat` so static page views stay on the free Hosting tier.
 >
 > The archive layout is:
 >
 > ```text
 > mwra-glossary-firebase/
-> ├── firebase.json          # Hosting rewrites `/ask` to the HTTPS function
-> ├── functions/index.js     # Implements the `/ask` HTTPS function with shared-token guard
-> ├── functions/package.json # Minimal dependencies for the function runtime
-> ├── functions/.runtimeconfig.json (generated)
-> ├── web/                   # Static UI already wired to call `/ask`
+> ├── firebase.json          # Hosting rewrites `/api/**` to the HTTPS function
+> ├── functions/
+> │   ├── index.ts           # Entrypoint that wires up the HTTPS Function
+> │   ├── package.json       # Minimal dependencies for the runtime
+> │   ├── tsconfig.json      # TypeScript build settings
+> │   └── src/
+> │       ├── chat.ts        # Primary `/api/chat` handler (Gemini/OpenAI proxy)
+> │       ├── cliBridge.ts   # Optional CLI relay endpoint (disabled by default)
+> │       └── firestoreLog.ts # Helper used to persist request/response metadata
+> ├── public/                # Chart Activation Portal UI already wired to call `/api/chat`
 > └── README_FIREBASE.md     # Copy/paste quick start used below
 > ```
 
@@ -72,16 +77,16 @@ setup step.
 
 ## 5. Set required runtime secrets
 
-The HTTPS function protects `/ask` behind a shared token. Configure that token (and optionally an OpenAI API key if you plan to
-forward traffic to OpenAI instead of Gemini) before deploying:
+The HTTPS function protects the `/api/chat` surface behind a shared token. Configure that token (and optionally an OpenAI API key if you
+plan to forward traffic to OpenAI instead of Gemini) before deploying:
 
 ```bash
-firebase functions:config:set ask.shared_token="<shared-token>"
-# Optional if you plan to toggle OpenAI mode from `functions/index.js`
-firebase functions:config:set ask.openai_api_key="<sk-...>"
+firebase functions:config:set chat.shared_token="<shared-token>"
+# Optional if you plan to toggle OpenAI mode from `functions/src/chat.ts`
+firebase functions:config:set chat.openai_api_key="<sk-...>"
 ```
 
-When the Cloud Function executes it will read `functions.config().ask.shared_token` (and `ask.openai_api_key` when present). Using
+When the Cloud Function executes it will read `functions.config().chat.shared_token` (and `chat.openai_api_key` when present). Using
 Function config avoids checking secrets into version control.
 
 ## 6. Deploy
@@ -92,14 +97,14 @@ With dependencies installed and configuration applied, deploy both Hosting and F
 firebase deploy --only hosting:codex-mwra,functions
 ```
 
-The CLI will upload the `web/` assets to Firebase Hosting and deploy the `/ask` HTTPS function. Because only `/ask` traffic hits
+The CLI will upload the `public/` assets to Firebase Hosting and deploy the `/api/chat` HTTPS function. Because only `/api/chat` traffic hits
 the Function, most requests stay on the free Hosting tier.
 
 ## 7. Test the deployment
 
 1. Visit `https://<site-id>.web.app/` (or your custom domain) and ensure the glossary UI loads.
 2. Submit a test question — the frontend prompts for the shared token before relaying to the function.
-3. Inspect the Firebase Console → Functions logs to confirm the request path (`/ask`) and that token validation succeeds.
+3. Inspect the Firebase Console → Functions logs to confirm the request path (`/api/chat`) and that token validation succeeds.
 
 ## 8. Iterate with additional apps
 
@@ -119,7 +124,7 @@ When you are done testing, you can remove the deployed resources:
 
 ```bash
 firebase hosting:disable --site <site-id>
-firebase functions:delete ask --region=us-central1
+firebase functions:delete chat --region=us-central1
 ```
 
 Because the project never leaves the free tier, you will not incur charges if you forget this step. It simply keeps your
