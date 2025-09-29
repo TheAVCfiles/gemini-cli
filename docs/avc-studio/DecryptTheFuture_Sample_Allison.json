@@ -1,0 +1,98 @@
+{
+  "profile": {
+    "displayName": "Allison (AVC)",
+    "note": "Owner of Decrypt the Girl; demo dataset."
+  },
+  "natal": {
+    "date": "1992-02-25",
+    "time": "15:09",
+    "tz": "America/New_York",
+    "location": {
+      "city": "TBD",
+      "lat": null,
+      "lon": null
+    },
+    "houseSystem": "Whole Sign"
+  },
+  "cycles": {
+    "transits": [
+      {
+        "date": "2025-10-01",
+        "planet": "Saturn",
+        "aspect": "trine",
+        "to": "Sun",
+        "orb": 1.2,
+        "score": 28,
+        "notes": "Structure supports identity work"
+      },
+      {
+        "date": "2025-10-07",
+        "planet": "Mars",
+        "aspect": "square",
+        "to": "Moon",
+        "orb": 0.6,
+        "score": -22,
+        "notes": "Watch for reactivity; move the energy"
+      },
+      {
+        "date": "2025-10-15",
+        "planet": "Venus",
+        "aspect": "conjunct",
+        "to": "MC",
+        "orb": 0.3,
+        "score": 35,
+        "notes": "Public-facing charm; pitch-friendly"
+      }
+    ],
+    "progressions": [],
+    "solarArcs": [],
+    "returns": []
+  },
+  "scores": {
+    "daily": [
+      {
+        "date": "2025-09-28",
+        "pos": 6,
+        "neg": -2
+      },
+      {
+        "date": "2025-09-29",
+        "pos": 8,
+        "neg": -4
+      },
+      {
+        "date": "2025-09-30",
+        "pos": 10,
+        "neg": -3
+      }
+    ]
+  },
+  "events": [
+    {
+      "when": "2025-09-30",
+      "label": "Draft Mothernet node map",
+      "tags": [
+        "Mothernet",
+        "Room008"
+      ]
+    }
+  ],
+  "rituals": [
+    {
+      "name": "Signal Breath",
+      "steps": [
+        "inhale 4",
+        "hold 4",
+        "exhale 8"
+      ],
+      "tags": [
+        "grounding"
+      ]
+    }
+  ],
+  "ui": {
+    "theme": "dark",
+    "showScores": true,
+    "reducedMotion": false
+  }
+}
