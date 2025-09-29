@@ -1,0 +1,26 @@
+{
+  "name": "agent-functions",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "20" },
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rimraf lib",
+    "predeploy": "npm run build",
+    "serve": "npm run build && firebase emulators:start --only functions,hosting",
+    "lint": "echo \"(lint later)\""
+  },
+  "dependencies": {
+    "@google-cloud/vertexai": "^1.7.0",
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^5.0.0",
+    "openai": "^4.56.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.6.3"
+  }
+}
