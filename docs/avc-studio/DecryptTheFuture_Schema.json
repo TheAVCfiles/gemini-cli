@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DecryptTheFuture",
+  "type": "object",
+  "required": [
+    "profile",
+    "natal",
+    "cycles",
+    "scores",
+    "ui"
+  ],
+  "properties": {
+    "profile": {
+      "type": "object",
+      "required": [
+        "displayName"
+      ],
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "natal": {
+      "type": "object",
+      "required": [
+        "date",
+        "time",
+        "tz",
+        "location"
+      ],
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "YYYY-MM-DD"
+        },
+        "time": {
+          "type": "string",
+          "description": "HH:MM"
+        },
+        "tz": {
+          "type": "string",
+          "description": "IANA timezone, e.g., America/New_York"
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            },
+            "lat": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "lon": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          }
+        },
+        "houseSystem": {
+          "type": "string",
+          "enum": [
+            "Placidus",
+            "Whole Sign",
+            "Equal",
+            "Koch",
+            "Porphyry"
+          ],
+          "default": "Whole Sign"
+        }
+      }
+    },
+    "cycles": {
+      "type": "object",
+      "properties": {
+        "transits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "date",
+              "planet",
+              "aspect",
+              "to",
+              "score"
+            ],
+            "properties": {
+              "date": {
+                "type": "string"
+              },
+              "planet": {
+                "type": "string"
+              },
+              "aspect": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string",
+                "description": "Natal point or angle"
+              },
+              "orb": {
+                "type": "number"
+              },
+              "score": {
+                "type": "number",
+                "description": "Impact score -100..+100"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "progressions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "solarArcs": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "returns": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "scores": {
+      "type": "object",
+      "properties": {
+        "daily": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "date",
+              "pos",
+              "neg"
+            ],
+            "properties": {
+              "date": {
+                "type": "string"
+              },
+              "pos": {
+                "type": "number"
+              },
+              "neg": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "when": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "rituals": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "ui": {
+      "type": "object",
+      "properties": {
+        "theme": {
+          "type": "string",
+          "enum": [
+            "light",
+            "dark",
+            "high-contrast"
+          ]
+        },
+        "showScores": {
+          "type": "boolean"
+        },
+        "reducedMotion": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Decrypt the Future — Viewer</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    h1 { margin-top: 0; }
+    .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    th { background: #f4f4f4; text-align: left; }
+    canvas { width: 100%; height: 220px; }
+    .small { color: #666; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Decrypt the Future — Demo Viewer</h1>
+  <p class="small">Drop an updated JSON next to this file named <code>DecryptTheFuture_Sample_Allison.json</code> to refresh.</p>
+  <div class="grid">
+    <section>
+      <h2>Profile</h2>
+      <div id="profile"></div>
+      <h3>Natal</h3>
+      <div id="natal"></div>
+      <h3>Settings</h3>
+      <div id="settings"></div>
+    </section>
+    <section>
+      <h2>Transits</h2>
+      <table id="transits"><thead><tr><th>Date</th><th>Planet</th><th>Aspect</th><th>To</th><th>Score</th></tr></thead><tbody></tbody></table>
+      <h2>Daily Scores</h2>
+      <canvas id="scoreChart" width="800" height="220"></canvas>
+    </section>
+  </div>
+
+  <script>
+    async function load() {
+      const res = await fetch('DecryptTheFuture_Sample_Allison.json');
+      const data = await res.json();
+      document.getElementById('profile').textContent = data.profile.displayName + (data.profile.note ? ' — ' + data.profile.note : '');
+      const n = data.natal;
+      document.getElementById('natal').textContent = `${n.date} ${n.time} ${n.tz} @ ${n.location.city}`;
+      document.getElementById('settings').textContent = JSON.stringify(data.ui);
+
+      const tbody = document.querySelector('#transits tbody');
+      tbody.innerHTML = '';
+      (data.cycles.transits || []).forEach(t => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${t.date}</td><td>${t.planet}</td><td>${t.aspect}</td><td>${t.to}</td><td>${t.score}</td>`;
+        tbody.appendChild(tr);
+      });
+
+      // Simple canvas chart for daily scores
+      const canvas = document.getElementById('scoreChart');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      const margin = 24;
+      const w = canvas.width - margin*2;
+      const h = canvas.height - margin*2;
+      const days = (data.scores.daily || []).map(d => d.date);
+      const pos = (data.scores.daily || []).map(d => d.pos);
+      const neg = (data.scores.daily || []).map(d => d.neg);
+      const maxV = Math.max(1, ...pos, ...neg.map(v => Math.abs(v)));
+
+      function y(v) { return margin + h - ((v + maxV) / (2*maxV)) * h; }
+      function x(i) { return margin + (w * i / Math.max(1, days.length-1)); }
+
+      // axes
+      ctx.strokeStyle = '#888'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(margin, y(0)); ctx.lineTo(margin+w, y(0)); ctx.stroke();
+
+      // draw line helper
+      function drawLine(vals) {
+        ctx.beginPath();
+        vals.forEach((v,i) => {
+          const X = x(i), Y = y(v);
+          if (i===0) ctx.moveTo(X,Y); else ctx.lineTo(X,Y);
+        });
+        ctx.stroke();
+      }
+
+      // pos line
+      ctx.strokeStyle = '#2a7'; ctx.lineWidth = 2; drawLine(pos);
+      // neg line
+      ctx.strokeStyle = '#c44'; ctx.lineWidth = 2; drawLine(neg);
+
+      // labels
+      ctx.fillStyle = '#000';
+      ctx.fillText('Positive / Negative Daily Scores', margin, margin-6);
+    }
+
+    load().catch(err => {
+      document.body.insertAdjacentHTML('beforeend', '<p style="color:red">Failed to load sample JSON: '+err+'</p>');
+    });
+  </script>
+</body>
+</html>
