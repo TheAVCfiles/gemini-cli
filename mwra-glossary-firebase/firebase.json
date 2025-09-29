@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "source": "functions"
+  },
+  "hosting": {
+    "public": "web",
+    "rewrites": [
+      { "source": "/ask", "function": "ask" }
+    ]
+  }
+}
