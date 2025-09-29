@@ -5,6 +5,50 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "rewrites": [
+      {
+        "source": "/bot-gym/**",
+        "destination": "/bot-gym/index.html"
+      },
+      {
+        "source": "/looppool/**",
+        "destination": "/looppool/index.html"
+      },
+      {
+        "source": "/retriever-ag/**",
+        "destination": "/retriever-ag/index.html"
+      },
+      {
+        "source": "/cache-up/**",
+        "destination": "/cache-up/index.html"
+      },
+      {
+        "source": "/art-official-intelligence/**",
+        "destination": "/art-official-intelligence/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(css|js)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(html)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=3600"
+          }
+        ]
+      }
     ]
   }
 }
