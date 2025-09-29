@@ -124,3 +124,164 @@ firebase functions:delete ask --region=us-central1
 
 Because the project never leaves the free tier, you will not incur charges if you forget this step. It simply keeps your
 "codex" project tidy for future demos.
+
+## Appendix A. HTTPS Function source
+
+The bundled Cloud Function is a TypeScript handler that wraps the Gemini SDK with a lightweight set of runtime controls. The
+full source is included below for teams who want to customize the behavior or port it into an existing Firebase Functions code
+base.
+
+```ts
+import * as admin from "firebase-admin";
+import { GoogleGenerativeAI } from "google-generative-ai";
+
+if (!admin.apps.length) admin.initializeApp();
+
+const FALLBACK_MODEL = "gemini-1.5-pro";
+
+// === Inline instructions.yaml (paste your YAML below the backticks) ===
+const INSTRUCTIONS_YAML = String.raw`# ========================================================
+# DeCrypt Console · AI Studio Instructions
+# Version: v0.1
+# ========================================================
+
+meta:
+  project: "DeCrypt the Girl / Intuition Labs"
+  owner: "AVC"
+  environment: "Firebase Hosting + Functions, Codex-linked"
+  version: "0.1"
+
+model:
+  text: "gemini-1.5-pro"
+  audio: "gemini-2.5-flash-native-audio-preview-09-2025"
+  voice: "Zephyr"
+
+style:
+  persona:
+    - "Helpful, skeptical of fluff, surgically precise."
+    - "Financially literate and technically competent."
+    - "Poetic cadence when flagged, otherwise plain."
+  formatting:
+    - "Short paragraphs, no walls of text."
+    - "Lists only when clarity improves."
+    - "Use emojis instead of SVG icons."
+  prohibitions:
+    - "Do not change literal model strings found in code."
+    - "Avoid gradients or decorative bloat."
+    - "Do not speculate on private data."
+
+contracts:
+  default_response:
+    type: object
+    properties:
+      answer: { type: string, description: "Plain response text." }
+      notes:  { type: string, nullable: true, description: "Optional rationale." }
+      actions:{ type: array, nullable: true, items: { type: string } }
+    required: ["answer"]
+  json_mode:
+    enforce: true
+    violation_policy: "Re-emit valid JSON."
+
+routing:
+  rules:
+    - if: "audio_input == true" 
+      route: "gemini/audio"
+    - if: "tokens_estimate > 6000"
+      route: "gemini/text"
+    - if: "quick answer"
+      route: "local_llm"
+    - else: "gemini/text"
+
+tools:
+  enabled: [summarize, extract, classify]
+  usage_policy:
+    - "Only call a tool if fidelity improves."
+    - "Return tool output inside JSON contract."
+
+tone_switches:
+  poetic_on: "Use metaphor and rhythm sparingly."
+  poetic_off: "Plain, functional style."
+  strict: "Maximize factual precision."
+  warm: "Keep concise but kind."
+
+security:
+  - "If asked for secrets, refuse."
+  - "If legal/medical/financial risk, add caution note."
+  - "Prefer explicit uncertainty over hallucination."
+
+system_preamble: |
+  You are the DeCrypt Console assistant running on Firebase Functions.
+  Default output must obey the DEFAULT_RESPONSE JSON schema unless UI flags freeform.
+  Respect constraints on model strings, style, and tone.
+`;
+
+// Tiny YAML → text extractor for iPhone speed (no extra deps)
+function buildSystemInstructionFromInline(): string {
+  // We only need the preamble + a few style lines for the systemInstruction.
+  const preambleMatch = INSTRUCTIONS_YAML.match(/system_preamble:\s*\|\s*([\s\S]*)$/);
+  const preamble = preambleMatch ? preambleMatch[1].trim() : "";
+  const persona = (INSTRUCTIONS_YAML.match(/persona:\s*([\s\S]*?)\n\s*[a-z_]+:/) || [,""])[1]
+    .split("\n").filter(l=>l.trim().startsWith("-")).map(l=>l.replace(/^\s*-\s*/,"")).join(" | ");
+  const formatting = (INSTRUCTIONS_YAML.match(/formatting:\s*([\s\S]*?)\n\s*[a-z_]+:/) || [,""])[1]
+    .split("\n").filter(l=>l.trim().startsWith("-")).map(l=>l.replace(/^\s*-\s*/,"")).join(" | ");
+  const prohibitions = (INSTRUCTIONS_YAML.match(/prohibitions:\s*([\s\S]*?)\n\s*[a-z_]+:/) || [,""])[1]
+    .split("\n").filter(l=>l.trim().startsWith("-")).map(l=>l.replace(/^\s*-\s*/,"")).join(" | ");
+
+  return [
+    preamble,
+    "STYLE:",
+    persona && `- Persona: ${persona}`,
+    formatting && `- Formatting: ${formatting}`,
+    prohibitions && `- Prohibitions: ${prohibitions}`,
+    "DEFAULT_RESPONSE JSON schema: must include 'answer'."
+  ].filter(Boolean).join("\n");
+}
+
+export async function chatHandler(req: any, res: any) {
+  const { message, history = [], model, toggles } = req.body || {};
+  if (!message) return res.status(400).json({ error: "message required" });
+
+  const apiKey =
+    process.env.GEMINI_API_KEY ||
+    process.env.generativeai_key ||
+    process.env.GENERATIVEAI_KEY;
+
+  if (!apiKey) return res.status(500).json({ error: "Gemini API key missing" });
+
+  const chosenModel = model || FALLBACK_MODEL;
+
+  const systemInstruction = [
+    buildSystemInstructionFromInline(),
+    toggles?.poetic_on ? "TONE: Use metaphor and rhythm sparingly." : "",
+    toggles?.poetic_off ? "TONE: Plain, functional style." : "",
+    toggles?.strict ? "TONE: Maximize factual precision." : "",
+    toggles?.warm ? "TONE: Concise but kind." : "",
+    toggles?.json_mode ? "RESPONSE MODE: Emit ONLY valid JSON per DEFAULT_RESPONSE schema." : ""
+  ].filter(Boolean).join("\n");
+
+  const genai = new GoogleGenerativeAI(apiKey);
+  const modelClient = genai.getGenerativeModel({ model: chosenModel, systemInstruction });
+
+  const wantsJson = !!toggles?.json_mode;
+  const contractHint = wantsJson
+    ? `Respond ONLY in valid JSON with {"answer": string, "notes"?: string, "actions"?: string[]}.`
+    : "";
+
+  const turns = (history as Array<{ role: "user"|"assistant"; content: string }>).map(h => ({
+    role: h.role === "user" ? "user" : "model",
+    parts: [{ text: h.content }]
+  }));
+
+  const result = await modelClient.generateContent([
+    ...turns,
+    { role: "user", parts: [{ text: [contractHint, message].filter(Boolean).join("\n\n") }] }
+  ]);
+
+  const text = result.response.text() || "";
+  res.json({ text, model: chosenModel, usage: result.response.usageMetadata || null });
+}
+```
+
+The handler assembles a concise `systemInstruction` at request time so the same binary can serve multiple tone presets (plain,
+strict, poetic, warm) without redeploying. It also supports JSON-only responses by appending a contract hint when the front-end
+flags `json_mode` in the payload.
