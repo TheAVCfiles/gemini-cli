@@ -1,0 +1,120 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cacheGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="screenGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Central cache/database cylinder -->
+  <g transform="translate(200,150)">
+    <!-- Cylinder body -->
+    <rect x="-40" y="-60" width="80" height="120" fill="url(#cacheGradient)" rx="8"/>
+    <!-- Cylinder top -->
+    <ellipse cx="0" cy="-60" rx="40" ry="12" fill="#a855f7"/>
+    <!-- Cylinder bottom -->
+    <ellipse cx="0" cy="60" rx="40" ry="12" fill="#6b21a8"/>
+    
+    <!-- Cache data layers -->
+    <rect x="-35" y="-40" width="70" height="8" fill="#ffffff" opacity="0.3" rx="2"/>
+    <rect x="-35" y="-20" width="70" height="8" fill="#ffffff" opacity="0.3" rx="2"/>
+    <rect x="-35" y="0" width="70" height="8" fill="#ffffff" opacity="0.3" rx="2"/>
+    <rect x="-35" y="20" width="70" height="8" fill="#ffffff" opacity="0.3" rx="2"/>
+    <rect x="-35" y="40" width="70" height="8" fill="#ffffff" opacity="0.3" rx="2"/>
+    
+    <!-- Cache label -->
+    <text x="0" y="-75" text-anchor="middle" font-size="14" font-family="Arial" fill="#7c3aed" font-weight="bold">💾</text>
+  </g>
+  
+  <!-- Glossary documents floating around -->
+  <g fill="#ffffff" stroke="#7c3aed" stroke-width="2">
+    <!-- Document 1 (left) -->
+    <g transform="translate(80,100)">
+      <rect x="0" y="0" width="40" height="50" rx="4" fill="url(#screenGradient)"/>
+      <rect x="5" y="8" width="30" height="3" fill="#7c3aed" opacity="0.6"/>
+      <rect x="5" y="15" width="25" height="2" fill="#a855f7" opacity="0.4"/>
+      <rect x="5" y="20" width="28" height="2" fill="#a855f7" opacity="0.4"/>
+      <rect x="5" y="25" width="20" height="2" fill="#a855f7" opacity="0.4"/>
+      <text x="20" y="65" text-anchor="middle" font-size="10" font-family="Arial" fill="#7c3aed">Old</text>
+      <!-- Animation -->
+      <animateTransform attributeName="transform" type="translate" values="80,100; 85,95; 80,100" dur="4s" repeatCount="indefinite"/>
+    </g>
+    
+    <!-- Document 2 (right) -->
+    <g transform="translate(280,100)">
+      <rect x="0" y="0" width="40" height="50" rx="4" fill="url(#screenGradient)"/>
+      <rect x="5" y="8" width="30" height="3" fill="#7c3aed" opacity="0.6"/>
+      <rect x="5" y="15" width="22" height="2" fill="#a855f7" opacity="0.4"/>
+      <rect x="5" y="20" width="30" height="2" fill="#a855f7" opacity="0.4"/>
+      <rect x="5" y="25" width="25" height="2" fill="#a855f7" opacity="0.4"/>
+      <text x="20" y="65" text-anchor="middle" font-size="10" font-family="Arial" fill="#7c3aed">New</text>
+      <!-- Animation -->
+      <animateTransform attributeName="transform" type="translate" values="280,100; 275,95; 280,100" dur="4s" repeatCount="indefinite" begin="2s"/>
+    </g>
+    
+    <!-- Conflict indicator -->
+    <g transform="translate(200,80)">
+      <circle cx="0" cy="0" r="15" fill="#ef4444" opacity="0.8"/>
+      <text x="0" y="5" text-anchor="middle" font-size="16" font-family="Arial" fill="#ffffff">⚠️</text>
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+    </g>
+  </g>
+  
+  <!-- Data flow arrows -->
+  <g stroke="#a855f7" stroke-width="3" fill="none" opacity="0.8">
+    <!-- Arrow from left document to cache -->
+    <path d="M 120 125 L 160 140" stroke-dasharray="5,3" marker-end="url(#arrowhead)">
+      <animate attributeName="stroke-dashoffset" values="0;8" dur="2s" repeatCount="indefinite"/>
+    </path>
+    <!-- Arrow from right document to cache -->
+    <path d="M 280 125 L 240 140" stroke-dasharray="5,3" marker-end="url(#arrowhead)">
+      <animate attributeName="stroke-dashoffset" values="0;8" dur="2s" repeatCount="indefinite" begin="1s"/>
+    </path>
+    <!-- Processing arrow (downward) -->
+    <path d="M 200 210 L 200 240" stroke-dasharray="5,3" marker-end="url(#arrowhead)">
+      <animate attributeName="stroke-dashoffset" values="0;8" dur="1.5s" repeatCount="indefinite" begin="2s"/>
+    </path>
+  </g>
+  
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#a855f7" />
+    </marker>
+  </defs>
+  
+  <!-- Clean output document (bottom) -->
+  <g transform="translate(170,250)">
+    <rect x="0" y="0" width="60" height="40" rx="6" fill="url(#screenGradient)" stroke="#10b981" stroke-width="3"/>
+    <rect x="8" y="8" width="44" height="3" fill="#10b981" opacity="0.8"/>
+    <rect x="8" y="15" width="35" height="2" fill="#10b981" opacity="0.6"/>
+    <rect x="8" y="20" width="40" height="2" fill="#10b981" opacity="0.6"/>
+    <rect x="8" y="25" width="30" height="2" fill="#10b981" opacity="0.6"/>
+    <text x="30" y="50" text-anchor="middle" font-size="10" font-family="Arial" fill="#10b981" font-weight="bold">✅ Clean</text>
+    <animate attributeName="opacity" values="0;1" dur="1s" begin="3s" fill="freeze"/>
+  </g>
+  
+  <!-- Floating sync indicators -->
+  <g fill="#ffffff" opacity="0.9">
+    <circle cx="50" cy="200" r="3">
+      <animate attributeName="cy" values="200;195;200" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <text x="50" y="190" text-anchor="middle" font-size="12" font-family="Arial">📋</text>
+    
+    <circle cx="350" cy="200" r="3">
+      <animate attributeName="cy" values="200;195;200" dur="3s" repeatCount="indefinite" begin="1.5s"/>
+    </circle>
+    <text x="350" y="190" text-anchor="middle" font-size="12" font-family="Arial">🔄</text>
+  </g>
+</svg>
