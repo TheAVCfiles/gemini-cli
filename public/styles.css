@@ -36,6 +36,50 @@ body {
   text-align: center;
 }
 
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-text {
+  text-align: left;
+}
+
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 300px;
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .hero-text {
+    text-align: center;
+  }
+  
+  .hero-visual {
+    order: -1;
+  }
+  
+  .hero-image {
+    max-height: 200px;
+  }
+}
+
 .header h1 {
   font-size: 3rem;
   font-weight: 700;
@@ -47,7 +91,19 @@ body {
   font-size: 1.25rem;
   opacity: 0.9;
   max-width: 600px;
-  margin: 0 auto 2rem;
+  margin: 0 0 2rem;
+}
+
+/* Workflow visuals */
+.workflow-visual {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.workflow-diagram {
+  max-width: 100%;
+  height: auto;
+  max-height: 200px;
 }
 
 /* Buttons */
