@@ -40,6 +40,7 @@ This documentation is organized into the following sections:
 - **[Contributing & Development Guide](../CONTRIBUTING.md):** Information for contributors and developers, including setup, building, testing, and coding conventions.
 - **[NPM](./npm.md):** Details on how the project's packages are structured
 - **[Troubleshooting Guide](./troubleshooting.md):** Find solutions to common problems and FAQs.
+- **[Serverless model catalog](./serverless-models.md):** Look up the Together AI serverless models that Gemini CLI can reach.
 - **[Terms of Service and Privacy Notice](./tos-privacy.md):** Information on the terms of service and privacy notices applicable to your use of Gemini CLI.
 - **[Releases](./releases.md):** Information on the project's releases and deployment cadence.
 
