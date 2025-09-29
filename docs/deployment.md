@@ -83,6 +83,56 @@ You can run the most recently committed version of Gemini CLI directly from the 
 npx https://github.com/google-gemini/gemini-cli
 ```
 
+### 5. Demo containers (Google Cloud Run)
+
+For quick demos—especially when you do not want to build the project locally—you
+can use the pre-built containers published to Google Artifact Registry under the
+`starry-argon-463819-a2` project. These images mirror the Netlify demo and are
+ready to run on Google Cloud Run or locally with Docker.
+
+1. Authenticate Docker with Artifact Registry (only needs to be done once per
+   workstation):
+
+   ```bash
+   gcloud auth configure-docker us-central1-docker.pkg.dev
+   ```
+
+2. Inspect the available demo images:
+
+   ```bash
+   PROJECT=starry-argon-463819-a2
+   gcloud artifacts docker images list \
+     us-central1-docker.pkg.dev/${PROJECT}/cloud-run-source-deploy
+   ```
+
+3. Deploy a container to Cloud Run (replace `<IMAGE_NAME>` with one of the
+   images returned above):
+
+   ```bash
+   PROJECT=starry-argon-463819-a2
+   REGION=us-central1
+   SERVICE=gemini-glossary-demo
+   IMAGE=us-central1-docker.pkg.dev/${PROJECT}/cloud-run-source-deploy/<IMAGE_NAME>
+
+   gcloud run deploy ${SERVICE} \
+     --image=${IMAGE} \
+     --project=${PROJECT} \
+     --region=${REGION} \
+     --platform=managed \
+     --allow-unauthenticated
+   ```
+
+4. (Optional) Run the same container locally:
+
+   ```bash
+   docker run --rm -p 8080:8080 ${IMAGE}
+   ```
+
+When deployed, Cloud Run exposes the static glossary UI on the service URL and
+serves the `/ask` function from the same container. Add your `OPENAI_API_KEY`
+and other environment variables directly in the Cloud Run service configuration
+to enable live responses.
+
 ## Deployment architecture
 
 The execution methods described above are made possible by the following architectural components and processes:
