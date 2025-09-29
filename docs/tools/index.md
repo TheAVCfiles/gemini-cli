@@ -16,6 +16,10 @@ These tools provide the following capabilities:
 - **Take actions:** Tools can modify files, write new files, or perform other actions on your system (again, typically with safeguards).
 - **Ground responses:** By using tools to fetch real-time or specific local data, Gemini's responses can be more accurate, relevant, and grounded in your actual context.
 
+## Quickstarts and tutorials
+
+- **[MCP Quickstart](./mcp-quickstart.md):** Learn how to expose PostgreSQL-backed tools with Toolbox and explore them using MCP Inspector.
+
 ## How to use Gemini CLI tools
 
 To use Gemini CLI tools, provide a prompt to the Gemini CLI. The process works as follows:
