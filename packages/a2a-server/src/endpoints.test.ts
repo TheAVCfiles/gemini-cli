@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from 'vitest';
 import request from 'supertest';
 import type express from 'express';
 import { createApp, updateCoderAgentCardUrl } from './agent.js';
 import * as fs from 'node:fs';
+import { promises as fsPromises } from 'node:fs';
 import * as path from 'node:path';
 import * as os from 'node:os';
 import type { Server } from 'node:http';
@@ -56,10 +57,60 @@ vi.mock('./task.js', () => {
   return { Task: MockTask };
 });
 
+type DownloadCall = { bucket: string; name: string; destination: string };
+type SignedUrlCall = {
+  bucket: string;
+  name: string;
+  options: Record<string, unknown>;
+};
+type UploadCall = { bucket: string; args: unknown[] };
+
+const downloadCalls: DownloadCall[] = [];
+const signedUrlCalls: SignedUrlCall[] = [];
+const uploadCalls: UploadCall[] = [];
+
+vi.mock('@google-cloud/storage', () => {
+  return {
+    Storage: class {
+      bucket(bucketName: string) {
+        return {
+          file: (objectName: string) => ({
+            download: vi.fn(async ({ destination }: { destination: string }) => {
+              downloadCalls.push({ bucket: bucketName, name: objectName, destination });
+              await fsPromises.writeFile(
+                destination,
+                `${bucketName}/${objectName}`,
+              );
+            }),
+            getSignedUrl: vi.fn(async (options) => {
+              signedUrlCalls.push({
+                bucket: bucketName,
+                name: objectName,
+                options,
+              });
+              return ['https://signed-url'];
+            }),
+          }),
+          upload: vi.fn(async (...args: unknown[]) => {
+            uploadCalls.push({ bucket: bucketName, args });
+          }),
+        };
+      }
+    },
+  };
+});
+
+beforeEach(() => {
+  downloadCalls.length = 0;
+  signedUrlCalls.length = 0;
+  uploadCalls.length = 0;
+});
+
 describe('Agent Server Endpoints', () => {
   let app: express.Express;
   let server: Server;
   let testWorkspace: string;
+  let originalReleaseBucket: string | undefined;
 
   const createTask = (contextId: string) =>
     request(app)
@@ -78,6 +129,8 @@ describe('Agent Server Endpoints', () => {
     testWorkspace = fs.mkdtempSync(
       path.join(os.tmpdir(), 'gemini-agent-test-'),
     );
+    originalReleaseBucket = process.env['GCS_RELEASE_BUCKET_NAME'];
+    process.env['GCS_RELEASE_BUCKET_NAME'] = 'release-bucket';
     app = await createApp();
     await new Promise<void>((resolve) => {
       server = app.listen(0, () => {
@@ -98,6 +151,11 @@ describe('Agent Server Endpoints', () => {
             fs.rmSync(testWorkspace, { recursive: true, force: true });
           } catch (e) {
             console.warn(`Could not remove temp dir '${testWorkspace}':`, e);
+          }
+          if (originalReleaseBucket === undefined) {
+            delete process.env['GCS_RELEASE_BUCKET_NAME'];
+          } else {
+            process.env['GCS_RELEASE_BUCKET_NAME'] = originalReleaseBucket;
           }
           resolve();
         });
@@ -142,5 +200,67 @@ describe('Agent Server Endpoints', () => {
     expect(response.status).toBe(200);
     expect(response.body.name).toBe('Gemini SDLC Agent');
     expect(response.body.url).toBe(`http://localhost:${port}/`);
+  });
+
+  it('should bundle audio and transcript via POST /bundle', async () => {
+    vi.useFakeTimers();
+    try {
+      const fixedDate = new Date('2025-01-02T03:04:05.678Z');
+      vi.setSystemTime(fixedDate);
+
+      const response = await request(app)
+        .post('/bundle')
+        .send({
+          audio: 'gs://audio-bucket/path/audio.webm',
+          session: 'gs://session-bucket/path/session.json',
+        })
+        .set('Content-Type', 'application/json');
+
+      expect(response.status).toBe(200);
+      expect(response.body.object).toBe(
+        'gs://release-bucket/releases/AVC_2025-01-02T03-04-05-678Z.zip',
+      );
+      expect(response.body.downloadUrl).toBe('https://signed-url');
+
+      expect(downloadCalls).toEqual([
+        expect.objectContaining({
+          bucket: 'audio-bucket',
+          name: 'path/audio.webm',
+          destination: expect.stringMatching(/^\/tmp\/audio-\d+\.webm$/),
+        }),
+        expect.objectContaining({
+          bucket: 'session-bucket',
+          name: 'path/session.json',
+          destination: expect.stringMatching(/^\/tmp\/session-\d+\.json$/),
+        }),
+      ]);
+
+      expect(uploadCalls).toHaveLength(1);
+      expect(uploadCalls[0]?.bucket).toBe('release-bucket');
+      expect(uploadCalls[0]?.args[0]).toBe(
+        '/tmp/AVC_2025-01-02T03-04-05-678Z.zip',
+      );
+      expect(uploadCalls[0]?.args[1]).toEqual({
+        destination: 'releases/AVC_2025-01-02T03-04-05-678Z.zip',
+      });
+
+      expect(signedUrlCalls).toEqual([
+        expect.objectContaining({
+          bucket: 'release-bucket',
+          name: 'releases/AVC_2025-01-02T03-04-05-678Z.zip',
+        }),
+      ]);
+      expect(signedUrlCalls[0]?.options).toMatchObject({
+        version: 'v4',
+        action: 'read',
+      });
+      const expires = signedUrlCalls[0]?.options?.expires as number;
+      expect(typeof expires).toBe('number');
+      expect(expires).toBe(
+        fixedDate.getTime() + 7 * 24 * 60 * 60 * 1000,
+      );
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
