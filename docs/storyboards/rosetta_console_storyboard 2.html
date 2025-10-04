@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rosetta Console — Interaction Storyboard</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4f6fb;
+        --ink: #0f172a;
+        --muted: #475569;
+        --surface: #ffffff;
+        --accent: #2563eb;
+        --accent-soft: rgba(37, 99, 235, 0.08);
+        --border: rgba(148, 163, 184, 0.35);
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--muted);
+      }
+      header {
+        padding: clamp(24px, 5vw, 56px);
+        padding-bottom: 0;
+      }
+      header h1 {
+        margin: 0;
+        font-size: clamp(2rem, 6vw, 3rem);
+        color: var(--ink);
+        letter-spacing: 0.06em;
+      }
+      header p {
+        margin: 12px 0 0;
+        max-width: 680px;
+        line-height: 1.6;
+      }
+      main {
+        padding: clamp(24px, 5vw, 56px);
+        display: grid;
+        gap: clamp(24px, 4vw, 40px);
+      }
+      .lane {
+        background: var(--surface);
+        border-radius: 24px;
+        border: 1px solid var(--border);
+        padding: clamp(20px, 4vw, 32px);
+        box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+      }
+      .lane h2 {
+        margin-top: 0;
+        font-size: 1.3rem;
+        color: var(--ink);
+        letter-spacing: 0.04em;
+      }
+      .steps {
+        display: grid;
+        gap: 18px;
+      }
+      .step {
+        display: grid;
+        gap: 8px;
+        padding: 18px 20px;
+        border-radius: 16px;
+        border: 1px dashed rgba(148, 163, 184, 0.6);
+        background: var(--accent-soft);
+      }
+      .step strong {
+        color: var(--accent);
+        letter-spacing: 0.04em;
+      }
+      .step small {
+        color: rgba(71, 85, 105, 0.8);
+        font-size: 0.85rem;
+      }
+      .grid {
+        display: grid;
+        gap: 24px;
+      }
+      @media (min-width: 1100px) {
+        .grid {
+          grid-template-columns: 1.2fr 1fr;
+        }
+      }
+      .notes {
+        display: grid;
+        gap: 16px;
+      }
+      .note {
+        padding: 16px;
+        border-radius: 18px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+      }
+      footer {
+        padding: 24px clamp(24px, 5vw, 56px) 56px;
+        color: rgba(71, 85, 105, 0.75);
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="regimeTicker" style="margin: clamp(16px, 4vw, 32px);"></div>
+    <header>
+      <h1>Scenario Lane · Multilingual Crisis Push</h1>
+      <p>
+        Variant storyboard that focuses on the scripted operator flow. Each lane shows a discrete interaction beat
+        across triage, localization, and approvals. Regime ticker persists at top as command temperature control.
+      </p>
+    </header>
+    <main>
+      <section class="grid">
+        <article class="lane">
+          <h2>Lane A — Situation Intake</h2>
+          <div class="steps">
+            <div class="step">
+              <strong>00:00 · Alert surfaces</strong>
+              <p>Operator receives automated ping: "Inbound rumor spike (ES)".</p>
+              <small>Regime ticker flashes green (open). Operator glances to confirm risk window.</small>
+            </div>
+            <div class="step">
+              <strong>00:20 · Source triage</strong>
+              <p>Context panel summarises origin, velocity, and suggested sentiment sweep.</p>
+              <small>Console auto-selects translation deck for Spanish / Portuguese.</small>
+            </div>
+            <div class="step">
+              <strong>00:40 · Plan selection</strong>
+              <p>Operator drags "Rumor counter-narrative" playbook into staging area.</p>
+              <small>Stage indicates dependencies: Legal, Market Ops, Localization.</small>
+            </div>
+          </div>
+        </article>
+        <aside class="lane">
+          <h2>Operator Notes</h2>
+          <div class="notes">
+            <div class="note">
+              <strong>Regime gating</strong>
+              <p>All outbound moves require verifying that the regime is open to avoid autopilot escalation.</p>
+            </div>
+            <div class="note">
+              <strong>Timeboxing</strong>
+              <p>Each lane is targeted to under 2 minutes from alert to approved response.</p>
+            </div>
+            <div class="note">
+              <strong>Fallback path</strong>
+              <p>
+                If ticker flips to closed, console locks the staging lane and escalates to the crisis war room module.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </section>
+      <section class="lane">
+        <h2>Lane B — Localization & QA</h2>
+        <div class="steps">
+          <div class="step">
+            <strong>01:00 · Draft synthesis</strong>
+            <p>Gemini generates tri-lingual copy + sentiment tuning controls.</p>
+            <small>Regime ticker shows amber mid-play; operator can freeze generation.</small>
+          </div>
+          <div class="step">
+            <strong>01:25 · Stakeholder sweep</strong>
+            <p>Console surfaces required approvals and parallelizes them with templated notes.</p>
+            <small>Live chat sidecar auto-translates replies back to English.</small>
+          </div>
+          <div class="step">
+            <strong>01:50 · Final release</strong>
+            <p>Operator publishes with localized attachments and audit log snapshot.</p>
+            <small>Ticker logs the state at send-time for reporting.</small>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      Storyboard variant — update <code>regime_snapshot.json</code> for interactive demos. Autorefresh can be enabled by passing
+      a polling interval to <code>initRegimeTicker</code>.
+    </footer>
+    <script type="module">
+      import { initRegimeTicker } from './regime_ticker.js';
+      initRegimeTicker({ target: '#regimeTicker', src: 'regime_snapshot.json', autorefresh: 0, theme: 'light' });
+    </script>
+  </body>
+</html>
