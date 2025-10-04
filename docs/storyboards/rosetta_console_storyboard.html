@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rosetta Console — Storyboard</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #0f172a;
+        --panel: rgba(15, 23, 42, 0.9);
+        --panel-border: rgba(148, 163, 184, 0.4);
+        --accent: #38bdf8;
+        --text-muted: rgba(226, 232, 240, 0.75);
+        --text-strong: #f8fafc;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: linear-gradient(160deg, #0f172a 0%, #1e293b 55%, #020617 100%);
+        color: var(--text-muted);
+      }
+      header {
+        padding: 32px clamp(24px, 5vw, 48px) 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 32px;
+      }
+      header h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        letter-spacing: 0.08em;
+        color: var(--text-strong);
+        margin: 0;
+      }
+      header p {
+        margin: 0;
+        max-width: 640px;
+        font-size: 1rem;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: clamp(24px, 4vw, 48px);
+        padding: 0 clamp(24px, 5vw, 48px) clamp(48px, 12vh, 120px);
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: 24px;
+        padding: clamp(20px, 4vw, 32px);
+        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.55);
+        backdrop-filter: blur(12px);
+      }
+      .panel h2 {
+        margin-top: 0;
+        font-size: 1.35rem;
+        color: var(--text-strong);
+        letter-spacing: 0.06em;
+      }
+      .feed {
+        display: grid;
+        gap: 16px;
+      }
+      .feed-item {
+        display: grid;
+        gap: 6px;
+        padding: 16px 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(15, 23, 42, 0.65);
+      }
+      .feed-item strong {
+        color: var(--text-strong);
+        letter-spacing: 0.04em;
+      }
+      .feed-item small {
+        color: rgba(148, 163, 184, 0.75);
+        font-size: 0.8rem;
+      }
+      .module-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+      .module {
+        padding: 18px;
+        border-radius: 18px;
+        border: 1px dashed rgba(148, 163, 184, 0.35);
+        background: rgba(15, 23, 42, 0.55);
+      }
+      .module h3 {
+        margin-top: 0;
+        margin-bottom: 6px;
+        color: var(--accent);
+        font-size: 1rem;
+        letter-spacing: 0.04em;
+      }
+      .callout {
+        margin-top: 24px;
+        padding: 18px 20px;
+        border-radius: 16px;
+        border: 1px solid rgba(56, 189, 248, 0.45);
+        background: rgba(14, 165, 233, 0.12);
+        color: #e0f2fe;
+        line-height: 1.5;
+      }
+      footer {
+        padding: 24px clamp(24px, 5vw, 48px);
+        color: rgba(148, 163, 184, 0.75);
+        font-size: 0.85rem;
+      }
+      @media (max-width: 980px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="regimeTicker" style="margin: 16px clamp(24px, 5vw, 48px);"></div>
+    <header>
+      <div>
+        <h1>Rosetta Console</h1>
+        <p>
+          The operator cockpit for real-time multilingual market response. The storyboard highlights the
+          primary console layout, live agent feed, and regime monitoring banner.
+        </p>
+      </div>
+      <aside class="panel" style="max-width: 320px;">
+        <h2>Mission</h2>
+        <p>
+          Provide a heads-up display that blends model outputs, tactical actions, and live status signals. Operators
+          should get <em>context first</em>, with precision controls one tap away.
+        </p>
+      </aside>
+    </header>
+    <main class="layout">
+      <section class="panel">
+        <h2>Storyboard · Main Canvas</h2>
+        <div class="feed">
+          <article class="feed-item">
+            <strong>00:00 — Launch Pad</strong>
+            <p>Console boots into a dense overview of markets, active agents, and latest actions.</p>
+            <small>HUD overlays key metrics, timeline scrubbing available.</small>
+          </article>
+          <article class="feed-item">
+            <strong>00:15 — Regime spotlight</strong>
+            <p>
+              Regime ticker anchors the top of the canvas. Operators can drill into the snapshot to audit
+              the factors behind open / closed status.
+            </p>
+            <small>Ticker must refresh without reflowing the main column.</small>
+          </article>
+          <article class="feed-item">
+            <strong>00:45 — Multi-agent choreography</strong>
+            <p>
+              Feed transitions to show queued plans, side-channel translations, and recommended responses with
+              confidence badges.
+            </p>
+            <small>Operators can pin, diff, or send live.</small>
+          </article>
+        </div>
+        <div class="callout">
+          <strong>Design note:</strong> The regime banner sits between the nav and scenario grid, bridging system
+          telemetry with human decision making.
+        </div>
+      </section>
+      <section class="panel">
+        <h2>Storyboard · Support Modules</h2>
+        <div class="module-grid">
+          <article class="module">
+            <h3>Command Stream</h3>
+            <p>Chronological ledger of issued prompts and tool calls, grouped by mission thread.</p>
+          </article>
+          <article class="module">
+            <h3>Language Rosetta</h3>
+            <p>Live translation matrix summarizing tone, risk, and commitments across locales.</p>
+          </article>
+          <article class="module">
+            <h3>Escalation Ladder</h3>
+            <p>Pre-built movesets for the operator. Each shows playbook context, required approvals, and ETA.</p>
+          </article>
+          <article class="module">
+            <h3>Ops Chronicle</h3>
+            <p>Automated post-mortem drafting. Surfaces stats, anomalies, and recommended follow-ups.</p>
+          </article>
+        </div>
+        <div class="callout">
+          Operators can pop these modules into sidecars. Regime context persists in the ticker no matter the layout.
+        </div>
+      </section>
+    </main>
+    <footer>
+      Prototype storyboard — update the adjacent <code>regime_snapshot.json</code> to demo live status.
+    </footer>
+    <script type="module">
+      import { initRegimeTicker } from './regime_ticker.js';
+      initRegimeTicker({ target: '#regimeTicker', src: 'regime_snapshot.json', autorefresh: 0 });
+    </script>
+  </body>
+</html>
