@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Minute Runner | Multi-Symbol Regime Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="dashboard">
+    <header>
+      <h1>Minute Runner | Multi-Symbol Regime Demo</h1>
+    </header>
+    <section class="levels-card">
+      <h2>Predictive Levels & Flows</h2>
+      <div id="levelsTable"><em>Loading...</em></div>
+    </section>
+    <section class="regime-cards" id="regimeCards"></section>
+    <footer>
+      <p>Auto-generated, auto-hosted, and ready for visual iteration. Push code, create, share.</p>
+    </footer>
+  </main>
+  <script type="module">
+    const symbols = ["ETH", "BTC", "LIT"];
+    async function loadLevelsTable() {
+      const tbl = document.getElementById('levelsTable');
+      try {
+        const resp = await fetch('predictive_levels.csv', {cache: 'no-store'});
+        const csv = await resp.text();
+        const rows = csv.trim().split('\n').map(r => r.split(','));
+        let html = `<table><thead><tr>${rows[0].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+        for (let i=1; i<rows.length; ++i) { html += `<tr>${rows[i].map(d=>`<td>${d}</td>`).join('')}</tr>`; }
+        html += '</tbody></table>'; tbl.innerHTML = html;
+      } catch(e) { tbl.textContent = "Failed to load predictive levels."; }
+    }
+    loadLevelsTable(); setInterval(loadLevelsTable, 10000);
+
+    async function loadRegimeCards() {
+      const container = document.getElementById('regimeCards');
+      let html = '';
+      for (const sym of symbols) {
+        try {
+          const resp = await fetch(`regime_snapshot_${sym}.json`, {cache: 'no-store'});
+          const j = await resp.json();
+          html += `<div class="summary-card"><h3>${sym} Regime</h3>
+            <b>Date:</b> ${j.timestamp ? new Date(j.timestamp).toLocaleDateString() : '—'}<br>
+            <b>Regime:</b> <span class="regime">${j.action || '—'} | ${j.regime_open ? "OPEN" : "CLOSED"}</span>
+            <ul>
+              <li>TRI* <b>${j.tri_sigma ?? '—'}σ</b></li>
+              <li>p-value <b>${j.p_value ?? '—'}</b></li>
+              <li>Wtap: <b>${Math.round(100*(j.wtap ?? 0))}%</b></li>
+              <li>Kinetic Gain: <b>${j.kinetic_gain_factor ?? '—'}x</b></li>
+              <li>Last Close: <b>${j.last_close ?? '—'}</b></li>
+            </ul>
+            <b>Notes:</b> <ul><li>${j.notes ?? ''}</li></ul>
+          </div>`;
+        } catch(e) {
+          html += `<div class="summary-card"><h3>${sym} Regime</h3><p>Failed to load snapshot.</p></div>`;
+        }
+      }
+      container.innerHTML = html;
+    }
+    loadRegimeCards(); setInterval(loadRegimeCards, 10000);
+  </script>
+</body>
+</html>

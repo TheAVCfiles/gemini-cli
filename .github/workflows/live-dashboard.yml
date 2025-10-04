@@ -1,0 +1,36 @@
+name: Live Dashboard Auto-Update
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run regime logic update
+        run: python tri_dashboard_live.py
+
+      - name: Run predictive levels update
+        run: python update_predictive_levels.py
+
+      - name: Commit updated regime snapshots and predictive levels
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add regime_snapshot_*.json predictive_levels.csv
+          git commit -m "Auto-update regime logic, price action & flows [skip ci]" || echo "No changes to commit"
+          git push
