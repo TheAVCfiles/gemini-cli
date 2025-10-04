@@ -5,9 +5,27 @@
  */
 
 /// <reference types="vitest" />
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { defineConfig } from 'vitest/config';
 
+const coreSrcDir = fileURLToPath(new URL('../core/src', import.meta.url));
+const toPosixPath = (value: string) => value.split(path.sep).join(path.posix.sep);
+
 export default defineConfig({
+  resolve: {
+    alias: [
+      {
+        find: /^@google\/gemini-cli-core\/(.+)$/,
+        replacement: toPosixPath(path.join(coreSrcDir, '$1')),
+      },
+      {
+        find: '@google/gemini-cli-core',
+        replacement: toPosixPath(path.join(coreSrcDir, 'index.ts')),
+      },
+    ],
+  },
   test: {
     include: ['**/*.{test,spec}.?(c|m)[jt]s?(x)', 'config.test.ts'],
     exclude: ['**/node_modules/**', '**/dist/**', '**/cypress/**'],
