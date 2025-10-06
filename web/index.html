@@ -177,6 +177,7 @@
     </style>
   </head>
   <body>
+    <div id="regimeTicker" style="margin: 16px 0;"></div>
     <header>
       <h1>MWRA Interactive Glossary</h1>
       <p>
@@ -258,5 +259,10 @@
     </dialog>
 
     <script src="boot_glossary.js"></script>
+  
+    <script type="module">
+      import { initRegimeTicker } from '../docs/assets/regime_ticker.js';
+      initRegimeTicker({ target: '#regimeTicker', src: 'regime_snapshot.json', autorefresh: 0 });
+    </script>
   </body>
 </html>

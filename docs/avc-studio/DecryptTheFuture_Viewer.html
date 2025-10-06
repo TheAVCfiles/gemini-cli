@@ -16,6 +16,7 @@
   </style>
 </head>
 <body>
+  <div id="regimeTicker" style="margin:16px 0;"></div>
   <h1>Decrypt the Future — Demo Viewer</h1>
   <p class="small">Drop an updated JSON next to this file named <code>DecryptTheFuture_Sample_Allison.json</code> to refresh.</p>
   <div class="grid">
@@ -94,6 +95,11 @@
     load().catch(err => {
       document.body.insertAdjacentHTML('beforeend', '<p style="color:red">Failed to load sample JSON: '+err+'</p>');
     });
+  </script>
+
+  <script type="module">
+    import { initRegimeTicker } from '../assets/regime_ticker.js';
+    initRegimeTicker({ target: '#regimeTicker', src: 'regime_snapshot.json', autorefresh: 0 });
   </script>
 </body>
 </html>
