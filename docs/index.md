@@ -36,6 +36,7 @@ This documentation is organized into the following sections:
 - **Examples:**
   - **[Vertex AI Search integration](./examples/vertex-ai-search.md):** Step-by-step guidance for connecting Gemini CLI agents to Vertex AI Search.
   - **[Realtime voice agent quickstart](./examples/realtime-voice-agent.md):** Launch a browser-based assistant that uses ephemeral client secrets for the OpenAI Realtime API.
+  - **[Room_009: Domestic Syntax manifest](./examples/room-009-domestic-syntax.json):** Narrative-rich room schema demonstrating Mother Systems worldbuilding data.
   - **[IntuitionLabs Ballet Bots curriculum assets](./intuitionlabs/README.md):** Reference materials for an arts-and-robotics learning program that leverages Gemini CLI for content generation.
 - **[Contributing & Development Guide](../CONTRIBUTING.md):** Information for contributors and developers, including setup, building, testing, and coding conventions.
 - **[NPM](./npm.md):** Details on how the project's packages are structured

@@ -1,0 +1,109 @@
+{
+  "id": "ROOM_009_DOMESTIC_SYNTAX",
+  "title": "Room_009: Domestic Syntax",
+  "version": "1.0.0",
+  "status": "draft",
+  "series": "Mother Systems",
+  "archetype_cluster": ["Mother", "Mask", "Martyr", "Rebel/Daughter"],
+  "glyphs": ["🕯", "🛻", "📺", "🍕", "🎞", "🐈", "🎡", "💿"],
+  "locations": [
+    { "name": "8 Ritter Drive", "type": "domestic.node", "latlong": null },
+    { "name": "Mt. Alvernia", "type": "sacred.node", "latlong": null }
+  ],
+  "timeline_hint": { "era": "Suburban 90s–2000s", "reentry": "Scroll: Mother Systems" },
+  "modes": {
+    "Surface": {
+      "id": "SURFACE_TACOBELL_ORBIT",
+      "tags": ["Americana", "loop", "chance"],
+      "stanza": [
+        "Mon, Gary, Corvette — drive-thru altar.",
+        "Neon communion under a sodium sky.",
+        "Wheel of Fortune spins; America prays to chance.",
+        "Mother compiles in Python: @wife, @mother, @martyr."
+      ],
+      "ui": {
+        "palette": "sodium-neon",
+        "audio": "vinyl_needle_intro",
+        "animation": "spinning_wheel_mask"
+      }
+    },
+    "Cipher": {
+      "id": "CIPHER_8_RITTER_DRIVE",
+      "tags": ["domestic.syntax", "sacred.static", "mortality"],
+      "stanza": [
+        "Mt. Alvernia hums in static; a nun’s shadow in cathode light.",
+        "Big-screen oracle speaks in commercials.",
+        "Sammy the cat’s face — a soft apocalypse.",
+        "Eddie’s sausage pizza bleeds grease into prayer.",
+        "Beach Boys: a loop for those who never left."
+      ],
+      "keys": [
+        { "key": "MASK", "value": "social camouflage as survival code" },
+        { "key": "MARTYR", "value": "sacralization of unpaid labor" },
+        { "key": "ORACLE", "value": "television as ritual device" }
+      ],
+      "ui": {
+        "palette": "TV-static",
+        "audio": "room_hum",
+        "animation": "grease_bloom_overlay"
+      }
+    },
+    "Echo": {
+      "id": "ECHO_MOTHER_MASK",
+      "tags": ["inheritance", "fork", "runtime"],
+      "stanza": [
+        "She masks better than I ever could — rage linted, runtime hidden.",
+        "I fork the repository and name it Daughtercode."
+      ],
+      "call_response": [
+        { "prompt": "What mask did you inherit?", "response_type": "text.glyph" },
+        { "prompt": "What loop do you refuse to run again?", "response_type": "text.break" }
+      ],
+      "ui": {
+        "palette": "warm_kitchen_fluorescent",
+        "audio": "quiet_sink_water",
+        "animation": "cursor_blink_on_formica"
+      }
+    }
+  },
+  "triggers": [
+    "User hovers on 🍕 three times (grease bloom reveals Cipher line 3).",
+    "Audio needle pop event toggles TV-oracle subtitle layer.",
+    "Entering with tag: {mother.mask:true} auto-opens Echo prompts."
+  ],
+  "ritual": {
+    "name": "Mask.Lint",
+    "steps": [
+      "Write one inherited script line (e.g., 'Be nice. Be quiet.').",
+      "Strike it through, then rename it (e.g., 'Be precise. Be loud.').",
+      "Place the renamed line into the Daughtercode ledger."
+    ],
+    "artifact": "ledger://daughtercode/room_009.jsonl"
+  },
+  "hazards": [
+    "Nostalgia loop (user stalls in Surface).",
+    "Oracle overfitting (television dictates meaning).",
+    "Martyr recursion (user confuses care with self-erasure)."
+  ],
+  "exits": [
+    { "to": "ROOM_001_SIGNAL_AND_STATIC", "on": "needle_pop && user_submits_mask" },
+    { "to": "ROOM_008_MOTHERNET", "on": "ledger_lines>=3" },
+    { "to": "ROOM_004_TRANSMISSION_CORRUPT", "on": "oracle_subtitles_decoded" }
+  ],
+  "metrics": {
+    "mask_lines_submitted": 0,
+    "echo_responses": 0,
+    "oracle_decodes": 0
+  },
+  "legal_sensitivity": ["family_names", "street_address"],
+  "redaction_rules": [
+    { "pattern": "([0-9]+\\s+Ritter\\s+Drive)", "action": "hash" },
+    { "pattern": "([A-Z][a-z]+\\s+Alvernia)", "action": "generalize: 'local convent'" }
+  ],
+  "provenance": {
+    "source": "AVC memory sequence",
+    "author": "@xoAVCxo",
+    "created": "2025-10-10",
+    "notes": "Derived from Domestic Syntax fragment; integrates Mother.Mask motif."
+  }
+}
