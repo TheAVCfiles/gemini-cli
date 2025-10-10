@@ -7,6 +7,7 @@ The IntuitionLabs Ballet Bots program combines creative movement, robotics, and 
 - `class_overviews/`
   - [`ballet_bots.md`](./class_overviews/ballet_bots.md): Curriculum goals, narrative arc, and module breakdown.
   - [`minting_system_overview.md`](./class_overviews/minting_system_overview.md): Token and badge mechanics that reward learner progress.
+- [`adaptive_ethics_secure_edition.md`](./adaptive_ethics_secure_edition.md): DOI-backed reference sheet for the Secure Edition research bundle.
 - `teaching_materials/`
   - [`lesson_plans.md`](./teaching_materials/lesson_plans.md): Ready-to-run outlines for each session.
   - [`student_worksheets.md`](./teaching_materials/student_worksheets.md): Printable activities and reflection prompts.
