@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Visual Idea Canvas</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css"
+      integrity="sha384-5gL/zy5tr3I9k2feuw+ZQilnxVe3Qo8NMHGUbqeasTyVmbwSPZ7T++YaUHr8r68m"
+      crossorigin="anonymous"
+    />
+    <style>
+      :root {
+        --surface: #0f172a;
+        --surface-accent: #1e3a8a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+      }
+
+      body {
+        background: #f8fafc;
+        color: #0f172a;
+      }
+
+      header.hero {
+        background: linear-gradient(140deg, var(--surface) 0%, var(--surface-accent) 100%);
+        color: #fff;
+        padding: 3.5rem 1rem 2.5rem;
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+
+      header.hero h1 {
+        margin-bottom: 0.75rem;
+        font-size: clamp(2.25rem, 4vw, 3rem);
+        font-weight: 700;
+      }
+
+      header.hero p {
+        margin: 0 auto;
+        max-width: 720px;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      main {
+        max-width: 960px;
+        margin: 0 auto 4rem;
+        padding: 0 1.5rem 4rem;
+      }
+
+      .panel {
+        background: #fff;
+        border-radius: 20px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        box-shadow: 0 25px 55px rgba(15, 23, 42, 0.12);
+        padding: clamp(1.5rem, 4vw, 2.5rem);
+        margin-bottom: 1.75rem;
+      }
+
+      .panel h2 {
+        margin-bottom: 1rem;
+        font-size: 1.45rem;
+        font-weight: 650;
+      }
+
+      .panel p.lead {
+        color: var(--muted);
+        margin-bottom: 2rem;
+      }
+
+      .grid-two {
+        display: grid;
+        gap: 1.25rem;
+      }
+
+      @media (min-width: 768px) {
+        .grid-two {
+          grid-template-columns: 2fr 3fr;
+          align-items: end;
+        }
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+      }
+
+      .stages {
+        display: grid;
+        gap: 1.25rem;
+      }
+
+      @media (min-width: 900px) {
+        .stages {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .stage-card {
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        padding: 1.25rem;
+        background: #fff;
+        min-height: 320px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        box-shadow: 0 18px 35px rgba(148, 163, 184, 0.15);
+      }
+
+      .stage-card h3 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
+      .stage-card div > p {
+        margin-bottom: 0.5rem;
+      }
+
+      .stage-card .empty {
+        color: var(--muted);
+      }
+
+      .env-hint {
+        font-size: 0.9rem;
+        color: var(--muted);
+        margin-top: -0.25rem;
+      }
+
+      .toast {
+        position: fixed;
+        inset: auto 1rem 1rem auto;
+        padding: 0.75rem 1.25rem;
+        border-radius: 999px;
+        font-weight: 600;
+        color: #fff;
+        background: #ef4444;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
+        transition: opacity 0.3s ease;
+        opacity: 0;
+      }
+
+      .toast:not(.hidden) {
+        opacity: 1;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      #loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        font-weight: 600;
+        padding: 2rem 0;
+        color: var(--muted);
+      }
+
+      .spinner {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        border: 3px solid #cbd5f5;
+        border-top-color: #2563eb;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      textarea {
+        min-height: 160px;
+      }
+
+      footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.9rem;
+        padding: 2rem 0 3rem;
+      }
+
+      footer a {
+        color: #1d4ed8;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <h1>Visual Idea Canvas</h1>
+      <p>
+        Generate AI-assisted product stages in one click. Save an API key locally,
+        draft a plan, tweak it iteratively, and export ready-to-share Markdown for
+        your team.
+      </p>
+    </header>
+
+    <main>
+      <section class="panel" aria-labelledby="idea-heading">
+        <div class="grid-two">
+          <div>
+            <h2 id="idea-heading">Input</h2>
+            <p class="lead">
+              Paste a Gemini API key (optional) and describe your idea. Without a
+              key the canvas falls back to an offline mock so you can still test
+              the workflow.
+            </p>
+            <label for="apiKey">Gemini API key</label>
+            <input
+              id="apiKey"
+              name="apiKey"
+              type="password"
+              autocomplete="off"
+              spellcheck="false"
+              inputmode="text"
+              aria-describedby="apiKeyHelp"
+            />
+            <small id="apiKeyHelp" class="env-hint"
+              >Stored in your browser only after pressing Enter.</small
+            >
+          </div>
+          <div>
+            <label for="ideaPrompt">Idea prompt</label>
+            <textarea
+              id="ideaPrompt"
+              name="ideaPrompt"
+              placeholder="Example: A glossary tool that spots conflicts between engineering glossaries"
+            ></textarea>
+            <div class="actions" role="group" aria-label="Idea actions">
+              <button id="generateBtn" type="button" class="contrast">
+                Generate stages
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="actions" style="justify-content: flex-end">
+          <button id="copyBtn" type="button" class="secondary hidden">
+            Copy to Clipboard
+          </button>
+          <button id="downloadBtn" type="button" class="outline hidden">
+            Download Markdown
+          </button>
+        </div>
+      </section>
+
+      <section class="panel" aria-live="polite">
+        <div id="loading" class="hidden" aria-busy="false" role="status">
+          <div class="spinner" aria-hidden="true"></div>
+          <span>Generating the canvas…</span>
+        </div>
+        <div id="stagesContainer" class="stages hidden">
+          <article class="stage-card" aria-labelledby="draft-heading">
+            <h3 id="draft-heading">Draft</h3>
+            <div id="draftContent">
+              <p class="empty">Generate to populate the draft stage.</p>
+            </div>
+          </article>
+          <article class="stage-card" aria-labelledby="staging-heading">
+            <h3 id="staging-heading">Staging</h3>
+            <div id="stagingContent">
+              <p class="empty">Generate to populate the staging stage.</p>
+            </div>
+          </article>
+          <article class="stage-card" aria-labelledby="prod-heading">
+            <h3 id="prod-heading">Production</h3>
+            <div id="prodContent">
+              <p class="empty">Generate to populate the production stage.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="tweakContainer" class="panel hidden" aria-labelledby="tweak-heading">
+        <h2 id="tweak-heading">Tweak the canvas</h2>
+        <p class="lead">
+          Provide follow-up instructions and regenerate the three stages while
+          keeping environment variable hints in place.
+        </p>
+        <label for="tweakPrompt">Tweak prompt</label>
+        <textarea
+          id="tweakPrompt"
+          name="tweakPrompt"
+          placeholder="Example: Emphasize data governance and add a telemetry rollout milestone"
+        ></textarea>
+        <div class="actions" style="justify-content: flex-end">
+          <button id="tweakBtn" type="button">
+            Apply tweak
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Part of the MWRA interactive tooling suite ·
+      <a href="index.html">Back to glossary</a>
+    </footer>
+
+    <div id="messageBox" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/dompurify@3.0.11/dist/purify.min.js"
+      integrity="sha384-g7hLr+UOQ4kHUKnONy36o9C2jw+GWNmQc9FCuRWS5ivBp4Vs8IbRKKti+HYAGsn6"
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        if (window.DOMPurify) return;
+        console.warn("DOMPurify failed to load; falling back to minimal sanitizer.");
+        window.DOMPurify = {
+          sanitize(value) {
+            const div = document.createElement("div");
+            div.textContent = value;
+            return div.innerHTML;
+          },
+        };
+      });
+    </script>
+    <script>
+  document.addEventListener('DOMContentLoaded', () => {
+  // ---------- Config ----------
+  const MODEL = 'gemini-2.5-flash-preview-05-20:generateContent';
+  const API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models/';
+  const API_URL = (key) => `${API_BASE}${MODEL}?key=${encodeURIComponent(key)}`;
+
+  // ---------- Elements ----------
+  const apiKeyEl = document.getElementById('apiKey');
+  const ideaPromptInput = document.getElementById('ideaPrompt');
+  const tweakPromptInput = document.getElementById('tweakPrompt');
+  const generateBtn = document.getElementById('generateBtn');
+  const tweakBtn = document.getElementById('tweakBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const loadingDiv = document.getElementById('loading');
+  const stagesContainer = document.getElementById('stagesContainer');
+  const tweakContainer = document.getElementById('tweakContainer');
+  const draftContent = document.getElementById('draftContent');
+  const stagingContent = document.getElementById('stagingContent');
+  const prodContent = document.getElementById('prodContent');
+  const messageBox = document.getElementById('messageBox');
+
+  // a11y live region for toasts
+  messageBox.setAttribute('role','status');
+  messageBox.setAttribute('aria-live','polite');
+
+  let currentIdea = '';      // canonical markdown from model/mock
+  let currentIdeaSlug = '';  // for filename
+  let keySaved = false;
+
+  // ---------- Local storage (opt-in) ----------
+  // Do not auto-persist the key; user must press Enter in the field to save.
+  apiKeyEl.placeholder = 'Paste key (press Enter to save)';
+  apiKeyEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      localStorage.setItem('gemini_api_key', apiKeyEl.value.trim());
+      keySaved = true;
+      toast('API key saved locally', 'ok');
+    }
+  });
+  // If user previously saved, load it
+  const stored = localStorage.getItem('gemini_api_key');
+  if (stored) { apiKeyEl.value = stored; keySaved = true; }
+
+  // ---------- Helpers ----------
+  function toast(msg, type = 'error') {
+    messageBox.textContent = msg;
+    messageBox.style.backgroundColor = type === 'error' ? '#ef4444' : '#22c55e';
+    messageBox.classList.remove('hidden');
+    window.setTimeout(() => messageBox.classList.add('hidden'), 2200);
+  }
+
+  function setBusy(busy) {
+    [generateBtn, tweakBtn, copyBtn, downloadBtn, ideaPromptInput, tweakPromptInput].forEach(b => b.disabled = busy);
+    loadingDiv.classList.toggle('hidden', !busy);
+    stagesContainer.classList.toggle('hidden', busy);
+    // a11y
+    loadingDiv.setAttribute('aria-busy', String(busy));
+  }
+
+  function slugify(str) {
+    return (str || 'visual-idea-canvas')
+      .toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60);
+  }
+
+  function mockResponse(promptText) {
+    return `### Draft
+- Core concept: ${promptText}
+- Key features to explore: user journeys, simple UI mock, glossary.
+- UI/UX: one-page canvas, big buttons, friendly copy.
+
+### Staging
+- Functional prototype with read-only views and basic interactions.
+- Internal testing: feedback capture, error states, loading spinners.
+- STAGING_API_URL=https://api.myapp-staging.example.com
+
+### Production
+- Polished UX, auth, shareable links, telemetry (privacy-first).
+- Public features: export, versioning, tweak loop.
+- PROD_API_URL=https://api.myapp.example.com`;
+  }
+
+  async function fetchWithBackoff(url, options, retries = 3, delay = 800) {
+    try {
+      const res = await fetch(url, options);
+      if (res.status === 429 && retries > 0) {
+        await new Promise(r => setTimeout(r, delay));
+        return fetchWithBackoff(url, options, retries - 1, delay * 2);
+      }
+      if (!res.ok) {
+        let msg = `${res.status} ${res.statusText}`;
+        try { const j = await res.json(); if (j?.error?.message) msg += ` — ${j.error.message}`; } catch {}
+        throw new Error(msg);
+      }
+      return res.json();
+    } catch (e) {
+      if (retries > 0) {
+        await new Promise(r => setTimeout(r, delay));
+        return fetchWithBackoff(url, options, retries - 1, delay * 2);
+      }
+      throw e;
+    }
+  }
+
+  // Parse sections: capture content after a header until the next header or end
+  function sliceSection(md, header) {
+    const rx = new RegExp(`^\s*###\s*${header}\s*\n([\s\S]*?)(?=\n\s*###\s*|$)`, 'im');
+    const m = md.match(rx);
+    return m ? m[1].trim() : '';
+  }
+
+  function renderMarkdownSegment(md) {
+    const lines = md.split('\n').filter((line) => line.trim() !== '');
+    const html = lines
+      .map((line) => {
+        if (/^\s*-\s+/.test(line)) {
+          return `<p class="flex items-start"><span class="mr-2 text-indigo-500 font-bold" aria-hidden="true">•</span><span>${line.replace(/^\s*-\s+/, '')}</span></p>`;
+        }
+        if (/^[A-Z0-9_]+\s*=/.test(line)) {
+          const [k, ...rest] = line.split('=');
+          const v = rest.join('=').trim();
+          return `<div class="bg-gray-50 border border-gray-200 p-3 rounded-md font-mono text-sm" role="group" aria-label="Environment variable">
+                  <span class="font-semibold text-gray-800">${k.trim()}</span>
+                  <span class="text-gray-500"> = </span>
+                  <span class="break-all">${v.replace(/^"+|"+$/g,'')}</span>
+                </div>`;
+        }
+        return `<p>${line}</p>`;
+      })
+      .join('\n');
+
+    return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+  }
+
+  function parseAndRenderIdea(md) {
+    const draft = sliceSection(md, 'Draft') || 'No content generated.';
+    const staging = sliceSection(md, 'Staging') || 'No content generated.';
+    const production = sliceSection(md, 'Production') || 'No content generated.';
+
+    draftContent.innerHTML = renderMarkdownSegment(draft);
+    stagingContent.innerHTML = renderMarkdownSegment(staging);
+    prodContent.innerHTML = renderMarkdownSegment(production);
+
+    // a11y: move focus to first stage header for screen readers
+    stagesContainer.querySelector('h3')?.focus?.();
+  }
+
+  function enablePostActions() {
+    tweakContainer.classList.remove('hidden');
+    stagesContainer.classList.remove('hidden');
+    tweakBtn.classList.remove('hidden');
+    copyBtn.classList.remove('hidden');
+    downloadBtn.classList.remove('hidden');
+  }
+
+  function toMarkdownExport() {
+    // Export from canonical markdown instead of DOM text to preserve structure.
+    return currentIdea || '';
+  }
+
+  async function callGemini(promptText, systemText) {
+    const key = apiKeyEl.value.trim();
+    if (!key) return { text: mockResponse(promptText), mocked: true };
+
+    const payload = {
+      contents: [{ parts: [{ text: promptText }] }],
+      systemInstruction: { parts: [{ text: systemText }] }
+    };
+
+    const json = await fetchWithBackoff(API_URL(key), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const candidate = json?.candidates?.[0];
+    const text = candidate?.content?.parts?.[0]?.text;
+    if (!text) throw new Error('Empty or malformed model response.');
+    return { text, mocked: false };
+  }
+
+  // ---------- Actions ----------
+  async function generateIdea() {
+    const idea = ideaPromptInput.value.trim();
+    if (!idea) { toast('Enter an idea first'); return; }
+
+    setBusy(true);
+    try {
+      const prompt = `Act as a product manager and visual designer. I have an idea: "${idea}".
+Break it into three sections with markdown headers exactly: "### Draft", "### Staging", "### Production".
+Each section must include 3–6 concise bullets. In Staging and Production, include one example environment variable (different per stage).
+Use clear, concrete language.`;
+
+      const sys = `You are a precise product development assistant. ALWAYS return exactly three sections headed "### Draft", "### Staging", and "### Production".`;
+
+      const { text } = await callGemini(prompt, sys);
+
+      // Validate the three headers exist; otherwise fall back.
+      if (!/###\s*Draft/i.test(text) || !/###\s*Staging/i.test(text) || !/###\s*Production/i.test(text)) {
+        throw new Error('Response missing required headers.');
+      }
+
+      currentIdea = text;
+      currentIdeaSlug = slugify(idea);
+      parseAndRenderIdea(text);
+      enablePostActions();
+      ideaPromptInput.value = '';
+
+      // announce completion
+      toast('Stages generated', 'ok');
+    } catch (e) {
+      console.error(e);
+      const fallback = mockResponse(idea);
+      currentIdea = fallback;
+      currentIdeaSlug = slugify(idea);
+      parseAndRenderIdea(fallback);
+      enablePostActions();
+      toast(`Using offline mock (${e.message || 'error'})`, 'error');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function tweakIdea() {
+    const tweak = tweakPromptInput.value.trim();
+    if (!tweak || !currentIdea.trim()) { toast('Nothing to tweak'); return; }
+
+    setBusy(true);
+    try {
+      const prompt = `Given this three-stage plan:
+${currentIdea}
+
+Apply this change: "${tweak}".
+Return the updated plan in the exact same three sections and headers. Keep environment variables present and distinct.`;
+      const sys = `You refine plans. Return EXACTLY the three headers "### Draft", "### Staging", "### Production".`;
+      const { text } = await callGemini(prompt, sys);
+
+      if (!/###\s*Draft/i.test(text) || !/###\s*Staging/i.test(text) || !/###\s*Production/i.test(text)) {
+        throw new Error('Response missing required headers.');
+      }
+
+      currentIdea = text;
+      parseAndRenderIdea(text);
+      tweakPromptInput.value = '';
+      toast('Tweaked', 'ok');
+    } catch (e) {
+      console.error(e);
+      toast(`Failed to tweak — ${e.message}`, 'error');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function copyAll() {
+    const md = toMarkdownExport();
+    if (!md.trim()) { toast('Nothing to copy'); return; }
+    navigator.clipboard.writeText(md).then(() => {
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => copyBtn.textContent = 'Copy to Clipboard', 1500);
+    }).catch(err => {
+      console.error(err);
+      toast('Copy failed — select and copy manually.', 'error');
+    });
+  }
+
+  function downloadMd() {
+    const md = toMarkdownExport();
+    if (!md.trim()) { toast('Nothing to download'); return; }
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `${currentIdeaSlug || 'visual-idea-canvas'}.md`;
+    document.body.appendChild(a); a.click();
+    a.remove(); URL.revokeObjectURL(url);
+    toast('Downloaded .md', 'ok');
+  }
+
+  // ---------- Wire up ----------
+  generateBtn.addEventListener('click', generateIdea);
+  tweakBtn.addEventListener('click', tweakIdea);
+  copyBtn.addEventListener('click', copyAll);
+  downloadBtn.addEventListener('click', downloadMd);
+
+  // Keyboard: Cmd/Ctrl+Enter to generate, Shift+Enter to tweak
+  document.addEventListener('keydown', (e) => {
+    const isMac = navigator.platform.toUpperCase().includes('MAC');
+    if ((isMac ? e.metaKey : e.ctrlKey) && e.key === 'Enter') {
+      e.preventDefault(); generateIdea();
+    } else if (e.shiftKey && e.key === 'Enter') {
+      e.preventDefault(); tweakIdea();
+    }
+  });
+
+  // Respect prefers-reduced-motion (pause spinner animation)
+  const m = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function applyReducedMotion() {
+    if (m.matches) loadingDiv.querySelector('.spinner')?.style?.setProperty('animation', 'none');
+  }
+  m.addEventListener?.('change', applyReducedMotion);
+  applyReducedMotion();
+
+  // Reveal previously saved key message
+  if (keySaved) {
+    toast('API key restored from local storage', 'ok');
+  }
+  });
+    </script>
+  </body>
+</html>

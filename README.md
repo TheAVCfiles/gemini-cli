@@ -14,6 +14,7 @@ optional `/ask` endpoint for AI-assisted explanations.
 - Alphabet navigation (A–Z / #) and instant search
 - Export currently visible entries as CSV
 - Optional OpenAI-backed assistant (falls back to offline stub)
+- Visual Idea Canvas for planning product launches with optional Gemini integration
 
 ---
 
@@ -85,6 +86,7 @@ Environment variables:
 ```
 web/
   index.html            # UI shell and Pico.css theme
+  visual-idea-canvas.html # Visual Idea Canvas generator (Gemini optional)
   boot_glossary.js      # Glossary bootstrapper + conflict agent
   glossary.json         # Canonical glossary dataset
 netlify/
