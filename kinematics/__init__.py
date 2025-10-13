@@ -13,6 +13,7 @@ from .glisse_fsm import (
     VolSignal,
     DeadlineWindow,
 )
+from .v90d100_protocol import V90D100Protocol
 
 __all__ = [
     "DeadlineWindow",
@@ -26,4 +27,5 @@ __all__ = [
     "StructureSignal",
     "VolSignal",
     "elastic_deadline",
+    "V90D100Protocol",
 ]
