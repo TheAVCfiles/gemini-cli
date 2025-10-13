@@ -12,12 +12,18 @@
 node_modules
 bower_components
 
+# Python virtual environments and artifacts
+.venv/
+__pycache__/
+*.pyc
+
 # Editors
 .idea
 *.iml
 
 # OS metadata
 .DS_Store
+*.DS_Store
 Thumbs.db
 
 # TypeScript build info files
@@ -40,6 +46,9 @@ packages/cli/src/generated/
 packages/core/src/generated/
 .integration-tests/
 packages/vscode-ide-companion/*.vsix
+
+# Artifacts
+artifacts/*.zip
 
 # GHA credentials
 gha-creds-*.json
