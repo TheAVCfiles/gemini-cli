@@ -4,6 +4,7 @@ Use this list when applying the bundle in a downstream repository.
 
 - [ ] Extract the archive into `_mwra_patch/` (or pass a different path to the script).
 - [ ] Run `bash apply_mwra_patch.sh` (optionally pass the extracted directory).
+  - [ ] Provide `--sha256 <HEX>` when verifying a downloaded archive.
 - [ ] Confirm `web/index.html` includes `<script src="boot_glossary.js"></script>` before `</body>`.
 - [ ] Inspect `web/glossary.json` to verify the canonical dataset copied correctly.
 - [ ] Deploy locally (`netlify dev`) and ensure:
