@@ -64,13 +64,18 @@ describe('initCommand', () => {
     const result = await initCommand.action!(mockContext, '');
 
     // Assert: Check that writeFileSync was called correctly
-    expect(fs.writeFileSync).toHaveBeenCalledWith(geminiMdPath, '', 'utf8');
+    expect(fs.writeFileSync).toHaveBeenCalledWith(
+      geminiMdPath,
+      expect.stringContaining('# Project Overview'),
+      'utf8',
+    );
 
     // Assert: Check that an informational message was added to the UI
     expect(mockContext.ui.addItem).toHaveBeenCalledWith(
       {
         type: 'info',
-        text: 'Empty GEMINI.md created. Now analyzing the project to populate it.',
+        text:
+          'Starter GEMINI.md template created. Now analyzing the project to populate it.',
       },
       expect.any(Number),
     );

@@ -40,13 +40,31 @@ export const initCommand: SlashCommand = {
       };
     }
 
-    // Create an empty GEMINI.md file
-    fs.writeFileSync(geminiMdPath, '', 'utf8');
+    const template = `# Project Overview
+
+TODO: Summarize the project's purpose, primary technologies, and any notable
+architecture decisions.
+
+## Building and Running
+
+- TODO: Document the commands to install dependencies.
+- TODO: Document the commands to build or compile the project.
+- TODO: Document the commands to run the project locally.
+- TODO: Document the commands to run tests or quality checks.
+
+## Development Conventions
+
+- TODO: Capture any contribution guidelines, coding standards, or testing
+  requirements you discover.
+`;
+
+    fs.writeFileSync(geminiMdPath, template, 'utf8');
 
     context.ui.addItem(
       {
         type: 'info',
-        text: 'Empty GEMINI.md created. Now analyzing the project to populate it.',
+        text:
+          'Starter GEMINI.md template created. Now analyzing the project to populate it.',
       },
       Date.now(),
     );
