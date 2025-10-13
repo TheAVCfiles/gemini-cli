@@ -14,6 +14,7 @@ This documentation is organized into the following sections:
   - **[Running locally and in sandboxes](./deployment.md):** Information for running Gemini CLI.
   - **[Firebase Hosting quick start](./firebase-hosting.md):** Deploy the MWRA glossary demo with a single Firebase project.
 - **[Architecture Overview](./architecture.md):** Understand the high-level design of Gemini CLI, including its components and how they interact.
+- **[Agents](./agents.md):** Learn how to build agents with the OpenAI API using composable primitives.
 - **CLI Usage:** Documentation for `packages/cli`.
   - **[CLI Introduction](./cli/index.md):** Overview of the command-line interface.
   - **[Commands](./cli/commands.md):** Description of available CLI commands.
