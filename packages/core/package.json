@@ -6,6 +6,10 @@
     "type": "git",
     "url": "git+https://github.com/google-gemini/gemini-cli.git"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
