@@ -16,8 +16,34 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from typing import Optional
 
 import pandas as pd
+from pydantic import BaseModel, Field
+
+
+class Regime(BaseModel):
+    tri: float = Field(0.0, description="Systemic stress score TRI*")
+    tau_star: float = Field(0.0, description="Regime indicator τ*")
+
+
+class Deadlines(BaseModel):
+    D0: int = 4
+    min_D: int = 2
+    max_D: int = 12
+
+
+class RiskBudget(BaseModel):
+    bps: float = 15.0
+    no_scale_p_low: float = 0.05
+    no_scale_p_high: float = 0.35
+
+
+class EngineConfig(BaseModel):
+    structure_min: int = Field(85, ge=0)
+    tau_ci_excludes_zero: bool = True
+    deadlines: Deadlines = Field(default_factory=Deadlines)
+    risk: RiskBudget = Field(default_factory=RiskBudget)
 
 
 @dataclass(frozen=True)
@@ -61,6 +87,8 @@ def read_tau_summary(path: Path) -> dict[str, Any]:
     ci_high = float(row.get("ci_high"))
     tau_star = float(row.get("tau_star"))
     r_star = float(row.get("r_star"))
+    tri_value = row.get("tri", 0.0)
+    tri = 0.0 if pd.isna(tri_value) else float(tri_value)
     excludes_zero = (ci_low > 0 and ci_high > 0) or (ci_low < 0 and ci_high < 0)
     return {
         "tau_star": tau_star,
@@ -68,6 +96,7 @@ def read_tau_summary(path: Path) -> dict[str, Any]:
         "ci_low": ci_low,
         "ci_high": ci_high,
         "tau_ci_excludes_zero": excludes_zero,
+        "tri": tri,
     }
 
 
@@ -92,7 +121,7 @@ def structural_confirmation(path: Path, fallback: int) -> dict[str, Any]:
     if confirmed_rows.empty:
         return {"struct_confirmed": False, "tap_weight": fallback, "confirmation": None}
 
-    confirmation = confirmed_rows.iloc[0].get("confirmation")
+    confirmation: Optional[str] = confirmed_rows.iloc[0].get("confirmation")
     weight = fallback
     if isinstance(confirmation, str):
         # confirmation strings look like "Event name (W:95, 2024-01-01)"
@@ -121,6 +150,12 @@ def build_payload(inputs: RegimeInputs) -> dict[str, Any]:
     regime = "kinetic_power_up" if gate_open else "cunning_mercy"
     max_risk = 0.025 if gate_open else 0.005
 
+    regime_metrics = Regime(tri=tau_info["tri"], tau_star=tau_info["tau_star"])
+    engine_config = EngineConfig(
+        structure_min=int(struct_info["tap_weight"]),
+        tau_ci_excludes_zero=tau_info["tau_ci_excludes_zero"],
+    )
+
     payload = {
         "struct_confirmed": struct_info["struct_confirmed"],
         "tap_weight": struct_info["tap_weight"],
@@ -134,6 +169,8 @@ def build_payload(inputs: RegimeInputs) -> dict[str, Any]:
         "gate_open": gate_open,
         "regime": regime,
         "max_position_risk": max_risk,
+        "regime_metrics": regime_metrics.model_dump(),
+        "engine_config": engine_config.model_dump(),
     }
     return payload
 
