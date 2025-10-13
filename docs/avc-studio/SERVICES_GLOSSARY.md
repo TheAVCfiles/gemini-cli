@@ -16,9 +16,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
@@ -55,9 +55,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
@@ -94,9 +94,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
@@ -133,9 +133,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
@@ -172,9 +172,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
@@ -211,9 +211,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
@@ -250,9 +250,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
@@ -289,9 +289,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
@@ -328,9 +328,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
@@ -367,9 +367,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
@@ -406,9 +406,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
@@ -445,9 +445,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
@@ -484,9 +484,9 @@
 - **Outputs:** UI state, events, downloadable artifacts
 
 **Interfaces**  
-- **User-facing:** routes/components TBD  
-- **APIs/Functions:** TBD (see `docs/api.md`)  
-- **Files/Schemas:** TBD
+- **User-facing:** None detected (no router modules found); Components: AboutBox, AppWrapper, AuthDialog, AuthInProgress, AutoAcceptIndicator, CloudFreePrivacyNotice, CloudPaidPrivacyNotice, CompressionMessage, ConsoleSummaryDisplay, ContextSummaryDisplay, ContextUsageDisplay, DebugProfiler, +54 more  
+- **APIs/Functions:** aboutCommand, addCommand, addMCPStatusChangeListener, applyReplacement, authCommand, bugCommand, calculateReplacement, chatCommand, clearCommand, compressCommand, connectAndDiscover, connectToMcpServer, +63 more  
+- **Files/Schemas:** DecryptTheFuture (docs/avc-studio/DecryptTheFuture_Schema.json)
 
 **Dependencies**  
 - Upstream: Surface/Cipher/Echo (as relevant)  
