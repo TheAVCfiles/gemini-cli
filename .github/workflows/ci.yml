@@ -92,7 +92,16 @@ jobs:
         uses: 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' # ratchet:actions/setup-node@v4.4.0
         with:
           node-version-file: '.nvmrc'
-          cache: 'npm'
+
+      - name: 'Cache node_modules'
+        uses: 'actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830' # ratchet:actions/cache@v4
+        with:
+          path: |-
+            ~/.npm
+            node_modules
+          key: '${{ runner.os }}-node-${{ hashFiles(''.nvmrc'') }}-${{ hashFiles(''**/package-lock.json'') }}'
+          restore-keys: |-
+            ${{ runner.os }}-node-
 
       - name: 'Run lockfile check'
         run: |-
@@ -274,7 +283,16 @@ jobs:
         uses: 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' # ratchet:actions/setup-node@v4
         with:
           node-version: '${{ matrix.node-version }}'
-          cache: 'npm'
+
+      - name: 'Cache node_modules'
+        uses: 'actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830' # ratchet:actions/cache@v4
+        with:
+          path: |-
+            ~/.npm
+            node_modules
+          key: '${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles(''**/package-lock.json'') }}'
+          restore-keys: |-
+            ${{ runner.os }}-node-${{ matrix.node-version }}-
 
       - name: 'Build project'
         run: |-
