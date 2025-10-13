@@ -48,10 +48,14 @@ The `README_FIREBASE.md` inside the archive mirrors the next sections for quick 
 ```bash
 cd functions
 npm install
+npm install google-generative-ai
+npm run build
 cd ..
 ```
 
-The package only pulls the HTTPS Function runtime dependencies, so this step completes quickly even on the free tier.
+The package only pulls the HTTPS Function runtime dependencies, so this step completes quickly even on the free tier. The extra
+`npm install google-generative-ai` command pins the Gemini SDK used by the Cloud Function, and `npm run build` transpiles the
+TypeScript sources before deployment.
 
 ## 4. Configure project aliases and Hosting target
 
@@ -93,7 +97,12 @@ firebase deploy --only hosting:codex-mwra,functions
 ```
 
 The CLI will upload the `web/` assets to Firebase Hosting and deploy the `/ask` HTTPS function. Because only `/ask` traffic hits
-the Function, most requests stay on the free Hosting tier.
+the Function, most requests stay on the free Hosting tier. When you are iterating on the backend logic you can run the following
+shorter command to push only Function changes:
+
+```bash
+firebase deploy --only functions
+```
 
 ## 7. Test the deployment
 
