@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Evidence Matrix</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css"
+      integrity="sha384-5gL/zy5tr3I9k2feuw+ZQilnxVe3Qo8NMHGUbqeasTyVmbwSPZ7T++YaUHr8r68m"
+      crossorigin="anonymous"
+    />
+    <style>
+      :root {
+        --surface: #0f172a;
+        --surface-accent: #1e3a8a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+      }
+
+      body {
+        background: #f8fafc;
+        color: #0f172a;
+      }
+
+      header.hero {
+        background: linear-gradient(135deg, var(--surface), var(--surface-accent));
+        color: #fff;
+        padding: 3.5rem 1rem 2.5rem;
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+
+      header.hero h1 {
+        margin-bottom: 0.75rem;
+        font-size: clamp(2.25rem, 4vw, 3rem);
+        font-weight: 700;
+      }
+
+      header.hero p {
+        margin: 0 auto;
+        max-width: 760px;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      main {
+        max-width: 1100px;
+        margin: 0 auto 5rem;
+        padding: 0 1.5rem;
+      }
+
+      .panel {
+        background: #fff;
+        border-radius: 20px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        box-shadow: 0 25px 55px rgba(15, 23, 42, 0.12);
+        padding: clamp(1.5rem, 4vw, 2.5rem);
+        margin-bottom: 2rem;
+      }
+
+      .panel h2 {
+        margin-bottom: 1rem;
+        font-size: 1.45rem;
+        font-weight: 650;
+      }
+
+      .lead {
+        color: var(--muted);
+        margin-bottom: 1.5rem;
+      }
+
+      textarea {
+        min-height: 220px;
+        font-family: "Source Code Pro", "SFMono-Regular", ui-monospace, SFMono-Regular,
+          Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        justify-content: flex-end;
+        margin-top: 1.25rem;
+      }
+
+      .summary-grid {
+        display: grid;
+        gap: 1.25rem;
+      }
+
+      @media (min-width: 768px) {
+        .summary-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .summary-card {
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        padding: 1.25rem;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        box-shadow: 0 18px 35px rgba(148, 163, 184, 0.15);
+      }
+
+      .summary-card h3 {
+        margin: 0;
+        font-size: 1.15rem;
+      }
+
+      .summary-card ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: #1f2937;
+      }
+
+      .summary-card li + li {
+        margin-top: 0.35rem;
+      }
+
+      .projects {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .project-card {
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        padding: 1.5rem;
+        background: #fff;
+        box-shadow: 0 22px 45px rgba(148, 163, 184, 0.18);
+      }
+
+      .project-card h3 {
+        margin-bottom: 0.35rem;
+        font-size: 1.25rem;
+      }
+
+      .project-goal {
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+
+      .project-score {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: rgba(37, 99, 235, 0.12);
+        color: #1d4ed8;
+        padding: 0.35rem 0.8rem;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+
+      thead th {
+        text-align: left;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #475569;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 0.5rem;
+      }
+
+      tbody td {
+        padding: 0.65rem 0;
+        border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+      }
+
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .score-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.55rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background: rgba(16, 185, 129, 0.15);
+        color: #0f766e;
+      }
+
+      .status-chip {
+        display: inline-flex;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: rgba(239, 68, 68, 0.12);
+        color: #b91c1c;
+      }
+
+      .status-chip.ready {
+        background: rgba(14, 165, 233, 0.15);
+        color: #0369a1;
+      }
+
+      .small-note {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.9rem;
+        padding: 3rem 0 4rem;
+      }
+
+      footer a {
+        color: #1d4ed8;
+      }
+
+      #messageBox {
+        position: fixed;
+        inset: auto 1rem 1rem auto;
+        padding: 0.75rem 1.25rem;
+        border-radius: 999px;
+        font-weight: 600;
+        color: #fff;
+        background: #ef4444;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
+        transition: opacity 0.3s ease;
+        opacity: 0;
+      }
+
+      #messageBox:not(.hidden) {
+        opacity: 1;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <h1>Evidence Matrix</h1>
+      <p>
+        Paste a project portfolio JSON, calculate weighted momentum scores, and
+        surface the highest leverage moves. The matrix highlights ready-to-ship
+        tasks, flags blockers, and exports a Markdown brief for async updates.
+      </p>
+    </header>
+
+    <main>
+      <section class="panel" aria-labelledby="input-heading">
+        <h2 id="input-heading">Input portfolio</h2>
+        <p class="lead">
+          Provide a JSON object with a <code>projects</code> array. Each project
+          should contain a <code>goal</code> and a <code>tasks</code> list with
+          <code>impact</code>, <code>urgency</code>, <code>effort</code>, and
+          <code>blocked</code> fields (1–5 scale for the numeric values).
+        </p>
+        <label for="portfolioInput" class="small-note"
+          >Example data preloaded below.</label
+        >
+        <textarea id="portfolioInput" spellcheck="false"></textarea>
+        <div class="actions" role="group" aria-label="Matrix actions">
+          <button id="analyzeBtn" type="button" class="contrast">
+            Generate matrix
+          </button>
+          <button id="copyBtn" type="button" class="secondary hidden">
+            Copy Markdown
+          </button>
+          <button id="downloadBtn" type="button" class="outline hidden">
+            Download Markdown
+          </button>
+        </div>
+      </section>
+
+      <section id="summaryPanel" class="panel hidden" aria-live="polite">
+        <h2>Portfolio summary</h2>
+        <p class="lead">
+          Weighted scores emphasize impact and urgency, subtract effort, and
+          apply a penalty when tasks are blocked. Use the cards below to orient
+          the team before diving into per-project details.
+        </p>
+        <div id="summaryGrid" class="summary-grid"></div>
+      </section>
+
+      <section id="projectsPanel" class="panel hidden" aria-labelledby="projects-heading">
+        <h2 id="projects-heading">Project evidence cards</h2>
+        <div id="projectsContainer" class="projects"></div>
+      </section>
+    </main>
+
+    <footer>
+      Part of the MWRA interactive tooling suite ·
+      <a href="index.html">Back to glossary</a> ·
+      <a href="visual-idea-canvas.html">Visual Idea Canvas</a>
+    </footer>
+
+    <div id="messageBox" class="hidden" role="status" aria-live="polite"></div>
+
+    <script>
+      const SAMPLE_DATA = {
+        projects: [
+          {
+            name: "Decrypt the Girl",
+            goal: "Publish Chapter Zero + provenance portal",
+            tasks: [
+              {
+                title: "Add Evidence Matrix page",
+                impact: 5,
+                urgency: 4,
+                effort: 2,
+                blocked: false
+              },
+              {
+                title: "Polish Casa Savoia request letter",
+                impact: 4,
+                urgency: 3,
+                effort: 1,
+                blocked: false
+              }
+            ]
+          },
+          {
+            name: "Agentic Analytics",
+            goal: "Ship v0 landing page + demo",
+            tasks: [
+              {
+                title: "Draft 'How it Works' section",
+                impact: 5,
+                urgency: 5,
+                effort: 3,
+                blocked: false
+              },
+              {
+                title: "Outline demo flow",
+                impact: 4,
+                urgency: 3,
+                effort: 2,
+                blocked: true
+              }
+            ]
+          }
+        ]
+      };
+
+      const impactWeight = 2.5;
+      const urgencyWeight = 2.0;
+      const effortPenalty = 1.5;
+      const blockedPenalty = 5;
+
+      const textarea = document.getElementById("portfolioInput");
+      const analyzeBtn = document.getElementById("analyzeBtn");
+      const summaryPanel = document.getElementById("summaryPanel");
+      const summaryGrid = document.getElementById("summaryGrid");
+      const projectsPanel = document.getElementById("projectsPanel");
+      const projectsContainer = document.getElementById("projectsContainer");
+      const copyBtn = document.getElementById("copyBtn");
+      const downloadBtn = document.getElementById("downloadBtn");
+      const messageBox = document.getElementById("messageBox");
+
+      let currentPortfolio = null;
+      let currentMarkdown = "";
+
+      function toast(msg, type = "error") {
+        messageBox.textContent = msg;
+        messageBox.style.backgroundColor = type === "error" ? "#ef4444" : "#22c55e";
+        messageBox.classList.remove("hidden");
+        window.setTimeout(() => messageBox.classList.add("hidden"), 2400);
+      }
+
+      function computeScore(task) {
+        const effort = Math.max(1, Number(task.effort) || 0);
+        let score =
+          (Number(task.impact) || 0) * impactWeight +
+          (Number(task.urgency) || 0) * urgencyWeight -
+          effort * effortPenalty;
+        if (task.blocked) score -= blockedPenalty;
+        return Number(score.toFixed(1));
+      }
+
+      function decorateTasks(project) {
+        const tasks = Array.isArray(project.tasks) ? project.tasks : [];
+        return tasks.map((task) => {
+          const score = computeScore(task);
+          const readiness = task.blocked ? "Blocked" : "Ready";
+          const readinessClass = task.blocked ? "" : "ready";
+          return {
+            ...task,
+            score,
+            readiness,
+            readinessClass
+          };
+        }).sort((a, b) => b.score - a.score);
+      }
+
+      function buildSummaryCards(projects) {
+        const allTasks = projects.flatMap((project) =>
+          project.decoratedTasks.map((task) => ({ ...task, project: project.name }))
+        );
+
+        const readyTasks = allTasks.filter((task) => !task.blocked);
+        const blockedTasks = allTasks.filter((task) => task.blocked);
+
+        summaryGrid.innerHTML = "";
+
+        const topCard = document.createElement("article");
+        topCard.className = "summary-card";
+        topCard.innerHTML = "<h3>Top opportunities</h3>";
+        const topList = document.createElement("ul");
+        const topItems = readyTasks.length ? readyTasks.slice(0, 3) : allTasks.slice(0, 3);
+        topItems.forEach((task) => {
+          const li = document.createElement("li");
+          li.textContent = `${task.title} (${task.project}) — score ${task.score}`;
+          topList.appendChild(li);
+        });
+        if (!topItems.length) {
+          const li = document.createElement("li");
+          li.textContent = "No tasks available.";
+          topList.appendChild(li);
+        }
+        topCard.appendChild(topList);
+        summaryGrid.appendChild(topCard);
+
+        const focusCard = document.createElement("article");
+        focusCard.className = "summary-card";
+        focusCard.innerHTML = "<h3>Project momentum</h3>";
+        const focusList = document.createElement("ul");
+        projects
+          .map((project) => {
+            const firstReady = project.decoratedTasks.find((task) => !task.blocked);
+            return {
+              name: project.name,
+              task: firstReady,
+              score: firstReady ? firstReady.score : -Infinity
+            };
+          })
+          .sort((a, b) => b.score - a.score)
+          .forEach((entry) => {
+            const li = document.createElement("li");
+            if (entry.task) {
+              li.textContent = `${entry.name}: ${entry.task.title} (score ${entry.task.score})`;
+            } else {
+              li.textContent = `${entry.name}: awaiting unblock`;
+            }
+            focusList.appendChild(li);
+          });
+        focusCard.appendChild(focusList);
+        summaryGrid.appendChild(focusCard);
+
+        const blockCard = document.createElement("article");
+        blockCard.className = "summary-card";
+        blockCard.innerHTML = "<h3>Blocked items</h3>";
+        const blockList = document.createElement("ul");
+        if (!blockedTasks.length) {
+          const li = document.createElement("li");
+          li.textContent = "No blockers detected.";
+          blockList.appendChild(li);
+        } else {
+          blockedTasks.forEach((task) => {
+            const li = document.createElement("li");
+            li.textContent = `${task.title} (${task.project}) — unblock to reclaim ~${task.score}`;
+            blockList.appendChild(li);
+          });
+        }
+        blockCard.appendChild(blockList);
+        summaryGrid.appendChild(blockCard);
+      }
+
+      function renderProjects(projects) {
+        projectsContainer.innerHTML = "";
+        projects.forEach((project) => {
+          const card = document.createElement("article");
+          card.className = "project-card";
+
+          const title = document.createElement("h3");
+          title.textContent = project.name || "Untitled project";
+          card.appendChild(title);
+
+          if (project.goal) {
+            const goal = document.createElement("p");
+            goal.className = "project-goal";
+            goal.textContent = project.goal;
+            card.appendChild(goal);
+          }
+
+          const bestReady = project.decoratedTasks.find((task) => !task.blocked);
+          if (bestReady) {
+            const badge = document.createElement("span");
+            badge.className = "project-score";
+            badge.textContent = `Momentum: ${bestReady.score} via ${bestReady.title}`;
+            card.appendChild(badge);
+          }
+
+          const table = document.createElement("table");
+          const thead = document.createElement("thead");
+          const headRow = document.createElement("tr");
+          ["Task", "Impact", "Urgency", "Effort", "Status", "Score"].forEach((label) => {
+            const th = document.createElement("th");
+            th.textContent = label;
+            headRow.appendChild(th);
+          });
+          thead.appendChild(headRow);
+          table.appendChild(thead);
+
+          const tbody = document.createElement("tbody");
+          project.decoratedTasks.forEach((task) => {
+            const row = document.createElement("tr");
+
+            const titleCell = document.createElement("td");
+            titleCell.textContent = task.title || "Untitled task";
+            row.appendChild(titleCell);
+
+            const impactCell = document.createElement("td");
+            impactCell.textContent = task.impact;
+            row.appendChild(impactCell);
+
+            const urgencyCell = document.createElement("td");
+            urgencyCell.textContent = task.urgency;
+            row.appendChild(urgencyCell);
+
+            const effortCell = document.createElement("td");
+            effortCell.textContent = task.effort;
+            row.appendChild(effortCell);
+
+            const statusCell = document.createElement("td");
+            const statusChip = document.createElement("span");
+            statusChip.className = `status-chip ${task.readinessClass}`.trim();
+            statusChip.textContent = task.readiness;
+            statusCell.appendChild(statusChip);
+            row.appendChild(statusCell);
+
+            const scoreCell = document.createElement("td");
+            const scoreChip = document.createElement("span");
+            scoreChip.className = "score-chip";
+            scoreChip.textContent = task.score;
+            scoreCell.appendChild(scoreChip);
+            row.appendChild(scoreCell);
+
+            tbody.appendChild(row);
+          });
+          table.appendChild(tbody);
+
+          card.appendChild(table);
+          projectsContainer.appendChild(card);
+        });
+      }
+
+      function toMarkdown(portfolio) {
+        const lines = [];
+        lines.push(`# Evidence Matrix`);
+        lines.push("");
+        portfolio.projects.forEach((project) => {
+          lines.push(`## ${project.name || "Untitled project"}`);
+          if (project.goal) {
+            lines.push(`Goal: ${project.goal}`);
+          }
+          lines.push("");
+          lines.push(`| Task | Impact | Urgency | Effort | Status | Score |`);
+          lines.push(`| --- | --- | --- | --- | --- | --- |`);
+          project.decoratedTasks.forEach((task) => {
+            const status = task.blocked ? "Blocked" : "Ready";
+            lines.push(
+              `| ${task.title.replace(/\|/g, "\\|")} | ${task.impact} | ${task.urgency} | ${task.effort} | ${status} | ${task.score} |`
+            );
+          });
+          lines.push("");
+        });
+        return lines.join("\n");
+      }
+
+      function runAnalysis() {
+        let parsed;
+        try {
+          parsed = JSON.parse(textarea.value);
+        } catch (err) {
+          toast(`Invalid JSON — ${err.message}`);
+          return;
+        }
+
+        if (!parsed || !Array.isArray(parsed.projects)) {
+          toast("Provide an object with a projects array.");
+          return;
+        }
+
+        const projects = parsed.projects.map((project) => ({
+          ...project,
+          decoratedTasks: decorateTasks(project)
+        }));
+
+        currentPortfolio = { projects };
+        buildSummaryCards(projects);
+        renderProjects(projects);
+        currentMarkdown = toMarkdown({ projects });
+
+        summaryPanel.classList.remove("hidden");
+        projectsPanel.classList.remove("hidden");
+        copyBtn.classList.remove("hidden");
+        downloadBtn.classList.remove("hidden");
+        toast("Matrix updated", "ok");
+      }
+
+      analyzeBtn.addEventListener("click", runAnalysis);
+      copyBtn.addEventListener("click", () => {
+        if (!currentMarkdown.trim()) {
+          toast("Nothing to copy");
+          return;
+        }
+        navigator.clipboard
+          .writeText(currentMarkdown)
+          .then(() => {
+            copyBtn.textContent = "Copied!";
+            setTimeout(() => (copyBtn.textContent = "Copy Markdown"), 1500);
+          })
+          .catch((err) => {
+            console.error(err);
+            toast("Copy failed — select and copy manually.");
+          });
+      });
+
+      downloadBtn.addEventListener("click", () => {
+        if (!currentMarkdown.trim()) {
+          toast("Nothing to download");
+          return;
+        }
+        const blob = new Blob([currentMarkdown], { type: "text/markdown;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "evidence-matrix.md";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        toast("Downloaded .md", "ok");
+      });
+
+      document.addEventListener("keydown", (event) => {
+        const isMac = navigator.platform.toUpperCase().includes("MAC");
+        const modKey = isMac ? event.metaKey : event.ctrlKey;
+        if (modKey && event.key === "Enter") {
+          event.preventDefault();
+          runAnalysis();
+        }
+      });
+
+      const m = window.matchMedia("(prefers-reduced-motion: reduce)");
+      m.addEventListener?.("change", () => {
+        document.body.classList.toggle("reduced-motion", m.matches);
+      });
+
+      textarea.value = JSON.stringify(SAMPLE_DATA, null, 2);
+      runAnalysis();
+    </script>
+  </body>
+</html>
