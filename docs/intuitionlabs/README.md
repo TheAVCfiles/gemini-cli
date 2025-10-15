@@ -10,5 +10,6 @@ The IntuitionLabs Ballet Bots program combines creative movement, robotics, and 
 - `teaching_materials/`
   - [`lesson_plans.md`](./teaching_materials/lesson_plans.md): Ready-to-run outlines for each session.
   - [`student_worksheets.md`](./teaching_materials/student_worksheets.md): Printable activities and reflection prompts.
+- [`mythos-architecture.md`](./mythos-architecture.md): Mermaid diagram of the broader MythOS™ operating topology, showing how Intuition Labs connects to companion programs and governance rituals.
 
 Use these materials alongside Gemini CLI to generate custom prompts, adapt activities to new audiences, or manage interactive assets referenced by the curriculum.
