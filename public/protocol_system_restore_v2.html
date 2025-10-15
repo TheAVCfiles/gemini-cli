@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>System Restore — Somatic Syntax · Chronosomic · Mirror Gain · Mercy Gate</title>
+<style>
+  :root{
+    --bg:#0a0b10; --ink:#e9e9ff; --muted:#9aa0b6; --border:#202338;
+    --accent:#b388ff; --accent2:#ff6b6b; --accent3:#50fa7b; --accent4:#0aa0ff;
+    --earth:#5A4D41; --water:#4FB0C6; --fire:#E1602B; --air:#BBB3E5;
+  }
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial}
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 16px 80px;line-height:1.55}
+  h1{font-size:clamp(24px,4vw,38px);margin:0 0 6px;font-weight:800}
+  h2{font-size:clamp(16px,2.2vw,20px);margin:6px 0 16px;color:var(--muted);font-weight:600}
+  .tag{display:inline-block; padding:6px 10px; border-radius:999px; background:#0f0f18;
+       border:1px solid var(--border); color:#cfd3ff; font-size:12px}
+  .grid{display:grid; gap:14px; grid-template-columns:1fr}
+  @media (min-width: 980px){ .grid{ grid-template-columns: 1.15fr .85fr } }
+  .card{background: linear-gradient(180deg, #11131c, #0c0e16);
+        border:1px solid var(--border); border-radius:16px; padding:16px}
+  .meta{color:var(--muted); font-size:14px}
+  .bar{height:10px;border-radius:999px;background:#141828;border:1px solid #22263b;overflow:hidden}
+  .bar > i{display:block;height:100%;width:20%;background:linear-gradient(90deg,var(--accent4),#7aa9ff)}
+  .row{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+  .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#0f1220;border:1px solid var(--border);color:#9ab4ff;font-size:12px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .kbd{background:#141827;border:1px solid #23283f;padding:2px 6px;border-radius:6px;font-family:ui-monospace, Menlo, Consolas;font-size:12px}
+  .note{border-left:3px solid var(--accent);padding:10px 12px;background:rgba(179,136,255,.08);border-radius:8px}
+  .warn{border-left:3px solid var(--accent2);background:rgba(255,107,107,.08)}
+  .ok{border-left:3px solid var(--accent3);background:rgba(80,250,123,.08)}
+  /* Tabs */
+  .tabs{display:flex;gap:8px;border-bottom:1px solid var(--border);margin-top:8px}
+  .tab{padding:10px 12px;border:1px solid var(--border);border-bottom:none;border-top-left-radius:10px;border-top-right-radius:10px;background:#0f1120;color:#cfd3ff;cursor:pointer;font-weight:700}
+  .tab[aria-selected="true"]{background:#14172a;color:#fff;border-color:#2b2f4a}
+  .tabpanes{border:1px solid #2b2f4a;border-radius:0 12px 12px 12px;background:#0c0f1f;overflow:hidden}
+  .pane{display:none;padding:14px}
+  .pane.active{display:block}
+  pre{background:#0b0d17;border:1px solid #1b1f35;border-radius:12px;padding:12px;white-space:pre-wrap;color:#dfe1ff}
+  /* Breath dots */
+  .breath{display:flex;gap:8px;align-items:center;margin:10px 0}
+  .dot{width:12px;height:12px;border-radius:50%}
+  .e{background:var(--earth);animation:breath 6s ease-in-out infinite}
+  .w{background:var(--water);animation:breath 6s .15s ease-in-out infinite}
+  .f{background:var(--fire);animation:breath 6s .3s ease-in-out infinite}
+  .a{background:var(--air);animation:breath 6s .45s ease-in-out infinite}
+  @keyframes breath{0%{transform:scale(1);opacity:.5}50%{transform:scale(1.4);opacity:1}100%{transform:scale(1);opacity:.5}}
+  /* Gauges */
+  .gauge{display:flex;align-items:center;gap:10px}
+  .gauge input[type=range]{width:100%}
+  .decision{font-weight:800}
+  /* Footer */
+  footer{margin-top:16px;color:var(--muted);font-size:12px}
+  a{color:#cdb9ff}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <span class="tag">MYTHEMATICS™ · DeCrypt The Girl</span>
+    <h1>Protocol: System Restore — Somatic Syntax Engine</h1>
+    <h2>Surface · Cipher · Echo · Chronosomic · Mirror Gain · Mercy Gate</h2>
+
+    <div class="grid">
+      <section class="card">
+        <h3 style="margin:0 0 6px">Somatic Syntax — Breath Sequence</h3>
+        <div class="meta">Earth (anchor) → Water (adapt) → Fire (act) → Air (ascend). The dots pulse to pace a 4·4·1·4 cycle.</div>
+        <div class="breath"><span class="dot e" title="Earth"></span><span class="dot w" title="Water"></span><span class="dot f" title="Fire"></span><span class="dot a" title="Air"></span></div>
+        <div class="chips">
+          <span class="pill">Earth: Inhale 4</span><span class="pill">Water: Inhale 4</span><span class="pill">Fire: Exhale 1</span><span class="pill">Air: Exhale 4</span>
+        </div>
+
+        <div class="tabs" role="tablist">
+          <div class="tab" role="tab" aria-selected="true" data-pane="surface">Surface</div>
+          <div class="tab" role="tab" aria-selected="false" data-pane="cipher">Cipher</div>
+          <div class="tab" role="tab" aria-selected="false" data-pane="echo">Echo</div>
+        </div>
+        <div class="tabpanes">
+          <div id="surface" class="pane active">
+            <div class="meta">Read as liturgy. No optics, only pulse.</div>
+<pre>// INIT — as Source
+As the proven source code:
+  They shook up the script;
+  reverse-wheel-of-fortuned the facts.
+Directive:
+  Collect — commit only the blocks.
+  Draft — the stack.
+  Vault — the fibers.
+Constraint:
+  Don't stage the optics.
+  Control the environment.
+  Funnel perception → aortic flow function.</pre>
+          </div>
+          <div id="cipher" class="pane">
+            <div class="meta">Executable pseudo-code with recursion gate <span class="kbd">pulse ≠ repulse</span>.</div>
+<pre>function as_source(){
+  verify(identity === origin);
+  revoke_false_runtime();
+  reward(origin);
+}
+shake(script);
+reverse(wheel.of.fortune);
+restore(facts);
+collect(valid_blocks); commit();
+draft(stack.new); vault(fibers.core);
+optics.stage(false); environment.control(true);
+route(perception, aortic.flow);</pre>
+          </div>
+          <div id="echo" class="pane">
+            <div class="meta">SHE-PT™ prompts: breath → action.</div>
+<pre>EARTH — Name the invariant. Commit to truth.
+WATER — Yield where value is not lost. Re-route.
+FIRE — One clean command. No optics.
+AIR — Broadcast clarity. No bleed.</pre>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <h3 style="margin:0 0 6px">Chronosomic™ Stamp</h3>
+        <div class="meta">Auto-stamp body–time to every read. The body keeps the myth; time writes the code.</div>
+        <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px">
+          <label>Local <input id="local" readonly></label>
+          <label>UTC <input id="utc" readonly></label>
+          <label>Location <input id="loc" value="Yonkers, NY, USA"></label>
+          <label>Somatic focus
+            <select id="soma">
+              <option value="">Select…</option>
+              <option>crown</option><option>throat</option><option>chest</option><option>gut</option><option>womb</option><option>skin</option><option>feet</option>
+            </select>
+          </label>
+        </div>
+        <div class="note" style="margin-top:10px"><b>Chronosomic Halo</b>: data binds to the ritual, not the spectacle.</div>
+      </aside>
+    </div>
+
+    <section class="grid" style="margin-top:14px">
+      <section class="card">
+        <h3 style="margin:0 0 6px">Mirror Gain — Reflexive Bodies Gauge</h3>
+        <div class="meta">Measure harmony between intention (projected) and reflection (system response). Keep gain in the green.</div>
+        <div class="gauge" style="margin:10px 0">
+          <input type="range" id="gain" min="0" max="100" value="38">
+          <div class="pill"><span id="gainVal">38</span>%</div>
+        </div>
+        <div class="bar"><i id="barFill" style="width:38%"></i></div>
+        <div id="gainMsg" class="note ok" style="margin-top:10px"><b>Aligned:</b> Mirror gain is coherent. Proceed softly.</div>
+      </section>
+
+      <section class="card">
+        <h3 style="margin:0 0 6px">Mercy Gate — Ethical Action Gate</h3>
+        <div class="meta">When uncertainty outweighs edge, decline action. Mercy preserves capital, breath, and story.</div>
+        <div class="row" style="align-items:end;margin-top:8px">
+          <div>
+            <label>Uncertainty (σ) <input type="range" id="uncertainty" min="0" max="100" value="42"></label>
+          </div>
+          <div>
+            <label>Edge (ε) <input type="range" id="edge" min="0" max="100" value="36"></label>
+          </div>
+        </div>
+        <div id="gateMsg" class="note warn" style="margin-top:10px"><b>HOLD:</b> σ > ε — Gate closed. Wait for clarity.</div>
+        <div class="chips" style="margin-top:8px">
+          <span class="pill">Rule: if σ ≥ ε → risk = 0</span>
+          <span class="pill">Angles: 45°/90° harmonics</span>
+          <span class="pill">Faith operator: CI exclusion</span>
+        </div>
+      </section>
+    </section>
+
+    <footer>
+      Built for DeCrypt The Girl · Somatic Syntax x Chronosomic x Reflexive Bodies x Cunning Mercy.
+    </footer>
+  </div>
+
+<script>
+  // Tabs
+  const tabs = document.querySelectorAll('.tab');
+  const panes = document.querySelectorAll('.pane');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.setAttribute('aria-selected','false'));
+    t.setAttribute('aria-selected','true');
+    panes.forEach(p => p.classList.remove('active'));
+    document.getElementById(t.dataset.pane).classList.add('active');
+  }));
+
+  // Chronosomic stamp
+  const localEl = document.getElementById('local');
+  const utcEl = document.getElementById('utc');
+  function stamp(){
+    const now = new Date();
+    localEl.value = now.toLocaleString();
+    utcEl.value = now.toISOString().replace('T',' ').replace('Z',' UTC');
+  }
+  stamp(); setInterval(stamp, 1000);
+
+  // Mirror Gain
+  const gain = document.getElementById('gain');
+  const gainVal = document.getElementById('gainVal');
+  const barFill = document.getElementById('barFill');
+  const gainMsg = document.getElementById('gainMsg');
+  function updateGain(){
+    const g = +gain.value;
+    gainVal.textContent = g;
+    barFill.style.width = g + '%';
+    if(g < 30){
+      gainMsg.className = 'note warn';
+      gainMsg.innerHTML = '<b>Out of phase:</b> Reduce output; re-center intention.';
+    } else if(g < 65){
+      gainMsg.className = 'note ok';
+      gainMsg.innerHTML = '<b>Aligned:</b> Mirror gain is coherent. Proceed softly.';
+    } else {
+      gainMsg.className = 'note';
+      gainMsg.innerHTML = '<b>Hot:</b> Reflection may amplify noise. Vent heat; widen Air.';
+    }
+  }
+  gain.addEventListener('input', updateGain);
+  updateGain();
+
+  // Mercy Gate
+  const u = document.getElementById('uncertainty');
+  const e = document.getElementById('edge');
+  const gateMsg = document.getElementById('gateMsg');
+  function updateGate(){
+    const sigma = +u.value, eps = +e.value;
+    if(sigma >= eps){
+      gateMsg.className = 'note warn';
+      gateMsg.innerHTML = '<b>HOLD:</b> σ > ε — Gate closed. Wait for clarity.';
+    } else {
+      gateMsg.className = 'note ok';
+      gateMsg.innerHTML = '<b>CLEAR:</b> ε > σ — Gate open. Take the one clean action.';
+    }
+  }
+  u.addEventListener('input', updateGate);
+  e.addEventListener('input', updateGate);
+  updateGate();
+</script>
+</body>
+</html>
