@@ -7,6 +7,7 @@ The IntuitionLabs Ballet Bots program combines creative movement, robotics, and 
 - `class_overviews/`
   - [`ballet_bots.md`](./class_overviews/ballet_bots.md): Curriculum goals, narrative arc, and module breakdown.
   - [`minting_system_overview.md`](./class_overviews/minting_system_overview.md): Token and badge mechanics that reward learner progress.
+  - [`apop_allstars.md`](./class_overviews/apop_allstars.md): KPop kinetics program integrating emotional intelligence and creative data literacy.
 - `teaching_materials/`
   - [`lesson_plans.md`](./teaching_materials/lesson_plans.md): Ready-to-run outlines for each session.
   - [`student_worksheets.md`](./teaching_materials/student_worksheets.md): Printable activities and reflection prompts.
