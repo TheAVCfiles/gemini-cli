@@ -35,6 +35,9 @@ bundle
 junit.xml
 packages/*/coverage/
 
+# Runtime artifacts for local mock services
+data/
+
 # Generated files
 packages/cli/src/generated/
 packages/core/src/generated/

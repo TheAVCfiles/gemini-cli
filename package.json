@@ -50,7 +50,8 @@
     "release:version": "node scripts/version.js",
     "telemetry": "node scripts/telemetry.js",
     "check:lockfile": "node scripts/check-lockfile.js",
-    "clean": "node scripts/clean.js"
+    "clean": "node scripts/clean.js",
+    "mock:trading-server": "node scripts/mock-trading-server.js"
   },
   "bin": {
     "gemini": "bundle/gemini.js"
