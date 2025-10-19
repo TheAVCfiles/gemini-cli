@@ -1,0 +1,22 @@
+{
+  "NodeID": "Rovagnasco.Prati.NYT.1887",
+  "Primary_Source": "New York Times",
+  "Title": "The Story of a Marquis: Exiled from Italy, He Lives a Bohemian Life",
+  "Date": "1887-01-29",
+  "Page": 8,
+  "Access": "TimesMachine",
+  "URL": "https://www.nytimes.com/1887/01/29/archives/the-story-of-a-marquis-exiled-from-italy-he-lives-a-bohemian-life.html",
+  "Details": {
+    "Name": "Robert Prati, Marquis of Rovagnasca",
+    "Origin": "Piedmontese military family (Alessandria, Italy)",
+    "Occupation_NYC": [
+      "Translator in the Mayor's Office",
+      "Teacher of Languages and Fencing"
+    ],
+    "Exile_Cause": "Political; associated with Carbonari movement",
+    "Italian_Pension": "Received small stipend from Italian government; petitioned final payment",
+    "Death": "26 January 1887, New York City",
+    "Burial": "East Orange, New Jersey (Holy Sepulchre Cemetery)"
+  },
+  "MythOS_Function": "Archetype: The Exiled Translator—transmutes empire into code, discipline into language."
+}
