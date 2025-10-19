@@ -1,0 +1,135 @@
+{
+  "id": "APOP_ALLSTARS_CURRICULUM",
+  "title": "APop Allstars Curriculum Table",
+  "description": "Notion-style database schema capturing choreography, emotional intelligence, and creative data literacy goals for the APop Allstars program.",
+  "database_schema": {
+    "name": "Girl Development Plan",
+    "view": "APop Allstars Curriculum Table",
+    "columns": [
+      {
+        "name": "Development Goal",
+        "type": "title",
+        "example": "Integrate KPop-style choreography with emotional intelligence and creative data literacy."
+      },
+      {
+        "name": "Category",
+        "type": "multi_select",
+        "options": ["Physical", "Emotional", "Creative"]
+      },
+      {
+        "name": "Age Range",
+        "type": "text",
+        "example": "6–12 years"
+      },
+      {
+        "name": "Activities",
+        "type": "rich_text",
+        "example": "Rhythm Sync Lab, Idol Energy Training, Choreo Cipher, Emotion in Motion, Mini-Producer Project"
+      },
+      {
+        "name": "Resources Needed",
+        "type": "multi_select",
+        "options": [
+          "Mirrors and soft floor space",
+          "KPop playlists (clean edits)",
+          "Tablet or projector",
+          "LED wristbands",
+          "Printable movement ciphers"
+        ]
+      },
+      {
+        "name": "Status",
+        "type": "select",
+        "options": ["Planning", "In Progress", "On Hold", "Complete"]
+      },
+      {
+        "name": "Priority",
+        "type": "select",
+        "options": ["High", "Medium", "Low"]
+      },
+      {
+        "name": "Start Date",
+        "type": "date",
+        "example": "2025-10-20"
+      },
+      {
+        "name": "Target Completion",
+        "type": "date",
+        "example": "2026-01-30"
+      },
+      {
+        "name": "Instructor",
+        "type": "person",
+        "example": "Miss Allison Van Cura"
+      },
+      {
+        "name": "Cultural Literacy Components",
+        "type": "rich_text",
+        "example": "Learn simple Korean greetings, teamwork values, and stage culture of KPop idols."
+      },
+      {
+        "name": "Performance Goal",
+        "type": "rich_text",
+        "example": "APop Allstars: Bloom Mode – showcase with emotion glyph explanations."
+      },
+      {
+        "name": "Gamified Elements",
+        "type": "multi_select",
+        "options": [
+          "Sentient Cents practice tokens",
+          "Kinetic Cipher Log notation system"
+        ]
+      },
+      {
+        "name": "Progress Notes",
+        "type": "text",
+        "example": "Curriculum ready for pilot phase. Will use Performance Ledger for progress tracking."
+      },
+      {
+        "name": "Milestone Achieved",
+        "type": "checkbox"
+      },
+      {
+        "name": "URL",
+        "type": "url",
+        "example": "https://www.notion.so/APop-Allstars-KPop-Kinetics"
+      }
+    ]
+  },
+  "sample_row": {
+    "Development Goal": "Translate choreography confidence into emotional and data storytelling resilience.",
+    "Category": ["Physical", "Emotional", "Creative"],
+    "Age Range": "9–11 years",
+    "Activities": [
+      "Warm-up: Emotion Dial stretches synced to tempo changes",
+      "Main: Choreo Cipher trio challenge with LED wristband cues",
+      "Reflection: Emotion glyph journaling in Performance Ledger",
+      "Studio Lab: Mini-Producer Project storyboard using tablet"
+    ],
+    "Resources Needed": [
+      "Mirrors and soft floor space",
+      "KPop playlists (clean edits)",
+      "Tablet or projector",
+      "LED wristbands",
+      "Printable movement ciphers"
+    ],
+    "Status": "Planning",
+    "Priority": "High",
+    "Start Date": "2025-10-27",
+    "Target Completion": "2026-02-07",
+    "Instructor": "Miss Allison Van Cura",
+    "Cultural Literacy Components": [
+      "Practice Hangul stage greetings and gratitude phrases",
+      "Discuss collaborative norms used by KPop trainee teams",
+      "Map emotional glyphs to moments in iconic performances"
+    ],
+    "Performance Goal": "Bloom Mode mini-stage featuring cipher explanations for family audience.",
+    "Gamified Elements": [
+      "Sentient Cents practice tokens",
+      "Kinetic Cipher Log notation system"
+    ],
+    "Progress Notes": "Pilot choreography drafted; emotion glyph legend reviewed with cohort.",
+    "Milestone Achieved": false,
+    "URL": "https://www.notion.so/APop-Allstars-KPop-Kinetics"
+  }
+}
