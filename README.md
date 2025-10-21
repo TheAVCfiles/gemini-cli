@@ -68,16 +68,20 @@ Abutment,Part of a structure supporting an arch or span,MWRA SpecBook
 
 ## 🤖 Ask endpoint
 
-`netlify/functions/ask.js` wraps OpenAI's Responses API. Provide an `OPENAI_API_KEY`
-to enable live answers. Without the key, the function echoes a stub message so the
-frontend experience stays consistent.
+`netlify/functions/ask.js` can call either Gemini's Generative Language API or
+OpenAI's Responses API. Provide whichever key you have available and the function
+will automatically pick the matching provider (preferring Gemini when both are set)
+and include the provider name in the JSON response. Without a key, it echoes a
+stub message so the frontend experience stays consistent.
 
 Environment variables:
 
-| Variable         | Description                                              |
-| ---------------- | -------------------------------------------------------- |
-| `OPENAI_API_KEY` | (Optional) API key for OpenAI Responses API              |
-| `OPENAI_MODEL`   | (Optional) Override the model. Default: `gpt-4o-mini`    |
+| Variable          | Description                                                                |
+| ----------------- | -------------------------------------------------------------------------- |
+| `GEMINI_API_KEY`  | (Optional) API key for Gemini's Generative Language API                    |
+| `GEMINI_MODEL`    | (Optional) Override the Gemini model. Default: `gemini-1.5-flash`          |
+| `OPENAI_API_KEY`  | (Optional) API key for OpenAI Responses API                                |
+| `OPENAI_MODEL`    | (Optional) Override the OpenAI model. Default: `gpt-4o-mini`               |
 
 ---
 
