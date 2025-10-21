@@ -6,6 +6,10 @@
 
 import express from 'express';
 import { AsyncLocalStorage } from 'node:async_hooks';
+import { Storage } from '@google-cloud/storage';
+import archiver from 'archiver';
+import { createWriteStream } from 'node:fs';
+import { promises as fsPromises } from 'node:fs';
 
 import type { Message, Task as SDKTask, AgentCard } from '@a2a-js/sdk';
 import type {
@@ -36,6 +40,18 @@ import type { PersistedStateMetadata } from './metadata_types.js';
 import { getPersistedState, setPersistedState } from './metadata_types.js';
 
 const requestStorage = new AsyncLocalStorage<{ req: express.Request }>();
+const storage = new Storage();
+
+type ParsedGsUri = { bucket: string; name: string };
+
+function parseGsUri(uri: unknown): ParsedGsUri {
+  const match =
+    typeof uri === 'string' ? /^gs:\/\/([^/]+)\/(.+)$/.exec(uri) : undefined;
+  if (!match) {
+    throw new Error(`Bad GCS URI: ${uri}`);
+  }
+  return { bucket: match[1]!, name: match[2]! };
+}
 
 /**
  * Provides a wrapper for Task. Passes data from Task to SDKTask.
@@ -776,6 +792,97 @@ export async function createApp() {
         return;
       }
       res.json({ metadata: await wrapper.task.getMetadata() });
+    });
+
+    expressApp.post('/bundle', async (req, res) => {
+      const releaseBucketName =
+        process.env['GCS_RELEASE_BUCKET_NAME'] ||
+        process.env['GCS_BUCKET_NAME'];
+      if (!releaseBucketName) {
+        res
+          .status(500)
+          .json({ error: 'Release bucket not configured on server' });
+        return;
+      }
+
+      const { audio, session } = req.body ?? {};
+      if (typeof audio !== 'string' || typeof session !== 'string') {
+        res
+          .status(400)
+          .json({ error: 'Send { audio, session } gs:// URIs' });
+        return;
+      }
+
+      let audioObject: ParsedGsUri;
+      let sessionObject: ParsedGsUri;
+      try {
+        audioObject = parseGsUri(audio);
+        sessionObject = parseGsUri(session);
+      } catch (error) {
+        res.status(400).json({ error: (error as Error).message });
+        return;
+      }
+
+      const now = Date.now();
+      const isoStamp = new Date(now).toISOString().replace(/[:.]/g, '-');
+      const audioLocal = `/tmp/audio-${now}.webm`;
+      const sessionLocal = `/tmp/session-${now}.json`;
+      const zipLocal = `/tmp/AVC_${isoStamp}.zip`;
+      const releaseKey = `releases/AVC_${isoStamp}.zip`;
+
+      const cleanupPaths = [audioLocal, sessionLocal, zipLocal];
+      try {
+        await storage
+          .bucket(audioObject.bucket)
+          .file(audioObject.name)
+          .download({ destination: audioLocal });
+        await storage
+          .bucket(sessionObject.bucket)
+          .file(sessionObject.name)
+          .download({ destination: sessionLocal });
+
+        await new Promise<void>((resolve, reject) => {
+          const output = createWriteStream(zipLocal);
+          const archive = archiver('zip', { zlib: { level: 9 } });
+          output.on('close', resolve);
+          output.on('error', reject);
+          archive.on('error', reject);
+          archive.pipe(output);
+          archive.file(audioLocal, { name: 'audio.webm' });
+          archive.file(sessionLocal, { name: 'transcript.json' });
+          const finalizePromise = archive.finalize();
+          void finalizePromise.catch(reject);
+        });
+
+        await storage
+          .bucket(releaseBucketName)
+          .upload(zipLocal, { destination: releaseKey });
+
+        const [downloadUrl] = await storage
+          .bucket(releaseBucketName)
+          .file(releaseKey)
+          .getSignedUrl({
+            version: 'v4',
+            action: 'read',
+            expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+          });
+
+        res.json({
+          object: `gs://${releaseBucketName}/${releaseKey}`,
+          downloadUrl,
+        });
+      } catch (error) {
+        logger.error('[CoreAgent] Bundle generation failed:', error);
+        const message =
+          error instanceof Error ? error.message : 'Bundle generation failed';
+        res.status(500).json({ error: message });
+      } finally {
+        await Promise.all(
+          cleanupPaths.map((filePath) =>
+            fsPromises.rm(filePath, { force: true }).catch(() => undefined),
+          ),
+        );
+      }
     });
     return expressApp;
   } catch (error) {
