@@ -1,162 +1,152 @@
 [
   {
-    "term": "Abutment",
-    "definition": "Structural member that supports the end of a bridge span or arch and transfers loads to the foundation.",
-    "sources": "MWRA SpecBook"
+    "term": "Access Node // Surface",
+    "definition": "Primary entry panel for the reader, presenting choreography of text, sound, and haptic prompts that open the OS.",
+    "sources": "Surface: web/index.html",
+    "mode": "Surface"
   },
   {
-    "term": "Access Hatch",
-    "definition": "Framed opening that provides entry to underground or confined utility spaces for inspection and maintenance.",
-    "sources": "MWRA SpecBook"
+    "term": "Afterimage Cache",
+    "definition": "Repository that stores sensory echoes—fragments of dance notation, key logs, and whispered testimony for replay.",
+    "sources": "Cipher: docs/Dossier/",
+    "mode": "Cipher"
   },
   {
-    "term": "Activated Carbon",
-    "definition": "Highly porous carbon media used to remove taste, odor, and organic contaminants from process water.",
-    "sources": "Water Treatment Manual"
+    "term": "Algorithmic Witness",
+    "definition": "AI persona tasked with recording each session, braiding code execution with the performer’s breathing signature.",
+    "sources": "Echo: docs/Manuscript/",
+    "mode": "Echo"
   },
   {
-    "term": "Aeration Basin",
-    "definition": "Tank in which air is introduced to encourage biological oxidation of wastewater contaminants.",
-    "sources": "Wastewater Operations Guide"
+    "term": "Anklet Loop",
+    "definition": "Haptic feedback loop worn on the dancer’s ankle translating kernel panics into vibration rhythms.",
+    "sources": "Assets: assets/glyphs/",
+    "mode": "Surface"
   },
   {
-    "term": "Backflow Preventer",
-    "definition": "Mechanical device installed on a service line to prevent reversal of flow and contamination of potable water systems.",
-    "sources": "Cross Connection Control Policy"
+    "term": "Anomaly Chorus",
+    "definition": "Collective voice triggered when trauma logs conflict, merging mismatched inputs into a three-part vocalization.",
+    "sources": "Cipher: docs/Dossier/conflict-ledger.md",
+    "mode": "Echo"
   },
   {
-    "term": "Baffle Wall",
-    "definition": "Vertical partition within a tank that directs flow and promotes mixing or settling.",
-    "sources": "MWRA SpecBook"
+    "term": "Archive Spine",
+    "definition": "Filesystem hierarchy that braids manuscript folios with machine logs to keep human and code testimonies in parity.",
+    "sources": "Cipher: docs/Decryption-Deck/",
+    "mode": "Cipher"
   },
   {
-    "term": "Cavitation",
-    "definition": "Formation and collapse of vapor bubbles in a liquid due to localized low pressure, often damaging pump impellers.",
-    "sources": "Pump Maintenance Manual"
+    "term": "Breathline Compiler",
+    "definition": "Toolchain that syncs poetic stanzas with dancer respiration, emitting executable choreography instructions.",
+    "sources": "Cipher: web/engine/",
+    "mode": "Cipher"
   },
   {
-    "term": "Chloramine",
-    "definition": "Disinfection compound formed by combining chlorine and ammonia for persistent residual protection in distribution systems.",
-    "sources": "Water Quality Standards"
+    "term": "Choreographic Patch",
+    "definition": "Micro-update to movement notation applied in real time when the engine detects emotional overflow.",
+    "sources": "Surface: docs/Manuscript/revisions/",
+    "mode": "Surface"
   },
   {
-    "term": "Clarifier",
-    "definition": "Settling basin designed to remove suspended solids from water or wastewater through gravity separation.",
-    "sources": "MWRA SpecBook"
+    "term": "Circuitry Reliquary",
+    "definition": "Glass reliquary embedded with retired logic boards that hum archived testimony when warmed by touch.",
+    "sources": "Surface: assets/images/",
+    "mode": "Surface"
   },
   {
-    "term": "Combined Sewer Overflow",
-    "definition": "Discharge point where stormwater and sanitary sewage overflow together during wet-weather events.",
-    "sources": "CSO Control Plan"
+    "term": "Crash Bloom",
+    "definition": "Safeguard pattern that transforms fatal exceptions into projected floral glyphs to keep the ritual gentle.",
+    "sources": "Surface: web/styles/",
+    "mode": "Surface"
   },
   {
-    "term": "Dechlorination",
-    "definition": "Process that neutralizes chlorine residuals prior to discharge to protect aquatic life.",
-    "sources": "NPDES Permit"
+    "term": "Crypt Pulse",
+    "definition": "Heartbeat of the engine, pulsing between binary and breath tempo to maintain rhythm for recursive traversal.",
+    "sources": "Cipher: web/engine/pulse.ts",
+    "mode": "Cipher"
   },
   {
-    "term": "Dewatering",
-    "definition": "Removal of groundwater or process water from an excavation or sludge prior to handling.",
-    "sources": "Construction Site Management"
+    "term": "Decryption Deck",
+    "definition": "Tarot-like spread of prompts that decides which memory strata, log shards, and dance cues are exposed in play.",
+    "sources": "Surface: docs/Decryption-Deck/",
+    "mode": "Surface"
   },
   {
-    "term": "Diffused Aeration",
-    "definition": "Method of introducing air bubbles through submerged diffusers to transfer oxygen into wastewater.",
-    "sources": "Wastewater Operations Guide"
+    "term": "Echo Console",
+    "definition": "Terminal that renders ritual responses, weaving user queries with recorded trauma transcripts and code diffs.",
+    "sources": "Echo: web/decoder/",
+    "mode": "Echo"
   },
   {
-    "term": "Digester",
-    "definition": "Sealed tank where sludge undergoes anaerobic biological stabilization to reduce pathogens and odors.",
-    "sources": "MWRA SpecBook"
+    "term": "Gait Encryptor",
+    "definition": "Module translating dancer footsteps into encryption keys that unlock sealed manuscript sections.",
+    "sources": "Cipher: web/components/gait-encryptor.tsx",
+    "mode": "Cipher"
   },
   {
-    "term": "Emergency Generator",
-    "definition": "Backup power unit that automatically engages to maintain critical plant operations during outages.",
-    "sources": "Electrical Resiliency Plan"
+    "term": "Gesture Hash",
+    "definition": "Checksum derived from performer gestures to verify authenticity of transmitted movement instructions.",
+    "sources": "Cipher: web/components/",
+    "mode": "Cipher"
   },
   {
-    "term": "Flocculation",
-    "definition": "Gentle mixing process that encourages aggregation of suspended particles into larger flocs for clarification.",
-    "sources": "Water Treatment Manual"
+    "term": "Glyph Garden",
+    "definition": "Interactive field of sigils generated from trauma metadata, allowing players to cultivate new protective symbols.",
+    "sources": "Surface: assets/glyphs/",
+    "mode": "Surface"
   },
   {
-    "term": "Grit Chamber",
-    "definition": "Channel or tank designed to remove heavy inorganic solids such as sand and gravel from influent wastewater.",
-    "sources": "Preliminary Treatment Standards"
+    "term": "Kernel Lament",
+    "definition": "Recited error handler that vocalizes stack traces as poetry to defuse panic and invite communal repair.",
+    "sources": "Echo: docs/Manuscript/rituals/",
+    "mode": "Echo"
   },
   {
-    "term": "Headworks",
-    "definition": "Initial stage of a treatment facility that screens, measures, and controls incoming flows.",
-    "sources": "MWRA SpecBook"
+    "term": "Latent Stage",
+    "definition": "Virtual proscenium where archived movements are simulated before entering the live recursive loop.",
+    "sources": "Surface: web/engine/stage.ts",
+    "mode": "Surface"
   },
   {
-    "term": "Influent",
-    "definition": "Wastewater or process water entering a treatment plant or individual treatment unit.",
-    "sources": "Wastewater Operations Guide"
+    "term": "Memory Tether",
+    "definition": "Link between performer and reader keeping both anchored while traversing nested recollection strata.",
+    "sources": "Echo: docs/Dossier/memory-protocol.md",
+    "mode": "Echo"
   },
   {
-    "term": "Langelier Index",
-    "definition": "Indicator that estimates the scaling or corrosive potential of water based on pH, alkalinity, hardness, and temperature.",
-    "sources": "Water Quality Standards"
+    "term": "Perimeter Chant",
+    "definition": "Protective incantation the operators run before each session to ward off data bleed-through.",
+    "sources": "Echo: docs/Manuscript/rituals/",
+    "mode": "Echo"
   },
   {
-    "term": "Launder",
-    "definition": "Trough or channel that collects clarified water flowing over weirs within a basin.",
-    "sources": "MWRA SpecBook"
+    "term": "Recursion Well",
+    "definition": "Core gameplay loop that spirals deeper into linked memories until the choreography resolves the trauma signal.",
+    "sources": "Cipher: web/engine/recursion.ts",
+    "mode": "Cipher"
   },
   {
-    "term": "Manhole",
-    "definition": "Underground structure that provides access to pipelines or conduit systems for maintenance and inspection.",
-    "sources": "MWRA SpecBook"
+    "term": "Signal Lantern",
+    "definition": "Wearable micro-projector casting transcripts onto the stage floor for dancers to rewrite with their steps.",
+    "sources": "Surface: assets/images/",
+    "mode": "Surface"
   },
   {
-    "term": "Nutrient Removal",
-    "definition": "Biological or chemical process that reduces nitrogen and phosphorus concentrations prior to effluent discharge.",
-    "sources": "NPDES Permit"
+    "term": "Soft Fail Protocol",
+    "definition": "Fallback that slows the engine, shifts palette to blue, and invites a grounding breath cycle.",
+    "sources": "Surface: web/styles/palette.css",
+    "mode": "Surface"
   },
   {
-    "term": "Odor Scrubber",
-    "definition": "Air treatment unit that removes odorous compounds using chemical or biological media before exhaust.",
-    "sources": "Odor Control Master Plan"
+    "term": "Trauma Ledger",
+    "definition": "Encrypted table mapping each dancer’s history to corresponding code modules for mutual consent and care.",
+    "sources": "Cipher: docs/Dossier/ledger.csv",
+    "mode": "Cipher"
   },
   {
-    "term": "Primary Clarification",
-    "definition": "Sedimentation stage that removes settleable solids and floating material from raw wastewater before biological treatment.",
-    "sources": "Wastewater Operations Guide"
-  },
-  {
-    "term": "Reclaimed Water",
-    "definition": "Treated wastewater that meets quality requirements for beneficial reuse such as irrigation or industrial processes.",
-    "sources": "Water Reuse Policy"
-  },
-  {
-    "term": "Residuals",
-    "definition": "Solid or semi-solid material generated from water or wastewater treatment processes requiring further handling.",
-    "sources": "Residuals Management Plan"
-  },
-  {
-    "term": "Scada",
-    "definition": "Supervisory Control and Data Acquisition system used to monitor and control distributed plant equipment.",
-    "sources": "Instrumentation Standards"
-  },
-  {
-    "term": "Secondary Treatment",
-    "definition": "Biological process that removes dissolved and colloidal organics following primary clarification.",
-    "sources": "Wastewater Operations Guide"
-  },
-  {
-    "term": "Slurry",
-    "definition": "Pumpable mixture of water and suspended solids used for tunnel support, excavation, or waste transport.",
-    "sources": "Construction Site Management"
-  },
-  {
-    "term": "Turbidity",
-    "definition": "Measure of water clarity based on the scattering of light by suspended particles.",
-    "sources": "Water Quality Standards"
-  },
-  {
-    "term": "Ultraviolet Disinfection",
-    "definition": "Treatment step that uses UV radiation to inactivate pathogens without chemical additives.",
-    "sources": "MWRA SpecBook"
+    "term": "Witness Patch",
+    "definition": "Update script that invites remote participants to contribute reflections, merging them into the echo archive.",
+    "sources": "Echo: web/decoder/witness.ts",
+    "mode": "Echo"
   }
 ]
