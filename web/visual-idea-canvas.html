@@ -241,6 +241,19 @@
             </div>
           </div>
         </div>
+        <div style="margin-top: 1.5rem">
+          <label for="backlogJson">Backlog JSON (optional)</label>
+          <textarea
+            id="backlogJson"
+            name="backlogJson"
+            placeholder="Paste a projects array to build the canvas without Gemini"
+          ></textarea>
+          <div class="actions" style="justify-content: flex-end">
+            <button id="backlogBtn" type="button" class="secondary">
+              Build from backlog
+            </button>
+          </div>
+        </div>
         <div class="actions" style="justify-content: flex-end">
           <button id="copyBtn" type="button" class="secondary hidden">
             Copy to Clipboard
@@ -335,8 +348,10 @@
   const apiKeyEl = document.getElementById('apiKey');
   const ideaPromptInput = document.getElementById('ideaPrompt');
   const tweakPromptInput = document.getElementById('tweakPrompt');
+  const backlogInput = document.getElementById('backlogJson');
   const generateBtn = document.getElementById('generateBtn');
   const tweakBtn = document.getElementById('tweakBtn');
+  const backlogBtn = document.getElementById('backlogBtn');
   const copyBtn = document.getElementById('copyBtn');
   const downloadBtn = document.getElementById('downloadBtn');
   const loadingDiv = document.getElementById('loading');
@@ -378,7 +393,9 @@
   }
 
   function setBusy(busy) {
-    [generateBtn, tweakBtn, copyBtn, downloadBtn, ideaPromptInput, tweakPromptInput].forEach(b => b.disabled = busy);
+    [generateBtn, tweakBtn, backlogBtn, copyBtn, downloadBtn, ideaPromptInput, tweakPromptInput, backlogInput]
+      .filter(Boolean)
+      .forEach((b) => { b.disabled = busy; });
     loadingDiv.classList.toggle('hidden', !busy);
     stagesContainer.classList.toggle('hidden', busy);
     // a11y
@@ -485,6 +502,92 @@
     return currentIdea || '';
   }
 
+  function classifyStage(task) {
+    const urgency = Number(task?.urgency);
+    const impact = Number(task?.impact);
+    if (task?.blocked) return 'Draft';
+    if (Number.isFinite(urgency) && urgency >= 5) return 'Draft';
+    if (Number.isFinite(urgency) && urgency >= 4) return 'Staging';
+    if (Number.isFinite(urgency) && urgency >= 3 && Number.isFinite(impact) && impact >= 4) return 'Staging';
+    return 'Production';
+  }
+
+  function formatMetrics(task) {
+    const parts = [];
+    if (Number.isFinite(Number(task?.impact))) parts.push(`impact ${Number(task.impact)}`);
+    if (Number.isFinite(Number(task?.urgency))) parts.push(`urgency ${Number(task.urgency)}`);
+    if (Number.isFinite(Number(task?.effort))) parts.push(`effort ${Number(task.effort)}`);
+    return parts.length ? ` _(${parts.join(', ')})_` : '';
+  }
+
+  function buildBacklogMarkdown(backlog) {
+    if (!backlog || !Array.isArray(backlog.projects)) {
+      throw new Error('Backlog JSON must include a "projects" array.');
+    }
+
+    const stageBuckets = {
+      Draft: [],
+      Staging: [],
+      Production: [],
+    };
+    const blocked = [];
+
+    backlog.projects.forEach((project) => {
+      const projectName = project?.name?.trim();
+      if (!projectName) return;
+      const tasks = Array.isArray(project.tasks) ? project.tasks : [];
+      tasks.forEach((task) => {
+        const title = task?.title?.trim();
+        if (!title) return;
+        const stage = classifyStage(task);
+        const record = {
+          project: projectName,
+          title,
+          impact: Number(task?.impact),
+          urgency: Number(task?.urgency),
+          effort: Number(task?.effort),
+          blocked: Boolean(task?.blocked),
+        };
+        stageBuckets[stage].push(record);
+        if (record.blocked) blocked.push(record);
+      });
+    });
+
+    const compare = (a, b) => {
+      const urgencyDiff = (b.urgency || 0) - (a.urgency || 0);
+      if (urgencyDiff !== 0) return urgencyDiff;
+      const impactDiff = (b.impact || 0) - (a.impact || 0);
+      if (impactDiff !== 0) return impactDiff;
+      return (a.effort || Infinity) - (b.effort || Infinity);
+    };
+
+    const sections = ['Draft', 'Staging', 'Production']
+      .map((stage) => {
+        const entries = stageBuckets[stage];
+        entries.sort(compare);
+        if (!entries.length) {
+          return `### ${stage}\n- No tasks slotted here yet.`;
+        }
+        const bullets = entries
+          .map((entry) => {
+            const blockedTag = entry.blocked ? '⚠️ Blocked — ' : '';
+            return `- **${entry.project}** — ${blockedTag}${entry.title}${formatMetrics(entry)}`;
+          })
+          .join('\n');
+        return `### ${stage}\n${bullets}`;
+      })
+      .join('\n\n');
+
+    if (blocked.length) {
+      const summary = blocked
+        .map((entry) => `- ${entry.project}: ${entry.title}`)
+        .join('\n');
+      return `${sections}\n\n**Blocked tasks:**\n${summary}`;
+    }
+
+    return sections;
+  }
+
   async function callGemini(promptText, systemText) {
     const key = apiKeyEl.value.trim();
     if (!key) return { text: mockResponse(promptText), mocked: true };
@@ -507,6 +610,30 @@
   }
 
   // ---------- Actions ----------
+  function generateFromBacklog() {
+    const raw = backlogInput.value.trim();
+    if (!raw) {
+      toast('Paste backlog JSON first');
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(raw);
+      const markdown = buildBacklogMarkdown(parsed);
+      const slugSource = Array.isArray(parsed.projects)
+        ? parsed.projects.map((p) => p?.name || '').join(' ')
+        : 'backlog';
+      currentIdea = markdown;
+      currentIdeaSlug = slugify(slugSource || 'backlog-plan');
+      parseAndRenderIdea(markdown);
+      enablePostActions();
+      toast('Backlog loaded', 'ok');
+    } catch (e) {
+      console.error(e);
+      toast(`Backlog parse failed — ${e.message || 'error'}`, 'error');
+    }
+  }
+
   async function generateIdea() {
     const idea = ideaPromptInput.value.trim();
     if (!idea) { toast('Enter an idea first'); return; }
@@ -605,6 +732,7 @@ Return the updated plan in the exact same three sections and headers. Keep envir
   // ---------- Wire up ----------
   generateBtn.addEventListener('click', generateIdea);
   tweakBtn.addEventListener('click', tweakIdea);
+  backlogBtn.addEventListener('click', generateFromBacklog);
   copyBtn.addEventListener('click', copyAll);
   downloadBtn.addEventListener('click', downloadMd);
 
