@@ -1,0 +1,40 @@
+name: Daily EOD Commit Backup
+
+on:
+  schedule:
+    # 03:55 UTC ~ 23:55 America/New_York (adjust during DST)
+    - cron: "55 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  eod:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate EOD report
+        run: |
+          python eod_commit_report.py --since "$(date -u -d 'today 00:00' +'%Y-%m-%d 00:00')" --until "$(date -u +'%Y-%m-%d %H:%M')" --html --output-dir backups || true
+          ls -lah backups || true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eod-commit-report-${{ github.run_id }}
+          path: backups/
+
+      # Optional: commit report into repo
+      - name: Commit report to backups/ (optional)
+        if: ${{ false }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add backups
+          git commit -m "chore(backups): EOD report"
+          git push
