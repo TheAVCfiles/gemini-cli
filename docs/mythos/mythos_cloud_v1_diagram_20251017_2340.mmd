@@ -1,0 +1,22 @@
+graph TD
+    subgraph MythOS Cloud
+        Studio[MythOS Studio Runtime]
+        Engine[Signal Engine - Minute Runner / VRO / Physics]
+        API[Decryption Engine API]
+        Frontend[MythOS Frontend (Vercel/Cloudflare)]
+        Storage[(MinIO / Cloud Storage)]
+        DB[(PostgreSQL)]
+        AI[Model Training Node (GPU)]
+        Queue[(Pub/Sub or Cloud Function)]
+    end
+
+    Studio --> Engine
+    Engine --> Storage
+    Engine --> DB
+    Engine --> AI
+    API --> Engine
+    Frontend --> API
+    Frontend --> Storage
+    Queue --> Engine
+    Queue --> Frontend
+    AI --> Storage

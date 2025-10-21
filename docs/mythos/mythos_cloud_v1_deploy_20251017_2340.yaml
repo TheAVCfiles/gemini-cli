@@ -1,0 +1,49 @@
+version: '3.9'
+services:
+  mythos-api:
+    image: ghcr.io/intuitionlabs/mythos-api:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/mythos
+      - MINIO_URL=http://minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    depends_on:
+      - db
+      - minio
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mythos
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+
+  signal-engine:
+    image: ghcr.io/intuitionlabs/signal-engine:latest
+    environment:
+      - RUN_MODE=production
+      - DATABASE_URL=postgresql://postgres:password@db:5432/mythos
+      - MINIO_URL=http://minio:9000
+    depends_on:
+      - db
+      - minio
+
+volumes:
+  pgdata:
+  minio_data:
