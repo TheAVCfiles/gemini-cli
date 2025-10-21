@@ -1,0 +1,11 @@
+[project]
+name = "glisse-engine"
+version = "0.1.0"
+description = "Finite-state trading controller with elastic deadlines and narrated cues."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.pytest.ini_options]
+addopts = "-q"
+pythonpath = ["src"]
