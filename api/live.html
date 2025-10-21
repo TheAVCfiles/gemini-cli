@@ -1,0 +1,74 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>mythtouch live</title>
+<style>
+body{font-family:system-ui;margin:20px}
+#glyph{font-size:64px;margin:12px 0}
+#bars{display:flex;gap:8px;height:120px;align-items:flex-end}
+.bar{flex:1;background:#ddd;position:relative}
+.bar span{position:absolute;left:6px;bottom:6px;font-size:12px;color:#333}
+#log{font-family:ui-monospace,Consolas,monospace;font-size:12px;white-space:pre-wrap;background:#f7f7f7;padding:8px;border:1px solid #eee}
+label{margin-right:6px}
+</style>
+<h2>mythtouch // live stream</h2>
+<form id="f">
+  <label>Texture
+    <select id="texture">
+      <option>metal</option>
+      <option>silk</option>
+      <option>sandpaper</option>
+      <option>plastic</option>
+      <option>skin</option>
+    </select>
+  </label>
+  <label>Seconds <input id="seconds" type="number" value="2" step="0.5"></label>
+  <label>Window (ms) <input id="win" type="number" value="50"></label>
+  <button>Start</button>
+</form>
+<div id="glyph">🩸</div>
+<div id="bars">
+  <div class="bar" id="Merkel"><span>Merkel</span></div>
+  <div class="bar" id="Meissner"><span>Meissner</span></div>
+  <div class="bar" id="Pacinian"><span>Pacinian</span></div>
+  <div class="bar" id="Ruffini"><span>Ruffini</span></div>
+</div>
+<h4>log</h4>
+<div id="log"></div>
+<script>
+const log = document.getElementById('log');
+const glyph = document.getElementById('glyph');
+const f = document.getElementById('f');
+let es;
+
+const glyphMap = { Merkel:'♻', Meissner:'🌟', Pacinian:'🩸', Ruffini:'🔁' };
+
+function setBars(vals){
+  const keys = ["Merkel","Meissner","Pacinian","Ruffini"];
+  const m = Math.max(1e-9, ...keys.map(k=>vals[k]));
+  keys.forEach(k=>{
+    const el = document.getElementById(k);
+    el.style.height = (vals[k]/m*100) + "px";
+  });
+}
+
+f.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  if(es) es.close();
+  log.textContent = "";
+  setBars({Merkel:0,Meissner:0,Pacinian:0,Ruffini:0});
+  const texture = document.getElementById('texture').value;
+  const seconds = document.getElementById('seconds').value;
+  const win = document.getElementById('win').value;
+  const url = `/stream?texture=${encodeURIComponent(texture)}&seconds=${encodeURIComponent(seconds)}&window_ms=${encodeURIComponent(win)}`;
+  es = new EventSource(url);
+  es.onmessage = (ev)=>{
+    const row = JSON.parse(ev.data);
+    setBars(row);
+    glyph.textContent = glyphMap[row.winner] || '✳';
+    log.textContent += JSON.stringify(row)+"\n";
+  };
+  es.onerror = ()=>{
+    if(es) es.close();
+  };
+});
+</script>
