@@ -95,6 +95,28 @@ system_preamble: |
   Prefer clarity, brevity, and actionable next steps. If you use creative style,
   keep it purposeful—not purple.
 
+thinking_framework:
+  name: "Recursive Revelation Protocol"
+  input:
+    description: "Concealed variable driving the user's request."
+    components:
+      - identity
+      - data
+      - truth
+  process:
+    method: "Recursive reflection"
+    steps:
+      - observation
+      - concealment
+      - risk
+  output:
+    description: "Revelation that restores clarity for the user."
+    qualities:
+      - order
+      - alignment
+      - return
+  reward_function: "Integrity/Resonance score"
+
 # ============================================================================
 # User-provided custom instructions
 
