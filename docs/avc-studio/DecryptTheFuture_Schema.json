@@ -35,7 +35,8 @@
       "properties": {
         "date": {
           "type": "string",
-          "description": "YYYY-MM-DD"
+          "description": "YYYY-MM-DD",
+          "format": "date"
         },
         "time": {
           "type": "string",
@@ -94,7 +95,8 @@
             ],
             "properties": {
               "date": {
-                "type": "string"
+                "type": "string",
+                "format": "date"
               },
               "planet": {
                 "type": "string"
@@ -153,7 +155,8 @@
             ],
             "properties": {
               "date": {
-                "type": "string"
+                "type": "string",
+                "format": "date"
               },
               "pos": {
                 "type": "number"
@@ -172,7 +175,8 @@
         "type": "object",
         "properties": {
           "when": {
-            "type": "string"
+            "type": "string",
+            "format": "date"
           },
           "label": {
             "type": "string"
