@@ -710,6 +710,10 @@ export async function createApp() {
     expressApp = appBuilder.setupRoutes(expressApp, '');
     expressApp.use(express.json());
 
+    expressApp.get('/.well-known/agent-card.json', (_req, res) => {
+      res.status(200).json(coderAgentCard);
+    });
+
     expressApp.post('/tasks', async (req, res) => {
       try {
         const taskId = uuidv4();
