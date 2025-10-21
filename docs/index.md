@@ -38,6 +38,8 @@ This documentation is organized into the following sections:
   - **[Vertex AI Search integration](./examples/vertex-ai-search.md):** Step-by-step guidance for connecting Gemini CLI agents to Vertex AI Search.
   - **[Mechanotransduction simulation](./examples/mechanotransduction-simulation.md):** End-to-end tactile encoding pipeline with vibration synthesis, receptor filters, spikes, and somatotopic maps.
   - **[IntuitionLabs Ballet Bots curriculum assets](./intuitionlabs/README.md):** Reference materials for an arts-and-robotics learning program that leverages Gemini CLI for content generation.
+- **Heritage & Provenance:**
+  - **[Rovagnasca–Casa Savoia archival dossier](./provenance/rovagnasca-casa-savoia.md):** Official correspondence summary for the Prati di Rovagnasca lineage and MythOS™ node reference.
 - **[Contributing & Development Guide](../CONTRIBUTING.md):** Information for contributors and developers, including setup, building, testing, and coding conventions.
 - **[NPM](./npm.md):** Details on how the project's packages are structured
 - **[Troubleshooting Guide](./troubleshooting.md):** Find solutions to common problems and FAQs.
