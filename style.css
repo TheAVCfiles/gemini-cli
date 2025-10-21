@@ -1,0 +1,28 @@
+body {
+  background: #181f29;
+  color: #e6f0ff;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  margin: 0;
+}
+.dashboard {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2em 1em;
+}
+header { text-align: center; margin-bottom: 1.5em; }
+.summary-card, .levels-card {
+  background: #232a3c;
+  border-radius: 12px;
+  box-shadow: 0 0 16px #121626;
+  padding: 1.5em;
+  margin: 1em 0;
+}
+.summary-card h3, .levels-card h2 { color: #9efcff; margin-top: 0; }
+ul { margin: 0.5em 0 1em 1em; padding: 0; }
+.regime { color: #ffd166; font-weight: bold; }
+.open { color: #10b981; font-weight: bold; }
+.closed { color: #ef4444; font-weight: bold; }
+footer { text-align: center; margin-top: 2em; font-size: 0.9em; color: #9efcff;}
+table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+th, td { padding: 4px 8px; border: 1px solid #333; font-size: 0.96em;}
+th { background: #1d2332; color: #9efcff;}
