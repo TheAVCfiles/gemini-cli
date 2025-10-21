@@ -88,6 +88,40 @@
       "env": {
         "GEMINI_SANDBOX": "false"
       }
+    },
+    {
+      "name": "Surface Layer – Run current ritual",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "env": {
+        "MYTHOS_MODE": "Surface",
+        "MYTHOS_CONTEXT": "Decrypt-The-Girl"
+      }
+    },
+    {
+      "name": "Cipher Layer – Main sequence",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/cipher_entrypoint.py",
+      "console": "integratedTerminal",
+      "env": {
+        "MYTHOS_MODE": "Cipher",
+        "MYTHOS_CONTEXT": "Decrypt-The-Girl"
+      }
+    },
+    {
+      "name": "Echo Layer – Diagnostics",
+      "type": "python",
+      "request": "launch",
+      "module": "tests.echo_runner",
+      "console": "integratedTerminal",
+      "env": {
+        "MYTHOS_MODE": "Echo",
+        "MYTHOS_CONTEXT": "Decrypt-The-Girl"
+      }
     }
   ],
   "inputs": [
