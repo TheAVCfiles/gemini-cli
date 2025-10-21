@@ -1,0 +1,168 @@
+{
+  "texture": "metal",
+  "fs": 1000,
+  "seconds": 1.0,
+  "window_ms": 50,
+  "timeseries": [
+    {
+      "t_center": 0.025,
+      "Merkel": 0.04749885389558412,
+      "Meissner": 0.0026211471860772134,
+      "Pacinian": 0.3930019412019295,
+      "Ruffini": 0.03368278788955853,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.075,
+      "Merkel": 0.08788003288513044,
+      "Meissner": 0.00016876720798344137,
+      "Pacinian": 0.3859536567853584,
+      "Ruffini": 0.05963482192133684,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.125,
+      "Merkel": 0.09034512313785163,
+      "Meissner": 5.3135458710101775e-05,
+      "Pacinian": 0.35504697025747034,
+      "Ruffini": 0.08484569745724808,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.175,
+      "Merkel": 0.0832164610057223,
+      "Meissner": 9.650756606487999e-05,
+      "Pacinian": 0.3370669338908571,
+      "Ruffini": 0.10056597622901257,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.225,
+      "Merkel": 0.08847604646359113,
+      "Meissner": 5.5508056285236845e-05,
+      "Pacinian": 0.30835383124879107,
+      "Ruffini": 0.10284130952462661,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.275,
+      "Merkel": 0.09101470258428856,
+      "Meissner": 5.233558232678477e-05,
+      "Pacinian": 0.29275180310953103,
+      "Ruffini": 0.09432939084385884,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.325,
+      "Merkel": 0.08182749341206633,
+      "Meissner": 2.1906483526239752e-05,
+      "Pacinian": 0.28636431884329144,
+      "Ruffini": 0.08133649508974741,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.375,
+      "Merkel": 0.07443829586026966,
+      "Meissner": 3.4487700165200324e-05,
+      "Pacinian": 0.27014122496250176,
+      "Ruffini": 0.06946696859383987,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.425,
+      "Merkel": 0.07151326744939443,
+      "Meissner": 4.653613368320748e-05,
+      "Pacinian": 0.2614361589272443,
+      "Ruffini": 0.06125658362008259,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.475,
+      "Merkel": 0.06171589514899527,
+      "Meissner": 5.548257474941463e-05,
+      "Pacinian": 0.255946452303099,
+      "Ruffini": 0.056203174315874856,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.525,
+      "Merkel": 0.04727243431162792,
+      "Meissner": 3.659312938346892e-05,
+      "Pacinian": 0.23843159783076198,
+      "Ruffini": 0.05185767792383349,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.575,
+      "Merkel": 0.03844234318922586,
+      "Meissner": 1.522243753904373e-05,
+      "Pacinian": 0.23190665083108059,
+      "Ruffini": 0.04532120931630807,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.625,
+      "Merkel": 0.03169658924131966,
+      "Meissner": 3.6502041199150486e-05,
+      "Pacinian": 0.22406548038476995,
+      "Ruffini": 0.03516084066737028,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.675,
+      "Merkel": 0.02070153018074972,
+      "Meissner": 1.8693217208043505e-05,
+      "Pacinian": 0.21306059538149022,
+      "Ruffini": 0.022799341313147245,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.725,
+      "Merkel": 0.01187640096747074,
+      "Meissner": 4.0727452371157906e-05,
+      "Pacinian": 0.3182691045916321,
+      "Ruffini": 0.011740988410537804,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.775,
+      "Merkel": 0.00919702697343735,
+      "Meissner": 4.625341402536477e-05,
+      "Pacinian": 0.587610963512946,
+      "Ruffini": 0.0047755310205745,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.825,
+      "Merkel": 0.00634477203222237,
+      "Meissner": 5.621580856014395e-05,
+      "Pacinian": 0.2399724346729914,
+      "Ruffini": 0.00196897280026524,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.875,
+      "Merkel": 0.001395056554809257,
+      "Meissner": 0.00010878502334940656,
+      "Pacinian": 0.1774019262964268,
+      "Ruffini": 0.0019437661076854606,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.925,
+      "Merkel": 0.00027621116168547263,
+      "Meissner": 0.0003403315847401197,
+      "Pacinian": 0.1701395971132942,
+      "Ruffini": 0.005129635620536476,
+      "winner": "Pacinian"
+    },
+    {
+      "t_center": 0.975,
+      "Merkel": 0.008740695228088678,
+      "Meissner": 0.0031060189852957815,
+      "Pacinian": 0.16046632017080817,
+      "Ruffini": 0.014780809342168239,
+      "winner": "Pacinian"
+    }
+  ]
+}
