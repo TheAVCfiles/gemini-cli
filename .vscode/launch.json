@@ -1,101 +1,37 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
+      "type": "pwa-node",
       "request": "launch",
-      "name": "Build & Launch CLI",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "build-and-start"],
-      "skipFiles": ["<node_internals>/**"],
+      "name": "Node: Run scripts (dev)",
       "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "env": {
-        "GEMINI_SANDBOX": "false"
-      }
-    },
-    {
-      "name": "Launch Companion VS Code Extension",
-      "type": "extensionHost",
-      "request": "launch",
-      "args": [
-        "--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-ide-companion"
-      ],
-      "outFiles": [
-        "${workspaceFolder}/packages/vscode-ide-companion/dist/**/*.js"
-      ],
-      "preLaunchTask": "npm: build: vscode-ide-companion"
-    },
-    {
-      "name": "Attach",
-      "port": 9229,
-      "request": "attach",
-      "skipFiles": ["<node_internals>/**"],
-      "type": "node",
-      // fix source mapping when debugging in sandbox using global installation
-      // note this does not interfere when remoteRoot is also ${workspaceFolder}/packages
-      "remoteRoot": "/usr/local/share/npm-global/lib/node_modules/@gemini-cli",
-      "localRoot": "${workspaceFolder}/packages"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${file}",
-      "outFiles": ["${workspaceFolder}/**/*.js"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug Test File",
       "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "test",
-        "-w",
-        "packages",
-        "--",
-        "--inspect-brk=9229",
-        "--no-file-parallelism",
-        "${input:testFile}"
-      ],
-      "cwd": "${workspaceFolder}",
+      "runtimeArgs": ["run", "dev"],
       "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
       "skipFiles": ["<node_internals>/**"]
     },
     {
-      "name": "Debug Integration Test File",
-      "type": "node",
+      "type": "chrome",
       "request": "launch",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": [
-        "vitest",
-        "run",
-        "--root",
-        "./integration-tests",
-        "--inspect-brk=9229",
-        "${file}"
-      ],
+      "name": "Web: Launch at http://localhost:5173",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Node: Tests",
       "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "skipFiles": ["<node_internals>/**"],
-      "env": {
-        "GEMINI_SANDBOX": "false"
-      }
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "test"],
+      "console": "integratedTerminal"
     }
   ],
-  "inputs": [
+  "compounds": [
     {
-      "id": "testFile",
-      "type": "promptString",
-      "description": "Enter the path to the test file (e.g., ${workspaceFolder}/packages/cli/src/ui/components/LoadingIndicator.test.tsx)",
-      "default": "${workspaceFolder}/packages/cli/src/ui/components/LoadingIndicator.test.tsx"
+      "name": "Dev + Browser",
+      "configurations": ["Node: Run scripts (dev)", "Web: Launch at http://localhost:5173"]
     }
   ]
 }

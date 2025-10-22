@@ -1,0 +1,29 @@
+{
+  "project": "Decrypt The Girl",
+  "author": "Allison Van Cura",
+  "mode": ["Surface", "Cipher", "Echo"],
+  "description": "Recursive poetic OS linking trauma, code, and choreography into a playable literary engine.",
+  "default_model": "gpt-5-codex",
+  "reasoning_effort": "high",
+  "contexts": {
+    "manuscript": ["docs/Decryption-Deck/", "docs/Manuscript/", "docs/Dossier/"],
+    "web": ["web/decoder/", "web/engine/", "web/styles/", "web/components/"],
+    "legal": ["evidence/", "press/"],
+    "assets": ["assets/glyphs/", "assets/fonts/", "assets/images/"]
+  },
+  "codex": {
+    "approval_mode": "agent",
+    "run_commands": true,
+    "read_outside_workspace_requires_approval": true
+  },
+  "linting": {
+    "javascript": "eslint",
+    "styles": "stylelint",
+    "markdown": "markdownlint"
+  },
+  "glossary": {
+    "Surface": "reader-visible UX and presentation layer",
+    "Cipher": "hidden logic, keys, and structural constraints",
+    "Echo": "responses, reflections, and ritualized output"
+  }
+}
