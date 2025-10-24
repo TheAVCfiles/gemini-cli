@@ -41,6 +41,10 @@ unzip mwra-glossary-firebase.zip
 cd mwra-glossary-firebase
 ```
 
+Prefer a built-in helper? Run `npm run download:mwra -- --dest <path>` from the repository
+root to fetch the archive with Node instead of `curl`. The script accepts `--force` to
+overwrite an existing download.
+
 The `README_FIREBASE.md` inside the archive mirrors the next sections for quick reference.
 
 ## 3. Install the Cloud Function dependencies
