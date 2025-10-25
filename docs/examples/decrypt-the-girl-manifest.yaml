@@ -1,0 +1,17 @@
+project: DecryptTheGirl
+publish_to:
+  - mythos_cloud
+  - github_release
+paths:
+  artifacts: ./exports
+  manifests: ./proof_ledger.json
+auth:
+  github_token: ${{ secrets.GITHUB_TOKEN }}
+  mythos_key: ${{ secrets.MYTHOS_API_KEY }}
+meta:
+  creator: Allison Van Cura
+  license: CC-BY-NC-4.0
+  tags: [adaptive-ethics, sentient-cents, balanchine-cipher]
+# User-provided custom instructions
+
+https://platform.openai.com/storage/vector_stores/vs_6859e43920848191a894dd36ecf0595a
