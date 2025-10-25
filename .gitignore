@@ -39,8 +39,10 @@ packages/*/coverage/
 data/
 
 # Generated files
-packages/cli/src/generated/
-packages/core/src/generated/
+packages/cli/src/generated/*
+!packages/cli/src/generated/git-commit.js
+packages/core/src/generated/*
+!packages/core/src/generated/git-commit.js
 .integration-tests/
 packages/vscode-ide-companion/*.vsix
 
