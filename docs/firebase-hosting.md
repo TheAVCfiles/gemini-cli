@@ -51,7 +51,20 @@ npm install
 cd ..
 ```
 
-The package only pulls the HTTPS Function runtime dependencies, so this step completes quickly even on the free tier.
+The package only pulls the HTTPS Function runtime dependencies, so this step completes quickly even on the free tier. For
+reference, the bundled `functions/package.json` declares the following production dependencies:
+
+```json
+"dependencies": {
+  "js-yaml": "4.1.0",
+  "firebase-admin": "12.6.0",
+  "firebase-functions": "5.0.1",
+  "google-generative-ai": "0.11.1"
+}
+```
+
+They cover YAML parsing for the glossary dataset, the Firebase Admin and Functions SDKs used by the HTTPS endpoint, and the
+Google Generative AI SDK that powers the `/ask` responses.
 
 ## 4. Configure project aliases and Hosting target
 
