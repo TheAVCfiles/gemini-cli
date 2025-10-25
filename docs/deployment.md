@@ -115,3 +115,7 @@ The release process is automated through GitHub Actions. The release workflow pe
 1.  Build the NPM packages using `tsc`.
 2.  Publish the NPM packages to the artifact registry.
 3.  Create GitHub releases with bundled assets.
+
+## Additional deployment patterns
+
+- [Regional MIG + internal HTTP load balancer on Google Compute Engine](deployment/gce-mig.md): Step-by-step commands for provisioning autoscaled frontend and retrieval tiers behind an internal load balancer, including health checks, firewall rules, and cleanup guidance.
