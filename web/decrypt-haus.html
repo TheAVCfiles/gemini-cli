@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Decrypt Haus Prototype</title>
+    <style>
+      body {
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        margin: 0;
+        background: #0c0c0c;
+        color: #fff;
+      }
+      .screen {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+        transition: opacity 0.6s ease;
+      }
+      button {
+        background: #ff3366;
+        border: none;
+        padding: 14px 24px;
+        border-radius: 8px;
+        color: #fff;
+        font-weight: 600;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(255, 51, 102, 0.35);
+      }
+      input,
+      select {
+        padding: 10px;
+        margin: 6px;
+        border-radius: 6px;
+        border: none;
+        width: min(320px, 70%);
+        background: rgba(255, 255, 255, 0.08);
+        color: inherit;
+      }
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .card {
+        background: #111;
+        padding: 28px;
+        border-radius: 18px;
+        box-shadow: 0 0 20px rgba(255, 51, 102, 0.45);
+        width: min(420px, 90vw);
+      }
+      .card h2 {
+        margin-bottom: 0.75rem;
+        font-size: 1.75rem;
+      }
+      .card p {
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      #dash h2 {
+        margin-bottom: 0.5rem;
+      }
+      @media (max-width: 600px) {
+        .screen {
+          padding: 1.5rem;
+        }
+        button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="intro" class="screen">
+      <h1>Decrypt Haus</h1>
+      <p>Tap to begin your orbit.</p>
+      <button type="button" onclick="next('form')">Start</button>
+    </div>
+
+    <div id="form" class="screen hidden">
+      <h2>Your Birth Data</h2>
+      <input id="name" placeholder="Full Name" />
+      <input id="birth" type="date" />
+      <input id="time" type="time" />
+      <input id="place" placeholder="City, Country" />
+      <button type="button" onclick="generate()">Generate Insight</button>
+    </div>
+
+    <div id="card" class="screen hidden">
+      <div class="card">
+        <h2 id="title"></h2>
+        <p id="content"></p>
+      </div>
+      <button type="button" onclick="next('gate')">Access Deeper Layer</button>
+    </div>
+
+    <div id="gate" class="screen hidden">
+      <h2>Tier Access</h2>
+      <p>Unlock analytics, hosting, and data tools.</p>
+      <button type="button" onclick="next('dash')">Subscribe ($9.99/mo)</button>
+    </div>
+
+    <div id="dash" class="screen hidden">
+      <h2>Performance Dashboard</h2>
+      <p id="metrics"></p>
+      <button type="button" onclick="restart()">Restart</button>
+    </div>
+
+    <script>
+      const screens = document.querySelectorAll('.screen');
+
+      function next(id) {
+        screens.forEach((screen) => screen.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+      }
+
+      function generate() {
+        const name = document.getElementById('name').value || 'Seeker';
+        const titles = ['Lunar Logic', 'Solar Drift', 'Seoul Node Pulse'];
+        const lines = [
+          `${name}, your cycle aligns with collective risk appetite — trade empathy for clarity.`,
+          'Momentum builds in the second act; harvest data, not drama.',
+          'Echoes strong in ensemble mode — release one insight before midnight.',
+        ];
+        const title = titles[Math.floor(Math.random() * titles.length)];
+        const content = lines[Math.floor(Math.random() * lines.length)];
+        document.getElementById('title').innerText = title;
+        document.getElementById('content').innerText = content;
+        next('card');
+      }
+
+      function restart() {
+        next('intro');
+      }
+
+      document.getElementById('metrics').innerText =
+        'Insights generated: 12 | Resonance score: 0.78 | Tokens earned: 42 ¢';
+    </script>
+  </body>
+</html>
