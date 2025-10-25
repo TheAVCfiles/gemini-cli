@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Signal Salon — Book</title>
+
+<!-- Fonts: use Playfair Display + Inter (or host) -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#060409;
+  --gold-1: #D4AF37; /* warm gold */
+  --gold-2: #FFD88B; /* highlight */
+  --rose:#EFAFC2;
+  --glass: rgba(255,255,255,0.04);
+  --muted: rgba(255,255,255,0.15);
+  --accent: #00E0FF; /* electric accent */
+}
+
+/* Base */
+html,body{height:100%;margin:0;background:linear-gradient(180deg,#050407 0%, #04030a 100%);font-family:Inter,system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+.container {display:flex;align-items:center;justify-content:center;height:100vh;padding:20px;}
+
+/* Modal shell */
+.modal {
+  width:920px; max-width:94vw; border-radius:14px; overflow:hidden;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.05));
+  box-shadow: 0 30px 80px rgba(2,2,2,0.7), inset 0 1px 0 rgba(255,255,255,0.03);
+  display:grid; grid-template-columns: 1fr 460px; gap:0;
+  transform: translateY(0); transition: transform .45s cubic-bezier(.2,.9,.3,1);
+  border: 1px solid rgba(212,175,55,0.06);
+}
+
+/* Left: hero */
+.modal .hero {
+  padding:44px 36px;
+  position:relative;
+  background:linear-gradient(135deg, rgba(10,8,12,0.6), rgba(8,6,10,0.38));
+}
+.brand-tag {
+  font-family:'Playfair Display', serif;
+  color:var(--gold-1); letter-spacing:1px; font-size:13px;
+  text-transform:uppercase; margin-bottom:16px;
+}
+.headline{
+  font-family:'Playfair Display', serif; color:#fff; font-size:34px; line-height:1.05;
+  margin:0 0 14px 0;
+}
+.sub{ color:var(--muted); font-size:14px; margin-bottom:22px; }
+.ribbon{
+  position:absolute; left:-100px; top:40%; width:120%; height:120px; pointer-events:none;
+  background: linear-gradient(90deg, transparent 10%, rgba(212,175,55,0.06) 50%, transparent 90%);
+  transform: rotate(-6deg) translateZ(0);
+  animation: ribbonflow 14s linear infinite;
+  filter: blur(0.3px);
+}
+@keyframes ribbonflow{
+  0%{transform:translateX(-40%) rotate(-6deg)}50%{transform:translateX(0%) rotate(-6deg)}100%{transform:translateX(40%) rotate(-6deg)}
+}
+
+/* service list */
+.services {display:flex;flex-direction:column;gap:12px; margin-top:8px}
+.service-card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:10px; padding:14px; display:flex; align-items:center; justify-content:space-between;
+  border:1px solid rgba(255,255,255,0.04);
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+.service-card:hover{ transform: translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.6); }
+.service-title{ color:#fff; font-weight:600; font-size:16px; }
+.service-desc{ color:var(--muted); font-size:13px; margin-top:6px; }
+
+/* Right: booking column */
+.book {
+  padding:30px; background:linear-gradient(180deg, rgba(4,3,6,0.6), rgba(2,2,2,0.4));
+  border-left:1px solid rgba(212,175,55,0.04);
+}
+.pricing {font-family:'Playfair Display',serif; color:var(--gold-1); font-size:28px; margin:0 0 12px 0}
+.cta {display:flex; gap:12px; margin-top:18px}
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:600; font-size:14px;
+  border:1px solid rgba(255,255,255,0.06);
+}
+.btn.primary {background: linear-gradient(90deg,var(--gold-1),var(--gold-2)); color:#111;}
+.btn.ghost {background:transparent; color:var(--gold-1); border:1px dashed rgba(212,175,55,0.18);}
+
+.meta {font-size:12px;color:var(--muted); margin-top:10px}
+
+/* halo effect */
+.halo {
+  position:absolute; right:-80px; bottom:-60px; width:420px; height:420px; border-radius:50%;
+  background: radial-gradient(circle at 35% 35%, rgba(0,224,255,0.07), rgba(212,175,55,0.045) 20%, transparent 40%);
+  filter: blur(36px); pointer-events:none; z-index:0;
+  animation: haloPulse 6s ease-in-out infinite;
+}
+@keyframes haloPulse{
+  0%{transform:scale(.96)}50%{transform:scale(1.06)}100%{transform:scale(.96)}
+}
+
+/* small responsive */
+@media(max-width:980px){
+  .modal{grid-template-columns:1fr; padding:0}
+  .hero{padding:28px} .book{border-left:none;border-top:1px solid rgba(212,175,55,0.04)}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Signal Salon booking">
+    <div class="hero">
+      <div class="brand-tag">Decrypt The Girl — Salon</div>
+      <h1 class="headline">High-Voltage Rituals for High-Voltage Lives</h1>
+      <p class="sub">Precision, presence, and a conduit for abundance. Book a private session; leave with a bespoke system.</p>
+
+      <div class="services">
+        <div class="service-card" data-service="signal">
+          <div style="max-width:70%">
+            <div class="service-title">The Signal Reading</div>
+            <div class="service-desc">60-min: Birth chart + Wealth Signature. PDF + voice memo.</div>
+          </div>
+          <div style="text-align:right"><div style="font-weight:700;color:var(--gold-1)">$555</div><div style="font-size:12px;color:var(--muted)">Book →</div></div>
+        </div>
+
+        <div class="service-card" data-service="cloak">
+          <div style="max-width:70%">
+            <div class="service-title">The Cloak Consultation</div>
+            <div class="service-desc">90-min VIP: somatic map + personal roadmap.</div>
+          </div>
+          <div style="text-align:right"><div style="font-weight:700;color:var(--gold-1)">$1,111</div><div style="font-size:12px;color:var(--muted)">Book →</div></div>
+        </div>
+
+        <div class="service-card" data-service="sidekick">
+          <div style="max-width:70%">
+            <div class="service-title">Manifesting Side-Kick</div>
+            <div class="service-desc">Event on-call: live cues, ritual support, micro-activations.</div>
+          </div>
+          <div style="text-align:right"><div style="font-weight:700;color:var(--gold-1)">$2,222</div><div style="font-size:12px;color:var(--muted)">Book →</div></div>
+        </div>
+
+      </div>
+
+      <div class="ribbon" aria-hidden="true"></div>
+      <div class="halo" aria-hidden="true"></div>
+    </div>
+
+    <aside class="book">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:68px;height:68px;border-radius:12px;background:linear-gradient(135deg,var(--gold-1),var(--gold-2));display:flex;align-items:center;justify-content:center;color:#111;font-weight:700">AVC</div>
+        <div>
+          <div style="font-size:13px;color:var(--muted)">Hosted by</div>
+          <div style="font-weight:700;color:#fff">Miss Allison • Author • Choreographer</div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px">
+        <div class="pricing">The Cloak Consultation</div>
+        <div class="meta">Limit 6 VIPs per week • Recordings provided • Confidential</div>
+
+        <div class="cta">
+          <button class="btn primary" id="btnBookNow">Reserve</button>
+          <button class="btn ghost" id="btnQuick">Quick Align</button>
+        </div>
+
+        <div style="margin-top:14px;color:var(--muted);font-size:13px">
+          <strong>Arrival:</strong> Wear something that feels like you. Bring one object to transform into a relic.
+        </div>
+
+        <div style="margin-top:18px;font-size:13px;color:var(--muted)">
+          <div style="margin-bottom:6px">Payment</div>
+          <div style="display:flex;gap:8px">
+            <div style="width:44px;height:28px;background:#111;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px">Stripe</div>
+            <div style="width:44px;height:28px;background:#111;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px">Calendly</div>
+          </div>
+        </div>
+
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<!-- Optional subtle sound (432Hz style) -->
+<audio id="pulseAudio" preload="auto">
+  <!-- Replace with your gentle ambient .mp3; sample file not included -->
+  <source src="https://example.com/432Hz-ambient.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* Basic interactivity: open booking flows */
+const btnBook = document.getElementById('btnBookNow');
+const btnQuick = document.getElementById('btnQuick');
+const audio = document.getElementById('pulseAudio');
+
+function openStripeCheckout(service){
+  // Replace with Stripe Checkout / Payment Link
+  // Example: window.location.href = "https://buy.stripe.com/checkout_link_for_service"
+  alert("OPEN CHECKOUT: " + service + " — Replace JS with Stripe Checkout or Payment Link.");
+}
+function openCalendly(){
+  // Replace with Calendly embed popup or your scheduling link
+  alert("OPEN SCHEDULER — Replace with Calendly popup code.");
+}
+
+btnBook.addEventListener('click', ()=> {
+  audio && audio.play().catch(()=>{});
+  openCalendly();
+});
+btnQuick.addEventListener('click', ()=> {
+  audio && audio.play().catch(()=>{});
+  openStripeCheckout('quick-align');
+});
+
+/* Service-card quickbook on click */
+document.querySelectorAll('.service-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    const s = card.getAttribute('data-service');
+    audio && audio.play().catch(()=>{});
+    // map service to link
+    if(s==='signal') openStripeCheckout('signal-reading');
+    if(s==='cloak') openCalendly();
+    if(s==='sidekick') openStripeCheckout('sidekick-block');
+  });
+});
+</script>
+
+</body>
+</html>
