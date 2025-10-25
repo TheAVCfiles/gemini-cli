@@ -1,0 +1,32 @@
+name: "refactor-mythos-module"
+description: "Run Codex cloud agent to refactor and test the MythOS engine."
+environment:
+  runtime: python3.10
+  dependencies:
+    - numpy==1.26
+    - matplotlib
+    - requests
+  setup_commands:
+    - pip install -e .
+    - echo "Environment ready."
+
+resources:
+  cpu: 4
+  memory: 16GB
+  gpu: false
+
+entrypoint:
+  command: "python run_tests.py"
+
+context:
+  include:
+    - src/
+    - tests/
+    - codex-task.yml
+  exclude:
+    - node_modules/
+    - .git/
+    - .env
+
+timeouts:
+  max_runtime: 1800
