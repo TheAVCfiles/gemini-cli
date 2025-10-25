@@ -11,5 +11,6 @@ The IntuitionLabs Ballet Bots program combines creative movement, robotics, and 
 - `teaching_materials/`
   - [`lesson_plans.md`](./teaching_materials/lesson_plans.md): Ready-to-run outlines for each session.
   - [`student_worksheets.md`](./teaching_materials/student_worksheets.md): Printable activities and reflection prompts.
+- [`saas_products.md`](./saas_products.md): Pricing, fulfillment, and publishing workflow for IntuitionLabs' SaaS catalog.
 
 Use these materials alongside Gemini CLI to generate custom prompts, adapt activities to new audiences, or manage interactive assets referenced by the curriculum.
