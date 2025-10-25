@@ -13,6 +13,48 @@
   status = 200
   force = true
 
+[[redirects]]
+  from = "/health"
+  to = "/.netlify/functions/sovereign/health"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/opps"
+  to = "/.netlify/functions/sovereign/opps"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/quote"
+  to = "/.netlify/functions/sovereign/quote"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/execute"
+  to = "/.netlify/functions/sovereign/execute"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/killswitch"
+  to = "/.netlify/functions/sovereign/killswitch"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/trades"
+  to = "/.netlify/functions/sovereign/trades"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/pnl"
+  to = "/.netlify/functions/sovereign/pnl"
+  status = 200
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
