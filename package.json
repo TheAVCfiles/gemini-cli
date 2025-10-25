@@ -96,7 +96,9 @@
   "dependencies": {
     "@lvce-editor/ripgrep": "^1.6.0",
     "simple-git": "^3.28.0",
-    "strip-ansi": "^7.1.0"
+    "strip-ansi": "^7.1.0",
+    "express": "^4.21.2",
+    "@google-cloud/pubsub": "^4.7.3"
   },
   "optionalDependencies": {
     "@lydell/node-pty": "1.1.0",
