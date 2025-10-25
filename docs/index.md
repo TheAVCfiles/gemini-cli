@@ -39,6 +39,7 @@ This documentation is organized into the following sections:
   - **[Room_009: Domestic Syntax manifest](./examples/room-009-domestic-syntax.json):** Narrative-rich room schema demonstrating Mother Systems worldbuilding data.
   - **[APop Allstars — 12-week dance curriculum](./examples/apop-allstars-12-week-curriculum.md):** Mermaid Gantt chart outlining the physical, emotional, and creative training arc.
   - **[IntuitionLabs Ballet Bots curriculum assets](./intuitionlabs/README.md):** Reference materials for an arts-and-robotics learning program that leverages Gemini CLI for content generation.
+  - **[IntuitionLabs Mythos Cloud SaaS starter kit](./intuitionlabs/saas_template/README.md):** Config-driven landing page, pricing, and sales collateral templates that demonstrate automated packaging workflows.
 - **[Contributing & Development Guide](../CONTRIBUTING.md):** Information for contributors and developers, including setup, building, testing, and coding conventions.
 - **[NPM](./npm.md):** Details on how the project's packages are structured
 - **[Troubleshooting Guide](./troubleshooting.md):** Find solutions to common problems and FAQs.

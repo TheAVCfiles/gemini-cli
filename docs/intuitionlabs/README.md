@@ -11,5 +11,11 @@ The IntuitionLabs Ballet Bots program combines creative movement, robotics, and 
 - `teaching_materials/`
   - [`lesson_plans.md`](./teaching_materials/lesson_plans.md): Ready-to-run outlines for each session.
   - [`student_worksheets.md`](./teaching_materials/student_worksheets.md): Printable activities and reflection prompts.
+- `saas_template/`
+  - [`config.yaml`](./saas_template/config.yaml): Product, pricing, and automation metadata for the Mythos Cloud SaaS starter kit.
+  - [`package_and_publish.py`](./saas_template/package_and_publish.py): Renders the landing page, sales offers, and manifest.
+  - [`saas_auto_landing.html`](./saas_template/saas_auto_landing.html): Responsive landing page shell populated from the configuration file.
+  - [`actions_auto_sell.yml`](./saas_template/actions_auto_sell.yml): Example GitHub Actions workflow that packages and uploads the starter assets.
+  - [`templates/`](./saas_template/templates): Marketing offer markdown blueprints that the packaging script personalises.
 
 Use these materials alongside Gemini CLI to generate custom prompts, adapt activities to new audiences, or manage interactive assets referenced by the curriculum.

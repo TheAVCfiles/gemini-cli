@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>$seo_title</title>
+    <meta name="description" content="$seo_description" />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #0b0b10;
+        --fg: #f1f5f9;
+        --accent: #9f7aea;
+        --muted: #94a3b8;
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: linear-gradient(135deg, rgba(12, 10, 23, 0.98), rgba(28, 26, 46, 0.92)), url('https://images.unsplash.com/photo-1523475472560-d2df97ec485c?auto=format&fit=crop&w=1600&q=80') center/cover fixed;
+        color: var(--fg);
+        min-height: 100vh;
+      }
+
+      .overlay {
+        backdrop-filter: blur(24px);
+        min-height: 100vh;
+        background: linear-gradient(160deg, rgba(15, 13, 34, 0.92), rgba(32, 30, 55, 0.82));
+      }
+
+      header,
+      main,
+      footer {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 2.5rem;
+      }
+
+      header {
+        padding-top: 5rem;
+        padding-bottom: 4rem;
+      }
+
+      header h1 {
+        font-size: clamp(2.75rem, 5vw, 4rem);
+        margin-bottom: 1rem;
+      }
+
+      header p.tagline {
+        font-size: clamp(1.15rem, 2vw, 1.5rem);
+        color: var(--muted);
+        max-width: 48ch;
+      }
+
+      a.primary-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.95rem 1.6rem;
+        border-radius: 999px;
+        margin-top: 2rem;
+        background: var(--accent);
+        color: #0f0f1a;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 18px 40px rgba(159, 122, 234, 0.35);
+      }
+
+      section {
+        margin-bottom: 4.5rem;
+      }
+
+      h2 {
+        font-size: clamp(1.75rem, 3vw, 2.5rem);
+        margin-bottom: 1.5rem;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.75rem;
+      }
+
+      .feature-grid li {
+        list-style: none;
+        padding: 1.5rem;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.05);
+      }
+
+      .pricing-table {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .tier-card {
+        background: rgba(8, 10, 23, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 2rem 1.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        box-shadow: 0 18px 60px rgba(15, 11, 38, 0.45);
+      }
+
+      .tier-card h3 {
+        font-size: 1.35rem;
+        margin: 0;
+      }
+
+      .tier-card .price {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+
+      .tier-card .price span {
+        font-size: 1rem;
+        margin-left: 0.35rem;
+        color: var(--muted);
+      }
+
+      .tier-card ul {
+        list-style: none;
+        padding-left: 1rem;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .tier-card a.cta {
+        margin-top: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.85rem 1.4rem;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        background: rgba(159, 122, 234, 0.9);
+        color: #0f0f1a;
+      }
+
+      .audience-list {
+        list-style: none;
+        padding-left: 1rem;
+        display: grid;
+        gap: 0.95rem;
+      }
+
+      .founder-note {
+        border-left: 3px solid var(--accent);
+        padding-left: 1.25rem;
+        color: var(--muted);
+        font-style: italic;
+        max-width: 70ch;
+      }
+
+      footer {
+        padding-bottom: 4rem;
+        color: rgba(226, 232, 240, 0.7);
+      }
+
+      @media (max-width: 720px) {
+        header,
+        main,
+        footer {
+          padding: 0 1.75rem;
+        }
+
+        header {
+          padding-top: 4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay">
+      <header>
+        <h1>$product_name</h1>
+        <p class="tagline">$product_tagline</p>
+        <a class="primary-cta" href="$primary_cta_url">$primary_cta_label →</a>
+      </header>
+      <main>
+        <section aria-labelledby="product-overview">
+          <h2 id="product-overview">Build momentum in days, not quarters</h2>
+          <p>$product_description</p>
+          <ul class="feature-grid">
+$feature_list
+          </ul>
+        </section>
+        <section aria-labelledby="pricing">
+          <h2 id="pricing">Pricing tuned for signal</h2>
+          <div class="pricing-table">
+$pricing_table
+          </div>
+          <p class="founder-note">$pricing_note</p>
+        </section>
+        <section aria-labelledby="audiences">
+          <h2 id="audiences">Go-to-market quick stats</h2>
+          <ul class="audience-list">
+$audience_list
+          </ul>
+        </section>
+        <section aria-labelledby="founder-note">
+          <h2 id="founder-note">Founder note</h2>
+          <p class="founder-note">$founder_note</p>
+        </section>
+      </main>
+      <footer>
+        <p>Ready to see $product_name inside your stack? <a class="primary-cta" href="$primary_cta_url">$primary_cta_label →</a></p>
+      </footer>
+    </div>
+  </body>
+</html>

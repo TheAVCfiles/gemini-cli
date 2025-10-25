@@ -1,0 +1,44 @@
+name: IntuitionLabs Mythos Cloud Auto-Sell Kit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "docs/intuitionlabs/saas_template/**"
+
+jobs:
+  package-template:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install optional helpers
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      - name: Render SaaS assets
+        working-directory: docs/intuitionlabs/saas_template
+        run: |
+          python package_and_publish.py --output dist
+
+      - name: Upload artifact bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: mythos-cloud-starter
+          path: docs/intuitionlabs/saas_template/dist
+          if-no-files-found: error
+
+      - name: Summarise output
+        run: |
+          find docs/intuitionlabs/saas_template/dist -type f -print

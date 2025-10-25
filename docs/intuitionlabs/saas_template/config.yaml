@@ -1,0 +1,132 @@
+{
+  "product": {
+    "name": "IntuitionLabs Mythos Cloud",
+    "tagline": "Composable SaaS scaffolding for AI-native founders.",
+    "description": "Mythos Cloud gives early teams pre-built operations so they can ship AI-powered services without recruiting a full platform crew.",
+    "features": [
+      "Blueprint-driven onboarding journeys that personalise every trial in under five minutes.",
+      "Realtime compliance telemetry and adaptive guardrails for AI governance teams.",
+      "Landing page generator wired to pricing experiments and revenue instrumentation.",
+      "Automated offer writers that translate roadmaps into sales collateral overnight."
+    ],
+    "founder_note": "We built Mythos Cloud after watching founders burn cycles on ops instead of testing their market. Every artifact here is optimised for rapid storytelling, data capture, and fast compliance sign-off."
+  },
+  "audiences": [
+    {
+      "title": "Adaptive ethics program directors",
+      "need": "Operationalise oversight dashboards for generative AI launches.",
+      "signal": "They ask for board-ready compliance updates before every release."
+    },
+    {
+      "title": "Product operators",
+      "need": "Run pricing experiments across AI feature bundles without rebuilding the stack.",
+      "signal": "They are accountable for expansion revenue inside six months."
+    },
+    {
+      "title": "Culture-forward marketing leads",
+      "need": "Ship narrative-rich launch campaigns that resonate with creative communities.",
+      "signal": "They look for glitch aesthetics and community-first messaging frameworks."
+    }
+  ],
+  "pricing": {
+    "currency": "USD",
+    "currency_symbol": "$",
+    "tiers": [
+      {
+        "id": "launch",
+        "name": "Launch",
+        "price": 49,
+        "billing_period": "month",
+        "value_props": [
+          "Adaptive ethics playbooks with six automation recipes.",
+          "Landing page kit with five narrative framings.",
+          "Notion dashboard to track activation and trust metrics."
+        ],
+        "cta_label": "Activate Launch",
+        "cta_url": "https://intuitionlabs.ai/book?plan=launch"
+      },
+      {
+        "id": "scale",
+        "name": "Scale",
+        "price": 179,
+        "billing_period": "month",
+        "value_props": [
+          "Dynamic pricing sandbox with cohort analysis dashboards.",
+          "Automated compliance reporting exports.",
+          "Offer template rotation with experiment tagging."
+        ],
+        "cta_label": "Run a scale sprint",
+        "cta_url": "https://intuitionlabs.ai/book?plan=scale"
+      },
+      {
+        "id": "enterprise",
+        "name": "Enterprise",
+        "price": 520,
+        "billing_period": "month",
+        "value_props": [
+          "Dedicated AI governance concierge and stakeholder workshops.",
+          "Private release pipeline with notarised artifact publishing.",
+          "Executive narrative lab tailored to investor updates."
+        ],
+        "cta_label": "Design a custom lab",
+        "cta_url": "https://intuitionlabs.ai/book?plan=enterprise"
+      }
+    ],
+    "note": "Every subscription includes sandboxed API keys, analytics lookbooks, and concierge onboarding."
+  },
+  "primary_cta": {
+    "label": "Book a strategy lab",
+    "url": "https://intuitionlabs.ai/book"
+  },
+  "seo": {
+    "title": "IntuitionLabs Mythos Cloud — AI-native SaaS template",
+    "description": "Prototype pricing, offers, and compliance-ready landing pages in a weekend with IntuitionLabs Mythos Cloud."
+  },
+  "automation": {
+    "landing_page": {
+      "template": "saas_auto_landing.html",
+      "output": "index.html"
+    },
+    "offers": [
+      {
+        "template": "templates/adaptive_ethics_offer.md",
+        "output": "offers/adaptive_ethics.md",
+        "variables": {
+          "product_name": "IntuitionLabs Mythos Cloud",
+          "audience_title": "Adaptive ethics program directors",
+          "primary_outcome": "ship trust dashboards in under a week",
+          "activation_metric": "compliance incidents resolved per sprint",
+          "success_metric": "Board audit packets assembled in under 48 hours",
+          "cta_label": "Schedule your oversight lab",
+          "cta_url": "https://intuitionlabs.ai/book?campaign=adaptive-ethics"
+        }
+      },
+      {
+        "template": "templates/mythos_cloud_offer.md",
+        "output": "offers/mythos_cloud_growth.md",
+        "variables": {
+          "product_name": "IntuitionLabs Mythos Cloud",
+          "audience_title": "Product operations teams",
+          "primary_outcome": "launch and iterate bundled AI features without retooling",
+          "activation_metric": "experiment velocity tracked week-over-week",
+          "success_metric": "Net revenue retention expanding by 20% within two quarters",
+          "cta_label": "Spin up your Mythos pilot",
+          "cta_url": "https://intuitionlabs.ai/book?campaign=mythos-growth"
+        }
+      },
+      {
+        "template": "templates/glitch_as_entry_offer.md",
+        "output": "offers/glitch_as_entry.md",
+        "variables": {
+          "product_name": "IntuitionLabs Mythos Cloud",
+          "audience_title": "Culture-forward marketing leads",
+          "primary_outcome": "launch glitch-positive storytelling without burning the brand team",
+          "activation_metric": "community collaborations shipped each month",
+          "success_metric": "Launch microsites converting at 18% or higher",
+          "cta_label": "Book the Glitch-as-Entry lab",
+          "cta_url": "https://intuitionlabs.ai/book?campaign=glitch-as-entry"
+        }
+      }
+    ]
+  }
+}
