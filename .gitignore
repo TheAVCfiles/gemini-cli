@@ -37,6 +37,8 @@ packages/*/coverage/
 
 # Runtime artifacts for local mock services
 data/
+!public/assets/data/
+!public/assets/data/*.json
 
 # Generated files
 packages/cli/src/generated/
