@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Trust Evidence Modal</title>
+  <style>
+    body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background:#0a0a0a; color:#f3f3f3; margin:0; min-height:100vh; display:grid; place-items:center; }
+    button { font-family:inherit; }
+    .trigger-button { padding:14px 24px; border-radius:999px; background:linear-gradient(135deg,#3b82f6,#0ea5e9); color:#fff; border:none; font-weight:600; letter-spacing:0.02em; box-shadow:0 12px 30px rgba(14,165,233,0.35); cursor:pointer; transition:transform 0.2s ease, box-shadow 0.2s ease; }
+    .trigger-button:hover { transform:translateY(-2px); box-shadow:0 16px 34px rgba(14,165,233,0.45); }
+    .trigger-button:focus-visible { outline:3px solid rgba(14,165,233,0.5); outline-offset:3px; }
+
+/* Modal basics */
+.trust-modal { position: fixed; inset: 0; z-index: 1200; display: flex; align-items: center; justify-content: center; }
+.trust-modal[hidden] { display:none; }
+.trust-modal__backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.55); }
+.trust-modal__panel { position:relative; max-width:720px; width:92%; background:#0f0f0f; color:#f3f3f3; border-radius:12px; padding:20px; box-shadow: 0 20px 60px rgba(0,0,0,.6); z-index:2; }
+.trust-modal__close { position:absolute; right:12px; top:10px; background:transparent; border:0; color:#ddd; font-size:28px; cursor:pointer; }
+.trust-modal header h2 { margin:0; font-family: Georgia, serif; font-size:22px; }
+.trust-modal .muted { color:#bfbfbf; margin-top:6px }
+#trust-modal-evidence { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-top:14px; }
+.evidence-tile { background:#131313; padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); }
+.evidence-title { font-weight:600; margin-bottom:6px; }
+.evidence-type { color:#9aa; font-size:12px; }
+.trust-modal__meta { margin-top:12px; color:#9aa; display:flex; justify-content:space-between; align-items:center; }
+.trust-modal__meta time { font-size:12px; text-transform:uppercase; letter-spacing:0.08em; }
+.trust-modal__meta a { color:#38bdf8; text-decoration:none; font-size:12px; }
+.trust-modal__meta a:hover { text-decoration:underline; }
+@media (prefers-reduced-motion: reduce){ .trust-modal__panel { transition:none; } }
+  </style>
+</head>
+<body>
+  <button type="button" class="trigger-button" id="openModal">View transparency dossier</button>
+
+  <div class="trust-modal" id="trustModal" hidden role="dialog" aria-modal="true" aria-labelledby="trustModalTitle" aria-describedby="trustModalDesc">
+    <div class="trust-modal__backdrop" data-close="true" aria-hidden="true"></div>
+    <div class="trust-modal__panel">
+      <button class="trust-modal__close" type="button" aria-label="Close transparency dossier" data-close="true">&times;</button>
+      <header>
+        <h2 id="trustModalTitle">Transparency dossier</h2>
+        <p class="muted" id="trustModalDesc">A living ledger of the evidence we maintain to keep this launch verifiable, accountable, and aligned with our stated values.</p>
+      </header>
+
+      <section id="trust-modal-evidence" aria-label="Evidence tiles">
+        <article class="evidence-tile">
+          <div class="evidence-title">Third-party security audit</div>
+          <div class="evidence-type">PDF • Apr 2024</div>
+          <p class="muted">Scope: infrastructure hardening, incident response drills, SOC2 mapping.</p>
+        </article>
+        <article class="evidence-tile">
+          <div class="evidence-title">Live uptime dashboard</div>
+          <div class="evidence-type">Status page</div>
+          <p class="muted">15 min heartbeat checks across all regions, historical SLA since 2022.</p>
+        </article>
+        <article class="evidence-tile">
+          <div class="evidence-title">AI accountability charter</div>
+          <div class="evidence-type">Public pledge</div>
+          <p class="muted">Usage guardrails, human-in-the-loop verification, compensation policy.</p>
+        </article>
+        <article class="evidence-tile">
+          <div class="evidence-title">Data retention memo</div>
+          <div class="evidence-type">Internal policy</div>
+          <p class="muted">30-day deletion promise, anonymization routines, audit log retention rules.</p>
+        </article>
+      </section>
+
+      <footer class="trust-modal__meta">
+        <time datetime="2024-05-01">Updated May 1, 2024</time>
+        <a href="#" id="trustModalShare">Copy share link</a>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('trustModal');
+    const openBtn = document.getElementById('openModal');
+    const shareLink = document.getElementById('trustModalShare');
+    let lastFocusedElement = null;
+
+    function openModal() {
+      lastFocusedElement = document.activeElement;
+      modal.hidden = false;
+      const focusTarget = modal.querySelector('.trust-modal__close');
+      focusTarget?.focus();
+      document.addEventListener('keydown', handleKeydown);
+    }
+
+    function closeModal() {
+      modal.hidden = true;
+      document.removeEventListener('keydown', handleKeydown);
+      lastFocusedElement?.focus();
+    }
+
+    function handleKeydown(event) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeModal();
+      }
+    }
+
+    modal.addEventListener('click', (event) => {
+      if (event.target instanceof HTMLElement && event.target.dataset.close === 'true') {
+        closeModal();
+      }
+    });
+
+    openBtn.addEventListener('click', () => {
+      openModal();
+    });
+
+    shareLink.addEventListener('click', (event) => {
+      event.preventDefault();
+      const shareURL = window.location.href + '#trust-dossier';
+
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard
+          .writeText(shareURL)
+          .then(() => {
+            shareLink.textContent = 'Link copied';
+            setTimeout(() => (shareLink.textContent = 'Copy share link'), 2500);
+          })
+          .catch(() => {
+            shareLink.textContent = 'Unable to copy';
+            setTimeout(() => (shareLink.textContent = 'Copy share link'), 2500);
+          });
+      } else {
+        shareLink.textContent = 'Copy not supported';
+        setTimeout(() => (shareLink.textContent = 'Copy share link'), 2500);
+      }
+    });
+  </script>
+</body>
+</html>
