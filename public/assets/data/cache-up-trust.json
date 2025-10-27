@@ -1,0 +1,27 @@
+{
+  "score": 92,
+  "attraction": "High",
+  "mLift": "1.8x",
+  "updated": "2025-02-12T14:30:00Z",
+  "howUrl": "https://example.com/trust-framework",
+  "evidence": [
+    {
+      "title": "Glossary accuracy",
+      "description": "Weekly Cache Up runs kept terminology variance under 2% across 14 teams.",
+      "metric": "98% alignment",
+      "source": "Internal telemetry Q1"
+    },
+    {
+      "title": "Adoption momentum",
+      "description": "83% of early adopters activated conflict alerts within the first session.",
+      "metric": "+36% retention",
+      "source": "Pilot cohort analysis"
+    },
+    {
+      "title": "Manual review savings",
+      "description": "Editors reported saving an average of 4.2 hours per glossary refresh cycle.",
+      "metric": "4.2h saved",
+      "source": "Customer interviews"
+    }
+  ]
+}
