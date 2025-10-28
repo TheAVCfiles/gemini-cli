@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Digital Harmony Score</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="clinic">
+      <h1>Digital Harmony Check</h1>
+      <p class="sub">Scan a public handle. Receive a fictional Echo-Risk score.</p>
+      <form id="scan">
+        <input name="handle" placeholder="@handle or url" required />
+        <input name="email" type="email" placeholder="email (for report link)" required />
+        <button type="submit">Scan</button>
+      </form>
+      <section id="result" class="card hidden"></section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
