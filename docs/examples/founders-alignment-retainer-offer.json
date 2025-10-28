@@ -1,0 +1,41 @@
+{
+  "id": "FOUNDERS_ALIGNMENT_RETAINER_OFFER",
+  "title": "Founders Alignment Retainer Offer Automation",
+  "description": "Automation that follows up on a \"Launch Alignment Report\" email attachment with a timed retainer enrollment invite.",
+  "automation": {
+    "name": "FoundersAlignment_RetainerOffer",
+    "triggers": [
+      {
+        "app": "Gmail",
+        "event": "AttachmentSent"
+      }
+    ],
+    "filters": [
+      {
+        "if": "{{Gmail.subject}} contains 'Launch Alignment Report'"
+      }
+    ],
+    "steps": [
+      {
+        "app": "Delay",
+        "action": "Wait",
+        "params": {
+          "duration": "24h"
+        }
+      },
+      {
+        "app": "Gmail",
+        "action": "SendEmail",
+        "params": {
+          "to": "{{Gmail.to}}",
+          "subject": "Continue Alignment — Reserve Your Retainer Slot",
+          "html": "<p>Based on our session, you qualify for a monthly retainer. Secure your access → <a href='{{Stripe.checkout_link}}'>Enroll</a>.</p>"
+        }
+      }
+    ]
+  },
+  "handoff_notes": [
+    "Requires a Stripe checkout link exposed to the automation context (e.g., via a prior step or lookup table).",
+    "Confirm the Gmail account has send permissions for the follow-up template before activating."
+  ]
+}
