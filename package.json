@@ -95,8 +95,10 @@
   },
   "dependencies": {
     "@lvce-editor/ripgrep": "^1.6.0",
+    "@supabase/supabase-js": "^2.76.1",
     "simple-git": "^3.28.0",
-    "strip-ansi": "^7.1.0"
+    "strip-ansi": "^7.1.0",
+    "stripe": "^19.1.0"
   },
   "optionalDependencies": {
     "@lydell/node-pty": "1.1.0",

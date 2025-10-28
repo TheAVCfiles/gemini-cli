@@ -32,6 +32,43 @@
         font-size: 1.1rem;
         line-height: 1.5;
       }
+      .live-metrics {
+        display: grid;
+        gap: 1rem;
+        margin: 2rem auto 0;
+        max-width: 900px;
+      }
+      @media (min-width: 768px) {
+        .live-metrics {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+      .metric-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        padding: 1.25rem 1.5rem;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        min-height: 135px;
+      }
+      .metric-label {
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fff;
+      }
+      .metric-subtle {
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.8);
+      }
       .layout {
         max-width: 1100px;
         margin: 0 auto 3rem;
@@ -174,6 +211,9 @@
       footer a {
         color: #1d4ed8;
       }
+      footer .footer-line {
+        margin: 0.25rem 0;
+      }
     </style>
   </head>
   <body>
@@ -184,6 +224,25 @@
         checks. Upload external glossaries, spot conflicts instantly, and export
         the combined view.
       </p>
+      <div class="live-metrics" aria-live="polite">
+        <div class="metric-card">
+          <span class="metric-label">Live revenue</span>
+          <span class="metric-value" data-live-revenue>—</span>
+          <span class="metric-subtle">Across all engines</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Last 30 days</span>
+          <span class="metric-value" data-live-revenue-30d>—</span>
+          <span class="metric-subtle">
+            From <span data-live-transactions>—</span> deals
+          </span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">ARR run rate</span>
+          <span class="metric-value" data-live-run-rate>—</span>
+          <span class="metric-subtle">Last sale <span data-live-last-sale>—</span></span>
+        </div>
+      </div>
     </header>
     <main class="layout">
       <section class="toolbar" aria-labelledby="controls-heading">
@@ -236,7 +295,15 @@
     </main>
 
     <footer>
-      Maintained by the MWRA docs team · <a href="https://netlify.com" target="_blank" rel="noreferrer">Deploy on Netlify</a>
+      <p class="footer-line" aria-live="polite">
+        Live revenue: <strong data-footer-revenue>—</strong>
+        <span aria-hidden="true">·</span>
+        Powered by Google Cloud
+      </p>
+      <p class="footer-line">
+        Maintained by the MWRA docs team ·
+        <a href="https://netlify.com" target="_blank" rel="noreferrer">Deploy on Netlify</a>
+      </p>
     </footer>
 
     <dialog id="askDialog">
@@ -257,6 +324,7 @@
       </article>
     </dialog>
 
+    <script src="codex-metrics.js"></script>
     <script src="boot_glossary.js"></script>
   </body>
 </html>
