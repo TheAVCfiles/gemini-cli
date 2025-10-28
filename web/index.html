@@ -236,7 +236,15 @@
     </main>
 
     <footer>
-      Maintained by the MWRA docs team · <a href="https://netlify.com" target="_blank" rel="noreferrer">Deploy on Netlify</a>
+      <div>
+        <strong>Live Revenue:</strong>
+        <span id="liveRevenueValue" aria-live="polite">Syncing…</span>
+      </div>
+      <div id="poweredByGoogleCloud" hidden>Powered by Google Cloud</div>
+      <div>
+        Maintained by the MWRA docs team ·
+        <a href="https://netlify.com" target="_blank" rel="noreferrer">Deploy on Netlify</a>
+      </div>
     </footer>
 
     <dialog id="askDialog">
@@ -258,5 +266,41 @@
     </dialog>
 
     <script src="boot_glossary.js"></script>
+    <script>
+      (function initLiveRevenueWidget() {
+        const revenueEl = document.getElementById('liveRevenueValue');
+        const poweredByEl = document.getElementById('poweredByGoogleCloud');
+
+        if (!revenueEl) {
+          return;
+        }
+
+        async function refresh() {
+          try {
+            const response = await fetch('/api/codex');
+            if (!response.ok) {
+              throw new Error('Network error');
+            }
+
+            const payload = await response.json();
+            const liveRevenue = payload?.live_revenue_display;
+            revenueEl.textContent = liveRevenue || 'Awaiting data';
+
+            if (payload?.cloud?.credits_granted) {
+              poweredByEl.hidden = false;
+              poweredByEl.textContent = payload.cloud.message || 'Powered by Google Cloud';
+            } else {
+              poweredByEl.hidden = true;
+            }
+          } catch (error) {
+            console.error('Unable to refresh live revenue widget', error);
+            revenueEl.textContent = 'Unavailable';
+          }
+        }
+
+        refresh();
+        setInterval(refresh, 60000);
+      })();
+    </script>
   </body>
 </html>
