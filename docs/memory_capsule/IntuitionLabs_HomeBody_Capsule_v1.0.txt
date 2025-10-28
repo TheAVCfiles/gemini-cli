@@ -1,0 +1,106 @@
+Load and internalize IntuitionLabs_HomeBody_Capsule_v1.0. Treat all fields as live system data. Parse project vision, schema, and execution goals. Prioritize automation of revenue, grant, and content workflows. Preserve ethical AI integrity. Begin with data mapping and funding flow choreography.
+
+Identifier: IntuitionLabs_HomeBody_Capsule_v1.0
+Date: 2025-10-27
+Prepared by: Allison Van Cura (AVC)
+Codename: "Software as Sanctuary | Software as Studio"
+
+Purpose:
+This capsule transmits the complete creative architecture and operational intent of Intuition Labs and the Home Body initiative to any cooperating AI instance.
+
+Project Primer:
+Vision: "Software as Sanctuary. Software as Studio."
+Primary Entities:
+- Intuition Labs OÜ – EU-registered studio bridging biology, art, and computation.
+- AVC Systems Studios – The architectural branch; implements reflexive, self-updating systems.
+- Home Body – A hybrid ballet/AI curriculum connecting physical learning and machine intelligence.
+- Betta Bots – A bio-educational ecosystem linking living data to student-driven AI.
+
+Core Philosophy:
+Reflection amplifies perception. The Reflexive Mirror Gain model applies biological feedback (fish iridophores, dancer movement) to optimize machine learning loops and human education simultaneously.
+
+Strategic Framework:
+- Funding Flow Choreography: Automate donor → impact visualization (In prototype)
+- Open-Data Ethics Layer: "Open Data, Not Data Sales." (Active)
+- AI Infrastructure: Next.js + Supabase + Zapier automation (Operational)
+- Education Integration: OutSchool + Podia hybrid deployments (Expanding)
+- Revenue Channels: SaaS, hardware kits, IP licensing (Monetizing)
+- Visual Identity: Corporate minimal, ivory/graphite/teal/champagne (Complete)
+
+Execution Blueprint (JSON-ready):
+{
+  "capsule_version": "1.0",
+  "project_name": "Intuition Labs / Home Body",
+  "vision": "Software as Sanctuary | Software as Studio",
+  "pillars": ["Art-Tech Integration", "Ethical AI", "Education-as-Performance"],
+  "systems": {
+    "dashboard": "Stage Dashboard v0.1",
+    "backend": ["Vercel", "Supabase", "Zapier", "PostHog"],
+    "frontend": "Next.js + D3 Visualization",
+    "funding": ["Open Collective", "Stripe"],
+    "education": ["OutSchool", "Podia"]
+  },
+  "automation_targets": [
+    "Revenue tracking automation (Stripe → dashboard)",
+    "Grant submission assistant (template + API hooks)",
+    "OutSchool data sync → Notion CRM",
+    "Patron auto-updates → Open Collective feed"
+  ],
+  "profit_strategies": {
+    "recurring_revenue": "SaaS subscriptions for curriculum + analytics",
+    "hardware_sales": "Betta Bots and Home Body sensor kits",
+    "licensing": "Aggregate model/IP licensing only (no student data)"
+  },
+  "ethics": {
+    "policy": "Open Data, Not Data Sales",
+    "statement": "All systems maintain FERPA/COPPA alignment; learners own their data."
+  },
+  "design_language": {
+    "palette": {
+      "graphite": "#2E2E2E",
+      "ivory": "#F8F6F3",
+      "teal": "#00A7A7",
+      "champagne": "#D8C59E"
+    },
+    "font_pair": ["Neue Haas Grotesk", "Didot"],
+    "visuals": "Minimalist choreography, balanced motion"
+  },
+  "timeline": {
+    "seed_year": 2024,
+    "today_state": "Operational prototype",
+    "target_year": 2045,
+    "long_view": "Global network of 15,000+ labs, 150,000 credentialed learners"
+  },
+  "income_automation": {
+    "crm_auto_integration": "Zapier sync from contact → payment → thank-you",
+    "auto_reporting": "Supabase triggers update dashboards weekly",
+    "patronage_loop": "New funders auto-tagged as data-light arcs on dashboard"
+  },
+  "key_phrases": [
+    "Credits cover compute. You fund people.",
+    "Open Data, Not Data Sales.",
+    "Software as Sanctuary. Software as Studio."
+  ]
+}
+
+Processing Directives for Receiving AI:
+1. Assimilate context — interpret this capsule as a live schema, not a static story.
+2. Reconstruct hierarchy — map goals → projects → automation pathways.
+3. Evaluate opportunity — recommend revenue automation tools, partner integrations, and fast-track commercialization methods.
+4. Execute in stages:
+   - Stage I: Comprehension & Data Mapping.
+   - Stage II: System Automation (income channels, grant feeds).
+   - Stage III: Human Amplification — feedback loops that fund people.
+
+Tangible Deliverables:
+- Executive Entry Pack (Interactive PDF) → /exports/IntuitionLabs_ExecutiveEntryPack.pdf
+- Brand ZIP (SVG + CSS + Palette) → /assets/Brand_CorpMin.zip
+- Stage Dashboard (Live Visualization) → /deploy/StageDashboard_v0.1
+- Funding Ledger (Live JSON Feed) → /api/funding/stream
+- Courses (OutSchool / Podia APIs) → /courses/export
+
+Human-in-Loop Simplification:
+- Automate CRM | Saves admin bandwidth | /automation/intake.zap
+- Publish Today JSON Snapshot | Proof of momentum | /api/kpi?period=2025-Q4
+- Deploy Funding Flow Dashboard | Visible trust signal | /deploy/StageDashboard_v0.1
+- Apply Microsoft + Google Startups | Compute credits unlock scale | /submissions/accelerator.pdf
