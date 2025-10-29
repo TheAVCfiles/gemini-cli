@@ -141,6 +141,35 @@ body {
   color: var(--primary-color);
 }
 
+.btn-outline {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.btn-outline:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--secondary-color);
+  border: 1px dashed var(--border-color);
+}
+
+.btn-ghost:hover {
+  background-color: rgba(37, 99, 235, 0.08);
+  color: var(--primary-color);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
 /* Content Sections */
 .section {
   padding: 4rem 0;
@@ -308,4 +337,179 @@ body {
 .art-official {
   --primary-color: #db2777;
   --accent-color: #f472b6;
+}
+
+.bot-gym .combo-trainer {
+  align-items: stretch;
+}
+
+.bot-gym .combo-module {
+  background: white;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.bot-gym .combo-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--primary-color);
+}
+
+.bot-gym .combo-header p {
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  color: var(--secondary-color);
+}
+
+.bot-gym .combo-actions {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 540px) {
+  .bot-gym .combo-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.bot-gym .action-card {
+  --accent: var(--primary-color);
+  --accent-shadow: rgba(220, 38, 38, 0.22);
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  transition: transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.bot-gym .action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+}
+
+.bot-gym .action-card.playing {
+  border-color: var(--accent);
+  box-shadow: 0 18px 32px var(--accent-shadow);
+  transform: translateY(-4px);
+}
+
+.bot-gym .action-card.equipped:not(.playing) {
+  border-color: rgba(220, 38, 38, 0.45);
+  box-shadow: 0 12px 22px rgba(220, 38, 38, 0.14);
+}
+
+.bot-gym .action-main {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.bot-gym .action-emoji {
+  font-size: 1.6rem;
+}
+
+.bot-gym .action-name {
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.bot-gym .action-note {
+  font-size: 0.85rem;
+  color: var(--secondary-color);
+}
+
+.bot-gym .equip-btn {
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.bot-gym .equip-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px var(--accent-shadow);
+}
+
+.bot-gym .action-card.equipped .equip-btn {
+  background: #16a34a;
+  box-shadow: 0 10px 20px rgba(22, 163, 74, 0.25);
+}
+
+.bot-gym .action-card.equipped .equip-btn::before {
+  content: '✓';
+  font-weight: 800;
+}
+
+.bot-gym .combo-loadout {
+  font-size: 0.95rem;
+  color: var(--secondary-color);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bot-gym .combo-loadout strong {
+  color: var(--primary-color);
+}
+
+.bot-gym .combo-status {
+  display: grid;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  color: var(--secondary-color);
+}
+
+.bot-gym #combo-feedback {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
+
+.bot-gym .combo-progress {
+  position: relative;
+  height: 8px;
+  background: var(--bg-color);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.bot-gym .combo-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  transition: width 0.08s linear;
+}
+
+.bot-gym .combo-timer {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+}
+
+.bot-gym .combo-controls {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .bot-gym .combo-module {
+    padding: 1.5rem;
+  }
 }
