@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Intuition Labs Portal</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-900: #111827; /* gray-900 */
+        --bg-800: #1f2937; /* gray-800 */
+        --bg-700: #374151; /* gray-700 */
+        --text-100: #f3f4f6; /* gray-100 */
+        --text-200: #e5e7eb; /* gray-200 */
+        --text-300: #d1d5db; /* gray-300 */
+        --text-400: #9ca3af; /* gray-400 */
+        --accent: #6ee7b7; /* emerald-300 */
+        --warn: #fca5a5; /* rose-300 */
+        --warn-bg: #ef4444; /* red-500 */
+        --focus: #93c5fd; /* blue-300 */
+        --radius-lg: 12px;
+        --radius-md: 10px;
+        --radius-sm: 8px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--bg-800);
+        color: var(--text-300);
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
+          "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        line-height: 1.5;
+      }
+      .container {
+        max-width: 800px;
+        margin-inline: auto;
+        padding: 20px;
+      }
+      .card {
+        background: var(--bg-700);
+        border-radius: var(--radius-md);
+        padding: 20px;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #374151;
+      }
+      .title {
+        color: #fff;
+        font-size: 20px;
+        font-weight: 800;
+        margin: 0;
+      }
+      .badge {
+        font-size: 12px;
+        color: var(--warn);
+        background-color: color-mix(in oklab, var(--warn-bg) 20%, transparent);
+        padding: 4px 10px;
+        border-radius: 999px;
+        display: inline-flex;
+        gap: 0.5ch;
+        align-items: center;
+        border: 1px solid color-mix(in oklab, var(--warn-bg) 50%, transparent);
+      }
+      .muted {
+        color: var(--text-400);
+      }
+      h2 {
+        color: #fff;
+        font-size: 24px;
+        margin: 25px 0 4px;
+      }
+      h3 {
+        color: #fff;
+        font-size: 18px;
+        margin: 0 0 10px;
+        font-weight: 800;
+      }
+      ul {
+        padding-left: 1.25rem;
+        margin: 0;
+        list-style: none;
+      }
+      ul li {
+        padding-left: 0.75rem;
+        position: relative;
+        padding-bottom: 10px;
+      }
+      ul li::marker {
+        content: "";
+      }
+      ul li::before {
+        content: "✧";
+        position: absolute;
+        left: 0;
+        top: 0.15rem;
+        color: var(--accent);
+      }
+      .chart-box {
+        background: var(--bg-800);
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        margin-top: 15px;
+      }
+      .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+      }
+      .tip {
+        border-left: 3px solid var(--accent);
+        padding-left: 15px;
+        margin-top: 10px;
+      }
+      .chat-bubble {
+        background: #3b82f6;
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 15px 15px 0 15px;
+        display: inline-block;
+        max-width: 75%;
+      }
+      .chat-reply {
+        background: #4b5563;
+        color: var(--text-300);
+        padding: 10px 14px;
+        border-radius: 15px 15px 15px 0;
+        display: inline-block;
+        max-width: 75%;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+      .tile {
+        background: var(--bg-700);
+        padding: 20px;
+        border-radius: var(--radius-sm);
+        color: var(--text-300);
+        text-decoration: none;
+        display: block;
+        outline: none;
+      }
+      .tile:focus-visible,
+      .btn:focus-visible,
+      .badge:focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 2px;
+        border-radius: 10px;
+      }
+      .tile-title {
+        color: #fff;
+        font-weight: 700;
+        margin-top: 6px;
+      }
+      .tile-sub {
+        font-size: 12px;
+        color: var(--text-400);
+      }
+      .btn {
+        background: transparent;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        font: inherit;
+        padding: 0;
+      }
+      @media (max-width: 640px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .chat-bubble,
+        .chat-reply {
+          max-width: 100%;
+        }
+        .header {
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .countdown [aria-hidden="true"] {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container" role="main" aria-labelledby="page-title">
+      <header class="header">
+        <h1 id="page-title" class="title">Intuition Labs Portal</h1>
+        <span
+          class="badge countdown"
+          id="expiry-badge"
+          role="status"
+          aria-live="polite"
+        >
+          <span aria-hidden="true">⏳</span>
+          <span
+            ><strong>Portal Access</strong> Expires:
+            <time id="expiry-date" datetime="2025-11-28">Nov 28, 2025</time>
+            • <span id="time-remaining">calculating…</span></span
+          >
+        </span>
+      </header>
+
+      <section aria-labelledby="welcome">
+        <h2 id="welcome">Welcome, Lilly.</h2>
+        <p class="muted">
+          Your comprehensive blueprint is ready. Here are your key insights.
+        </p>
+      </section>
+
+      <section class="card" aria-labelledby="exec">
+        <h3 id="exec">Executive Summary: Your Path Forward</h3>
+        <ul>
+          <li>
+            Central Thesis: A compelling synergy between your transformative
+            Scorpio Sun and your innovative Aquarius Stellium.
+          </li>
+          <li>
+            Key Business Window: A critical, optimal window for a business
+            launch is projected between October 15–30, 2025.
+          </li>
+          <li>
+            Key Personal Window: A period of high probability for a significant
+            romantic partnership is forecast between November 2025 – February
+            2026.
+          </li>
+          <li>
+            Core Challenge: A recurring theme is the challenge of grounding your
+            brilliant, unconventional ideas into practical, day-to-day
+            execution.
+          </li>
+        </ul>
+      </section>
+
+      <section class="card" aria-labelledby="plan" style="margin-top: 25px">
+        <h3 id="plan">Your 12-Month Action Plan</h3>
+        <p class="muted">
+          This is your interactive “Natal-Transit Chart”, visualizing the ebb and
+          flow of your life’s energy. Green candles represent harmonious days;
+          red represent challenging days.
+        </p>
+
+        <div
+          class="chart-box"
+          role="img"
+          aria-label="Candlestick chart. Zoomed to Oct 15–30, 2025 with green highlight."
+        >
+          <p
+            class="mono"
+            style="font-size: 12px; color: var(--accent); text-align: center; margin: 0"
+          >
+            [ Interactive candlestick chart placeholder. Window Oct 15–30, 2025
+            highlighted in green. ]
+          </p>
+        </div>
+
+        <p class="muted" style="margin-top: 20px">
+          Simulated Interaction: You tap on the highlighted green window on the
+          chart. A tooltip appears:
+        </p>
+        <div class="tip">
+          <div style="color: #fff; font-weight: 700">Oct 15–30, 2025</div>
+          <div>
+            <span style="color: var(--accent); font-weight: 600">EVENT:</span>
+            Jupiter-Mars Energy Peak<br />
+            <span style="color: var(--accent); font-weight: 600">ACTION:</span>
+            HIGH-PRIORITY LAUNCH WINDOW. Take decisive action. Launch marketing
+            campaigns, seek initial funding, and formalize partnerships.
+          </div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="council" style="margin-top: 25px">
+        <h3 id="council">Your AI Council</h3>
+        <p class="muted">
+          This is your generative AI guidance, trained on your unique blueprint.
+          Ask a question to one of your Specialist Personas.
+        </p>
+
+        <div
+          style="background: var(--bg-800); border-radius: var(--radius-sm); margin-top: 15px; padding: 15px"
+        >
+          <p
+            class="mono muted"
+            style="margin: 0 0 6px"
+            aria-live="off"
+          >
+            [ ROUTER AGENT: Query routed to “Chronos Scribe” ]
+          </p>
+
+          <div style="text-align: right">
+            <p class="chat-bubble" aria-label="User message">
+              “My reading notes a ‘complete absence of any planets in Earth
+              signs’. How do I manage that challenge?”
+            </p>
+          </div>
+
+          <div style="margin-top: 12px">
+            <p class="chat-reply" aria-label="AI reply">
+              An excellent question. Your blueprint identifies this as a
+              critical area for conscious development. The primary recommendation
+              is to consciously compensate for this by seeking out structures and
+              partnerships that provide grounding.
+              <br /><br />
+              Your chart’s path to fulfillment lies in collaboration. You should
+              actively seek partners, particularly those with strong Earth
+              influences, who can provide the practical execution and attention
+              to detail that may not come naturally to you.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="artifacts" style="margin-top: 25px">
+        <h3 id="artifacts" style="color: #fff">Your Full Artifacts</h3>
+        <p class="muted">Download your assets or review your support options.</p>
+
+        <div class="grid" role="list">
+          <a class="tile" href="#" role="listitem">
+            <span style="font-size: 24px" aria-hidden="true">📄</span>
+            <div class="tile-title">Comprehensive PDF</div>
+            <div class="tile-sub">The full 45+ page report.</div>
+          </a>
+
+          <a class="tile" href="#" role="listitem">
+            <span style="font-size: 24px" aria-hidden="true">🎧</span>
+            <div class="tile-title">Audio Summary</div>
+            <div class="tile-sub">A supplemental summary for review.</div>
+          </a>
+
+          <a class="tile" href="#" role="listitem">
+            <span style="font-size: 24px" aria-hidden="true">💻</span>
+            <div class="tile-title">Video Consultation</div>
+            <div class="tile-sub">Recording of your 1-hour session.</div>
+          </a>
+
+          <a
+            class="tile"
+            href="#"
+            role="listitem"
+            style="display: flex; flex-direction: column; align-items: center; justify-content: center"
+          >
+            <img
+              src="https://image.api.playstation.com/vulcan/ap/rnd/202011/1009/H0yv19o1m8g48Gf3B6s4p4M.png"
+              alt="DeCrypt the Moon journal cover"
+              width="100"
+              height="100"
+              style="object-fit: cover; border-radius: 4px; margin-bottom: 8px"
+            />
+            <div class="tile-title" style="text-align: center">
+              DeCrypt the Moon
+            </div>
+            <div class="tile-sub" style="text-align: center">
+              A Recursive Moon Journal.
+            </div>
+          </a>
+
+          <a class="tile" href="mailto:support@intuition-labs.io" role="listitem">
+            <span style="font-size: 24px" aria-hidden="true">✉️</span>
+            <div class="tile-title">30-Day Support</div>
+            <div class="tile-sub">Contact for follow-up questions.</div>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // Live countdown for Portal Access badge
+      (function () {
+        const expiry = new Date("2025-11-28T23:59:59-05:00"); // America/New_York
+        const out = document.getElementById("time-remaining");
+        const dateEl = document.getElementById("expiry-date");
+
+        function fmt(n, w) {
+          return String(n).padStart(w || 2, "0");
+        }
+
+        function tick() {
+          const now = new Date();
+          let ms = expiry - now;
+          if (ms <= 0) {
+            out.textContent = "expired";
+            dateEl.setAttribute("aria-live", "polite");
+            clearInterval(t);
+            return;
+          }
+          const days = Math.floor(ms / 86400000);
+          ms -= days * 86400000;
+          const hrs = Math.floor(ms / 3600000);
+          ms -= hrs * 3600000;
+          const mins = Math.floor(ms / 60000);
+          ms -= mins * 60000;
+          const secs = Math.floor(ms / 1000);
+
+          out.textContent =
+            days >= 1
+              ? `${days} day${days === 1 ? "" : "s"} remaining`
+              : `${fmt(hrs)}:${fmt(mins)}:${fmt(secs)} remaining`;
+        }
+        const t = setInterval(tick, 1000);
+        tick();
+      })();
+    </script>
+  </body>
+</html>
