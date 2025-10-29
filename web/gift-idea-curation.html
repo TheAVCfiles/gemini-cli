@@ -168,54 +168,10 @@
 
         <!-- NEW Digital & Print-on-Demand Section -->
         <section>
-            <h2 class="text-2xl font-semibold mb-5 text-gray-900">Digital & Print-on-Demand Gift Ideas</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-                <!-- Digital Product Card 1: Funny Art Print -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col">
-                    <img src="https://placehold.co/400x300/E0F2FE/0891B2?text=Funny+Cartoon+Print" 
-                         alt="Funny cartoon to frame" 
-                         class="w-full h-48 object-cover"
-                         onerror="this.src='https://placehold.co/400x300/EFEFEF/B0B0B0?text=Image+Error'; this.onerror=null;">
-                    <div class="p-4 flex flex-col flex-grow">
-                        <h3 class="font-semibold text-base text-gray-900 mb-1 flex-grow gift-title">"Caffeinated existentialism" - Funny Cartoon Print</h3>
-                        <p class="text-sm text-gray-500 mb-2 gift-desc">High-resolution digital download. Print and frame instantly.</p>
-                        <div class="flex items-baseline gap-2 mb-4">
-                            <span class="text-xl font-bold text-gray-900">$8.50</span>
-                            <span class="text-sm font-medium text-cyan-700">Digital Download</span>
-                        </div>
-                        <button class="w-full mt-auto bg-gray-100 text-gray-700 py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors mb-2">
-                            View Details
-                        </button>
-                        <button class="w-full mt-auto bg-cyan-50 text-cyan-700 py-2 rounded-md text-sm font-medium hover:bg-cyan-100 transition-colors explain-gift-btn">
-                            ✨ Explain This Gift
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Digital Product Card 5: Auto Tarot Service -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col">
-                    <img src="https://placehold.co/400x300/F0F9FF/0E7490?text=Automated+Insights" 
-                         alt="Automated Daily Tarot Service" 
-                         class="w-full h-48 object-cover"
-                         onerror="this.src='https://placehold.co/400x300/EFEFEF/B0B0B0?text=Image+Error'; this.onerror=null;">
-                    <div class="p-4 flex flex-col flex-grow">
-                        <h3 class="font-semibold text-base text-gray-900 mb-1 flex-grow gift-title">Automated Insight: Daily Tarot Service</h3>
-                        <p class="text-sm text-gray-500 mb-2 gift-desc">Customizable subscription. A daily/weekly card & reflection prompt sent automatically. Choose theme & schedule.</p>
-                        <div class="flex items-baseline gap-2 mb-4">
-                            <span class="text-xl font-bold text-gray-900">$19.99</span>
-                            <span class="text-sm font-medium text-cyan-700">Digital Subscription</span>
-                        </div>
-                        <button class="w-full mt-auto bg-gray-100 text-gray-700 py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors mb-2">
-                            Customize Gift
-                        </button>
-                        <button class="w-full mt-auto bg-cyan-50 text-cyan-700 py-2 rounded-md text-sm font-medium hover:bg-cyan-100 transition-colors explain-gift-btn">
-                            ✨ Explain This Gift
-                        </button>
-                    </div>
-                </div>
-
-            </div>
+            <h2 class="text-2xl font-semibold mb-3 text-gray-900">Digital & Print-on-Demand Gift Ideas</h2>
+            <p class="text-gray-600 mb-6 max-w-3xl">Gift Hub continuously curates instant, high-converting digital souvenirs, trending printable patterns, and clever 3D printable MVPs so you can deliver something unforgettable in just a few clicks.</p>
+            <div id="seo-keyword-pills" class="flex flex-wrap gap-2 md:gap-3 mb-6"></div>
+            <div id="digital-gift-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
         </section>
 
         <!-- Footer -->
@@ -312,12 +268,143 @@
             aiResults.innerHTML = `<h3 class="text-xl font-semibold mb-4 text-gray-900">Here are a few ideas:</h3>${formattedHtml}`;
         });
 
+        // --- Digital Product Catalog & SEO Spotlight ---
+        const digitalGiftGrid = document.getElementById('digital-gift-grid');
+        const seoKeywordPills = document.getElementById('seo-keyword-pills');
+
+        const digitalGiftCatalog = [
+            {
+                title: '"Caffeinated Existentialism" Cartoon Print',
+                description: 'High-resolution printable poster featuring a whimsical coffee shop philosopher — download, print, and frame in minutes.',
+                price: '$8.50',
+                format: 'Instant Digital Download',
+                image: 'https://placehold.co/400x300/E0F2FE/0891B2?text=Funny+Cartoon+Print',
+                actionLabel: 'View Details',
+                seoKeywords: ['funny art print', 'coffee lover gift', 'printable wall art'],
+                badge: 'Top Search'
+            },
+            {
+                title: 'Automated Insight: Daily Tarot Service',
+                description: 'Schedule a personalized tarot draw and reflective journaling prompt that arrives by email automatically.',
+                price: '$19.99',
+                format: 'Digital Subscription',
+                image: 'https://placehold.co/400x300/F0F9FF/0E7490?text=Automated+Insights',
+                actionLabel: 'Customize Gift',
+                seoKeywords: ['tarot subscription', 'daily mindfulness', 'spiritual gifts'],
+                badge: 'Subscriber Favorite'
+            },
+            {
+                title: 'Holiday Market MVP: 3D Printed Snowflake Lantern (STL)',
+                description: 'Intricate snowflake tea-light lantern STL ready for home 3D printers—optimized for quick, no-support printing.',
+                price: '$6.75',
+                format: 'Printable 3D File',
+                image: 'https://placehold.co/400x300/ECFEFF/0F766E?text=3D+Snowflake+Lantern',
+                actionLabel: 'Download STL',
+                seoKeywords: ['3d printed ornament', 'holiday lantern', 'maker gift'],
+                badge: 'Maker Trend'
+            },
+            {
+                title: 'Festive Foil-Ready Photo Card Templates',
+                description: 'Editable Canva bundle with 5 luxury holiday card layouts sized for instant printing and foil finishing.',
+                price: '$14.00',
+                format: 'Editable Template Bundle',
+                image: 'https://placehold.co/400x300/FEF2F2/9F1239?text=Holiday+Card+Kit',
+                actionLabel: 'Edit in Canva',
+                seoKeywords: ['holiday cards printable', 'family photo template', 'foil card design'],
+                badge: 'Seasonal Bestseller'
+            },
+            {
+                title: 'Teacher Gratitude Toolkit',
+                description: 'Printable thank-you notes, classroom coupons, and digital badge graphics for a heartfelt teacher appreciation gift.',
+                price: '$9.25',
+                format: 'Printable Bundle',
+                image: 'https://placehold.co/400x300/EEF2FF/4338CA?text=Teacher+Toolkit',
+                actionLabel: 'Preview Bundle',
+                seoKeywords: ['teacher gift printable', 'classroom appreciation', 'thank you kit'],
+                badge: 'Staff Pick'
+            },
+            {
+                title: 'Customizable Star Map Ornament SVG Pack',
+                description: 'Laser-cut ready SVG layers to commemorate a meaningful night sky on wooden or acrylic ornaments.',
+                price: '$11.50',
+                format: 'SVG + Instruction Guide',
+                image: 'https://placehold.co/400x300/FDF2F8/86198F?text=Star+Map+SVG',
+                actionLabel: 'Personalize Now',
+                seoKeywords: ['ornament svg', 'night sky gift', 'laser cut file'],
+                badge: 'Gift Shop Trend'
+            },
+            {
+                title: 'Weekend Wanderer Travel Journal Notion Kit',
+                description: 'Pre-built Notion workspace with itineraries, packing checklists, and printable keepsake pages for trip lovers.',
+                price: '$12.00',
+                format: 'Notion Template + PDF',
+                image: 'https://placehold.co/400x300/F1F5F9/0369A1?text=Travel+Notion+Kit',
+                actionLabel: 'Duplicate Workspace',
+                seoKeywords: ['digital travel planner', 'notion template', 'travel gift'],
+                badge: 'SEO Rising'
+            },
+            {
+                title: 'Cozy Game Night Clipart & Pattern Library',
+                description: 'Set of seamless patterns and clipart inspired by indie cozy games—perfect for print-on-demand merch drops.',
+                price: '$7.80',
+                format: 'Commercial Clipart Pack',
+                image: 'https://placehold.co/400x300/FEF9C3/CA8A04?text=Cozy+Patterns',
+                actionLabel: 'License Pack',
+                seoKeywords: ['cozy game clipart', 'print on demand assets', 'seamless pattern'],
+                badge: 'Creator Essential'
+            }
+        ];
+
+        const createGiftCard = (gift) => {
+            const card = document.createElement('article');
+            card.className = 'bg-white rounded-lg shadow-md overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col';
+            card.dataset.tags = gift.seoKeywords.join(', ');
+
+            card.innerHTML = `
+                <div class="relative">
+                    <img src="${gift.image}" alt="${gift.title}" class="w-full h-48 object-cover" onerror="this.src='https://placehold.co/400x300/EFEFEF/B0B0B0?text=Image+Error'; this.onerror=null;">
+                    ${gift.badge ? `<span class="absolute top-3 left-3 bg-white/90 text-xs font-semibold text-indigo-700 uppercase tracking-wide px-2 py-1 rounded-full">${gift.badge}</span>` : ''}
+                </div>
+                <div class="p-4 flex flex-col flex-grow">
+                    <h3 class="font-semibold text-base text-gray-900 mb-1 flex-grow gift-title">${gift.title}</h3>
+                    <p class="text-sm text-gray-500 mb-2 gift-desc">${gift.description}</p>
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-xl font-bold text-gray-900">${gift.price}</span>
+                        <span class="text-sm font-medium text-cyan-700">${gift.format}</span>
+                    </div>
+                    <button class="w-full mt-auto bg-gray-100 text-gray-700 py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors mb-2">${gift.actionLabel}</button>
+                    <button class="w-full mt-auto bg-cyan-50 text-cyan-700 py-2 rounded-md text-sm font-medium hover:bg-cyan-100 transition-colors explain-gift-btn">✨ Explain This Gift</button>
+                </div>
+            `;
+
+            return card;
+        };
+
+        const renderDigitalGiftCatalog = () => {
+            digitalGiftGrid.innerHTML = '';
+            digitalGiftCatalog.forEach(gift => {
+                digitalGiftGrid.appendChild(createGiftCard(gift));
+            });
+
+            const keywordSet = new Set();
+            digitalGiftCatalog.forEach(gift => gift.seoKeywords.forEach(keyword => keywordSet.add(keyword)));
+
+            seoKeywordPills.innerHTML = '';
+            Array.from(keywordSet).slice(0, 12).forEach(keyword => {
+                const pill = document.createElement('span');
+                pill.className = 'px-3 py-1.5 rounded-full text-sm font-medium bg-indigo-50 text-indigo-700 border border-indigo-100';
+                pill.textContent = keyword;
+                seoKeywordPills.appendChild(pill);
+            });
+        };
+
+        renderDigitalGiftCatalog();
+
         // --- "Explain This Gift" Modal Logic ---
         const modal = document.getElementById('explanation-modal');
         const modalContent = document.getElementById('explanation-modal-content');
         const closeModalBtn = document.getElementById('close-modal');
         const modalBody = document.getElementById('modal-body');
-        const explainGiftBtns = document.querySelectorAll('.explain-gift-btn');
 
         const showModal = () => {
             modal.classList.remove('opacity-0', 'pointer-events-none');
@@ -336,25 +423,24 @@
             }
         });
 
-        explainGiftBtns.forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                // Find the parent card
-                const card = e.target.closest('.flex-col');
-                const title = card.querySelector('.gift-title').textContent.trim();
-                const desc = card.querySelector('.gift-desc').textContent.trim();
+        document.addEventListener('click', async (event) => {
+            const explainButton = event.target.closest('.explain-gift-btn');
+            if (!explainButton) return;
 
-                // Show modal with loading state
-                modalBody.innerHTML = `<div class="flex justify-center items-center h-24"><div class="loader"></div></div>`;
-                showModal();
+            const card = explainButton.closest('.flex-col');
+            if (!card) return;
 
-                const systemPrompt = "You are a creative marketing assistant. Briefly explain what this digital/printable gift is and why it makes a special, thoughtful present. Your tone should be warm and enthusiastic. Keep it to a single, concise paragraph.";
-                const userQuery = `Gift Title: ${title}\nDescription: ${desc}`;
+            const title = card.querySelector('.gift-title')?.textContent.trim() || 'Digital Gift';
+            const desc = card.querySelector('.gift-desc')?.textContent.trim() || '';
 
-                const responseText = await callGeminiApi(systemPrompt, userQuery);
+            modalBody.innerHTML = `<div class="flex justify-center items-center h-24"><div class="loader"></div></div>`;
+            showModal();
 
-                // Update modal with response
-                modalBody.innerHTML = `<p class="text-gray-700">${responseText.replace(/\n/g, '<br>')}</p>`;
-            });
+            const systemPrompt = "You are a creative marketing assistant. Briefly explain what this digital/printable gift is and why it makes a special, thoughtful present. Your tone should be warm and enthusiastic. Keep it to a single, concise paragraph.";
+            const userQuery = `Gift Title: ${title}\nDescription: ${desc}`;
+
+            const responseText = await callGeminiApi(systemPrompt, userQuery);
+            modalBody.innerHTML = `<p class="text-gray-700">${responseText.replace(/\n/g, '<br>')}</p>`;
         });
 
     </script>
