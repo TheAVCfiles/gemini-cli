@@ -18,6 +18,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
+    "start:api": "tsx server/index.ts",
     "start:a2a-server": "CODER_AGENT_PORT=41242 npm run start --workspace @google/gemini-cli-a2a-server",
     "debug": "cross-env DEBUG=1 node --inspect-brk scripts/start.js",
     "auth:npm": "npx google-artifactregistry-auth",
@@ -94,9 +95,16 @@
     "yargs": "^17.7.2"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.919.0",
+    "@aws-sdk/s3-request-presigner": "^3.919.0",
     "@lvce-editor/ripgrep": "^1.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "pg": "^8.16.3",
     "simple-git": "^3.28.0",
-    "strip-ansi": "^7.1.0"
+    "strip-ansi": "^7.1.0",
+    "zod": "^3.25.76"
   },
   "optionalDependencies": {
     "@lydell/node-pty": "1.1.0",
