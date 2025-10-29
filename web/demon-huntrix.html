@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demon Huntrix Dance Lab</title>
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: radial-gradient(circle at 20% 20%, #351f5d, #0b0b17 70%);
+        color: #f8f5ff;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: inherit;
+      }
+
+      header {
+        padding: 3.5rem 1.5rem 2rem;
+        text-align: center;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: clamp(2.5rem, 4vw, 3.4rem);
+        text-shadow: 0 20px 45px rgba(236, 72, 153, 0.35);
+      }
+
+      header p {
+        max-width: 680px;
+        margin: 1rem auto 0;
+        color: rgba(248, 245, 255, 0.78);
+        font-size: 1.05rem;
+        line-height: 1.6;
+      }
+
+      main {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 1.5rem 5rem;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(19, 17, 35, 0.85);
+        border: 1px solid rgba(244, 114, 182, 0.3);
+        border-radius: 22px;
+        padding: 1.25rem 1.5rem;
+        backdrop-filter: blur(14px);
+        box-shadow: 0 24px 60px rgba(56, 6, 71, 0.35);
+      }
+
+      .toolbar button {
+        border: 0;
+        border-radius: 16px;
+        background: linear-gradient(120deg, #f472b6, #c084fc);
+        color: #160b2f;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        padding: 0.75rem 1.2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .toolbar button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 35px rgba(236, 72, 153, 0.45);
+      }
+
+      .grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      @media (min-width: 900px) {
+        .grid-two {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .panel {
+        background: rgba(19, 17, 35, 0.88);
+        border: 1px solid rgba(148, 163, 255, 0.18);
+        border-radius: 22px;
+        padding: 1.75rem;
+        box-shadow: 0 18px 40px rgba(12, 7, 31, 0.5);
+      }
+
+      .panel h2 {
+        margin: 0 0 1rem;
+        font-size: 1.5rem;
+      }
+
+      .panel p.lead {
+        margin-top: -0.4rem;
+        color: rgba(226, 219, 255, 0.7);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .move-card,
+      .shop-card {
+        background: rgba(33, 30, 57, 0.9);
+        border-radius: 18px;
+        border: 1px solid rgba(244, 114, 182, 0.15);
+        padding: 1.2rem 1.4rem;
+        display: grid;
+        gap: 0.6rem;
+      }
+
+      .move-name {
+        font-size: 1.15rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+
+      .move-meta,
+      .shop-meta {
+        font-size: 0.9rem;
+        color: rgba(216, 206, 255, 0.75);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .move-description,
+      .shop-description {
+        color: rgba(245, 241, 255, 0.85);
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .shop-actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .shop-actions button {
+        background: none;
+        border: 0;
+        color: #f9a8d4;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 0.82rem;
+        padding: 0;
+      }
+
+      .shop-actions button[disabled] {
+        opacity: 0.6;
+        cursor: wait;
+        text-decoration: none;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.75rem;
+        border-radius: 999px;
+        padding: 0.25rem 0.65rem;
+        background: rgba(59, 130, 246, 0.18);
+        color: rgba(191, 219, 254, 0.9);
+      }
+
+      .timeline {
+        margin-top: 2rem;
+      }
+
+      .timeline input[type="range"] {
+        width: 100%;
+        accent-color: #f472b6;
+      }
+
+      .cue-grid {
+        display: grid;
+        gap: 1rem;
+      }
+
+      @media (min-width: 720px) {
+        .cue-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .cue-card-static {
+        background: rgba(30, 22, 55, 0.9);
+        border-radius: 18px;
+        padding: 1.2rem;
+        border: 1px solid rgba(168, 85, 247, 0.25);
+      }
+
+      .cue-card-static h3 {
+        margin: 0 0 0.35rem;
+        font-size: 1.05rem;
+      }
+
+      .cue-card-static pre {
+        background: rgba(12, 10, 24, 0.65);
+        border-radius: 12px;
+        padding: 0.75rem;
+        overflow-x: auto;
+        font-size: 0.8rem;
+        line-height: 1.4;
+      }
+
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 0, 12, 0.68);
+        backdrop-filter: blur(12px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 40;
+      }
+
+      .modal {
+        width: min(92vw, 420px);
+        background: rgba(17, 12, 35, 0.96);
+        border: 1px solid rgba(236, 72, 153, 0.35);
+        border-radius: 24px;
+        padding: 1.6rem;
+        box-shadow: 0 30px 70px rgba(236, 72, 153, 0.35);
+        display: grid;
+        gap: 1.1rem;
+      }
+
+      .modal h3 {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-size: 1.2rem;
+      }
+
+      .modal .buttons {
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .modal button {
+        border: 0;
+        border-radius: 14px;
+        padding: 0.6rem 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .primary {
+        background: linear-gradient(125deg, #f472b6, #facc15);
+        color: #1f0d35;
+      }
+
+      .secondary {
+        background: rgba(67, 56, 202, 0.85);
+        color: #f4f2ff;
+      }
+
+      .ghost {
+        background: rgba(17, 15, 28, 0.6);
+        color: rgba(203, 213, 255, 0.85);
+        border: 1px solid rgba(148, 163, 255, 0.25);
+      }
+
+      .spinner {
+        width: 20px;
+        height: 20px;
+        border-radius: 999px;
+        border: 3px solid rgba(236, 72, 153, 0.3);
+        border-top-color: rgba(236, 72, 153, 0.9);
+        animation: spin 0.9s linear infinite;
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .cue-overlay {
+        position: fixed;
+        left: 50%;
+        bottom: 2.2rem;
+        transform: translateX(-50%);
+        background: rgba(15, 12, 31, 0.82);
+        border: 1px solid rgba(236, 72, 153, 0.35);
+        padding: 1rem 1.4rem;
+        border-radius: 18px;
+        box-shadow: 0 18px 45px rgba(236, 72, 153, 0.32);
+        z-index: 30;
+        min-width: min(320px, 90vw);
+      }
+
+      .cue-overlay h4 {
+        margin: 0 0 0.35rem;
+        font-size: 1rem;
+      }
+
+      .cue-overlay p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: rgba(250, 244, 255, 0.82);
+      }
+
+      .error {
+        color: #fca5a5;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Demon Huntrix Dance Lab</h1>
+      <p>
+        Spin up fresh choreography, restock the shop with AI descriptions, and rehearse
+        the "Hit This Pose" cues pulled from your photo set. Everything runs locally with
+        Gemini requests proxied through the Netlify function.
+      </p>
+    </header>
+    <main class="grid" style="gap: 2rem;">
+      <section class="toolbar">
+        <div>
+          <strong>Gemini choreographer</strong>
+          <p style="margin: 0; color: rgba(226, 219, 255, 0.65); font-size: 0.9rem;">
+            Generates a new move in under a second with guardrails and a safe fallback.
+          </p>
+        </div>
+        <button id="generateMoveBtn" type="button">
+          <span aria-hidden="true">✨</span>
+          <span>New AI Move</span>
+        </button>
+      </section>
+
+      <section class="panel">
+        <h2>Routine Builder</h2>
+        <p class="lead">
+          Curate the base choreography, then drop AI-generated moves straight into the
+          rotation. Duration is shown in seconds.
+        </p>
+        <div id="movesList" class="grid" style="gap: 1rem;"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Shop Items</h2>
+        <p class="lead">Request an AI rewrite for any item. Output is capped at 80 characters.</p>
+        <div id="shopList" class="grid" style="gap: 1.1rem;"></div>
+      </section>
+
+      <section class="panel timeline">
+        <h2>Hit This Pose Cue Pack</h2>
+        <p class="lead">
+          Slide through the practice timeline. When you're within 0.4 seconds of a cue,
+          the overlay pops so dancers know exactly which pose to snap into.
+        </p>
+        <input id="timeline" type="range" min="0" max="35" step="0.1" value="12.4" />
+        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: rgba(203, 213, 255, 0.7);">
+          <span>0s</span>
+          <span>Hook</span>
+          <span>35s</span>
+        </div>
+        <div class="cue-grid" id="cueGrid"></div>
+      </section>
+    </main>
+
+    <div id="modalRoot" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+      <div class="modal" role="document">
+        <h3>
+          <span aria-hidden="true">⚡</span>
+          Gemini Move
+        </h3>
+        <div id="modalSpinner" class="spinner hidden" aria-hidden="true"></div>
+        <div id="modalError" class="error hidden" role="alert"></div>
+        <div id="modalDetails" class="hidden">
+          <div id="modalEmoji" style="font-size: 3rem; line-height: 1;">✨</div>
+          <div id="modalName" class="move-name"></div>
+          <div id="modalDescription" class="move-description"></div>
+          <div id="modalMeta" class="move-meta"></div>
+        </div>
+        <div class="buttons">
+          <button id="addMoveBtn" class="primary" type="button">Add to routine</button>
+          <button id="shuffleBtn" class="secondary" type="button">Shuffle</button>
+          <button id="closeBtn" class="ghost" type="button">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cueOverlay" class="cue-overlay hidden">
+      <h4 id="cueOverlayTitle"></h4>
+      <p id="cueOverlayNotes"></p>
+    </div>
+
+    <script type="module" src="./demon-huntrix.js"></script>
+  </body>
+</html>

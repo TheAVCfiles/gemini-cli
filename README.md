@@ -80,6 +80,30 @@ Environment variables:
 
 ---
 
+## ✨ Demon Huntrix Dance Lab (Gemini demo)
+
+The `web/demon-huntrix.html` playground showcases a Gemini-powered choreography
+workflow:
+
+- Generate a new "Demon Huntrix" dance move with schema validation and a fallback
+  pose.
+- Request short AI descriptions for in-game shop items.
+- Rehearse three "Hit This Pose" cue cards extracted from the provided photo set.
+
+All Gemini traffic is proxied through `netlify/functions/gemini.js`, which expects
+the following environment variables:
+
+| Variable          | Description                                                      |
+| ----------------- | ---------------------------------------------------------------- |
+| `GEMINI_API_KEY`  | (Required) API key for the Google Generative Language API        |
+| `GEMINI_MODEL`    | (Optional) Override the model. Default: `gemini-2.5-flash-preview-09-2025` |
+
+During development the page calls `/api/gemini`, which Netlify redirects to the
+serverless function. You can serve the static files with `netlify dev` or any HTTP
+server pointed at `web/`.
+
+---
+
 ## 📂 File map
 
 ```
