@@ -1,54 +1,101 @@
 # Gemini CLI Architecture Overview
 
-This document provides a high-level overview of the Gemini CLI's architecture.
+The Gemini CLI is a polyglot workspace where conversational AI, local tooling, and
+developer workflows meet. This document traces the major structures that keep the
+system coherent and adaptable.
 
-## Core components
+## Monorepo layout
 
-The Gemini CLI is primarily composed of two main packages, along with a suite of tools that can be used by the system in the course of handling command-line input:
+The repository is organized as a monorepo. Each package provides a discrete layer
+of functionality that can evolve independently while sharing a common core.
 
-1.  **CLI package (`packages/cli`):**
-    - **Purpose:** This contains the user-facing portion of the Gemini CLI, such as handling the initial user input, presenting the final output, and managing the overall user experience.
-    - **Key functions contained in the package:**
-      - [Input processing](./cli/commands.md)
-      - History management
-      - Display rendering
-      - [Theme and UI customization](./cli/themes.md)
-      - [CLI configuration settings](./cli/configuration.md)
+- **`packages/core`** – Runtime brain for orchestrating Gemini requests, tool
+  execution, telemetry, and session state.
+- **`packages/cli`** – Terminal interface that collects user input, renders
+  responses, and mediates approvals for tool execution.
+- **`packages/a2a-server`** – Lightweight server that exposes the same orchestration
+  primitives over HTTP for agent-to-agent or automated integrations.
+- **`packages/test-utils`** – Shared fixtures and helpers to keep integration tests
+  deterministic across packages.
+- **`packages/vscode-ide-companion`** – Bridges Gemini Core into an IDE companion
+  surface, reusing the same orchestration pipeline.
 
-2.  **Core package (`packages/core`):**
-    - **Purpose:** This acts as the backend for the Gemini CLI. It receives requests sent from `packages/cli`, orchestrates interactions with the Gemini API, and manages the execution of available tools.
-    - **Key functions contained in the package:**
-      - API client for communicating with the Google Gemini API
-      - Prompt construction and management
-      - Tool registration and execution logic
-      - State management for conversations or sessions
-      - Server-side configuration
+## Core subsystems
 
-3.  **Tools (`packages/core/src/tools/`):**
-    - **Purpose:** These are individual modules that extend the capabilities of the Gemini model, allowing it to interact with the local environment (e.g., file system, shell commands, web fetching).
-    - **Interaction:** `packages/core` invokes these tools based on requests from the Gemini model.
+Within `packages/core`, responsibilities are divided across dedicated domains:
 
-## Interaction Flow
+- **Conversation orchestration (`src/core/`)** – `GeminiClient`, `GeminiChat`, and
+  the `Turn` model maintain chat state, apply token limits, compress history when
+  necessary, and decide whether a response or tool call is needed.
+- **Prompt and context assembly (`src/core/prompts.ts`, `src/utils/` and
+  `src/ide/`)** – Collect environment data, IDE context, and cached history to
+  shape the request sent to Gemini. Environment summaries are generated through
+  `getEnvironmentContext` and `getDirectoryContextString`.
+- **Tooling (`src/tools/`, `src/core/coreToolScheduler.ts`,
+  `src/core/nonInteractiveToolExecutor.ts`)** – Declarative tool metadata allows
+  Gemini to request capabilities. The scheduler sequences requests, enforces
+  safety prompts, and streams intermediate tool results back into the
+  conversation.
+- **Configuration (`src/config/`)** – Wraps CLI flags, environment variables, and
+  persisted preferences to drive model selection, proxy support, and session IDs.
+- **Services and observability (`src/services/`, `src/telemetry/`)** – Cross-cutting
+  helpers like the `LoopDetectionService`, logging instrumentation, and telemetry
+  event factories guard against runaway loops and surface diagnostics.
 
-A typical interaction with the Gemini CLI follows this flow:
+## Request lifecycle
 
-1.  **User input:** The user types a prompt or command into the terminal, which is managed by `packages/cli`.
-2.  **Request to core:** `packages/cli` sends the user's input to `packages/core`.
-3.  **Request processed:** The core package:
-    - Constructs an appropriate prompt for the Gemini API, possibly including conversation history and available tool definitions.
-    - Sends the prompt to the Gemini API.
-4.  **Gemini API response:** The Gemini API processes the prompt and returns a response. This response might be a direct answer or a request to use one of the available tools.
-5.  **Tool execution (if applicable):**
-    - When the Gemini API requests a tool, the core package prepares to execute it.
-    - If the requested tool can modify the file system or execute shell commands, the user is first given details of the tool and its arguments, and the user must approve the execution.
-    - Read-only operations, such as reading files, might not require explicit user confirmation to proceed.
-    - Once confirmed, or if confirmation is not required, the core package executes the relevant action within the relevant tool, and the result is sent back to the Gemini API by the core package.
-    - The Gemini API processes the tool result and generates a final response.
-6.  **Response to CLI:** The core package sends the final response back to the CLI package.
-7.  **Display to user:** The CLI package formats and displays the response to the user in the terminal.
+```
+┌─────────────┐      ┌───────────────┐      ┌────────────────┐      ┌───────────────┐
+│ CLI surface │ ───▶ │ GeminiClient  │ ───▶ │ Gemini API      │ ───▶ │ Tool Scheduler │
+└─────────────┘      │  (core)       │ ◀─── │ (responses/     │ ◀─── │  & Executor   │
+       ▲             └───────────────┘      │  tool calls)    │      └───────────────┘
+       │                    │                └────────────────┘              │
+       │                    ▼                         ▲                      │
+       │             History compression,             │                      │
+       │             prompt assembly,                 │                      ▼
+       │             loop detection        Tool output streamed back   Local environment
+       │                                                                  operations
+       │
+       └────────────────────────────────────── Final response ────────────────────────┘
+```
 
-## Key Design Principles
+1. **CLI intake** – `packages/cli` gathers the prompt, renders local context, and
+   forwards the request to the Core package via the shared SDK.
+2. **Core preparation** – `GeminiClient` composes the system prompt, recent
+   history, environment context, and IDE snippets into a `GenerateContent`
+   payload. Token limits (`tokenLimits.ts`) and compression rules ensure the
+   request stays within model budgets.
+3. **Gemini response** – The Gemini API may return text, a tool invocation, or an
+   error. Responses stream back through `GeminiChat` to maintain turn ordering.
+4. **Tool execution** – When tool calls arrive, the core scheduler resolves the
+   handler from `src/tools`, ensures any required approval has been granted, and
+   executes the operation (filesystem, shell, web, etc.). Results feed back into
+   the same turn so Gemini can continue reasoning.
+5. **Render to user** – The CLI formats the final answer, progressive tool
+   updates, and telemetry warnings for display in the terminal or IDE.
 
-- **Modularity:** Separating the CLI (frontend) from the Core (backend) allows for independent development and potential future extensions (e.g., different frontends for the same backend).
-- **Extensibility:** The tool system is designed to be extensible, allowing new capabilities to be added.
-- **User experience:** The CLI focuses on providing a rich and interactive terminal experience.
+## Extension surfaces
+
+Because the orchestration logic is centralized inside `packages/core`, new
+surfaces can be layered on without rewriting the reasoning engine:
+
+- **Terminal UX (`packages/cli`)** – Rich prompt history, themes, and key bindings
+  built with React Ink components.
+- **Automations (`packages/a2a-server`)** – Exposes the same request lifecycle to
+  other agents or CI workflows via a minimal HTTP contract.
+- **Editor integrations (`packages/vscode-ide-companion`)** – Shares the session
+  and telemetry stack to deliver inline suggestions inside editors.
+
+## Design principles
+
+- **Separation of concerns** – Frontends own user experience while Core owns
+  orchestration, allowing new surfaces without duplication.
+- **Safety as a first-class workflow** – Tool scheduling, loop detection, and
+  approval prompts are built into the main request pipeline rather than added as
+  afterthoughts.
+- **Observability** – Detailed telemetry events (`src/telemetry/`) and consistent
+  logging provide insight into latency, tool usage, and error modes, supporting
+  iterative tuning.
+- **Composable context** – System prompts, IDE data, and environment snapshots are
+  treated as modular inputs so specialized surfaces can remix them without
+  rewriting the foundation.
