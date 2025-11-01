@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bet on AVC</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at top, #111927 0%, #05070b 60%, #000 100%);
+        color: #eef7ff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        text-align: center;
+        padding: 4rem 1.5rem 6rem;
+      }
+      h1 {
+        font-size: clamp(2.5rem, 5vw, 3.75rem);
+        margin: 0;
+      }
+      p {
+        margin: 0;
+        color: rgba(238, 247, 255, 0.75);
+        max-width: 38rem;
+      }
+      .buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .glow-button,
+      .glow-button-secondary {
+        border: none;
+        border-radius: 999px;
+        padding: 0.85rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: #05070b;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .glow-button {
+        background: linear-gradient(120deg, #7df9ff, #27ffc5);
+        box-shadow: 0 12px 30px rgba(33, 200, 182, 0.35);
+      }
+      .glow-button-secondary {
+        background: linear-gradient(120deg, #ffe66d, #ff9f1c);
+        box-shadow: 0 12px 30px rgba(255, 159, 28, 0.35);
+      }
+      .glow-button:hover,
+      .glow-button-secondary:hover {
+        transform: translateY(-2px) scale(1.02);
+      }
+      #confidence {
+        font-size: 0.95rem;
+        color: #7df9ff;
+        letter-spacing: 0.02em;
+      }
+      footer {
+        position: fixed;
+        bottom: 1.5rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        font-size: 0.85rem;
+        color: rgba(238, 247, 255, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Bet on $Allison-Van-Cura</h1>
+    <p>
+      Back the builder in real time. Choose your tier, hear the bell, and join the ledger of
+      believers.
+    </p>
+
+    <div class="buttons">
+      <button id="bet-seed" class="glow-button">Bet: Seed $22</button>
+      <button id="bet-a" class="glow-button-secondary">Bet: Series A $77</button>
+      <button id="bet-moonshot" class="glow-button">Bet: Moonshot $222</button>
+    </div>
+
+    <div id="confidence">Loading confidence index…</div>
+
+    <footer>
+      <span>Every chime is fresh conviction.</span>
+    </footer>
+
+    <audio id="avcChime" preload="auto" src="./chime.mp3"></audio>
+
+    <script>
+      const chime = document.getElementById('avcChime');
+
+      async function playAVCChime() {
+        try {
+          chime.currentTime = 0;
+          await chime.play();
+        } catch (error) {
+          console.warn('Audio playback blocked', error);
+        }
+      }
+
+      async function createAndGo(tierName, cents, description) {
+        try {
+          await playAVCChime();
+          const response = await fetch('/api/stripe/create_link', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ tierName, unitAmount: cents, description })
+          });
+          const { ok, url } = await response.json();
+          if (ok && url) {
+            window.location.href = url;
+          } else {
+            throw new Error('no_link');
+          }
+        } catch (error) {
+          console.error('Payment link failed', error);
+          alert('Payment link unavailable. Try again in a moment.');
+        }
+      }
+
+      document.getElementById('bet-seed').addEventListener('click', () =>
+        createAndGo('Seed $22', 2200, 'Bet on $Allison-Van-Cura')
+      );
+      document.getElementById('bet-a').addEventListener('click', () =>
+        createAndGo('Series A $77', 7700, 'Bet on $Allison-Van-Cura')
+      );
+      document.getElementById('bet-moonshot').addEventListener('click', () =>
+        createAndGo('Moonshot $222', 22200, 'Bet on $Allison-Van-Cura')
+      );
+
+      async function refreshConfidence() {
+        try {
+          const response = await fetch('/api/ledger');
+          const data = await response.json();
+          const total = Number(data.confidence_24h || 0).toFixed(2);
+          document.getElementById('confidence').textContent = `24h Confidence Index: $${total}`;
+        } catch (error) {
+          console.error('Ledger fetch failed', error);
+          document.getElementById('confidence').textContent = 'Confidence index unavailable';
+        }
+      }
+
+      refreshConfidence();
+      setInterval(refreshConfidence, 30000);
+    </script>
+  </body>
+</html>

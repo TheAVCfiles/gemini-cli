@@ -1,0 +1,19 @@
+{
+  "name": "bet-on-avc",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node src/server.js",
+    "lint": "node -e \"process.exit(0)\"",
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "micro": "^10.0.1",
+    "raw-body": "^2.5.2",
+    "stripe": "^16.7.0"
+  }
+}
