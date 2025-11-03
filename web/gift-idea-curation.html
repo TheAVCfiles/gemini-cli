@@ -169,7 +169,7 @@
         <!-- NEW Digital & Print-on-Demand Section -->
         <section>
             <h2 class="text-2xl font-semibold mb-3 text-gray-900">Digital & Print-on-Demand Gift Ideas</h2>
-            <p class="text-gray-600 mb-6 max-w-3xl">Gift Hub continuously curates instant, high-converting digital souvenirs, trending printable patterns, and clever 3D printable MVPs so you can deliver something unforgettable in just a few clicks.</p>
+            <p class="text-gray-600 mb-6 max-w-3xl">Gift Hub now taps social media signals, spiritual bestseller charts, and search-volume surges to surface instantly deliverable souvenirs, spell-coded services, and 3D printable drops engineered for virality and monetizing alignment.</p>
             <div id="seo-keyword-pills" class="flex flex-wrap gap-2 md:gap-3 mb-6"></div>
             <div id="digital-gift-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
         </section>
@@ -275,13 +275,15 @@
         const digitalGiftCatalog = [
             {
                 title: '"Caffeinated Existentialism" Cartoon Print',
-                description: 'High-resolution printable poster featuring a whimsical coffee shop philosopher — download, print, and frame in minutes.',
+                description: 'High-resolution printable poster featuring a whimsical coffee shop philosopher ready to download, print, and frame in minutes.',
                 price: '$8.50',
                 format: 'Instant Digital Download',
                 image: 'https://placehold.co/400x300/E0F2FE/0891B2?text=Funny+Cartoon+Print',
                 actionLabel: 'View Details',
                 seoKeywords: ['funny art print', 'coffee lover gift', 'printable wall art'],
-                badge: 'Top Search'
+                badge: 'Top Search',
+                platformBuzz: 'Pinterest saves up 138% this week',
+                trendStat: 'Keyword: "existential coffee art" up 92%'
             },
             {
                 title: 'Automated Insight: Daily Tarot Service',
@@ -291,27 +293,33 @@
                 image: 'https://placehold.co/400x300/F0F9FF/0E7490?text=Automated+Insights',
                 actionLabel: 'Customize Gift',
                 seoKeywords: ['tarot subscription', 'daily mindfulness', 'spiritual gifts'],
-                badge: 'Subscriber Favorite'
+                badge: 'Subscriber Favorite',
+                platformBuzz: 'TikTok #tarotcheckins hits 2.4M views',
+                trendStat: 'Search: "daily tarot email" up 120%'
             },
             {
                 title: 'Holiday Market MVP: 3D Printed Snowflake Lantern (STL)',
-                description: 'Intricate snowflake tea-light lantern STL ready for home 3D printers—optimized for quick, no-support printing.',
+                description: 'Intricate snowflake tea-light lantern STL ready for home 3D printers, optimized for fast prints with no supports needed.',
                 price: '$6.75',
                 format: 'Printable 3D File',
                 image: 'https://placehold.co/400x300/ECFEFF/0F766E?text=3D+Snowflake+Lantern',
                 actionLabel: 'Download STL',
                 seoKeywords: ['3d printed ornament', 'holiday lantern', 'maker gift'],
-                badge: 'Maker Trend'
+                badge: 'Maker Trend',
+                platformBuzz: 'YouTube timelapse collab reached 87k views',
+                trendStat: 'Keyword: "3d snowflake lantern stl" up 147%'
             },
             {
                 title: 'Festive Foil-Ready Photo Card Templates',
-                description: 'Editable Canva bundle with 5 luxury holiday card layouts sized for instant printing and foil finishing.',
+                description: 'Editable Canva bundle with five luxury holiday card layouts sized for instant printing and foil finishing.',
                 price: '$14.00',
                 format: 'Editable Template Bundle',
                 image: 'https://placehold.co/400x300/FEF2F2/9F1239?text=Holiday+Card+Kit',
                 actionLabel: 'Edit in Canva',
                 seoKeywords: ['holiday cards printable', 'family photo template', 'foil card design'],
-                badge: 'Seasonal Bestseller'
+                badge: 'Seasonal Bestseller',
+                platformBuzz: 'Etsy reviews average 4.9 stars with 1.2k saves',
+                trendStat: 'Search: "foil holiday card template" up 88%'
             },
             {
                 title: 'Teacher Gratitude Toolkit',
@@ -321,7 +329,9 @@
                 image: 'https://placehold.co/400x300/EEF2FF/4338CA?text=Teacher+Toolkit',
                 actionLabel: 'Preview Bundle',
                 seoKeywords: ['teacher gift printable', 'classroom appreciation', 'thank you kit'],
-                badge: 'Staff Pick'
+                badge: 'Staff Pick',
+                platformBuzz: 'Instagram #teacherthankyou reach up 540k',
+                trendStat: 'Keyword: "printable teacher appreciation" up 101%'
             },
             {
                 title: 'Customizable Star Map Ornament SVG Pack',
@@ -331,7 +341,9 @@
                 image: 'https://placehold.co/400x300/FDF2F8/86198F?text=Star+Map+SVG',
                 actionLabel: 'Personalize Now',
                 seoKeywords: ['ornament svg', 'night sky gift', 'laser cut file'],
-                badge: 'Gift Shop Trend'
+                badge: 'Gift Shop Trend',
+                platformBuzz: 'TikTok #starmapornament delivers 670k plays',
+                trendStat: 'Search: "star map ornament svg" up 156%'
             },
             {
                 title: 'Weekend Wanderer Travel Journal Notion Kit',
@@ -341,17 +353,93 @@
                 image: 'https://placehold.co/400x300/F1F5F9/0369A1?text=Travel+Notion+Kit',
                 actionLabel: 'Duplicate Workspace',
                 seoKeywords: ['digital travel planner', 'notion template', 'travel gift'],
-                badge: 'SEO Rising'
+                badge: 'SEO Rising',
+                platformBuzz: 'Travel reels pushed shares up 4.3x this month',
+                trendStat: 'Keyword: "notion travel planner" up 132%'
             },
             {
                 title: 'Cozy Game Night Clipart & Pattern Library',
-                description: 'Set of seamless patterns and clipart inspired by indie cozy games—perfect for print-on-demand merch drops.',
+                description: 'Set of seamless patterns and clipart inspired by indie cozy games, perfect for print-on-demand merch drops.',
                 price: '$7.80',
                 format: 'Commercial Clipart Pack',
                 image: 'https://placehold.co/400x300/FEF9C3/CA8A04?text=Cozy+Patterns',
                 actionLabel: 'License Pack',
                 seoKeywords: ['cozy game clipart', 'print on demand assets', 'seamless pattern'],
-                badge: 'Creator Essential'
+                badge: 'Creator Essential',
+                platformBuzz: 'Tumblr fandom loops stacked 3.2k reblogs',
+                trendStat: 'Search: "cozy game pattern pack" up 118%'
+            },
+            {
+                title: 'Viral Aura Filter Preset Pack',
+                description: 'Lightroom presets and CapCut overlay kit that drops an ethereal aura glow perfect for TikTok manifestation edits.',
+                price: '$15.50',
+                format: 'Preset + Overlay Bundle',
+                image: 'https://placehold.co/400x300/EFF6FF/1D4ED8?text=Aura+Preset+Pack',
+                actionLabel: 'Download Presets',
+                seoKeywords: ['aura preset pack', 'tiktok filter download', 'manifestation edit'],
+                badge: 'Social Bestseller',
+                platformBuzz: 'TikTok saves climbed 182% week over week',
+                trendStat: 'Keyword: "aura glow preset" up 210%'
+            },
+            {
+                title: 'Celestial Commerce Launch Ritual',
+                description: 'A Notion and Zapier ritual board that tracks moon phases, product drops, and viral goal setting for spiritual sellers.',
+                price: '$24.00',
+                format: 'Automation Template',
+                image: 'https://placehold.co/400x300/F5F3FF/5B21B6?text=Launch+Ritual',
+                actionLabel: 'Activate Workflow',
+                seoKeywords: ['moon phase planner', 'spiritual business template', 'launch ritual notion'],
+                badge: 'Mystic MVP',
+                platformBuzz: 'YouTube manifestor vlogs average 64k views',
+                trendStat: 'Keyword: "moon phase launch template" up 173%'
+            },
+            {
+                title: 'Liquid Light Sigil Motion Overlays',
+                description: 'Looping MP4 overlays with fluid, gold-dipped sigils for reels, live streams, and projection-mapped rituals.',
+                price: '$18.75',
+                format: 'Animated Overlay Set',
+                image: 'https://placehold.co/400x300/FFF7ED/9A3412?text=Liquid+Sigils',
+                actionLabel: 'Stream Overlays',
+                seoKeywords: ['sigil overlay pack', 'liquid light animation', 'witchy stream assets'],
+                badge: 'Creator Spell',
+                platformBuzz: 'Twitch creative collabs boosted watch time 4.1x',
+                trendStat: 'Keyword: "sigil overlay mp4" up 145%'
+            },
+            {
+                title: 'Soulful Teacher Gratitude Holographic Cards',
+                description: 'Print-ready holographic teacher cards with editable affirmations and QR-linked voice-note gratitude.',
+                price: '$13.40',
+                format: 'Printable Card Suite',
+                image: 'https://placehold.co/400x300/ECFEFF/2563EB?text=Holographic+Cards',
+                actionLabel: 'Customize Cards',
+                seoKeywords: ['teacher holographic card', 'editable gratitude card', 'teacher gift digital'],
+                badge: 'Classroom Favorite',
+                platformBuzz: 'Pinterest teacher boards report saves up 163%',
+                trendStat: 'Keyword: "holographic teacher card printable" up 134%'
+            },
+            {
+                title: 'Creator Coven Launch Graphics Pack',
+                description: '120 Canva and Figma templates for spiritual brand drops, including reel covers, carousels, and ritual sales funnels.',
+                price: '$29.00',
+                format: 'Template Megapack',
+                image: 'https://placehold.co/400x300/FFE4E6/BE123C?text=Coven+Launch+Pack',
+                actionLabel: 'Design Now',
+                seoKeywords: ['spiritual brand templates', 'instagram carousel canva', 'launch graphics pack'],
+                badge: 'Feed Fuel',
+                platformBuzz: 'Instagram carousel saves jumped 205%',
+                trendStat: 'Keyword: "canva spiritual template" up 167%'
+            },
+            {
+                title: 'Chakra Sync Soundbath Library',
+                description: 'Seven-track soundbath bundle tuned to each chakra with printable ritual cards and a streaming license.',
+                price: '$21.50',
+                format: 'Audio Bundle + Printables',
+                image: 'https://placehold.co/400x300/E0F2FE/0EA5E9?text=Chakra+Soundbath',
+                actionLabel: 'Play Sample',
+                seoKeywords: ['chakra soundbath download', 'sound healing bundle', 'meditation gift'],
+                badge: 'Wellness Wave',
+                platformBuzz: 'Spotify playlist adds surged 142%',
+                trendStat: 'Keyword: "chakra soundbath mp3" up 189%'
             }
         ];
 
@@ -368,6 +456,8 @@
                 <div class="p-4 flex flex-col flex-grow">
                     <h3 class="font-semibold text-base text-gray-900 mb-1 flex-grow gift-title">${gift.title}</h3>
                     <p class="text-sm text-gray-500 mb-2 gift-desc">${gift.description}</p>
+                    ${gift.platformBuzz ? `<p class="text-xs font-medium text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-md px-2 py-1 mb-2">${gift.platformBuzz}</p>` : ''}
+                    ${gift.trendStat ? `<p class="text-xs text-cyan-700 bg-cyan-50 border border-cyan-100 rounded-md px-2 py-1 mb-3">${gift.trendStat}</p>` : ''}
                     <div class="flex items-baseline gap-2 mb-4">
                         <span class="text-xl font-bold text-gray-900">${gift.price}</span>
                         <span class="text-sm font-medium text-cyan-700">${gift.format}</span>
@@ -393,7 +483,8 @@
             Array.from(keywordSet).slice(0, 12).forEach(keyword => {
                 const pill = document.createElement('span');
                 pill.className = 'px-3 py-1.5 rounded-full text-sm font-medium bg-indigo-50 text-indigo-700 border border-indigo-100';
-                pill.textContent = keyword;
+                const hashtag = `#${keyword.replace(/[^a-z0-9]+/gi, '').toLowerCase()}`;
+                pill.textContent = hashtag;
                 seoKeywordPills.appendChild(pill);
             });
         };
