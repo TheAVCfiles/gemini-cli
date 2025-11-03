@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Decrypt the Future — Client Preview</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: rgba(255, 255, 255, 0.92);
+        --glow: rgba(138, 180, 248, 0.45);
+        --pulse: rgba(255, 188, 255, 0.35);
+        --accent: #a5f6ff;
+        --shadow: rgba(0, 0, 0, 0.35);
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Space Grotesk", "Segoe UI", system-ui, -apple-system, sans-serif;
+        color: var(--ink);
+        background: radial-gradient(circle at 20% 20%, rgba(165, 246, 255, 0.12), transparent 40%),
+          radial-gradient(circle at 80% 0%, rgba(255, 188, 255, 0.14), transparent 42%),
+          linear-gradient(135deg, #04000f, #050a1f 55%, #0b1b30);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 16px;
+      }
+
+      .card {
+        width: min(920px, 92vw);
+        backdrop-filter: blur(18px);
+        background: rgba(8, 13, 28, 0.75);
+        border: 1px solid rgba(165, 246, 255, 0.22);
+        box-shadow: 0 24px 80px -32px rgba(82, 150, 255, 0.45);
+        border-radius: 32px;
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 12% -20% auto;
+        height: 220px;
+        background: radial-gradient(circle, rgba(165, 246, 255, 0.4), transparent 70%);
+        filter: blur(52px);
+        opacity: 0.8;
+      }
+
+      h1 {
+        font-size: clamp(2.25rem, 2vw + 1.5rem, 3.5rem);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+
+      h2 {
+        font-size: clamp(1.2rem, 1vw + 1rem, 1.6rem);
+        color: var(--accent);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+      }
+
+      p, li {
+        line-height: 1.65;
+      }
+
+      .tagline {
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        margin-bottom: 32px;
+        color: rgba(255, 255, 255, 0.62);
+      }
+
+      .grid {
+        display: grid;
+        gap: 28px;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        margin-top: 32px;
+      }
+
+      .panel {
+        background: rgba(9, 16, 33, 0.74);
+        border: 1px solid rgba(138, 180, 248, 0.22);
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      }
+
+      .panel h3 {
+        margin-top: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.22em;
+        font-size: 0.92rem;
+        color: rgba(165, 246, 255, 0.86);
+      }
+
+      .frequency {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: rgba(165, 246, 255, 0.18);
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.25em;
+        font-size: 0.75rem;
+      }
+
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 36px;
+        padding: 16px 32px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, rgba(165, 246, 255, 0.88), rgba(255, 188, 255, 0.88));
+        color: #041222;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 0 12px 30px -12px rgba(165, 246, 255, 0.6);
+        transition: transform 200ms ease, box-shadow 200ms ease;
+      }
+
+      .cta:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 18px 40px -10px rgba(255, 188, 255, 0.45);
+      }
+
+      .cta span {
+        font-size: 0.78rem;
+      }
+
+      .cta svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+      }
+
+      @media (max-width: 520px) {
+        .card {
+          padding: 28px;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <article class="card">
+      <header>
+        <div class="frequency">Liquid Light Frequency 444</div>
+        <h1>Decrypt the Future</h1>
+        <p class="tagline">Strategic Astro System Consultation — Preview Capsule</p>
+        <p>
+          A holographic snapshot of your cosmic-operational launch blueprint. We translate current transits into monetizable ritual
+          stacks so your brand feels inevitable, irresistible, and infinitely shareable.
+        </p>
+      </header>
+      <section class="grid">
+        <div class="panel">
+          <h3>Signal Scan</h3>
+          <p>
+            Venus trine Uranus ignites your magnetic storyline. Expect viral resonance when you unveil the "quantum care" feature
+            set on the next Libra moon.
+          </p>
+        </div>
+        <div class="panel">
+          <h3>System Mapping</h3>
+          <p>
+            Map your team’s energy choreography with a three-phase sprint: Seeding, Surge, Sustain. Each stage comes with a sound
+            bath cue and KPI threshold.
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Activation Blueprint</h3>
+          <p>
+            Deploy the Stargate Offer Stack: limited ritual kits, pay-what-feels-true livestream, and concierge retainer invite
+            for premium tiers.
+          </p>
+        </div>
+      </section>
+      <footer>
+        <p>
+          Tap the prism below to enter your personalized strategy portal. This client preview updates after every consultation,
+          ensuring your cosmic commerce stays fluid and future-proof.
+        </p>
+        <a class="cta" href="https://calendly.com/decrypt_the_future/decrypt-the-future-strategic-astro-system-consultation" target="_blank" rel="noreferrer">
+          <span>Book Your Portal</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+            <path d="M5 12h14" />
+            <path d="M13 5l7 7-7 7" />
+          </svg>
+        </a>
+      </footer>
+    </article>
+  </body>
+</html>
