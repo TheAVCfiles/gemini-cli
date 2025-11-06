@@ -1,0 +1,56 @@
+# Folio_001_LilithLoop.rouette
+# Logged: 2025-07-29 15:28:04 EDT
+# Description: Ritual choreography loop for the Lilith Lineage. Visibility is mediated by witness_window().
+
+IMPORT meta.witness_window
+IMPORT glyphs.map AS glyph_map
+
+SET loop_signature = "6/8"
+SET total_loops = INFINITY
+SET dancers = ["Aurora", "Shadow-Lilith", "Echo"]
+
+STATE aurora_perception = access.DENIED
+STATE loop_count = 0
+STATE last_trigger = null
+
+FUNCTION trigger(event_name):
+    SET last_trigger = event_name
+    IF witness_window(event_name) == access.GRANTED:
+        SET aurora_perception = access.GRANTED
+        CALL render(event_name)
+    ELSE:
+        SET aurora_perception = access.DENIED
+        CALL render_glitch(event_name)
+END FUNCTION
+
+FUNCTION render(event_name):
+    LET glyph = glyph_map[event_name] DEFAULT glyph_map["cue.fracture"]
+    OUTPUT choreography.frame(
+        loop=loop_count,
+        dancer_focus=dancers[loop_count % LENGTH(dancers)],
+        glyph=glyph,
+        visibility="clear"
+    )
+END FUNCTION
+
+FUNCTION render_glitch(event_name):
+    OUTPUT choreography.frame(
+        loop=loop_count,
+        dancer_focus="static",
+        glyph="⧖",
+        visibility="fractured"
+    )
+END FUNCTION
+
+LOOP WHILE total_loops == INFINITY:
+    INCREMENT loop_count
+
+    IF loop_count % 7 == 0:
+        CALL trigger("loop.completion_7")
+    ELSE IF loop_count % 3 == 0:
+        CALL trigger("cue.mirror_gaze")
+    ELSE:
+        CALL trigger("cue.fracture")
+
+    CALL choreography.rest(tempo=loop_signature)
+END LOOP

@@ -1,0 +1,26 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+.eggs/
+*.egg-info/
+
+# Virtual environments
+.env
+.venv
+venv/
+ENV/
+
+# Editor files
+.vscode/
+.idea/
+.DS_Store
+
+# Local credentials
+*.key.json
+config.yaml
+!gcp-mirror/config.yaml

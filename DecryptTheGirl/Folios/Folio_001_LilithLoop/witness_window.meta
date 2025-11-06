@@ -1,0 +1,18 @@
+# SYSTEM META-RULE for Folio_001_LilithLoop.rouette
+# Logged: 2025-07-29 15:28:04 EDT
+
+DEFINE FUNCTION witness_window(trigger_event):
+    # Access is granted conditionally, never constantly.
+    # Conditions can be tied to loop count, dancer proximity, or symbolic cues.
+
+    LET time_since_last_access = system.clock - last_access_timestamp
+    LET is_trigger_valid = trigger_event IN {cue.fracture, cue.mirror_gaze, loop.completion_7}
+
+    IF is_trigger_valid AND time_since_last_access > THRESHOLD:
+        SET last_access_timestamp = system.clock
+        RETURN access.GRANTED
+    ELSE:
+        RETURN access.DENIED
+END FUNCTION
+
+# Implication: The performance is continuous, but visibility is fractured.
