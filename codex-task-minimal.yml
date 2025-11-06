@@ -1,0 +1,18 @@
+name: "hello-world"
+description: "Minimal Codex cloud task with no dependencies."
+environment:
+  runtime: python3.10
+resources:
+  cpu: 1
+  memory: 2GB
+  gpu: false
+entrypoint:
+  command: "python main.py"
+context:
+  include:
+    - main.py
+    - codex-task-minimal.yml
+  exclude:
+    - .git/
+timeouts:
+  max_runtime: 300
