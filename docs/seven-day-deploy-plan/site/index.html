@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adaptive Ethics · Librarian Home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css" />
+    <style>
+      body { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+      header { text-align: center; margin-bottom: 2rem; }
+      nav ul { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; padding: 0; list-style: none; }
+      nav a { display: inline-block; padding: 0.5rem 0.9rem; border-radius: 999px; background: #1f2937; color: #fff !important; text-decoration: none; font-weight: 600; }
+      section { margin-bottom: 2.5rem; }
+      h2 { margin-top: 2rem; }
+      .cta { display: inline-flex; align-items: center; gap: 0.5rem; background: #2563eb; color: #fff !important; padding: 0.65rem 1.1rem; border-radius: 12px; font-weight: 600; text-decoration: none; }
+      .note { border-left: 4px solid #2563eb; padding-left: 1rem; margin: 2rem 0; }
+      footer { text-align: center; color: #6b7280; font-size: 0.9rem; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Adaptive Ethics Librarian</h1>
+      <p class="subtitle">Seven days, three story beats, one provenance spine.</p>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/doi/">DOI Landing</a></li>
+          <li><a href="/scan/">Compliance Intake</a></li>
+          <li><a href="/echo/">Echo Edition</a></li>
+          <li><a href="/press/">Press Kit</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section>
+      <h2>Launch Rhythm</h2>
+      <p>The librarian bundles your checklists, domain tasks, scholar submissions, and narrative assets. Follow the order below and you will move from DOI provenance to first-touch revenue conversations in one week.</p>
+      <ol>
+        <li><strong>Deploy:</strong> Publish this site on Cloudflare Pages and drop in the canonical PDF.</li>
+        <li><strong>Document:</strong> Update `/doi/` with your live domain and JSON-LD so Scholar bots listen.</li>
+        <li><strong>Route:</strong> Embed your compliance form at `/scan/` and wire the CTA on this page.</li>
+        <li><strong>Signal:</strong> Release the three LinkedIn posts and circulate the Echo Edition.</li>
+        <li><strong>Measure:</strong> Add screenshots and metrics to `/press/` before closing the sprint.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Immediate Actions</h2>
+      <div class="note">
+        <p><strong>Swap your domain:</strong> Search for <code>YOURDOMAIN.tld</code> in this repository and replace it with your live hostname. Update both `/doi/index.html` and `../content/jsonld_scholarlyarticle.json`.</p>
+      </div>
+      <p>Once your domain is live, import the calendar (`../Seven_Day_Launch_Ballet.ics`) and duplicate the LinkedIn copy from the <code>content</code> directory.</p>
+      <a class="cta" href="/scan/">Launch the compliance intake →</a>
+    </section>
+
+    <footer>
+      <p>Need automations? Add Typeform auto-replies, Calendly for demos, or Cloudflare Pages Functions to capture email.</p>
+    </footer>
+  </body>
+</html>
