@@ -1,0 +1,11 @@
+LinkedIn Post #1 · Temperance
+
+Today I shipped the Adaptive Ethics Secure Edition: a seven-day launch ballet that keeps provenance, compliance, and revenue signals in the same frame.
+
+Day 1 is about temperance—slow enough to anchor the DOI and JSON-LD correctly, fast enough to deploy the Cloudflare Pages site before momentum cools. The bundle includes:
+• DOI landing page with schema markup
+• Compliance intake shell ready for your Typeform or Notion embed
+• Echo Edition one-pager for high-fit follow-ups
+• Three LinkedIn posts (including this one) to narrate the arc
+
+If you want the librarian bundle (checklists, calendar, and site scaffold), drop "Temperance" below or visit https://YOURDOMAIN.tld/scan/ and I'll send it across.

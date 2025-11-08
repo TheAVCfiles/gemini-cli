@@ -1,0 +1,26 @@
+{
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  "name": "Adaptive Ethics Vol. 1 (Secure Edition)",
+  "author": {
+    "@type": "Person",
+    "name": "A. V. C."
+  },
+  "headline": "Adaptive Ethics Vol. 1 (Secure Edition)",
+  "description": "A seven-day launch choreography that anchors AI ethics provenance, compliance, and revenue signals.",
+  "datePublished": "2025-01-10",
+  "identifier": "https://doi.org/10.5281/zenodo.17282954",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Adaptive Ethics Collective",
+    "url": "https://YOURDOMAIN.tld/"
+  },
+  "url": "https://YOURDOMAIN.tld/doi/",
+  "keywords": ["AI ethics", "compliance", "launch plan", "provenance"],
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "encoding": {
+    "@type": "MediaObject",
+    "contentUrl": "https://YOURDOMAIN.tld/assets/Adaptive_Ethics_Vol1_SecureEdition_AvC_2025_DOI-10.5281-zenodo.17282954.pdf",
+    "encodingFormat": "application/pdf"
+  }
+}

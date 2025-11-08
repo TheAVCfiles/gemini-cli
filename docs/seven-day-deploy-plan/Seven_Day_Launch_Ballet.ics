@@ -1,0 +1,55 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Adaptive Ethics//Seven Day Launch Ballet//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:launch-day1-20250101@adaptive-ethics
+DTSTAMP:20240101T090000Z
+DTSTART;VALUE=DATE:20250101
+SUMMARY:Day 1 – Anchor the domain and DOI
+DESCRIPTION:Buy or point your Cloudflare Registrar domain. Deploy the /site folder to Cloudflare Pages. Upload the canonical PDF and update YOURDOMAIN.tld references. Verify the DOI landing page.
+END:VEVENT
+BEGIN:VEVENT
+UID:launch-day2-20250102@adaptive-ethics
+DTSTAMP:20240101T090000Z
+DTSTART;VALUE=DATE:20250102
+SUMMARY:Day 2 – Claim the scholar channels
+DESCRIPTION:Update ORCID, Google Scholar, ResearchGate, and OSF with the DOI landing page and abstract.
+END:VEVENT
+BEGIN:VEVENT
+UID:launch-day3-20250103@adaptive-ethics
+DTSTAMP:20240101T090000Z
+DTSTART;VALUE=DATE:20250103
+SUMMARY:Day 3 – Open the compliance funnel
+DESCRIPTION:Launch the /scan intake form, add the CTA to the homepage, and configure auto-replies.
+END:VEVENT
+BEGIN:VEVENT
+UID:launch-day4-20250104@adaptive-ethics
+DTSTAMP:20240101T090000Z
+DTSTART;VALUE=DATE:20250104
+SUMMARY:Day 4 – Publish Temperance
+DESCRIPTION:Publish LinkedIn Post #1, mirror it to your newsletter, and capture screenshots for the press kit.
+END:VEVENT
+BEGIN:VEVENT
+UID:launch-day5-20250105@adaptive-ethics
+DTSTAMP:20240101T090000Z
+DTSTART;VALUE=DATE:20250105
+SUMMARY:Day 5 – Share the Balanchine Cipher
+DESCRIPTION:Publish LinkedIn Post #2 and send warm outreach using the press kit page.
+END:VEVENT
+BEGIN:VEVENT
+UID:launch-day6-20250106@adaptive-ethics
+DTSTAMP:20240101T090000Z
+DTSTART;VALUE=DATE:20250106
+SUMMARY:Day 6 – Offer the Mercy Gate
+DESCRIPTION:Publish LinkedIn Post #3 and deliver the Echo Edition one-pager to three targets.
+END:VEVENT
+BEGIN:VEVENT
+UID:launch-day7-20250107@adaptive-ethics
+DTSTAMP:20240101T090000Z
+DTSTART;VALUE=DATE:20250107
+SUMMARY:Day 7 – Measure and memorialize
+DESCRIPTION:Capture analytics, update the press kit, and publish a retrospective.
+END:VEVENT
+END:VCALENDAR
