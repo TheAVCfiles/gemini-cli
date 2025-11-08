@@ -1,520 +1,342 @@
 /* @jsxImportSource https://esm.sh/react@18.3.1?dev */
-import React, { useState, useEffect, useCallback } from 'https://esm.sh/react@18.3.1?dev';
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'https://esm.sh/react@18.3.1?dev';
 import { createRoot } from 'https://esm.sh/react-dom@18.3.1/client?dev';
-import {
-  Play,
-  Pause,
-  Star,
-  Zap,
-  Award,
-  ShoppingBag,
-  Check,
-  Sparkles,
-} from 'https://esm.sh/lucide-react@0.356.0?bundle';
 
-// --- GAME CONFIGURATION ---
-const ACTIONS = {
-  SPIN: { name: 'Spin', emoji: '🔄', color: 'bg-fuchsia-600', ring: 'ring-fuchsia-400/50', icon: '🌀' },
-  STRIKE: { name: 'Strike', emoji: '👊', color: 'bg-red-600', ring: 'ring-red-400/50', icon: '⚔️' },
-  JUMP: { name: 'Jump', emoji: '⬆️', color: 'bg-cyan-600', ring: 'ring-cyan-400/50', icon: '⚡' },
-  POSE: { name: 'Pose', emoji: '💅', color: 'bg-indigo-600', ring: 'ring-indigo-400/50', icon: '⭐' },
-};
-
-const DANCE_MOVES = [
-  { name: 'Demon Portal Spin', action: ACTIONS.SPIN, description: 'A fluid, gravity-defying swirl.', power: 'SPEED' },
-  { name: 'Spirit Sword Strike', action: ACTIONS.STRIKE, description: 'A sharp slice to banish shadows.', power: 'POWER' },
-  { name: 'Shadow Step Slide', action: ACTIONS.POSE, description: 'A stylish, quick transition.', power: 'STEALTH' },
-  { name: 'Energy Wave Jump', action: ACTIONS.JUMP, description: 'Leap high to launch energy.', power: 'ENERGY' },
-  { name: 'Heart Shield Pop', action: ACTIONS.POSE, description: 'Pop and lock with attitude.', power: 'SHIELD' },
-  { name: 'Thunder Kick Combo', action: ACTIONS.STRIKE, description: 'Powerful triple-kick sequence.', power: 'STRIKE' },
-  { name: 'Mystic Hip Roll', action: ACTIONS.SPIN, description: 'Roll those hips in a magic circle.', power: 'MAGIC' },
-  { name: 'Victory Star Pose', action: ACTIONS.JUMP, description: 'End with a dazzling, high stance.', power: 'CHARM' },
+const teachers = [
+  {
+    name: 'Zoe',
+    emoji: '💃',
+    specialty: 'Cute Moves',
+    accentClass: 'text-pink-400',
+    highlightClass: 'bg-pink-500/20',
+  },
+  {
+    name: 'Mira',
+    emoji: '🦊',
+    specialty: 'Power Moves',
+    accentClass: 'text-purple-400',
+    highlightClass: 'bg-purple-500/20',
+  },
+  {
+    name: 'Rumi',
+    emoji: '⚡',
+    specialty: 'Speed Moves',
+    accentClass: 'text-yellow-300',
+    highlightClass: 'bg-yellow-400/20',
+  },
 ];
 
-const SHOP_ITEMS = [
-  { id: 1, name: 'Neon Cybersuit', emoji: '👚', cost: 150, type: 'outfit', color: 'text-cyan-400' },
-  { id: 2, name: 'Celestial Wings', emoji: '🕊️', cost: 220, type: 'accessory', color: 'text-purple-300' },
-  { id: 3, name: 'Rave Cat Headphones', emoji: '🎧', cost: 120, type: 'accessory', color: 'text-lime-400' },
-  { id: 4, name: 'Vampire Sneakers', emoji: '👟', cost: 180, type: 'shoes', color: 'text-red-400' },
-  { id: 5, name: 'Glitter Bomb Lipstick', emoji: '💄', cost: 90, type: 'accessory', color: 'text-pink-400' },
-  { id: 6, name: 'Holographic Skirt', emoji: '👗', cost: 160, type: 'outfit', color: 'text-yellow-400' },
-  { id: 7, name: 'K-Pop Ring Light', emoji: '💡', cost: 80, type: 'accessory', color: 'text-white' },
-  { id: 8, name: 'Aura Booster Drink', emoji: '🍹', cost: 50, type: 'food', color: 'text-orange-400' },
+const choreography = [
+  { beat: 0, lane: 0, name: 'Shadow Slide', durationBeats: 2, targetScore: 85 },
+  { beat: 2, lane: 1, name: 'Thunder Kick', durationBeats: 2, targetScore: 78 },
+  { beat: 4, lane: 2, name: 'Heart Pop', durationBeats: 2, targetScore: 92 },
+  { beat: 6, lane: 0, name: 'Spin Combo', durationBeats: 2, targetScore: 65 },
+  { beat: 8, lane: 1, name: 'Energy Wave', durationBeats: 2, targetScore: 90 },
+  { beat: 10, lane: 2, name: 'Laser Beam', durationBeats: 2, targetScore: 88 },
+  { beat: 12, lane: 0, name: 'Shadow Slide', durationBeats: 2, targetScore: 85 },
+  { beat: 14, lane: 1, name: 'Thunder Kick', durationBeats: 2, targetScore: 78 },
 ];
 
-const MOVE_TIME_MS = 2500;
-const STORAGE_KEY = 'demon_dance_state_v1';
+const BPM = 128;
 
-const App = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [coins, setCoins] = useState(0);
-  const [combo, setCombo] = useState(0);
-  const [level, setLevel] = useState(1);
-  const [showShop, setShowShop] = useState(false);
-  const [inventory, setInventory] = useState([]);
-  const [equippedItem, setEquippedItem] = useState(null);
-  const [moveStartTime, setMoveStartTime] = useState(0);
-  const [feedback, setFeedback] = useState('');
-  const [now, setNow] = useState(Date.now());
+function initToneMusic(onBeatCallback, onStopCallback) {
+  if (typeof Tone === 'undefined') {
+    console.error('Tone.js not loaded. Cannot start music.');
+    return { start: () => Promise.resolve(), stop: onStopCallback };
+  }
 
-  // --- PERSISTENCE (load) ---
+  try {
+    const bass = new Tone.MembraneSynth({
+      envelope: { attack: 0.02, decay: 0.8, sustain: 0.05, release: 0.5 },
+    }).toDestination();
+
+    const hihat = new Tone.NoiseSynth({
+      noise: { type: 'white' },
+      envelope: { attack: 0.001, decay: 0.05, sustain: 0 },
+    }).toDestination();
+
+    const snare = new Tone.NoiseSynth({
+      noise: { type: 'pink' },
+      envelope: { attack: 0.001, decay: 0.15, sustain: 0 },
+    }).toDestination();
+
+    Tone.Transport.bpm.value = BPM;
+
+    new Tone.Pattern(
+      (time) => bass.triggerAttackRelease('C2', '8n', time),
+      [0, 1, 0, 1],
+    ).start(0).humanize = true;
+
+    new Tone.Sequence(
+      (time) => snare.triggerAttackRelease('16n', time),
+      ['0:1', '0:3'],
+    ).start(0);
+
+    new Tone.Loop(
+      (time) => hihat.triggerAttackRelease('32n', time, 0.5),
+      '8n',
+    ).start(0);
+
+    let currentBeatIndex = 0;
+    const lastMove = choreography[choreography.length - 1];
+    const totalBeats = lastMove.beat + lastMove.durationBeats;
+
+    Tone.Transport.scheduleRepeat((time) => {
+      onBeatCallback(currentBeatIndex);
+      currentBeatIndex = (currentBeatIndex + 1) % totalBeats;
+    }, '4n');
+
+    const start = async () => {
+      await Tone.start();
+      const dummyPlayer = new Audio();
+      await dummyPlayer.play().catch(() => {});
+      dummyPlayer.pause();
+      Tone.Transport.start();
+    };
+
+    const stop = () => {
+      Tone.Transport.stop();
+      onStopCallback();
+    };
+
+    return { start, stop };
+  } catch (error) {
+    console.error('Error setting up Tone.js:', error);
+    return { start: () => Promise.reject(error), stop: onStopCallback };
+  }
+}
+
+function App() {
+  const videoRef = useRef(null);
+  const [streamActive, setStreamActive] = useState(false);
+  const [currentBeat, setCurrentBeat] = useState(-1);
+  const [isDancing, setIsDancing] = useState(false);
+  const [matchScore, setMatchScore] = useState(0);
+  const [selectedLane, setSelectedLane] = useState(0);
+  const [feedbackText, setFeedbackText] = useState('Get ready to dance!');
+  const [currentMove, setCurrentMove] = useState(null);
+  const musicRef = useRef(null);
+
+  const handleBeat = useCallback(
+    (beatIndex) => {
+      const beat = beatIndex % 16;
+      setCurrentBeat(beat);
+
+      const activeMove =
+        choreography.find((move) => move.beat === beat) ?? null;
+      setCurrentMove(activeMove);
+
+      if (activeMove) {
+        setFeedbackText(`New Move: ${activeMove.name}! Match the pose!`);
+      }
+
+      const baseScore = Math.floor(Math.random() * 40) + 50;
+      const scoreAdjustment =
+        activeMove && selectedLane === activeMove.lane
+          ? Math.floor(Math.random() * 10) + 10
+          : 0;
+      const finalScore = Math.min(100, baseScore + scoreAdjustment);
+      setMatchScore(finalScore);
+    },
+    [selectedLane],
+  );
+
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const data = JSON.parse(raw);
-      if (typeof data?.score === 'number') setScore(data.score);
-      if (typeof data?.coins === 'number') setCoins(data.coins);
-      if (typeof data?.level === 'number') setLevel(data.level);
-      if (Array.isArray(data?.inventory)) setInventory(data.inventory);
-      if (data?.equippedItem) setEquippedItem(data.equippedItem);
-    } catch {
-      // ignore malformed storage
-    }
-  }, []);
+    let isActive = true;
+    const setupCamera = async () => {
+      if (!navigator.mediaDevices) {
+        console.error('MediaDevices not supported.');
+        return;
+      }
 
-  // --- PERSISTENCE (save) ---
-  useEffect(() => {
-    const payload = { score, coins, level, inventory, equippedItem };
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-    } catch {
-      // storage might be disabled
-    }
-  }, [score, coins, level, inventory, equippedItem]);
-
-  const startNextMove = useCallback(() => {
-    const newMoveIndex = Math.floor(Math.random() * DANCE_MOVES.length);
-    setCurrentMoveIndex(newMoveIndex);
-    setMoveStartTime(Date.now());
-  }, []);
-
-  const handleMoveResult = useCallback(
-    (success, scoreIncrease = 0, coinsGain = 0) => {
-      setMoveStartTime(0);
-      if (success) {
-        setCombo((prevCombo) => {
-          const newCombo = prevCombo + 1;
-          setScore((prev) => prev + scoreIncrease + newCombo * 5);
-          setCoins((prev) => {
-            const comboBonusCoins = Math.floor(newCombo / 5) * 2;
-            const baseSuccessCoins = 2;
-            return prev + coinsGain + baseSuccessCoins + comboBonusCoins;
-          });
-          return newCombo;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            facingMode: 'user',
+          },
+          audio: false,
         });
-      } else {
-        setCombo(0);
-        setFeedback((prev) => (prev === 'MISS!' ? 'MISS!' : prev));
-      }
 
-      setTimeout(() => {
-        setFeedback('');
-        if (isPlaying) {
-          startNextMove();
+        if (videoRef.current && isActive) {
+          videoRef.current.srcObject = stream;
+          setStreamActive(true);
         }
-      }, 500);
-    },
-    [isPlaying, startNextMove]
-  );
-
-  // Smooth progress ticker
-  useEffect(() => {
-    if (!isPlaying || moveStartTime === 0) {
-      return undefined;
-    }
-    let rafId;
-    const tick = () => {
-      setNow(Date.now());
-      rafId = requestAnimationFrame(tick);
+      } catch (error) {
+        console.error('Camera access denied or error:', error);
+        setFeedbackText('🛑 Camera Error: Please allow access to start dancing!');
+      }
     };
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, [isPlaying, moveStartTime]);
 
-  // QTE Timeout
-  useEffect(() => {
-    if (!isPlaying || moveStartTime === 0) {
-      return undefined;
-    }
-    const id = setTimeout(() => {
-      setFeedback('MISS!');
-      handleMoveResult(false);
-    }, MOVE_TIME_MS);
-    return () => clearTimeout(id);
-  }, [isPlaying, moveStartTime, handleMoveResult]);
+    setupCamera();
 
-  // Level Up
-  useEffect(() => {
-    if (score >= level * 500) {
-      setLevel((prev) => prev + 1);
-    }
-  }, [score, level]);
-
-  const handleStartStopClick = useCallback(() => {
-    setIsPlaying((prev) => {
-      const newState = !prev;
-      if (newState) {
-        setFeedback('');
-        startNextMove();
-      } else {
-        setMoveStartTime(0);
-        setFeedback('Paused...');
+    return () => {
+      isActive = false;
+      if (videoRef.current && videoRef.current.srcObject) {
+        const tracks = videoRef.current.srcObject.getTracks();
+        tracks.forEach((track) => track.stop());
       }
-      return newState;
-    });
-  }, [startNextMove]);
-
-  const handleUserAction = useCallback(
-    (actionPressed) => {
-      if (!isPlaying || moveStartTime === 0 || feedback) {
-        return;
+      if (musicRef.current) {
+        musicRef.current.stop();
+        musicRef.current = null;
       }
-
-      const timeElapsed = Date.now() - moveStartTime;
-      const requiredAction = DANCE_MOVES[currentMoveIndex].action;
-      const isCorrect = actionPressed.name === requiredAction.name;
-
-      if (!isCorrect) {
-        setFeedback('WRONG!');
-        handleMoveResult(false);
-        return;
-      }
-
-      const delta = MOVE_TIME_MS - timeElapsed;
-      const absDelta = Math.abs(delta);
-
-      let feedbackText = 'GOOD!';
-      let scoreIncrease = 10;
-
-      if (absDelta <= 250) {
-        feedbackText = 'PERFECT!';
-        scoreIncrease = 50;
-      } else if (absDelta <= 500) {
-        feedbackText = 'GREAT!';
-        scoreIncrease = 30;
-      }
-
-      setFeedback(feedbackText);
-      handleMoveResult(true, scoreIncrease, 1);
-    },
-    [isPlaying, moveStartTime, feedback, currentMoveIndex, handleMoveResult]
-  );
-
-  const buyItem = useCallback(
-    (item) => {
-      if (coins >= item.cost && !inventory.some((i) => i.id === item.id)) {
-        setCoins((prev) => prev - item.cost);
-        setInventory((prev) => [...prev, item]);
-        setEquippedItem(item);
-      }
-    },
-    [coins, inventory]
-  );
-
-  const equipItem = useCallback((item) => {
-    setEquippedItem(item);
+    };
   }, []);
 
-  useEffect(() => {
-    const keyToAction = (e) => {
-      if (e.code === 'Space') {
-        e.preventDefault();
-        handleStartStopClick();
-        return;
-      }
-      if (!isPlaying || moveStartTime === 0 || feedback) {
-        return;
-      }
-      switch (e.key) {
-        case 'ArrowUp':
-          handleUserAction(ACTIONS.JUMP);
-          break;
-        case 'ArrowLeft':
-          handleUserAction(ACTIONS.SPIN);
-          break;
-        case 'ArrowRight':
-          handleUserAction(ACTIONS.POSE);
-          break;
-        case 'ArrowDown':
-          handleUserAction(ACTIONS.STRIKE);
-          break;
-        default:
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', keyToAction);
-    return () => window.removeEventListener('keydown', keyToAction);
-  }, [isPlaying, moveStartTime, feedback, handleUserAction, handleStartStopClick]);
-
-  const currentMove = DANCE_MOVES[currentMoveIndex];
-  const timeRemaining =
-    moveStartTime > 0 ? Math.max(0, MOVE_TIME_MS - (now - moveStartTime)) : MOVE_TIME_MS;
-  const progressPercent = (timeRemaining / MOVE_TIME_MS) * 100;
-
-  const feedbackStyle = (fb) => {
-    switch (fb) {
-      case 'PERFECT!':
-        return 'text-4xl text-cyan-300 tracking-widest drop-shadow-[0_0_15px_rgba(52,211,235,1)]';
-      case 'GREAT!':
-        return 'text-3xl text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,1)]';
-      case 'GOOD!':
-        return 'text-2xl text-indigo-400 drop-shadow-[0_0_8px_rgba(129,140,248,1)]';
-      case 'WRONG!':
-      case 'MISS!':
-        return 'text-4xl text-red-500 tracking-widest drop-shadow-[0_0_20px_rgba(239,68,68,1)]';
-      default:
-        return 'text-2xl text-white';
+  const toggleMusic = () => {
+    if (!musicRef.current) {
+      musicRef.current = initToneMusic(handleBeat, () => {
+        setIsDancing(false);
+        setCurrentBeat(-1);
+        setCurrentMove(null);
+      });
     }
+
+    if (isDancing) {
+      musicRef.current.stop();
+      setIsDancing(false);
+      setFeedbackText('Music stopped. Ready to start again!');
+      return;
+    }
+
+    musicRef.current
+      .start()
+      .then(() => {
+        setIsDancing(true);
+        setFeedbackText("Let's dance!");
+      })
+      .catch((error) => {
+        console.error('Failed to start audio:', error);
+        setFeedbackText('Failed to start audio. Try clicking again.');
+      });
   };
 
-  const ActionButton = ({ action }) => (
-    <button
-      onClick={() => handleUserAction(action)}
-      disabled={!isPlaying || moveStartTime === 0 || feedback}
-      className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg font-black text-sm sm:text-lg text-white transition-all duration-100 transform active:scale-95 border-2 border-transparent ${action.color} ${
-        isPlaying && moveStartTime > 0
-          ? `shadow-xl shadow-black/80 hover:scale-[1.05] border-fuchsia-400/50 ring-2 ${action.ring}`
-          : 'opacity-50 cursor-not-allowed'
-      }`}
-    >
-      <div className="text-3xl sm:text-4xl mb-1 drop-shadow-md">{action.emoji}</div>
-      {action.name.toUpperCase()}
-    </button>
-  );
+  const getInstructorPoseStyle = (laneIndex) => {
+    const isActive = currentMove && currentMove.lane === laneIndex && isDancing;
+    if (!isActive) {
+      return { opacity: 0 };
+    }
 
-  const ShopItemCard = ({ item }) => {
-    const isInInventory = inventory.some((i) => i.id === item.id);
-    const isEquipped = equippedItem?.id === item.id;
-    return (
-      <div
-        className={`bg-black/40 rounded-xl p-4 text-center backdrop-blur flex flex-col items-center justify-between h-full transition hover:bg-black/60 border-2 border-transparent ${
-          isEquipped ? 'border-cyan-400 shadow-[0_0_15px_rgba(52,211,235,0.7)]' : 'border-gray-700'
-        }`}
-      >
-        <div>
-          <div className={`text-4xl sm:text-5xl mb-2 ${item.color} drop-shadow-lg`}>{item.emoji}</div>
-          <h3 className="font-extrabold mb-2 text-sm sm:text-base text-gray-100">{item.name}</h3>
+    const isScaled = currentBeat % 4 < 2;
+    return {
+      opacity: 1,
+      transition: 'all 0.1s ease-out',
+      transform: isScaled ? 'scale(1.1) rotate(5deg)' : 'scale(1.0) rotate(-5deg)',
+      textShadow: '0 0 10px rgba(255, 255, 255, 0.8)',
+    };
+  };
+
+  const getMatchRating = (score) => {
+    if (score >= 90) return { emoji: '🔥', text: 'PERFECT!', color: 'text-red-400' };
+    if (score >= 80) return { emoji: '⭐', text: 'Great Match!', color: 'text-yellow-400' };
+    if (score >= 70) return { emoji: '👍', text: 'Good Effort!', color: 'text-green-400' };
+    return { emoji: '💪', text: 'Keep Going!', color: 'text-blue-400' };
+  };
+
+  const rating = getMatchRating(matchScore);
+
+  return (
+    <div className="relative min-h-screen bg-gray-900 text-white font-inter overflow-hidden p-0 md:p-4 touch-none select-none">
+      <h1 className="text-4xl md:text-5xl font-extrabold text-center pt-4 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-400">
+        K-Pop Dance Studio
+      </h1>
+
+      <div className="grid grid-cols-3 gap-1 md:gap-4 h-[60vh] md:h-[65vh] p-2 md:p-4">
+        {teachers.map((teacher, idx) => {
+          const isSelected = selectedLane === idx;
+          const isCurrentMove = currentMove && currentMove.lane === idx;
+          return (
+            <div
+              key={teacher.name}
+              className={`relative rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-[1.01] cursor-pointer border-4 ${isSelected ? 'border-yellow-400 scale-[1.01]' : 'border-gray-800'}`}
+              onClick={() => setSelectedLane(idx)}
+            >
+              <div className="bg-gray-800/70 h-full flex flex-col justify-between items-center text-center p-2 md:p-4 rounded-lg backdrop-blur-sm transition duration-300">
+                <div className="flex flex-col items-center">
+                  <span
+                    className={`text-6xl md:text-8xl transition-all duration-200 ${isCurrentMove ? 'animate-pulse' : ''}`}
+                    style={getInstructorPoseStyle(idx)}
+                  >
+                    {teacher.emoji}
+                  </span>
+                  <h3 className={`font-bold text-xl mt-2 mb-1 ${teacher.accentClass}`}>
+                    {teacher.name}
+                  </h3>
+                  <p className="text-xs text-gray-400 hidden md:block">{teacher.specialty}</p>
+                </div>
+
+                <div
+                  className={`w-full p-2 rounded-lg transition-all duration-300 ${isCurrentMove ? teacher.highlightClass : 'bg-gray-700/50'}`}
+                >
+                  <p className="text-sm font-semibold">
+                    {isCurrentMove ? currentMove.name : 'Next Up!'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="h-[40vh] md:h-[35vh] p-2 md:p-4 relative">
+        <div className="absolute inset-0 z-10 flex flex-col justify-center items-center pointer-events-none">
+          <div className="bg-black/60 p-3 md:p-6 rounded-2xl shadow-2xl border-2 border-purple-500 max-w-xs md:max-w-md w-full text-center">
+            <p className="text-xl md:text-3xl font-bold mb-1">{feedbackText}</p>
+            <div className={`text-5xl md:text-7xl font-extrabold ${rating.color}`}>
+              {rating.emoji} {matchScore}%
+            </div>
+            <p className="text-sm md:text-base text-gray-300">{rating.text}</p>
+            <p className="text-sm mt-1 text-pink-300">Tracking: {teachers[selectedLane].name}'s Lane</p>
+          </div>
         </div>
 
-        <div className="w-full mt-3">
-          {isInInventory ? (
-            <button
-              onClick={() => equipItem(item)}
-              className={`w-full py-2 rounded-lg font-bold text-sm transition-all duration-150 shadow-md ${
-                isEquipped
-                  ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/50'
-                  : 'bg-fuchsia-500 hover:bg-fuchsia-600 text-white'
-              }`}
-            >
-              {isEquipped ? (
-                <>
-                  <Check size={16} className="inline mr-1" /> EQUIPPED
-                </>
-              ) : (
-                'EQUIP'
-              )}
-            </button>
-          ) : (
-            <button
-              onClick={() => buyItem(item)}
-              disabled={coins < item.cost}
-              className={`w-full py-2 rounded-lg font-bold text-sm transition-all duration-150 shadow-md ${
-                coins >= item.cost
-                  ? 'bg-red-600 hover:bg-red-700 active:scale-95 shadow-red-900/50 text-white'
-                  : 'bg-gray-700 cursor-not-allowed opacity-70 text-gray-400'
-              }`}
-            >
-              {coins >= item.cost ? `Buy 💰 ${item.cost}` : `💰 ${item.cost} (LOCKED)`}
-            </button>
+        <div className="relative h-full w-full rounded-xl overflow-hidden shadow-inner border-4 border-gray-700">
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            className="w-full h-full object-cover"
+            style={{ transform: 'scaleX(-1)' }}
+            muted={!streamActive}
+          />
+          {!streamActive && (
+            <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
+              <p className="text-xl text-red-400">Waiting for Camera...</p>
+            </div>
           )}
         </div>
       </div>
-    );
-  };
 
-  return (
-    <div
-      className="min-h-screen bg-black text-white p-4 sm:p-6 font-['Inter']"
-      style={{ backgroundImage: 'radial-gradient(at 50% 100%, #150030 0%, #000000 70%)' }}
-    >
-      {/* Header Stats */}
-      <div className="max-w-4xl mx-auto mb-6">
-        <div className="bg-black/70 rounded-xl p-3 backdrop-blur border-2 border-gray-700 shadow-2xl shadow-fuchsia-900/30">
-          <div className="flex justify-around items-center flex-wrap text-sm sm:text-base gap-2 tracking-wide">
-            <div className="flex items-center gap-1 sm:gap-2">
-              <Zap className="text-cyan-400 w-5 h-5 drop-shadow-[0_0_5px_cyan]" />
-              <span className="font-bold text-cyan-200">LEVEL {level}</span>
-            </div>
-            <div className="flex items-center gap-1 sm:gap-2">
-              <Star className="text-yellow-400 w-5 h-5 drop-shadow-[0_0_5px_yellow]" />
-              <span className="font-bold text-yellow-300">SCORE: {score}</span>
-            </div>
-            <div className="flex items-center gap-1 sm:gap-2">
-              <Award className="text-red-400 w-5 h-5 drop-shadow-[0_0_5px_red]" />
-              <span className={`font-black tracking-widest ${
-                combo > 0 ? 'text-red-500 drop-shadow-[0_0_8px_red]' : 'text-gray-400'
-              }`}
-              >
-                COMBO: {combo}x
-              </span>
-            </div>
-            <div className="flex items-center gap-1 sm:gap-2">
-              <div className="text-xl sm:text-2xl text-yellow-500">💰</div>
-              <span className="font-bold text-yellow-300">{coins} CREDITS</span>
-            </div>
-          </div>
-        </div>
+      <div className="p-4 bg-gray-900 border-t border-gray-800 fixed bottom-0 left-0 w-full md:relative md:w-auto md:mt-4 md:flex md:justify-center">
+        <button
+          onClick={toggleMusic}
+          onTouchStart={(event) => event.preventDefault()}
+          className={`min-h-16 w-full md:w-64 text-2xl font-bold rounded-xl shadow-lg transition-all duration-300 ${isDancing ? 'bg-red-600 hover:bg-red-700' : 'bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600'}`}
+        >
+          {isDancing ? '🛑 STOP DANCING' : '🎵 START DANCE CLASS'}
+        </button>
       </div>
 
-      {/* --- Main Game Area --- */}
-      {!showShop ? (
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-b from-gray-900 to-black rounded-3xl p-6 sm:p-8 shadow-[0_0_40px_rgba(255,0,100,0.5)] border-4 border-fuchsia-500">
-            <h1 className="text-2xl sm:text-4xl font-black text-center mb-6 text-fuchsia-300 tracking-widest drop-shadow-[0_0_10px_rgba(255,0,100,0.8)]">
-              // CORE STAGE //
-            </h1>
-
-            {/* Equipped Item Display */}
-            <div className="text-center mb-4 min-h-[40px]">
-              {equippedItem && (
-                <div className="inline-flex items-center bg-black/60 p-2 rounded-full border border-cyan-400 shadow-lg shadow-cyan-900/50">
-                  <Sparkles className="w-4 h-4 text-cyan-300 mr-1 animate-spin" style={{ animationDuration: '2s' }} />
-                  <span className="text-xs font-semibold text-gray-300 mr-2">STATUS EFFECT:</span>
-                  <span
-                    className={`text-xl font-bold tracking-wider ${equippedItem.color}`}
-                    title={equippedItem.name}
-                  >
-                    {equippedItem.emoji} {equippedItem.name}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            <div className="bg-black/70 rounded-2xl p-6 sm:p-8 mb-6 min-h-[250px] flex flex-col justify-center items-center relative overflow-hidden border-2 border-gray-700 shadow-inner shadow-fuchsia-900/50">
-              {/* QTE Timer/Progress Bar */}
-              {isPlaying && moveStartTime > 0 && (
-                <div
-                  className="absolute top-0 left-0 h-2 bg-gradient-to-r from-red-600 to-yellow-400"
-                  style={{ width: `${progressPercent}%`, transition: 'width 0.1s linear' }}
-                />
-              )}
-
-              {/* Feedback Display */}
-              {feedback && (
-                <div
-                  className={`absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-10 font-black transition-opacity duration-300 ${feedbackStyle(
-                    feedback
-                  )}`}
-                >
-                  {feedback}
-                </div>
-              )}
-
-              {/* Dance Move Display */}
-              <div className="text-6xl sm:text-8xl mb-4 text-cyan-400 drop-shadow-[0_0_10px_cyan] animate-pulse">
-                {currentMove.action.icon}
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-black mb-2 text-center text-red-400 tracking-widest drop-shadow-[0_0_5px_red]">
-                {currentMove.name}
-              </h2>
-              <p className="text-base sm:text-lg text-center mb-4 text-gray-300 italic">
-                {currentMove.description}
-              </p>
-              <div className="bg-fuchsia-800 px-4 py-2 rounded-full shadow-lg shadow-fuchsia-900/50 border border-fuchsia-400">
-                <span className="font-bold text-sm sm:text-lg text-white">
-                  ACTION: {currentMove.action.name.toUpperCase()}
-                </span>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="grid grid-cols-4 gap-2 sm:gap-4 mb-6">
-              {Object.values(ACTIONS).map((action) => (
-                <ActionButton key={action.name} action={action} />
-              ))}
-            </div>
-
-            {/* Controls */}
-            <div className="flex justify-center gap-4 mb-6">
-              <button
-                onClick={handleStartStopClick}
-                className="bg-gradient-to-r from-green-500 to-lime-600 hover:from-green-600 hover:to-lime-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-black text-lg sm:text-xl flex items-center gap-3 shadow-lime-900/50 shadow-lg transform hover:scale-[1.02] active:scale-95 transition-all duration-150 border-2 border-lime-300"
-                style={{ textShadow: '0 0 5px #a7f3d0' }}
-              >
-                {isPlaying ? <Pause size={28} /> : <Play size={28} />}
-                {isPlaying ? 'PAUSE BATTLE' : 'START RHYTHM!'}
-              </button>
-            </div>
-
-            {/* Encouragement */}
-            <div className="text-center">
-              <p className="text-base sm:text-lg text-gray-400">
-                {isPlaying ? (
-                  combo > 15 ? (
-                    <span className="text-yellow-400 drop-shadow-[0_0_8px_yellow] font-bold">
-                      UNSTOPPABLE! PUSH THE LIMITS!
-                    </span>
-                  ) : combo > 5 ? (
-                    <span className="text-red-400 font-bold">RISING HEAT! MAINTAIN THE CHAIN!</span>
-                  ) : (
-                    'FIGHT! Match the move action before the bar runs out.'
-                  )
-                ) : (
-                  'PRESS START to enter the Demon Dance Zone.'
-                )}
-              </p>
-              <p className="text-xs text-gray-500 mt-2">
-                Keys: ← Spin, ↓ Strike, ↑ Jump, → Pose, Space = Start/Pause
-              </p>
-            </div>
-          </div>
-
-          {/* Shop Button */}
-          <div className="text-center mt-6">
-            <button
-              onClick={() => setShowShop(true)}
-              className="bg-black/80 hover:bg-black/90 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-black text-lg sm:text-xl flex items-center gap-3 shadow-fuchsia-500/50 shadow-[0_0_20px_rgba(217,70,239,0.7)] transform hover:scale-[1.02] active:scale-95 transition mx-auto border-2 border-fuchsia-500 text-fuchsia-300"
-            >
-              <ShoppingBag size={24} className="drop-shadow-[0_0_5px_rgba(217,70,239,1)]" />
-              VISIT THE GLAM SHOP
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-b from-gray-900 to-black rounded-3xl p-6 sm:p-8 shadow-[0_0_40px_rgba(52,211,235,0.5)] border-4 border-cyan-500">
-            <h1 className="text-3xl sm:text-4xl font-black text-center mb-6 text-cyan-300 tracking-widest drop-shadow-[0_0_10px_rgba(52,211,235,0.8)]">
-              // GLAM SHOP & INVENTORY //
-            </h1>
-
-            <p className="text-center text-gray-400 mb-6">
-              Acquire covetable, high-status gear to enhance your aesthetic and show your dedication.
-            </p>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              {SHOP_ITEMS.map((item) => (
-                <ShopItemCard key={item.id} item={item} />
-              ))}
-            </div>
-
-            <div className="text-center mt-6">
-              <button
-                onClick={() => setShowShop(false)}
-                className="bg-black/80 hover:bg-black/90 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-black text-lg sm:text-xl shadow-cyan-500/50 shadow-[0_0_20px_rgba(52,211,235,0.7)] transform hover:scale-[1.02] active:scale-95 transition mx-auto border-2 border-cyan-500 text-cyan-300"
-              >
-                RETURN TO STAGE
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <style>{`
+        body {
+          overscroll-behavior: none;
+          -webkit-overflow-scrolling: touch;
+        }
+        video {
+          -webkit-transform: translateZ(0);
+        }
+      `}</style>
     </div>
   );
-};
+}
 
-const root = createRoot(document.getElementById('root'));
-root.render(<App />);
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  createRoot(rootElement).render(<App />);
+}
