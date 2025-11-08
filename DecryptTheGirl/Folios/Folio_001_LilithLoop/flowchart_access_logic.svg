@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <style>
+    .box { fill: #111827; stroke: #f472b6; stroke-width: 2; rx: 12; ry: 12; }
+    .diamond { fill: #1f2937; stroke: #93c5fd; stroke-width: 2; }
+    .label { font-family: "Fira Code", monospace; font-size: 14px; fill: #f9fafb; }
+    .arrow { stroke: #f9fafb; stroke-width: 2; marker-end: url(#arrowhead); }
+    svg { background: #0f172a; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" fill="#f9fafb">
+      <path d="M0,0 L6,3 L0,6 z" />
+    </marker>
+  </defs>
+
+  <rect class="box" x="40" y="40" width="200" height="70" />
+  <text class="label" x="60" y="80">Trigger Event</text>
+  <text class="label" x="60" y="102">cue.fracture | cue.mirror_gaze | loop.completion_7</text>
+
+  <polygon class="diamond" points="320,75 380,115 320,155 260,115" />
+  <text class="label" x="275" y="118">witness_window()</text>
+  <text class="label" x="280" y="138">valid + threshold?</text>
+
+  <rect class="box" x="440" y="40" width="160" height="70" />
+  <text class="label" x="460" y="80">Render Frame</text>
+  <text class="label" x="460" y="102">visibility = clear</text>
+
+  <rect class="box" x="440" y="180" width="160" height="70" />
+  <text class="label" x="460" y="220">Render Glitch</text>
+  <text class="label" x="460" y="242">visibility = fractured</text>
+
+  <line class="arrow" x1="240" y1="75" x2="260" y2="103" />
+  <line class="arrow" x1="320" y1="155" x2="320" y2="180" />
+  <line class="arrow" x1="380" y1="103" x2="440" y2="75" />
+  <line class="arrow" x1="320" y1="155" x2="440" y2="215" />
+
+  <text class="label" x="360" y="70">YES</text>
+  <text class="label" x="350" y="200">NO</text>
+
+  <text class="label" x="60" y="30">Folio_001 Visibility Gate</text>
+</svg>
