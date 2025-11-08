@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rebuttal: Interactive Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .section-card {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        .fsm-node {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .fsm-node.active {
+            border-color: #0D9488;
+            background-color: #e0f2f1;
+            box-shadow: 0 0 0 3px #0D9488;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'warm-bg': '#FFFAF0',
+                        'warm-text': '#4A3728',
+                        'primary': {
+                            '500': '#0D9488',
+                            '600': '#047871',
+                            '700': '#065f5a',
+                        },
+                        'danger': '#EF4444',
+                        'safe': '#10B981',
+                    },
+                },
+            },
+        }
+    </script>
+    <script type="module">
+        
+        // --- GEMINI API SETUP ---
+        const GEMINI_TEXT_MODEL = "gemini-2.5-flash-preview-09-2025";
+        const GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts";
+        const apiKey = ""; // Leave as-is
+
+        // 1. Exponential Backoff Fetch
+        async function exponentialBackoffFetch(url, options, maxRetries = 5) {
+            for (let attempt = 0; attempt < maxRetries; attempt++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status !== 429) {
+                        return response;
+                    }
+                    const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                } catch (error) {
+                    const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+            throw new Error('Max retries exceeded for API call.');
+        }
+
+        // 2. Base64 to ArrayBuffer (for TTS)
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        // 3. PCM to WAV conversion (for TTS)
+        function pcmToWav(pcm16, sampleRate) {
+            const buffer = new ArrayBuffer(44 + pcm16.byteLength);
+            const view = new DataView(buffer);
+            let offset = 0;
+
+            const writeString = (str) => {
+                for (let i = 0; i < str.length; i++) {
+                    view.setUint8(offset + i, str.charCodeAt(i));
+                }
+                offset += str.length;
+            };
+
+            writeString('RIFF');
+            view.setUint32(offset, 36 + pcm16.byteLength, true); offset += 4;
+            writeString('WAVE');
+            writeString('fmt ');
+            view.setUint32(offset, 16, true); offset += 4; // Chunk size
+            view.setUint16(offset, 1, true); offset += 2; // Audio format (1 for PCM)
+            view.setUint16(offset, 1, true); offset += 2; // Number of channels
+            view.setUint32(offset, sampleRate, true); offset += 4; // Sample rate
+            view.setUint32(offset, sampleRate * 2, true); offset += 4; // Byte rate
+            view.setUint16(offset, 2, true); offset += 2; // Block align
+            view.setUint16(offset, 16, true); offset += 2; // Bits per sample
+            writeString('data');
+            view.setUint32(offset, pcm16.byteLength, true); offset += 4; // Chunk size
+
+            const pcm8 = new Uint8Array(pcm16.buffer);
+            for (let i = 0; i < pcm8.length; i++) {
+                view.setUint8(offset + i, pcm8[i]);
+            }
+
+            return new Blob([buffer], { type: 'audio/wav' });
+        }
+
+        // 4. Gemini Text Generation (with Grounding)
+        async function callGemini(userQuery, systemInstruction) {
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_TEXT_MODEL}:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: {
+                    parts: [{ text: systemInstruction }]
+                },
+                config: {
+                    temperature: 0.3
+                }
+            };
+
+            try {
+                const response = await exponentialBackoffFetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                return text || "Error: Could not generate explanation.";
+
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                return "Error: Failed to connect to explanation service.";
+            }
+        }
+
+        // 5. Gemini TTS Generation
+        async function callGeminiTTS(textToSpeak) {
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_TTS_MODEL}:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: textToSpeak }] }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: "Kore" } // Kore (Firm, informative voice)
+                        }
+                    }
+                },
+                model: GEMINI_TTS_MODEL
+            };
+
+            try {
+                const response = await exponentialBackoffFetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                    const match = mimeType.match(/rate=(\d+)/);
+                    const sampleRate = match ? parseInt(match[1], 10) : 16000;
+                    
+                    const pcmData = base64ToArrayBuffer(audioData);
+                    const pcm16 = new Int16Array(pcmData);
+                    
+                    const wavBlob = pcmToWav(pcm16, sampleRate);
+                    return URL.createObjectURL(wavBlob);
+                } else {
+                    console.error("TTS API Error: Missing audio data in response.", result);
+                    return null;
+                }
+
+            } catch (error) {
+                console.error("Gemini TTS API Error:", error);
+                return null;
+            }
+        }
+
+
+        // --- APPLICATION LOGIC ---
+
+        const FSM_STATES = [
+            {
+                name: "State 0: Pre-Flight Check",
+                description: "System is initializing. All risk gates are closed. Awaiting market data feed and initial liquidity confirmation.",
+                riskLevel: "LOW",
+                gateA: "Closed",
+                gateB: "Closed"
+            },
+            {
+                name: "State 1: Passive Observation (Low Volatility)",
+                description: "Market conditions are stable. Low volatility detected. Gates A (Vol Guard) and B (Liquidity Check) are OPEN for signal ingestion.",
+                riskLevel: "MEDIUM",
+                gateA: "Open",
+                gateB: "Open"
+            },
+            {
+                name: "State 2: High-Alert Staging (Volatility Spike)",
+                description: "Abnormal market volatility spike detected (Gate A: CLOSED). System enters a mandatory cooling period. All new signals rejected. Existing positions may be partially de-risked.",
+                riskLevel: "HIGH",
+                gateA: "Closed",
+                gateB: "Open"
+            },
+            {
+                name: "State 3: Liquidity Hold (Thin Market)",
+                description: "Market depth insufficient (Gate B: CLOSED). Execution risk is too high. System halts all activity to prevent catastrophic slippage.",
+                riskLevel: "CRITICAL",
+                gateA: "Open",
+                gateB: "Closed"
+            },
+            {
+                name: "State 4: Post-Trade Review",
+                description: "A signal was successfully executed. System is in a mandated review phase for 15 minutes. All gates temporarily CLOSED.",
+                riskLevel: "LOW",
+                gateA: "Closed",
+                gateB: "Closed"
+            }
+        ];
+
+        let currentStateIndex = 1; // Start at Passive Observation
+
+        function updateDisplay() {
+            const state = FSM_STATES[currentStateIndex];
+
+            // FSM Display
+            document.getElementById('current-state-title').textContent = state.name;
+            document.getElementById('state-description').textContent = state.description;
+
+            // Risk Gating Display
+            document.getElementById('gate-a-status').textContent = state.gateA;
+            document.getElementById('gate-b-status').textContent = state.gateB;
+            
+            // Risk Level Color
+            const riskPill = document.getElementById('risk-level-pill');
+            riskPill.textContent = state.riskLevel;
+            riskPill.className = 'inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium';
+            if (state.riskLevel === 'CRITICAL') {
+                riskPill.classList.add('bg-danger/10', 'text-danger', 'ring-danger');
+            } else if (state.riskLevel === 'HIGH') {
+                riskPill.classList.add('bg-danger/10', 'text-danger', 'ring-danger');
+            } else if (state.riskLevel === 'MEDIUM') {
+                riskPill.classList.add('bg-yellow-100', 'text-yellow-800', 'ring-yellow-500');
+            } else {
+                riskPill.classList.add('bg-safe/10', 'text-safe-800', 'ring-safe');
+            }
+
+            // FSM Nodes
+            document.querySelectorAll('.fsm-node').forEach((node, index) => {
+                node.classList.remove('active');
+                if (index === currentStateIndex) {
+                    node.classList.add('active');
+                }
+            });
+
+            // Clear Gemini features on state change
+            document.getElementById('explanation-box').classList.add('hidden');
+            document.getElementById('explanation-text').textContent = '';
+            document.getElementById('tts-btn').setAttribute('disabled', 'true');
+            const ttsAudio = document.getElementById('tts-audio');
+            ttsAudio.pause();
+            ttsAudio.currentTime = 0;
+            if (ttsAudio.src) URL.revokeObjectURL(ttsAudio.src); // Cleanup previous URL
+        }
+
+        function changeState(index) {
+            if (index >= 0 && index < FSM_STATES.length) {
+                currentStateIndex = index;
+                updateDisplay();
+            }
+        }
+
+        window.onload = function() {
+            updateDisplay();
+
+            // Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const burgerTop = document.getElementById('burger-top');
+            const burgerMid = document.getElementById('burger-mid');
+            const burgerBot = document.getElementById('burger-bot');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+                mobileMenuBtn.setAttribute('aria-expanded', !isExpanded);
+                mobileMenu.classList.toggle('hidden');
+                
+                burgerTop.classList.toggle('translate-y-2');
+                burgerTop.classList.toggle('rotate-45');
+                burgerMid.classList.toggle('opacity-0');
+                burgerBot.classList.toggle('-translate-y-2');
+                burgerBot.classList.toggle('-rotate-45');
+            });
+
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    mobileMenu.classList.add('hidden');
+                    burgerTop.classList.remove('translate-y-2', 'rotate-45');
+                    burgerMid.classList.remove('opacity-0');
+                    burgerBot.classList.remove('-translate-y-2', '-rotate-45');
+                });
+            });
+
+            // Smooth Scroll for Desktop Navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    if (this.closest('#mobile-menu')) return;
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // FSM Node Click Handlers (This handles the state change, replacing the inline onclicks)
+            document.querySelectorAll('.fsm-node').forEach((node, index) => {
+                node.addEventListener('click', () => changeState(index));
+            });
+            
+            // Chart Setup
+            const ctx = document.getElementById('backtestChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['False Signal (2020-08-10)', 'True Signal (2021-08-20)'],
+                    datasets: [{
+                        label: '90-Day Return (fraction)',
+                        data: [-0.264, 0.285],
+                        backgroundColor: ['rgba(239,68,68,0.6)', 'rgba(13,148,136,0.6)'],
+                        borderColor: ['rgba(239,68,68,1)', 'rgba(13,148,136,1)'],
+                        borderWidth: 1,
+                        borderRadius: 8,
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: false, 
+                            title: { display: true, text: '90-Day Return (fraction)' },
+                            ticks: {
+                                callback: function(value) {
+                                    return (value * 100).toFixed(1) + '%';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+
+            // --- GEMINI INTEGRATION LOGIC ---
+            const explainBtn = document.getElementById('explain-state-btn');
+            const loadingSpinner = document.getElementById('explain-loading-spinner');
+            const explanationBox = document.getElementById('explanation-box');
+            const explanationText = document.getElementById('explanation-text');
+            const ttsBtn = document.getElementById('tts-btn');
+            const ttsAudio = document.getElementById('tts-audio');
+
+            explainBtn.addEventListener('click', async () => {
+                const currentStateTitle = document.getElementById('current-state-title').textContent;
+                const currentStateDescription = document.getElementById('state-description').textContent;
+
+                // 1. Show loading state
+                explanationText.textContent = "Generating explanation...";
+                explanationBox.classList.remove('hidden');
+                ttsBtn.setAttribute('disabled', 'true');
+                loadingSpinner.classList.remove('hidden');
+                explainBtn.classList.add('disabled:opacity-50', 'cursor-not-allowed');
+                explainBtn.setAttribute('disabled', 'true');
+
+                // 2. Prepare prompt and call Gemini
+                const userQuery = `Current FSM State: "${currentStateTitle}". Description: "${currentStateDescription}".`;
+                const systemInstruction = `You are a clear, concise financial explainer. Take the provided technical FSM state title and description and summarize its core meaning and immediate risk implications in one to two sentences for a non-technical audience. Use Google Search grounding to ensure accuracy and relevance.`;
+
+                const explanation = await callGemini(userQuery, systemInstruction);
+
+                // 3. Update UI with explanation
+                explanationText.textContent = explanation;
+                loadingSpinner.classList.add('hidden');
+                explainBtn.removeAttribute('disabled');
+                explainBtn.classList.remove('disabled:opacity-50', 'cursor-not-allowed');
+
+                // 4. Generate TTS audio
+                const audioUrl = await callGeminiTTS(explanation);
+
+                if (audioUrl) {
+                    ttsAudio.src = audioUrl;
+                    ttsBtn.removeAttribute('disabled');
+                    ttsBtn.onclick = () => {
+                        ttsAudio.play();
+                        // Clean up Blob URL when audio finishes
+                        ttsAudio.onended = () => URL.revokeObjectURL(audioUrl);
+                    };
+                } else {
+                    ttsBtn.setAttribute('disabled', 'true');
+                }
+            });
+
+            // Handle audio stop on subsequent explanation click
+            explainBtn.addEventListener('click', () => {
+                ttsAudio.pause();
+                ttsAudio.currentTime = 0;
+                if (ttsAudio.src) URL.revokeObjectURL(ttsAudio.src);
+            });
+            
+        };
+    </script>
+</head>
+<body class="min-h-screen">
+    <header class="sticky top-0 z-10 bg-white/95 backdrop-blur-sm shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="#" class="flex-shrink-0 flex items-center">
+                    <span class="text-xl font-bold text-gray-800">Intuition Labs</span>
+                    <span class="ml-2 px-2 py-0.5 text-xs font-medium bg-primary-500/10 text-primary-600 rounded-full">Rebuttal Explorer</span>
+                </a>
+                
+                <nav class="hidden md:flex md:space-x-8">
+                    <a href="#fsm-section" class="text-gray-500 hover:text-primary-600 transition">FSM</a>
+                    <a href="#gating-section" class="text-gray-500 hover:text-primary-600 transition">Risk Gating</a>
+                    <a href="#backtest-section" class="text-gray-500 hover:text-primary-600 transition">Backtests</a>
+                    <a href="#" class="text-gray-500 hover:text-primary-600 transition">Documentation</a>
+                </nav>
+
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <div class="w-6 h-6 flex flex-col justify-around">
+                            <span id="burger-top" class="h-0.5 w-full bg-gray-600 transform transition duration-300 ease-in-out origin-top-left"></span>
+                            <span id="burger-mid" class="h-0.5 w-full bg-gray-600 transition duration-300 ease-in-out"></span>
+                            <span id="burger-bot" class="h-0.5 w-full bg-gray-600 transform transition duration-300 ease-in-out origin-bottom-left"></span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hidden md:hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#fsm-section" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 transition">FSM</a>
+                <a href="#gating-section" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 transition">Risk Gating</a>
+                <a href="#backtest-section" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 transition">Backtests</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 transition">Documentation</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+        
+        <!-- FSM Section -->
+        <section id="fsm-section" class="space-y-6">
+            <h2 class="text-3xl font-extrabold text-gray-900">1. Finite State Machine (FSM)</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                
+                <!-- State Display -->
+                <div class="md:col-span-2 section-card space-y-4" id="fsm-display">
+                    <h3 class="text-xl font-bold mb-1" id="current-state-title">Loading...</h3>
+                    <p class="text-sm text-gray-500 italic mb-4" id="state-description">Loading...</p>
+
+                    <!-- Gemini Explain/TTS Integration (NEW) -->
+                    <div class="space-y-3 pt-2 border-t border-gray-100">
+                        <button id="explain-state-btn" class="w-full md:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition duration-150 ease-in-out">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" id="explain-loading-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            Explain State ✨
+                        </button>
+                        <div id="explanation-box" class="hidden p-3 rounded-lg bg-teal-50 border border-teal-200 text-teal-800 text-sm">
+                            <p id="explanation-text" class="mb-2 italic font-medium"></p>
+                            <button id="tts-btn" class="flex items-center text-xs font-semibold text-teal-600 hover:text-teal-800 transition duration-150 ease-in-out disabled:opacity-50" disabled>
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.121-7.072a8 8 0 010 11.314m-12.87-11.585L4 12l2.787 5.143M2 12h20"></path></svg>
+                                🔊 Read Aloud
+                            </button>
+                            <audio id="tts-audio" class="hidden"></audio>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- State Navigator -->
+                <div class="section-card">
+                    <h3 class="text-lg font-semibold mb-3 border-b pb-2">FSM Navigator</h3>
+                    <div class="space-y-2">
+                        <!-- FSM Node 0 -->
+                        <div class="fsm-node p-3 rounded-lg border border-gray-200 hover:bg-gray-50">
+                            <p class="text-sm font-medium">0: Pre-Flight Check</p>
+                            <p class="text-xs text-gray-500">System Initialization</p>
+                        </div>
+                        <!-- FSM Node 1 -->
+                        <div class="fsm-node p-3 rounded-lg border border-gray-200 hover:bg-gray-50">
+                            <p class="text-sm font-medium">1: Passive Observation</p>
+                            <p class="text-xs text-gray-500">Normal Market</p>
+                        </div>
+                        <!-- FSM Node 2 -->
+                        <div class="fsm-node p-3 rounded-lg border border-gray-200 hover:bg-gray-50">
+                            <p class="text-sm font-medium">2: High-Alert Staging</p>
+                            <p class="text-xs text-gray-500">Volatility Spike</p>
+                        </div>
+                        <!-- FSM Node 3 -->
+                        <div class="fsm-node p-3 rounded-lg border border-gray-200 hover:bg-gray-50">
+                            <p class="text-sm font-medium">3: Liquidity Hold</p>
+                            <p class="text-xs text-gray-500">Thin Market</p>
+                        </div>
+                        <!-- FSM Node 4 -->
+                        <div class="fsm-node p-3 rounded-lg border border-gray-200 hover:bg-gray-50">
+                            <p class="text-sm font-medium">4: Post-Trade Review</p>
+                            <p class="text-xs text-gray-500">Trade Complete</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Risk Gating Section -->
+        <section id="gating-section" class="space-y-6">
+            <h2 class="text-3xl font-extrabold text-gray-900">2. Risk Gating Protocol: "Cunning Mercy"</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                
+                <!-- Gate A: Volatility Guard -->
+                <div class="section-card space-y-3">
+                    <h3 class="text-lg font-semibold text-gray-800">Gate A: Volatility Guard</h3>
+                    <p class="text-sm text-gray-600">The Volatility Guard (Vol Guard) dynamically measures the 1-hour realized volatility against a 30-day moving average threshold. If the spike is > 2.5 standard deviations, the gate closes and all execution is suspended.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-gray-500">Current Status:</span>
+                        <span id="gate-a-status" class="font-bold text-lg text-primary-600">Loading...</span>
+                    </div>
+                </div>
+                
+                <!-- Gate B: Liquidity Check -->
+                <div class="section-card space-y-3">
+                    <h3 class="text-lg font-semibold text-gray-800">Gate B: Liquidity Check</h3>
+                    <p class="text-sm text-gray-600">The Liquidity Check ensures sufficient market depth (min $5M 1-minute volume) to absorb the proposed order size without excessive price impact (slippage). If depth is low, the gate closes to prevent execution risk.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-gray-500">Current Status:</span>
+                        <span id="gate-b-status" class="font-bold text-lg text-primary-600">Loading...</span>
+                    </div>
+                </div>
+                
+                <!-- System Risk Profile -->
+                <div class="section-card space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-800">System Risk Profile</h3>
+                    <p class="text-sm text-gray-600">The overall risk level is derived from the current FSM State and the status of both active gates. It informs the strategy's maximum allocation sizing and stop-loss policy.</p>
+                    <div class="flex flex-col items-start space-y-2">
+                        <span class="text-sm font-medium text-gray-500">Overall Risk:</span>
+                        <span id="risk-level-pill" class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Backtest Section -->
+        <section id="backtest-section" class="space-y-6">
+            <h2 class="text-3xl font-extrabold text-gray-900">3. Backtest Receipts (2018–2023)</h2>
+            <p class="text-gray-600">The system must demonstrate successful avoidance of past false signals and capture of true, actionable signals. Below is a comparative backtest showing the results of two key historical events.</p>
+
+            <div class="chart-container section-card">
+                <canvas id="backtestChart"></canvas>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- False Signal Analysis -->
+                <div class="section-card space-y-3">
+                    <h3 class="text-lg font-semibold text-danger">False Signal Avoided</h3>
+                    <p class="text-sm text-gray-600">The system successfully gated the high-volatility event of August 2020 (False Signal). Without the Volatility Guard (Gate A), the trade would have resulted in a significant loss of 26.4%.</p>
+                    <p class="text-xs text-gray-500 mt-2">Date: 2020-08-10 | Gating State: High-Alert Staging (2)</p>
+                </div>
+                
+                <!-- True Signal Analysis -->
+                <div class="section-card space-y-3">
+                    <h3 class="text-lg font-semibold text-safe">True Signal Captured</h3>
+                    <p class="text-sm text-gray-600">The system captured the high-momentum event of August 2021 (True Signal). Both gates remained open, allowing a fully-sized allocation which yielded a 28.5% return over 90 days.</p>
+                    <p class="text-xs text-gray-500 mt-2">Date: 2021-08-20 | Gating State: Passive Observation (1)</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-12 border-t border-gray-200">
+        <p class="text-center text-sm text-gray-500">© 2024 Intuition Labs. All rights reserved. The system is the dance.</p>
+    </footer>
+</body>
+</html>
