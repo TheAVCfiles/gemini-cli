@@ -1,0 +1,17 @@
+{
+  "founder_profile": {
+    "name": "Lilly Simpson",
+    "birth_datetime_iso": "<<FOUNDER_ISO_DATETIME>>",
+    "birth_city": "<<FOUNDER_BIRTH_CITY>>",
+    "birth_country": "<<FOUNDER_BIRTH_COUNTRY>>",
+    "timezone": "<<FOUNDER_TIMEZONE>>"
+  },
+  "entity_profile": {
+    "name": "SYVAQ",
+    "founding_datetime_iso": "<<ENTITY_FOUNDING_ISO>>",
+    "founding_city": "<<ENTITY_FOUNDING_CITY>>",
+    "founding_country": "<<ENTITY_FOUNDING_COUNTRY>>",
+    "timezone": "<<ENTITY_TIMEZONE>>"
+  },
+  "notes": "Replace placeholders exactly; this file can be ingested by the engine bootstrapper."
+}
