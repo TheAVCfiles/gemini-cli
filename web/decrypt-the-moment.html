@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Decrypt The Moment</title>
+<style>
+body {
+  margin: 0;
+  background: #0c0c12;
+  color: #ffd86b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  flex-direction: column;
+  font-family: 'Montserrat', sans-serif;
+  overflow: hidden;
+}
+h1 {
+  font-size: 2.5em;
+  animation: fadeIn 2s ease forwards;
+}
+h2 {
+  font-size: 1.2em;
+  color: #ff92b7;
+  animation: fadeIn 3s ease 1s forwards;
+  opacity: 0;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+#sigil {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 2px solid #ffd86b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2em;
+  animation: pulse 3s infinite;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px #ffd86b;
+  }
+  50% {
+    box-shadow: 0 0 40px #ff92b7;
+  }
+  100% {
+    box-shadow: 0 0 10px #ffd86b;
+  }
+}
+</style>
+</head>
+<body>
+<h1>Decrypt The Moment</h1>
+<h2>Your chart. Your cycle. Offline.</h2>
+<div id="sigil">💠</div>
+<audio autoplay>
+  <source src="https://cdn.pixabay.com/download/audio/2023/07/10/audio_415c1f69ff.mp3" type="audio/mpeg">
+</audio>
+</body>
+</html>
