@@ -4,6 +4,15 @@
   "editor.rulers": [80],
   "editor.detectIndentation": false,
   "editor.insertSpaces": true,
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    ".venv": true,
+    "node_modules": true,
+    "dist": true,
+    "build": true
+  },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -12,5 +21,6 @@
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "terminal.integrated.defaultProfile.linux": "bash"
 }
