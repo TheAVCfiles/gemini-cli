@@ -52,7 +52,8 @@
     "telemetry": "node scripts/telemetry.js",
     "check:lockfile": "node scripts/check-lockfile.js",
     "clean": "node scripts/clean.js",
-    "mock:trading-server": "node scripts/mock-trading-server.js"
+    "mock:trading-server": "node scripts/mock-trading-server.js",
+    "stageport:zip": "node scripts/create-stageport-zip.js"
   },
   "bin": {
     "gemini": "bundle/gemini.js"
