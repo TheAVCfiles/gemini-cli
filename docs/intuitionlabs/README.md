@@ -13,5 +13,6 @@ The IntuitionLabs Ballet Bots program combines creative movement, robotics, and 
   - [`student_worksheets.md`](./teaching_materials/student_worksheets.md): Printable activities and reflection prompts.
 - [`saas_products.md`](./saas_products.md): Pricing, fulfillment, and publishing workflow for IntuitionLabs' SaaS catalog.
 - [`api_reference.md`](./api_reference.md): REST endpoints for wallets, governance, stickers, and GLUE support.
+- [`portal_blueprint.md`](./portal_blueprint.md): UI, copy, and implementation notes for the personalized IntuitionLabs portal experience.
 
 Use these materials alongside Gemini CLI to generate custom prompts, adapt activities to new audiences, or manage interactive assets referenced by the curriculum.
