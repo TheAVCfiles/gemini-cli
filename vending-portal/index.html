@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Vending Portal — DeCrypt the Girl</title>
+  <style>
+    body{background:#0b0b0d;color:#e6e6e9;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;max-width:900px;margin:3rem auto;padding:2rem}
+    h1{font-size:28px;margin-bottom:.25rem}
+    .spark{background:#111217;border-radius:8px;padding:1rem;margin:1rem 0}
+    .controls{display:flex;gap:.5rem}
+    input{padding:.5rem;border-radius:6px;border:1px solid #333;background:#0b0b0d;color:#fff}
+    button{padding:.5rem 1rem;border-radius:6px;border:0;background:#2ecc71;color:#082;cursor:pointer}
+    .hint{opacity:.6;font-size:13px}
+  </style>
+</head>
+<body>
+  <h1>Vending Portal</h1>
+  <p class="hint">List of sparks (auto-updated by the create-spark workflow).</p>
+
+  <div id="list">Loading sparks…</div>
+
+  <h3>Create a new spark</h3>
+  <div class="controls">
+    <input id="name" placeholder="spark-slug (letters, numbers, dash)" />
+    <button id="create">Create Spark</button>
+  </div>
+
+  <p class="hint">To create a spark click the button — then run the "Create Spark" GitHub Action in the Actions tab, or run the curl dispatch shown in the README. The UI lists sparks from <code>/sparks/index.json</code>.</p>
+
+<script>
+async function loadList(){
+  try{
+    const r = await fetch('/sparks/index.json', {cache: 'no-store'});
+    if(!r.ok) { document.getElementById('list').innerText = 'No sparks yet.'; return; }
+    const arr = await r.json();
+    const el = document.getElementById('list');
+    el.innerHTML = '';
+    if(arr.length===0){ el.innerText='No sparks yet.'; return; }
+    arr.forEach(s=>{
+      const div = document.createElement('div'); div.className='spark';
+      const link = document.createElement('a'); link.href = '/sparks/'+s+'/'; link.innerText = s; link.style.color='#9af';
+      div.innerHTML = `<strong>${s}</strong> — <span class="hint">/sparks/${s}/</span><br/>`;
+      div.appendChild(link);
+      el.appendChild(div);
+    });
+  }catch(err){
+    document.getElementById('list').innerText = 'Error loading sparks: '+err;
+  }
+}
+document.getElementById('create').onclick = async ()=>{
+  const name = document.getElementById('name').value.trim();
+  if(!/^[a-z0-9-]+$/.test(name)){ alert('Use a slug (lowercase letters, numbers, dash).'); return; }
+  // show instructions: trigger the workflow
+  const repo = window.location.pathname.split('/')[1] || 'REPO_OWNER/REPO_NAME';
+  alert(`To create spark "${name}" open GitHub -> Actions -> "Create Spark" -> Run workflow -> select branch "im-a-princess" and input spark_name="${name}".\n\nOr run the curl dispatch from your terminal using a PAT (see README).`);
+}
+loadList();
+</script>
+</body>
+</html>
