@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>K-Pop Choreography Planner — StagePort Linked</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background: #111827;
+      }
+      .container-card {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #1f2937;
+        box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+        border-radius: 1.5rem;
+        border: 2px solid #374151;
+        color: #f9fafb;
+      }
+      .kpop-gradient {
+        background-image: linear-gradient(to right, #8b5cf6, #ec4899);
+      }
+      .kpop-button {
+        transition: 0.2s;
+        background: #ec4899;
+      }
+      .kpop-button:hover {
+        background: #db2777;
+        transform: translateY(-1px);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="container-card">
+      <header class="text-center mb-8">
+        <h1 class="text-4xl font-extrabold kpop-gradient bg-clip-text text-transparent mb-2">
+          🎤 K-Pop Choreography Planner
+        </h1>
+        <p class="text-gray-400">
+          Coins → shop → transitions → <span class="text-yellow-300">StagePort</span>.
+        </p>
+      </header>
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <section class="xl:col-span-1 bg-gray-800 rounded-2xl border border-gray-700 p-4 space-y-3">
+          <h2 class="text-xl font-bold">Settings</h2>
+          <label class="text-sm text-gray-400">StagePort API URL</label>
+          <input
+            id="stageport-url"
+            class="w-full p-2 rounded-lg bg-gray-700 border border-gray-600"
+            placeholder="https://your-stageport.example.com"
+          />
+          <button
+            id="save-settings"
+            class="mt-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-3 rounded-lg"
+          >
+            Save
+          </button>
+          <div class="mt-4 text-sm text-gray-400">
+            <div>User ID: <span id="user-id">Loading...</span></div>
+            <div>Coins: <span id="coin-balance">0</span> ⬡</div>
+          </div>
+          <button
+            id="claim-coins-btn"
+            class="mt-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-2 px-3 rounded-lg"
+          >
+            Claim Practice Coins
+          </button>
+          <div id="message-box" class="hidden p-3 rounded-lg text-sm mt-2" role="alert"></div>
+        </section>
+        <section class="xl:col-span-1 bg-gray-800 rounded-2xl border border-gray-700 p-4 space-y-4">
+          <h2 class="text-xl font-bold">Move Set &amp; AI</h2>
+          <div class="flex space-x-2">
+            <input
+              type="text"
+              id="move-input"
+              placeholder="e.g., Body wave"
+              class="flex-grow p-2 border border-gray-600 rounded-lg bg-gray-700 text-white"
+            />
+            <button
+              id="add-move-btn"
+              class="bg-violet-500 hover:bg-violet-600 text-white font-semibold px-3 rounded-lg"
+            >
+              Add
+            </button>
+          </div>
+          <ul
+            id="move-list"
+            class="space-y-2 bg-gray-900 p-3 rounded-lg border border-gray-700 min-h-[120px]"
+          >
+            <li class="text-gray-500 italic">Add 3–5 moves to start.</li>
+          </ul>
+          <div class="grid grid-cols-2 gap-2">
+            <button
+              id="generate-choreo"
+              class="kpop-button text-white font-bold py-2 px-3 rounded-lg disabled:opacity-50"
+              disabled
+            >
+              ✨ Generate
+            </button>
+            <button
+              id="analyze-style"
+              class="kpop-button bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 rounded-lg disabled:opacity-50"
+              disabled
+            >
+              ✨ Analyze
+            </button>
+          </div>
+          <div class="bg-gray-900 p-3 rounded-lg border border-gray-700 min-h-[160px]" id="output-area">
+            <p class="text-gray-500 italic">Results appear here.</p>
+          </div>
+        </section>
+        <section class="xl:col-span-1 bg-gray-800 rounded-2xl border border-gray-700 p-4 space-y-4">
+          <h2 class="text-xl font-bold">StagePort Credential &amp; Sales</h2>
+          <div class="grid grid-cols-3 gap-2">
+            <select id="sp-movement" class="p-2 rounded-lg bg-gray-700 border border-gray-600">
+              <option>Plié</option>
+              <option>Tendu</option>
+              <option>Relevé</option>
+              <option>Pirouette</option>
+              <option>Glissade</option>
+              <option>Grand Jeté</option>
+              <option>Arabesque</option>
+            </select>
+            <select id="sp-concept" class="p-2 rounded-lg bg-gray-700 border border-gray-600">
+              <option>Angular Momentum</option>
+              <option>Compression Forces</option>
+              <option>Newton's Third Law</option>
+              <option>Projectile Motion</option>
+              <option>Center of Gravity</option>
+            </select>
+            <select id="sp-level" class="p-2 rounded-lg bg-gray-700 border border-gray-600">
+              <option>Middle School</option>
+              <option>High School</option>
+              <option>University (Intro)</option>
+              <option>Corporate Leadership</option>
+            </select>
+          </div>
+          <button
+            id="run-credential"
+            class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-lg"
+          >
+            Run Credential (→Coins)
+          </button>
+          <div id="credential-result" class="text-sm text-gray-300"></div>
+          <hr class="border-gray-700" />
+          <div class="grid grid-cols-2 gap-2">
+            <input
+              id="sale-product"
+              class="p-2 rounded-lg bg-gray-700 border border-gray-600"
+              placeholder="product_id"
+            />
+            <input
+              id="sale-email"
+              class="p-2 rounded-lg bg-gray-700 border border-gray-600"
+              placeholder="buyer email"
+            />
+            <input
+              id="sale-cents"
+              class="p-2 rounded-lg bg-gray-700 border border-gray-600"
+              placeholder="gross cents"
+            />
+            <input
+              id="sale-ref"
+              class="p-2 rounded-lg bg-gray-700 border border-gray-600"
+              placeholder="ref code"
+            />
+          </div>
+          <button
+            id="record-sale"
+            class="bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold py-2 px-3 rounded-lg"
+          >
+            Record Sale → Airtable
+          </button>
+          <div id="sale-result" class="text-sm text-gray-300"></div>
+        </section>
+      </div>
+      <section class="mt-6 bg-gray-800 rounded-2xl border border-gray-700 p-4">
+        <h2 class="text-xl font-bold">Studio Shop &amp; Inventory</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-2">Ingredient Shop</h3>
+            <div id="shop-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-2">Your Pantry</h3>
+            <ul id="inventory-list" class="space-y-2 bg-gray-900 p-3 rounded-lg border border-gray-700"></ul>
+          </div>
+        </div>
+        <div class="mt-3">
+          <button id="compose-btn" class="kpop-button text-white font-bold py-2 px-3 rounded-lg">
+            🔗 Connect Static → Kinetic
+          </button>
+          <div id="compose-output" class="text-sm text-gray-300 mt-2"></div>
+        </div>
+      </section>
+    </div>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+      import {
+        getAuth,
+        signInAnonymously,
+        signInWithCustomToken,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        onSnapshot,
+        collection,
+        setDoc,
+        deleteDoc,
+      } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+      const el = (id) => document.getElementById(id);
+      const API_URL = "/.netlify/functions/gemini-proxy";
+      const STAGEPORT_API = () => localStorage.getItem("STAGEPORT_API") || "";
+
+      let db;
+      let auth;
+      let userId = null;
+      let moves = [];
+      const SHOP_ITEMS = [
+        { id: "t_step", name: "T-Step", type: "transition", cost: 20, desc: "Simple foot switch" },
+        { id: "isolation_pop", name: "Isolation Pop", type: "transition", cost: 40, desc: "Sharp isolation" },
+        { id: "floating_glide", name: "Floating Glide", type: "transition", cost: 60, desc: "Continuous glide" },
+        { id: "locking_pin", name: "Locking Pin", type: "transition", cost: 80, desc: "Old-school lock" },
+      ];
+      let coinBalance = 0;
+      let inventory = [];
+
+      const retry = async (fn, n = 3, d = 1000) => {
+        for (let i = 0; i < n; i += 1) {
+          try {
+            return await fn();
+          } catch (error) {
+            if (i === n - 1) throw error;
+            await new Promise((resolve) => setTimeout(resolve, d * Math.pow(2, i)));
+          }
+        }
+        return undefined;
+      };
+
+      function showMessage(msg, type = "info") {
+        const box = el("message-box");
+        box.textContent = msg;
+        box.className = "p-3 rounded-lg text-sm mt-2";
+        if (type === "error") {
+          box.classList.add("bg-red-900/50", "border", "border-red-600", "text-red-300");
+        } else if (type === "success") {
+          box.classList.add("bg-green-900/50", "border", "border-green-600", "text-green-300");
+        } else {
+          box.classList.add("bg-violet-900/50", "border", "border-violet-600", "text-violet-300");
+        }
+        box.classList.remove("hidden");
+        setTimeout(() => box.classList.add("hidden"), 4000);
+      }
+
+      function markdownToHtml(md) {
+        if (!md) return "";
+        let html = md;
+        html = html.replace(/^### (.*$)/gim, "<h4>$1</h4>");
+        html = html.replace(/^## (.*$)/gim, "<h3>$1</h3>");
+        html = html.replace(/^# (.*$)/gim, "<h2>$1</h2>");
+        html = html.replace(/^\* (.*$)/gim, "<li>$1</li>");
+        html = html.replace(/^\- (.*$)/gim, "<li>$1</li>");
+        html = html.replace(/^(\d+\. )(.*$)/gim, "<li>$2</li>");
+        html = html.replace(
+          /(<li>.*<\/li>(\s*))+/gim,
+          (match) =>
+            match
+              .trim()
+              .match(/<li>\d+\.\s/)
+              ? "<ol>" + match.replace(/(\d+\. )/g, "") + "</ol>"
+              : "<ul>" + match + "</ul>",
+        );
+        html = html.replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>");
+        html = html.replace(/\n\s*\n/g, "</p><p>");
+        html = "<p>" + html.replace(/\n/g, "<br>") + "</p>";
+        html = html
+          .replace(/<p><\/p>/g, "")
+          .replace(/<p><ul>/g, "<ul>")
+          .replace(/<\/ul><\/p>/g, "</ul>")
+          .replace(/<p><ol>/g, "<ol>")
+          .replace(/<\/ol><\/p>/g, "</ol>");
+        return html;
+      }
+
+      const firebaseConfig = typeof __firebase_config !== "undefined" ? JSON.parse(__firebase_config) : null;
+      const initialAuthToken = typeof __initial_auth_token !== "undefined" ? __initial_auth_token : null;
+
+      async function initFirebase() {
+        if (!firebaseConfig) {
+          showMessage("Firebase not configured.", "error");
+          return;
+        }
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+        try {
+          if (initialAuthToken) {
+            await signInWithCustomToken(auth, initialAuthToken);
+          } else {
+            await signInAnonymously(auth);
+          }
+        } catch (error) {
+          console.error("Firebase auth failed", error);
+        }
+        onAuthStateChanged(auth, (user) => {
+          userId = user ? user.uid : crypto.randomUUID();
+          el("user-id").textContent = userId + (user ? "" : " (Anon)");
+          listenForMoves();
+          document.getElementById("generate-choreo").disabled = false;
+          document.getElementById("analyze-style").disabled = false;
+          loadWallet().then(renderShop).then(loadInventory);
+        });
+      }
+
+      const movesPath = () => `/artifacts/default-app-id/users/${userId}/kpop_moves`;
+
+      async function saveMove(name) {
+        if (!db || !userId) return;
+        const id = name.toLowerCase().replace(/[^a-z0-9]/g, "_") + "_" + Date.now();
+        await setDoc(doc(db, movesPath(), id), { name: name.trim(), createdAt: Date.now() });
+      }
+
+      async function deleteMove(id) {
+        if (!db || !userId) return;
+        await deleteDoc(doc(db, movesPath(), id));
+      }
+
+      function listenForMoves() {
+        const query = collection(db, movesPath());
+        onSnapshot(query, (snapshot) => {
+          moves = [];
+          snapshot.forEach((docSnap) => moves.push({ id: docSnap.id, ...docSnap.data() }));
+          moves.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+          renderMoves();
+        });
+      }
+
+      function renderMoves() {
+        const ul = el("move-list");
+        ul.innerHTML = "";
+        if (moves.length === 0) {
+          ul.innerHTML = '<li class="text-gray-500 italic">Add 3–5 moves to start.</li>';
+          return;
+        }
+        moves.forEach((move) => {
+          const li = document.createElement("li");
+          li.className = "flex justify-between items-center bg-gray-700 p-2 rounded-lg border border-gray-600";
+          li.innerHTML = `
+            <span class="text-gray-200">${move.name}</span>
+            <button class="text-pink-400 hover:text-pink-600 font-bold ml-4 text-lg">×</button>
+          `;
+          li.querySelector("button").onclick = () => deleteMove(move.id);
+          ul.appendChild(li);
+        });
+      }
+
+      function updateCoinsUI() {
+        el("coin-balance").textContent = coinBalance;
+      }
+
+      async function loadWallet() {
+        try {
+          const ref = doc(db, `/artifacts/default-app-id/users/${userId}/wallet`, "meta");
+          const { getDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+          const snap = await getDoc(ref);
+          coinBalance = snap.exists() ? snap.data().coins || 0 : 0;
+        } catch (error) {
+          console.warn("Wallet load failed", error);
+          coinBalance = 0;
+        }
+        updateCoinsUI();
+      }
+
+      async function saveWallet() {
+        try {
+          const ref = doc(db, `/artifacts/default-app-id/users/${userId}/wallet`, "meta");
+          await setDoc(ref, { coins: coinBalance }, { merge: true });
+        } catch (error) {
+          console.warn("Wallet save failed", error);
+        }
+      }
+
+      async function earnCoins(amount) {
+        coinBalance += amount;
+        await saveWallet();
+        updateCoinsUI();
+      }
+
+      async function spendCoins(amount) {
+        if (coinBalance < amount) return false;
+        coinBalance -= amount;
+        await saveWallet();
+        updateCoinsUI();
+        return true;
+      }
+
+      async function loadInventory() {
+        try {
+          const pathRoot = `/artifacts/default-app-id/users/${userId}/inventory`;
+          const query = collection(db, pathRoot);
+          const { getDocs } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+          const snap = await getDocs(query);
+          inventory = [];
+          snap.forEach((docSnap) => inventory.push({ id: docSnap.id, ...docSnap.data() }));
+        } catch (error) {
+          console.warn("Inventory load failed", error);
+          inventory = [];
+        }
+        renderInventory();
+      }
+
+      async function addToInventory(item) {
+        if (inventory.some((entry) => entry.id === item.id)) {
+          showMessage("Already owned.", "info");
+          return;
+        }
+        const entry = { ...item, ownedAt: Date.now() };
+        inventory.push(entry);
+        await setDoc(doc(db, `/artifacts/default-app-id/users/${userId}/inventory`, item.id), entry);
+        renderInventory();
+      }
+
+      function renderShop() {
+        const grid = el("shop-grid");
+        if (!grid) return;
+        grid.innerHTML = "";
+        SHOP_ITEMS.forEach((item) => {
+          const owned = inventory.some((entry) => entry.id === item.id);
+          const card = document.createElement("div");
+          card.className = "p-3 rounded-lg border border-gray-700 bg-gray-900";
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="font-semibold text-gray-100">${item.name}</p>
+                <p class="text-xs text-gray-400">${item.desc}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-yellow-300 font-bold">${item.cost} ⬡</p>
+                <button
+                  class="mt-2 ${
+                    owned ? "bg-gray-700 cursor-not-allowed" : "bg-pink-500 hover:bg-pink-600"
+                  } text-white text-sm font-semibold py-1 px-3 rounded-xl"
+                  ${owned ? "disabled" : ""}
+                  data-id="${item.id}"
+                >
+                  ${owned ? "Owned" : "Buy"}
+                </button>
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        grid.querySelectorAll("button[data-id]").forEach((button) => {
+          button.onclick = async (event) => {
+            const id = event.currentTarget.getAttribute("data-id");
+            const item = SHOP_ITEMS.find((entry) => entry.id === id);
+            if (!item || inventory.some((entry) => entry.id === id)) return;
+            const ok = await spendCoins(item.cost);
+            if (!ok) {
+              showMessage("Not enough coins.", "error");
+              return;
+            }
+            await addToInventory(item);
+            showMessage(`Purchased ${item.name}!`, "success");
+            renderShop();
+          };
+        });
+      }
+
+      function renderInventory() {
+        const ul = el("inventory-list");
+        if (!ul) return;
+        ul.innerHTML = "";
+        if (inventory.length === 0) {
+          ul.innerHTML = '<li class="text-gray-500 italic">No ingredients yet.</li>';
+          return;
+        }
+        inventory.forEach((item) => {
+          const li = document.createElement("li");
+          li.className = "flex items-center justify-between bg-gray-700 p-2 rounded-lg border border-gray-600";
+          li.innerHTML = `
+            <span class="text-gray-200">${item.name}</span>
+            <span class="text-xs text-gray-400">${new Date(item.ownedAt).toLocaleString()}</span>
+          `;
+          ul.appendChild(li);
+        });
+      }
+
+      async function generateSequence() {
+        if (moves.length < 3) {
+          showMessage("Add at least 3 moves.", "info");
+          return;
+        }
+        const movesText = moves.map((move) => move.name).join(", ");
+        const payload = {
+          contents: [
+            {
+              parts: [
+                {
+                  text: `Create a 30s K-Pop sequence from: ${movesText}. Sections: Intro, Verse, Chorus, Bridge.`,
+                },
+              ],
+            },
+          ],
+        };
+        const response = await retry(() =>
+          fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          }).then((res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+          }),
+        );
+        const text = response?.candidates?.[0]?.content?.parts?.[0]?.text || "No result.";
+        el("output-area").innerHTML =
+          '<h3 class="text-2xl font-bold text-pink-400 mb-2">Sequence</h3>' + markdownToHtml(text);
+      }
+
+      async function analyzeStyle() {
+        if (moves.length < 2) {
+          showMessage("Add at least 2 moves.", "info");
+          return;
+        }
+        const movesText = moves.map((move) => move.name).join(", ");
+        const payload = {
+          contents: [
+            {
+              parts: [
+                {
+                  text: `Analyze style and suggest one advanced complementary move for: ${movesText}.`,
+                },
+              ],
+            },
+          ],
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: "OBJECT",
+              properties: {
+                styleAnalysis: {
+                  type: "OBJECT",
+                  properties: {
+                    dominantStyle: { type: "STRING" },
+                    rationale: { type: "STRING" },
+                  },
+                  required: ["dominantStyle", "rationale"],
+                },
+                enhancementSuggestion: {
+                  type: "OBJECT",
+                  properties: {
+                    suggestedMove: { type: "STRING" },
+                    purpose: { type: "STRING" },
+                  },
+                  required: ["suggestedMove", "purpose"],
+                },
+              },
+            },
+          },
+        };
+        const response = await retry(() =>
+          fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          }).then((res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+          }),
+        );
+        const text = response?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+        const data = JSON.parse(text);
+        el("output-area").innerHTML = `
+          <h3 class="text-2xl font-bold text-purple-400 mb-2">Style &amp; Enhancement</h3>
+          <div class="text-sm">
+            <div><strong>Style:</strong> ${data.styleAnalysis?.dominantStyle || "-"}</div>
+            <div class="italic text-gray-400">Rationale: ${data.styleAnalysis?.rationale || "-"}</div>
+            <div class="mt-2"><strong>Advanced Move:</strong> ${
+              data.enhancementSuggestion?.suggestedMove || "-"
+            }</div>
+            <div class="italic text-gray-400">Purpose: ${data.enhancementSuggestion?.purpose || "-"}</div>
+          </div>
+        `;
+      }
+
+      async function runCredential() {
+        const base = STAGEPORT_API();
+        if (!base) {
+          showMessage("Set StagePort URL first.", "error");
+          return;
+        }
+        const body = {
+          movement: el("sp-movement").value,
+          concept: el("sp-concept").value,
+          level: el("sp-level").value,
+        };
+        const response = await retry(() =>
+          fetch(base.replace(/\/$/, "") + "/transcribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          }).then((res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+          }),
+        );
+        const report = response.credential_report;
+        el("credential-result").innerHTML = `
+          <div class="p-2 bg-gray-900 border border-gray-700 rounded-lg">
+            <div><strong>Status:</strong> ${response.status}</div>
+            <div><strong>Score:</strong> ${report.overall_score}</div>
+            <div><strong>Level:</strong> ${report.credential_level}</div>
+          </div>
+        `;
+        const bonus = report.overall_score >= 85 ? 25 : report.overall_score >= 70 ? 10 : 0;
+        if (bonus > 0) {
+          await earnCoins(bonus);
+          showMessage(`Credential bonus: +${bonus} ⬡`, "success");
+        }
+      }
+
+      async function recordSale() {
+        const base = STAGEPORT_API();
+        if (!base) {
+          showMessage("Set StagePort URL first.", "error");
+          return;
+        }
+        const body = {
+          product_id: el("sale-product").value || "PRO-CLASS-001",
+          buyer_email: el("sale-email").value || "buyer@example.com",
+          gross_cents: parseInt(el("sale-cents").value || "1999", 10),
+          ref_code: el("sale-ref").value || "",
+          creator_ids: [],
+        };
+        await retry(() =>
+          fetch(base.replace(/\/$/, "") + "/purchase", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          }).then((res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+          }),
+        );
+        el("sale-result").textContent = "Forwarded to Airtable.";
+        showMessage("Sale recorded → Airtable.", "success");
+      }
+
+      el("add-move-btn").onclick = () => {
+        const value = el("move-input").value.trim();
+        if (!value) return;
+        saveMove(value);
+        el("move-input").value = "";
+      };
+      el("generate-choreo").onclick = generateSequence;
+      el("analyze-style").onclick = analyzeStyle;
+      el("run-credential").onclick = runCredential;
+      el("record-sale").onclick = recordSale;
+      el("save-settings").onclick = () => {
+        localStorage.setItem("STAGEPORT_API", el("stageport-url").value.trim());
+        showMessage("Saved StagePort URL.", "success");
+      };
+      el("stageport-url").value = localStorage.getItem("STAGEPORT_API") || "";
+      el("claim-coins-btn").onclick = () => {
+        const gain = 5 + Math.floor(Math.random() * 16);
+        earnCoins(gain);
+        showMessage(`Practice bonus: +${gain} ⬡`, "success");
+      };
+
+      (async function boot() {
+        const firebaseConfig = typeof __firebase_config !== "undefined" ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== "undefined" ? __initial_auth_token : null;
+        if (firebaseConfig) {
+          const app = initializeApp(firebaseConfig);
+          db = getFirestore(app);
+          auth = getAuth(app);
+          try {
+            if (initialAuthToken) {
+              await signInWithCustomToken(auth, initialAuthToken);
+            } else {
+              await signInAnonymously(auth);
+            }
+          } catch (error) {
+            console.error("Firebase auth failed", error);
+          }
+          onAuthStateChanged(auth, (user) => {
+            userId = user ? user.uid : crypto.randomUUID();
+            el("user-id").textContent = userId + (user ? "" : " (Anon)");
+            listenForMoves();
+            document.getElementById("generate-choreo").disabled = false;
+            document.getElementById("analyze-style").disabled = false;
+            loadWallet();
+            loadInventory();
+            renderShop();
+          });
+        } else {
+          showMessage("Firebase not configured.", "error");
+        }
+      })();
+    </script>
+  </body>
+</html>
