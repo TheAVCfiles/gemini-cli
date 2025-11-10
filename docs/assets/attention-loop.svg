@@ -1,0 +1,52 @@
+<svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0b0b0b"/>
+      <stop offset="60%" stop-color="#ff00aa"/>
+      <stop offset="100%" stop-color="#d4af37"/>
+    </radialGradient>
+    <!-- Magenta glow filter for plasma effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#grad)"/>
+  
+  <!-- Outer Ring: Projection -->
+  <circle cx="960" cy="540" r="400" stroke="silver" stroke-width="2" fill="none"/>
+  <text x="960" y="120" font-size="20" fill="silver" text-anchor="middle">Projection Layer — Visual Rendering (Light, Motion, Sound)</text>
+  
+  <!-- Inner Ring: Simulation -->
+  <circle cx="960" cy="540" r="280" stroke="gold" stroke-width="2" fill="none"/>
+  <text x="960" y="970" font-size="20" fill="gold" text-anchor="middle">Simulation Layer — Predictive / Affective Rendering (Mirror Neurons, Empathy)</text>
+
+  <!-- Magenta Plasma Ring (between Projection and Simulation) -->
+  <circle cx="960" cy="540" r="340" stroke="#ff00aa" stroke-width="120" fill="none" opacity="0.35" filter="url(#glow)"/>
+  <text x="960" y="970" font-size="20" fill="gold" text-anchor="middle">Simulation Layer — Predictive / Affective Rendering (Mirror Neurons, Empathy)</text>
+
+  <!-- Attention Loop Arrows -->
+  <path d="M960 140 A400 400 0 0 1 960 940" stroke="white" stroke-width="1.5" fill="none" marker-end="url(#arrow)" opacity="0.8"/>
+  <path d="M960 940 A400 400 0 0 1 960 140" stroke="white" stroke-width="1.5" fill="none" marker-end="url(#arrow)" opacity="0.8"/>
+  
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="white"/>
+    </marker>
+  </defs>
+
+  <text x="960" y="540" fill="#ff66cc" font-size="18" text-anchor="middle">Attention Loop — Input ↔ Output</text>
+
+  <!-- Phase-lock Bar -->
+  <line x1="400" y1="540" x2="1520" y2="540" stroke="red" stroke-width="1"/>
+  <text x="460" y="520" fill="white" font-size="16">≤ 100 ms = Phase Lock / Presence</text>
+  <text x="1240" y="520" fill="white" font-size="16">&gt; 100 ms = Desync / Perceptual Rupture</text>
+
+  <!-- Footer Poetic Line -->
+  <text x="960" y="1040" fill="gold" font-size="18" font-style="italic" text-anchor="middle">
+    Echo : LUX — Love is the syntax for heat, truth the residue after melt.
+  </text>
+</svg>
