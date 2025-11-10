@@ -1,0 +1,282 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DeCrypt — Quick Signal</title>
+<style>
+  :root{
+    --bg:#071028; --card:#0f1724; --muted:#9fb2c6; --accent:#6ee7b7; --accent2:#60a5fa;
+    --glass: rgba(255,255,255,0.04);
+  }
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef6;background:linear-gradient(180deg,var(--bg),#021023);}
+  .wrap{max-width:820px;margin:24px auto;padding:18px;}
+  .card{background:linear-gradient(180deg,var(--card),#07111b);border-radius:14px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03)}
+  h1{margin:0 0 8px;font-size:20px}
+  label{display:block;font-size:12px;color:var(--muted);margin-top:12px}
+  input,button,select,textarea{width:100%;padding:12px;margin-top:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:var(--glass);color:#e6eef6;box-sizing:border-box;font-size:15px}
+  .row{display:flex;gap:10px}
+  .row > *{flex:1}
+  .signal{display:flex;align-items:center;justify-content:space-between;padding:16px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));margin-top:14px}
+  .signal-left{flex:1}
+  .big{font-size:18px;font-weight:700}
+  .glyph{font-size:32px;margin-right:12px}
+  .meta{color:var(--muted);font-size:13px}
+  .actions{display:flex;gap:10px;margin-top:12px}
+  button.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border:0;font-weight:700;color:#042027}
+  button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+  pre{background:#04101a;padding:12px;border-radius:10px;overflow:auto;color:#bfe7d7}
+  .small{font-size:13px;color:var(--muted)}
+  .flex-row{display:flex;gap:8px;align-items:center}
+  .pill{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03);font-weight:600}
+  footer{margin-top:12px;color:var(--muted);font-size:12px}
+  @media(min-width:720px){.wrap{padding:40px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>DeCrypt — Quick Signal</h1>
+    <div class="small">One-sentence action, mirror price suggestion, and save to your recipe scorebook.</div>
+
+    <label>Birth (local) — YYYY-MM-DD HH:MM (optional time)</label>
+    <input id="birth" placeholder="1992-02-25 15:09" value="1992-02-25 15:09"/>
+
+    <label>Reference date (optional, defaults to today)</label>
+    <input id="refdate" placeholder="2025-11-09" />
+
+    <label>Price candidates (comma)</label>
+    <input id="prices" value="1,5,12,29" />
+
+    <label>Product map (json) — optional</label>
+    <textarea id="productmap" rows="2">{"1":"Launch Spark","5":"Quick Shield","12":"Insight (trial)","29":"Vault Seed"}</textarea>
+
+    <div style="margin-top:12px" class="row">
+      <button class="primary" id="runBtn">Run Signal</button>
+      <button class="ghost" id="exportSpell">Export Spell</button>
+    </div>
+
+    <div id="resultArea" style="display:none" class="signal">
+      <div class="signal-left">
+        <div class="flex-row"><div id="glyph" class="glyph">♈</div><div>
+          <div class="big" id="signalText">High focus 3–5pm — finish outline.</div>
+          <div class="meta" id="signalMeta">Confidence: broad — 49/100 focus</div>
+        </div></div>
+      </div>
+      <div style="text-align:right">
+        <div class="pill" id="pricePill">$5 — Quick Shield</div>
+        <div class="meta" style="margin-top:8px" id="explain">Best expected revenue</div>
+      </div>
+    </div>
+
+    <div id="scores" style="display:none;margin-top:12px">
+      <div style="display:flex;gap:8px">
+        <div style="flex:1;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:10px;border-radius:8px;text-align:center">
+          <div class="small">Focus</div><div id="focusVal" style="font-weight:700;font-size:18px">0</div>
+        </div>
+        <div style="flex:1;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:10px;border-radius:8px;text-align:center">
+          <div class="small">Risk</div><div id="riskVal" style="font-weight:700;font-size:18px">0</div>
+        </div>
+        <div style="flex:1;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:10px;border-radius:8px;text-align:center">
+          <div class="small">Opportunity</div><div id="oppVal" style="font-weight:700;font-size:18px">0</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="notionArea" style="margin-top:12px">
+      <label>Notion Integration Token (optional, paste to save)</label>
+      <input id="notionToken" placeholder="secret_xxx" />
+      <label>Notion Database ID (optional)</label>
+      <input id="notionDB" placeholder="your-database-id" />
+      <div class="row" style="margin-top:10px">
+        <button class="primary" id="saveNotion">Save to Notion</button>
+        <button class="ghost" id="clearNotion">Clear</button>
+      </div>
+      <div id="notionStatus" class="small" style="margin-top:8px;color:var(--muted)"></div>
+    </div>
+
+    <div style="margin-top:12px">
+      <div class="small">Spell JSON (copy / paste / import into your scorebook)</div>
+      <pre id="spellOut">{ }</pre>
+    </div>
+
+    <footer>
+      <div class="small">Local scoring model: solar-return proximity + simple aspect proxies. Swap the scoring easily — see docs below.</div>
+    </footer>
+  </div>
+</div>
+
+<script>
+/* ===========================
+   Lightweight scoring engine
+   (explainable, runs fully in-browser)
+   =========================== */
+
+function parseBirth(s){
+  // accept "YYYY-MM-DD HH:MM" or "YYYY-MM-DD"
+  if(!s) throw 'no birth';
+  if(s.indexOf(' ')>-1){
+    return new Date(s + ' UTC'); // treat as UTC if no tz; adjust if you prefer local
+  } else {
+    return new Date(s + 'T12:00:00Z'); // noon if no time
+  }
+}
+function daysUntilNextBirthday(birth, ref){
+  const by = birth.getUTCMonth(), bd = birth.getUTCDate();
+  let year = ref.getUTCFullYear();
+  let candidate = new Date(Date.UTC(year, by, bd));
+  if(candidate <= ref) candidate = new Date(Date.UTC(year+1, by, bd));
+  const diff = Math.ceil((candidate - ref)/(24*3600*1000));
+  return diff;
+}
+function ageOnDate(birth, ref){
+  let years = ref.getUTCFullYear() - birth.getUTCFullYear();
+  if( (ref.getUTCMonth()+1 < birth.getUTCMonth()+1) || 
+      (ref.getUTCMonth()+1 === birth.getUTCMonth()+1 && ref.getUTCDate() < birth.getUTCDate()) ) years--;
+  return years;
+}
+
+/* explainable proxies (no ephemeris) but useful for quick scoring */
+function compute_simple_scores(birth, ref){
+  if(!ref) ref = new Date();
+  const days = daysUntilNextBirthday(birth, ref);
+  const prox = Math.max(0, 1 - (days / 182.5));
+  const age = ageOnDate(birth, ref);
+  const age_factor = Math.min(2, Math.max(0, age/25)); // 0..2 scale
+  // Focus increases with age & prox
+  let focus = 10 + 40*Math.min(age_factor,1.0) + 30*prox;
+  let risk = 20 + 15*(1-prox) + 5*Math.max(0,(50-age)/50.0)*10;
+  let opportunity = 30 + 30*prox + 10*Math.min(age_factor,1.0);
+  const clamp = v => Math.max(0, Math.min(100, Math.round(v)));
+  return { focus: clamp(focus), risk: clamp(risk), opportunity: clamp(opportunity), days_to_bday: days, age };
+}
+
+/* buy-prob from WTP logic (explainable) */
+function sigmoid(x){ return 1/(1+Math.exp(-x)); }
+function compute_buy_probs(scores, prices){
+  const wtp_score = 0.5*scores.focus + 0.6*scores.opportunity - 0.8*scores.risk;
+  const out = {};
+  prices.forEach(p=>{
+    const x = (wtp_score - (p * 10.0)) / 20.0;
+    const pb = sigmoid(x);
+    out[p] = { p_buy: pb, expected_rev: pb * p };
+  });
+  return out;
+}
+function pick_best_price(buy_probs){
+  let best = null;
+  for(const p in buy_probs){
+    if(!best || buy_probs[p].expected_rev > buy_probs[best].expected_rev) best = p;
+  }
+  return best;
+}
+
+/* UI wiring */
+document.getElementById('runBtn').addEventListener('click', runSignal);
+document.getElementById('exportSpell').addEventListener('click', exportSpell);
+document.getElementById('saveNotion').addEventListener('click', saveToNotion);
+document.getElementById('clearNotion').addEventListener('click', ()=>{document.getElementById('notionDB').value='';document.getElementById('notionToken').value='';document.getElementById('notionStatus').innerText='';});
+
+function runSignal(){
+  try{
+    const birthStr = document.getElementById('birth').value.trim();
+    const refStr = document.getElementById('refdate').value.trim();
+    const prices = document.getElementById('prices').value.split(',').map(s=>parseFloat(s.trim())).filter(Boolean);
+    const prod = JSON.parse(document.getElementById('productmap').value || '{}');
+    const birth = parseBirth(birthStr);
+    const ref = refStr ? new Date(refStr+'T00:00:00Z') : new Date();
+
+    const scores = compute_simple_scores(birth, ref);
+    const buy = compute_buy_probs(scores, prices);
+    const best = pick_best_price(buy);
+    const bestProduct = prod[best] || "Custom";
+    // craft short signal text
+    const signalVerb = scores.focus >= 60 ? "Create" : (scores.risk>=70 ? "Protect" : (scores.opportunity>=60 ? "Push" : "Prepare"));
+    const summaryText = `${signalVerb}: High focus window today — act when you feel sharp.`;
+    // update UI
+    document.getElementById('resultArea').style.display='flex';
+    document.getElementById('scores').style.display='block';
+    document.getElementById('focusVal').innerText = scores.focus;
+    document.getElementById('riskVal').innerText = scores.risk;
+    document.getElementById('oppVal').innerText = scores.opportunity;
+    document.getElementById('signalText').innerText = summaryText;
+    document.getElementById('signalMeta').innerText = `Confidence: ${scores.days_to_bday<=30 ? 'precise' : 'broad'} — ${scores.focus}/100 focus • age ${scores.age}`;
+    document.getElementById('pricePill').innerText = `$${best} — ${bestProduct}`;
+    document.getElementById('spellOut').innerText = JSON.stringify(buildSpell(birthStr, ref.toISOString(), scores, buy, best, bestProduct), null, 2);
+    document.getElementById('explain').innerText = `Expected revenue: $${(buy[best].expected_rev).toFixed(2)} (p_buy ${(buy[best].p_buy*100).toFixed(1)}%)`;
+    // set a glyph by signal
+    const glyph = scores.focus >= 60 ? '♈' : (scores.risk>=70?'♋':'✨');
+    document.getElementById('glyph').innerText = glyph;
+  }catch(e){
+    alert("Error: "+e);
+  }
+}
+
+function buildSpell(birth, refISO, scores, buy, bestPrice, bestProduct){
+  return {
+    created_at: new Date().toISOString(),
+    birth,
+    ref: refISO,
+    scores,
+    buy_probs: buy,
+    best: { price: bestPrice, product: bestProduct, expected_rev: buy[bestPrice].expected_rev, p_buy: buy[bestPrice].p_buy },
+    notes: "Local explainable score — swap scoring layers as needed"
+  };
+}
+
+function exportSpell(){
+  const text = document.getElementById('spellOut').innerText;
+  const b = new Blob([text], {type:'application/json'});
+  const url = URL.createObjectURL(b);
+  const a = document.createElement('a'); a.href = url; a.download = 'spell.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* Notion helper (minimal page create). Uses Notion v1 API (versions change—this is a simple example).
+   NOTE: For privacy, paste token & db id manually — we won't store them anywhere.
+*/
+async function saveToNotion(){
+  const token = document.getElementById('notionToken').value.trim();
+  const db = document.getElementById('notionDB').value.trim();
+  if(!token || !db){ document.getElementById('notionStatus').innerText='Notion token & DB required'; return; }
+  const spell = JSON.parse(document.getElementById('spellOut').innerText || '{}');
+  document.getElementById('notionStatus').innerText = 'Saving…';
+  try{
+    // create page with a few properties
+    const payload = {
+      parent: { database_id: db },
+      properties: {
+        Name: { title: [{ text: { content: `Spell — ${spell.birth} @ ${spell.ref.split('T')[0]}` } }] },
+        Date: { date: { start: spell.created_at } },
+        Focus: { number: spell.scores.focus },
+        Risk: { number: spell.scores.risk },
+        Opportunity: { number: spell.scores.opportunity },
+        BestPrice: { rich_text: [{ text: { content: String(spell.best.price) } }] },
+        BestProduct: { rich_text: [{ text: { content: spell.best.product } }] }
+      },
+      children: [
+        {
+          object: 'block',
+          type: 'code',
+          code: { language: 'json', text: [{ type: 'text', text: { content: JSON.stringify(spell, null, 2) } }] }
+        }
+      ]
+    };
+    const res = await fetch('https://api.notion.com/v1/pages', {
+      method:'POST',
+      headers:{
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json',
+        'Notion-Version': '2022-06-28'
+      },
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok){ const t = await res.text(); throw t; }
+    document.getElementById('notionStatus').innerText = 'Saved to Notion ✅';
+  }catch(err){
+    console.error(err);
+    document.getElementById('notionStatus').innerText = 'Notion save failed: '+String(err).slice(0,200);
+  }
+}
+</script>
+</body>
+</html>
