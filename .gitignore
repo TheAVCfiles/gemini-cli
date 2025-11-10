@@ -43,6 +43,9 @@ packages/cli/src/generated/
 packages/core/src/generated/
 .integration-tests/
 packages/vscode-ide-companion/*.vsix
+Decrypt_Spellbook/
+Decrypt_Spellbook.zip
+Decrypt_Spellbook.zip.b64
 
 # GHA credentials
 gha-creds-*.json
