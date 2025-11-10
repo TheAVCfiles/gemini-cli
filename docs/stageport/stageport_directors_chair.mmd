@@ -1,0 +1,95 @@
+%% StagePort Director's Chair — Systems Map
+%% Date: 2025-11-08
+%% Paste into Mermaid live editor or a Markdown block that supports Mermaid.
+
+flowchart TB
+    subgraph CHAIR["Director's Chair (Command Deck)"]
+      CMD[Metrics & Orchestration]
+      ROUTER[Signal Router]
+      ALERT[Safety/Title IX Alerts]
+    end
+
+    subgraph OPS["Operational Arc"]
+      CRM[Clients & Faculty CRM]
+      PROJ[Projects / Productions]
+      SALES[Franchise & Sales Pipeline]
+      LEDGER[Sentient Cents / StageCred Ledger]
+    end
+
+    subgraph PORTAL["Portal Arc (Audience & Client Experience)"]
+      VEND[Vending Portal PLUS (Catalog/Tiers)]
+      KIOSK[Studio Kiosk (Enroll/Check‑in/Pay)]
+      DASH[Studio Dashboard (Instructors/Students)]
+    end
+
+    subgraph SYSTEM["System Arc (APIs & Engines)"]
+      API[StagePort API / stagecred_api.py]
+      PREVIEW[StageCred Preview Engine]
+      CTDL[CTDL Badge Issuer]
+      ASTRO[Astro‑Economic Engine]
+    end
+
+    subgraph BRAND["Brand Arc (Offers & Comms)"]
+      OFFERS[Offer Library (B2C/B2B/White‑Label/Free)]
+      DECKS[Executive/Title IX/Investor Decks]
+      PRESS[Press & Community]
+    end
+
+    subgraph MEMORY["Memory Arc (Vault & Audit)"]
+      VAULT[Contracts, ProofTags, Releases]
+      ARCH[Living Playbills / Oral Histories]
+      REPORTS[Quarterly Reports & Case Studies]
+    end
+
+    subgraph SYN["Synthesis Arc (Analytics & AI)"]
+      INSIGHT[Signal Analytics]
+      AI[Oracle/Notebook Engines]
+    end
+
+    %% Primary flows
+    CMD -->|Direct| CRM
+    CMD --> PROJ
+    CMD --> SALES
+    CMD --> VEND
+    CMD --> DASH
+    CMD --> ALERT
+
+    CRM --> PROJ
+    PROJ --> LEDGER
+    SALES --> LEDGER
+    VEND --> SALES
+    KIOSK --> CRM
+    KIOSK --> LEDGER
+    DASH --> PROJ
+
+    API --> PREVIEW
+    PREVIEW --> CTDL
+    CTDL --> LEDGER
+    ASTRO --> INSIGHT
+    INSIGHT --> CMD
+
+    OFFERS --> VEND
+    DECKS --> PRESS
+    PRESS --> SALES
+
+    VAULT --> REPORTS
+    CTDL --> VAULT
+    ARCH --> REPORTS
+    REPORTS --> PRESS
+
+    %% Safety loop
+    ALERT -->|Notify| CMD
+    ALERT --> DASH
+    ALERT --> KIOSK
+
+    %% External
+    subgraph EXT["External Systems"]
+      JACK[Jackrabbit/Mindbody (import only)]
+      STRIPE[Stripe/Lemon Squeezy]
+      GITHUB[GitHub Repos]
+      VERCEL[Vercel/Netlify Hosting]
+    end
+    JACK -. import .-> CRM
+    GITHUB -. ingest .-> VEND
+    STRIPE --> LEDGER
+    VERCEL -. deploy .-> PORTAL
