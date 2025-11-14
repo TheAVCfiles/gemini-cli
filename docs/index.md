@@ -45,5 +45,6 @@ This documentation is organized into the following sections:
 - **[Troubleshooting Guide](./troubleshooting.md):** Find solutions to common problems and FAQs.
 - **[Terms of Service and Privacy Notice](./tos-privacy.md):** Information on the terms of service and privacy notices applicable to your use of Gemini CLI.
 - **[Releases](./releases.md):** Information on the project's releases and deployment cadence.
+- **[OpenAI Developers resources](./openai-developers-resources.md):** Quick reference for the videos highlighted on the OpenAI Developers Resources hub.
 
 We hope this documentation helps you make the most of the Gemini CLI!
