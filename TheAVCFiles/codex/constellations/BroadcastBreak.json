@@ -1,0 +1,12 @@
+{
+  "id": "BroadcastBreak",
+  "title": "Broadcast Break",
+  "description": "Where the frame fractures and the narrative becomes honest.",
+  "nodes": [
+    "glitch_01_frame",
+    "aurora_04_break",
+    "static_02_frame",
+    "witness_07_entry"
+  ],
+  "themes": ["media", "identity", "misrendering"]
+}

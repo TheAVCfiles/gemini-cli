@@ -1,0 +1,9 @@
+{
+  "poems": "./poems/",
+  "scenes": "./scenes/",
+  "constellations": "./constellations/",
+  "archetypes": "./archetypes/",
+  "glyphs": "./glyphs/",
+  "timeline": "./timeline/",
+  "schema": "./metadata/schema.json"
+}
