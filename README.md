@@ -120,6 +120,31 @@ README.md
 
 ---
 
+## 🪄 SML Starter Kit v0.1
+
+The repository now ships with a self-contained Sourcery Markup Language toolkit:
+
+- Language reference at `docs/sml-starter-kit/sourcery_alpha_spec.md`
+- Three playable spells in `docs/sml-starter-kit/examples/`
+- A `gemini sml` command that parses `.sml` files and emits JSON events
+- An optional Tkinter renderer (requires Python 3 with Tk) for visualizing `display` / `animate` effects
+
+Run the parser against a single spell:
+
+```bash
+./bin/gemini sml docs/sml-starter-kit/examples/bloom_in_quiet.sml
+```
+
+Play every spell and render them with Tkinter:
+
+```bash
+./bin/gemini sml docs/sml-starter-kit/examples --render
+```
+
+Use `--pretty` to format the JSON output or `--python` to point at a specific interpreter for rendering.
+
+---
+
 ## ✅ Maintenance checklist
 
 - Update `web/glossary.json` as terminology evolves.
