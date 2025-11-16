@@ -40,6 +40,8 @@ This documentation is organized into the following sections:
   - **[APop Allstars — 12-week dance curriculum](./examples/apop-allstars-12-week-curriculum.md):** Mermaid Gantt chart outlining the physical, emotional, and creative training arc.
   - **[IntuitionLabs Ballet Bots curriculum assets](./intuitionlabs/README.md):** Reference materials for an arts-and-robotics learning program that leverages Gemini CLI for content generation.
   - **[IntuitionLabs SaaS product catalog](./intuitionlabs/saas_products.md):** Pricing, fulfillment, and publishing workflows for the Adaptive Ethics Framework, Glissé Engine, and MythOS Cloud Access.
+- **Strategy & Growth:**
+  - **[B2A / D2C go-to-market strategy](./b2a-d2c-go-to-market-strategy.md):** Dual-motion playbook that aligns advocate-led channels with direct-to-consumer adoption.
 - **[Contributing & Development Guide](../CONTRIBUTING.md):** Information for contributors and developers, including setup, building, testing, and coding conventions.
 - **[NPM](./npm.md):** Details on how the project's packages are structured
 - **[Troubleshooting Guide](./troubleshooting.md):** Find solutions to common problems and FAQs.
