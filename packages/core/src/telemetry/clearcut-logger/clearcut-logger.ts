@@ -31,7 +31,7 @@ import { InstallationManager } from '../../utils/installationManager.js';
 import { UserAccountManager } from '../../utils/userAccountManager.js';
 import { safeJsonStringify } from '../../utils/safeJsonStringify.js';
 import { FixedDeque } from 'mnemonist';
-import { GIT_COMMIT_INFO, CLI_VERSION } from '../../generated/git-commit.js';
+import { GIT_COMMIT_INFO, CLI_VERSION } from '../../utils/git-commit-info.js';
 import { DetectedIde, detectIdeFromEnv } from '../../ide/detect-ide.js';
 
 export enum EventNames {

@@ -24,7 +24,7 @@ import { makeFakeConfig } from '../../test-utils/config.js';
 import { http, HttpResponse } from 'msw';
 import { server } from '../../mocks/msw.js';
 import { UserPromptEvent, makeChatCompressionEvent } from '../types.js';
-import { GIT_COMMIT_INFO, CLI_VERSION } from '../../generated/git-commit.js';
+import { GIT_COMMIT_INFO, CLI_VERSION } from '../../utils/git-commit-info.js';
 import { UserAccountManager } from '../../utils/userAccountManager.js';
 import { InstallationManager } from '../../utils/installationManager.js';
 

@@ -7,7 +7,7 @@
 import type React from 'react';
 import { Box, Text } from 'ink';
 import { Colors } from '../colors.js';
-import { GIT_COMMIT_INFO } from '../../generated/git-commit.js';
+import { GIT_COMMIT_INFO } from '@google/gemini-cli-core';
 
 interface AboutBoxProps {
   cliVersion: string;
