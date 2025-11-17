@@ -45,6 +45,13 @@ exports.handler = async (event) => {
   }
 
   const prompt = (parsedBody.prompt || "").toString();
+  if (!prompt.trim()) {
+    return {
+      statusCode: 400,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: "Prompt is required." }),
+    };
+  }
   const glossary = Array.isArray(parsedBody.glossary) ? parsedBody.glossary : [];
 
   if (!process.env.OPENAI_API_KEY) {
