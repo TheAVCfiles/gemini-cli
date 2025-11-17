@@ -1,0 +1,12 @@
+{
+  "name": "@lvce-editor/ripgrep",
+  "version": "1.6.0",
+  "description": "Local stub for @lvce-editor/ripgrep to avoid binary downloads in offline environments",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "keywords": ["ripgrep", "stub"],
+  "license": "Apache-2.0"
+}
