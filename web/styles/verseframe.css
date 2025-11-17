@@ -1,0 +1,7 @@
+:root { --pad: clamp(12px, 2vw, 24px); }
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; font-family: ui-sans-serif, system-ui, -apple-system; }
+#verseframe { max-width: 960px; margin: 0 auto; padding: var(--pad); }
+pre { background: #0f0f14; color: #c8f; padding: var(--pad); border-radius: 8px; overflow:auto; }
+button { padding: 8px 12px; border: 1px solid #333; border-radius: 8px; background: #111; color: #fff; cursor: pointer; }
+button:hover { filter: brightness(1.1); }
