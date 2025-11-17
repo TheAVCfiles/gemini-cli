@@ -1,16 +1,24 @@
 {
-  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
-  "editor.tabSize": 2,
-  "editor.rulers": [80],
-  "editor.detectIndentation": false,
-  "editor.insertSpaces": true,
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "workbench.activityBar.location": "right",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.exclude": {
+    "node_modules": true,
+    "dist": true,
+    ".DS_Store": true
   },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "search.exclude": {
+    "node_modules": true,
+    "dist": true
   },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  "codex.model": "gpt-5-codex",
+  "codex.reasoningEffort": "high",
+  "codex.approvalMode": "agent",
+  "codex.contextFiles": [
+    "mythos.config.json",
+    "README.md",
+    "web/decoder/decoder.html",
+    "web/engine/**",
+    "docs/Manuscript/**"
+  ]
 }
