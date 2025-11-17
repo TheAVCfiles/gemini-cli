@@ -9,7 +9,7 @@ import open from 'open';
 import { bugCommand } from './bugCommand.js';
 import { createMockCommandContext } from '../../test-utils/mockCommandContext.js';
 import { getCliVersion } from '../../utils/version.js';
-import { GIT_COMMIT_INFO } from '../../generated/git-commit.js';
+import { GIT_COMMIT_INFO } from '@google/gemini-cli-core';
 import { formatMemoryUsage } from '../utils/formatters.js';
 
 // Mock dependencies
