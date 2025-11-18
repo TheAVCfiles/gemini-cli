@@ -1,5 +1,5 @@
 /* @jsxImportSource https://esm.sh/react@18.3.1?dev */
-import React, { useState } from 'https://esm.sh/react@18.3.1?dev';
+import React, { useEffect, useState } from 'https://esm.sh/react@18.3.1?dev';
 import { createRoot } from 'https://esm.sh/react-dom@18.3.1/client?dev';
 import { X, Sparkles, ExternalLink } from 'https://esm.sh/lucide-react@0.356.0?bundle';
 
@@ -64,6 +64,49 @@ const initialFaculty = [
   },
 ];
 
+// Embodied phrase and ritual sequences — lightweight script visualizers for rehearsal
+const choreographySequences = {
+  'avc-founder': [
+    {
+      title: 'Diary Loop — Breath to Signal Split',
+      tempo: '82 bpm / 4-count',
+      cue: 'Scarf drop signals the split. Use Balanchine adjacency for spacing.',
+      counts: [
+        { count: '1–2', action: 'Inhale; carve ribcage open as if decoding a lockpick.' },
+        { count: '3–4', action: 'Scooped port de bras; feet in fifth, tendu devant to show the “key”.' },
+        { count: '5–6', action: 'Balanchine arabesque reach; eye-line follows the scarf’s fall.' },
+        { count: '7–8', action: 'Signal split: pivot to profile, pulse twice through the sternum.' },
+      ],
+    },
+  ],
+  'diana-castellanos': [
+    {
+      title: 'Fouetté Prep — Across-Floor Transposition',
+      tempo: '96 bpm / 8-count',
+      cue: 'Keep classical breath; lyrical arms only after the third count.',
+      counts: [
+        { count: '1–2', action: 'Plié in fourth, scoop the air to set musical phrase.' },
+        { count: '3–4', action: 'Whip to relevé prep; spotting to downstage right.' },
+        { count: '5–6', action: 'Hold the axis; sustain attitude line with soft port de bras.' },
+        { count: '7–8', action: 'Traveling prep into the next corner; suspend before landing.' },
+      ],
+    },
+  ],
+  'aurora-psuedo': [
+    {
+      title: 'Myth Persona — Ritualized Improvisation Loop',
+      tempo: 'Slow count / breath-based',
+      cue: 'Imagine moonlight as metronome; trace constellations with wrists.',
+      counts: [
+        { count: 'Arrival', action: 'Step through a violet gate; arms arc like a halo drawing down.' },
+        { count: 'Pulse', action: 'Two heartbeats in the sternum; let the knees echo the rhythm.' },
+        { count: 'Unfurl', action: 'Spiral the spine, release the jaw, eyes closed toward the floor.' },
+        { count: 'Offer', action: 'Extend both hands forward; hold the myth-thread for the next cue.' },
+      ],
+    },
+  ],
+};
+
 /* -----------------------
    === Small UI helpers ===
    ----------------------- */
@@ -103,6 +146,8 @@ function StageportFacultyPage() {
   const [licenseOpen, setLicenseOpen] = useState(false);
   const [licenseLoading, setLicenseLoading] = useState(false);
   const [licenseSuccess, setLicenseSuccess] = useState(false);
+  const [sequenceBeat, setSequenceBeat] = useState(0);
+  const [sequencePlaying, setSequencePlaying] = useState(false);
 
   const fetchVaultArtifact = async (facultyId) => {
     await new Promise((res) => setTimeout(res, 700));
@@ -150,6 +195,21 @@ function StageportFacultyPage() {
     subject: 'Founding Faculty Invitation — Pyrouette Stageport',
     body: `Hi {{name}},\n\nI’m inviting a small circle of high-caliber teachers to join the Pyrouette Stageport — a licensable agentic AI faculty that preserves your pedagogy, lineage and voice. You’ll be a founding faculty member; we’ll preserve your teaching artifacts in a private vault, license your classes to institutions, and ensure your name & legacy are front-and-center.\n\nThis is not an “embarrassing favor.” It’s an archival, revenue-generating collaboration with clear attribution, legal licensing, and royalties. I’d love to talk details and show the mock prototype.\n\n— Allison Van Cura`,
   };
+
+  const activeCounts = selected ? choreographySequences[selected.id]?.[0]?.counts || [] : [];
+
+  useEffect(() => {
+    if (!sequencePlaying || !activeCounts.length) return undefined;
+    const timer = setInterval(() => {
+      setSequenceBeat((prev) => (prev + 1) % activeCounts.length);
+    }, 1200);
+    return () => clearInterval(timer);
+  }, [activeCounts.length, sequencePlaying]);
+
+  useEffect(() => {
+    setSequenceBeat(0);
+    setSequencePlaying(false);
+  }, [selected?.id]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white font-inter p-8">
@@ -286,6 +346,62 @@ function StageportFacultyPage() {
                         <h5 className="font-medium">{selected.artifact?.title}</h5>
                         <p className="text-sm text-gray-300 mt-2">{selected.artifact?.excerpt}</p>
                         <div className="mt-4 text-xs text-gray-400">{selected.artifact?.content}</div>
+
+                        <div className="mt-6 p-4 rounded-lg border border-gray-700 bg-gray-900/70">
+                          <div className="flex items-center justify-between mb-3">
+                            <div>
+                              <div className="text-sm uppercase text-gray-400">Embodied Sequence Preview</div>
+                              <div className="text-xs text-gray-500">Live counts to see the script move before licensing.</div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => setSequencePlaying((prev) => !prev)}
+                                className="px-3 py-1 rounded-full text-xs bg-amber-600 text-black hover:bg-amber-500"
+                                disabled={!activeCounts.length}
+                              >
+                                {sequencePlaying ? 'Pause' : 'Play'}
+                              </button>
+                              <div className="text-xs text-gray-400">
+                                Beat {activeCounts.length ? sequenceBeat + 1 : 0}/{activeCounts.length || '—'}
+                              </div>
+                            </div>
+                          </div>
+
+                          {selected && choreographySequences[selected.id]?.length ? (
+                            <div className="space-y-4">
+                              {choreographySequences[selected.id].map((seq, idx) => (
+                                <div key={`${selected.id}-${idx}`} className="p-3 rounded-md bg-gray-800/60 border border-gray-700">
+                                  <div className="flex items-center justify-between text-sm font-medium">
+                                    <span>{seq.title}</span>
+                                    <span className="text-xs text-gray-400">{seq.tempo}</span>
+                                  </div>
+                                  <div className="text-xs text-amber-300 mt-1">Cue: {seq.cue}</div>
+                                  <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    {seq.counts.map((step, stepIdx) => {
+                                      const isActive =
+                                        sequencePlaying && stepIdx === sequenceBeat && idx === 0 && activeCounts.length > 0;
+                                      return (
+                                        <div
+                                          key={`${seq.title}-${stepIdx}`}
+                                          className={`p-2 rounded-md border text-xs ${
+                                            isActive
+                                              ? 'border-amber-500 bg-amber-500/20 text-amber-100'
+                                              : 'border-gray-700 bg-gray-900 text-gray-200'
+                                          }`}
+                                        >
+                                          <div className="font-semibold">{step.count}</div>
+                                          <div className="mt-1 text-[11px] text-gray-300">{step.action}</div>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="text-sm text-gray-400">No rehearsal data yet. Add a sequence to preview embodiment.</div>
+                          )}
+                        </div>
 
                         <div className="mt-6 flex gap-3">
                           <button

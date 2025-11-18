@@ -1,5 +1,5 @@
 // web/stageport-faculty/main.jsx
-import React, { useState } from "https://esm.sh/react@18.3.1?dev";
+import React, { useEffect, useState } from "https://esm.sh/react@18.3.1?dev";
 import { createRoot } from "https://esm.sh/react-dom@18.3.1/client?dev";
 import { X, Sparkles, ExternalLink } from "https://esm.sh/lucide-react@0.356.0?bundle";
 import { Fragment, jsx, jsxs } from "https://esm.sh/react@18.3.1?dev/jsx-runtime";
@@ -49,6 +49,47 @@ var initialFaculty = [
     licensed: false
   }
 ];
+var choreographySequences = {
+  "avc-founder": [
+    {
+      title: "Diary Loop \u2014 Breath to Signal Split",
+      tempo: "82 bpm / 4-count",
+      cue: "Scarf drop signals the split. Use Balanchine adjacency for spacing.",
+      counts: [
+        { count: "1\u20132", action: "Inhale; carve ribcage open as if decoding a lockpick." },
+        { count: "3\u20134", action: "Scooped port de bras; feet in fifth, tendu devant to show the \u201Ckey\u201D." },
+        { count: "5\u20136", action: "Balanchine arabesque reach; eye-line follows the scarf\u2019s fall." },
+        { count: "7\u20138", action: "Signal split: pivot to profile, pulse twice through the sternum." }
+      ]
+    }
+  ],
+  "diana-castellanos": [
+    {
+      title: "Fouett\xE9 Prep \u2014 Across-Floor Transposition",
+      tempo: "96 bpm / 8-count",
+      cue: "Keep classical breath; lyrical arms only after the third count.",
+      counts: [
+        { count: "1\u20132", action: "Pli\xE9 in fourth, scoop the air to set musical phrase." },
+        { count: "3\u20134", action: "Whip to relev\xE9 prep; spotting to downstage right." },
+        { count: "5\u20136", action: "Hold the axis; sustain attitude line with soft port de bras." },
+        { count: "7\u20138", action: "Traveling prep into the next corner; suspend before landing." }
+      ]
+    }
+  ],
+  "aurora-psuedo": [
+    {
+      title: "Myth Persona \u2014 Ritualized Improvisation Loop",
+      tempo: "Slow count / breath-based",
+      cue: "Imagine moonlight as metronome; trace constellations with wrists.",
+      counts: [
+        { count: "Arrival", action: "Step through a violet gate; arms arc like a halo drawing down." },
+        { count: "Pulse", action: "Two heartbeats in the sternum; let the knees echo the rhythm." },
+        { count: "Unfurl", action: "Spiral the spine, release the jaw, eyes closed toward the floor." },
+        { count: "Offer", action: "Extend both hands forward; hold the myth-thread for the next cue." }
+      ]
+    }
+  ]
+};
 function Badge({ children, className = "" }) {
   return /* @__PURE__ */ jsx("span", { className: `inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-600 text-black ${className}`, children });
 }
@@ -71,6 +112,8 @@ function StageportFacultyPage() {
   const [licenseOpen, setLicenseOpen] = useState(false);
   const [licenseLoading, setLicenseLoading] = useState(false);
   const [licenseSuccess, setLicenseSuccess] = useState(false);
+  const [sequenceBeat, setSequenceBeat] = useState(0);
+  const [sequencePlaying, setSequencePlaying] = useState(false);
   const fetchVaultArtifact = async (facultyId) => {
     await new Promise((res) => setTimeout(res, 700));
     if (facultyId === "avc-founder") {
@@ -119,6 +162,18 @@ This is not an \u201Cembarrassing favor.\u201D It\u2019s an archival, revenue-ge
 
 \u2014 Allison Van Cura`
   };
+  const activeCounts = selected ? choreographySequences[selected.id]?.[0]?.counts || [] : [];
+  useEffect(() => {
+    if (!sequencePlaying || !activeCounts.length) return void 0;
+    const timer = setInterval(() => {
+      setSequenceBeat((prev) => (prev + 1) % activeCounts.length);
+    }, 1200);
+    return () => clearInterval(timer);
+  }, [activeCounts.length, sequencePlaying]);
+  useEffect(() => {
+    setSequenceBeat(0);
+    setSequencePlaying(false);
+  }, [selected?.id]);
   return /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white font-inter p-8", children: [
     /* @__PURE__ */ jsxs("header", { className: "max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-6 py-12", children: [
       /* @__PURE__ */ jsx("div", { className: "w-44 h-44 rounded-2xl overflow-hidden ring-2 ring-amber-500", children: /* @__PURE__ */ jsx("img", { src: founder.headshot, alt: founder.name, className: "w-full h-full object-cover" }) }),
@@ -238,6 +293,55 @@ This is not an \u201Cembarrassing favor.\u201D It\u2019s an archival, revenue-ge
             /* @__PURE__ */ jsx("h5", { className: "font-medium", children: selected.artifact?.title }),
             /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-300 mt-2", children: selected.artifact?.excerpt }),
             /* @__PURE__ */ jsx("div", { className: "mt-4 text-xs text-gray-400", children: selected.artifact?.content }),
+            /* @__PURE__ */ jsxs("div", { className: "mt-6 p-4 rounded-lg border border-gray-700 bg-gray-900/70", children: [
+              /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-3", children: [
+                /* @__PURE__ */ jsxs("div", { children: [
+                  /* @__PURE__ */ jsx("div", { className: "text-sm uppercase text-gray-400", children: "Embodied Sequence Preview" }),
+                  /* @__PURE__ */ jsx("div", { className: "text-xs text-gray-500", children: "Live counts to see the script move before licensing." })
+                ] }),
+                /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+                  /* @__PURE__ */ jsx(
+                    "button",
+                    {
+                      onClick: () => setSequencePlaying((prev) => !prev),
+                      className: "px-3 py-1 rounded-full text-xs bg-amber-600 text-black hover:bg-amber-500",
+                      disabled: !activeCounts.length,
+                      children: sequencePlaying ? "Pause" : "Play"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxs("div", { className: "text-xs text-gray-400", children: [
+                    "Beat ",
+                    activeCounts.length ? sequenceBeat + 1 : 0,
+                    "/",
+                    activeCounts.length || "\u2014"
+                  ] })
+                ] })
+              ] }),
+              selected && choreographySequences[selected.id]?.length ? /* @__PURE__ */ jsx("div", { className: "space-y-4", children: choreographySequences[selected.id].map((seq, idx) => /* @__PURE__ */ jsxs("div", { className: "p-3 rounded-md bg-gray-800/60 border border-gray-700", children: [
+                /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-sm font-medium", children: [
+                  /* @__PURE__ */ jsx("span", { children: seq.title }),
+                  /* @__PURE__ */ jsx("span", { className: "text-xs text-gray-400", children: seq.tempo })
+                ] }),
+                /* @__PURE__ */ jsxs("div", { className: "text-xs text-amber-300 mt-1", children: [
+                  "Cue: ",
+                  seq.cue
+                ] }),
+                /* @__PURE__ */ jsx("div", { className: "mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2", children: seq.counts.map((step, stepIdx) => {
+                  const isActive = sequencePlaying && stepIdx === sequenceBeat && idx === 0 && activeCounts.length > 0;
+                  return /* @__PURE__ */ jsxs(
+                    "div",
+                    {
+                      className: `p-2 rounded-md border text-xs ${isActive ? "border-amber-500 bg-amber-500/20 text-amber-100" : "border-gray-700 bg-gray-900 text-gray-200"}`,
+                      children: [
+                        /* @__PURE__ */ jsx("div", { className: "font-semibold", children: step.count }),
+                        /* @__PURE__ */ jsx("div", { className: "mt-1 text-[11px] text-gray-300", children: step.action })
+                      ]
+                    },
+                    `${seq.title}-${stepIdx}`
+                  );
+                }) })
+              ] }, `${selected.id}-${idx}`)) }) : /* @__PURE__ */ jsx("div", { className: "text-sm text-gray-400", children: "No rehearsal data yet. Add a sequence to preview embodiment." })
+            ] }),
             /* @__PURE__ */ jsxs("div", { className: "mt-6 flex gap-3", children: [
               /* @__PURE__ */ jsx(
                 "button",
