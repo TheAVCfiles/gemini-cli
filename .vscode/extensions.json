@@ -1,7 +1,11 @@
 {
   "recommendations": [
     "vitest.explorer",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
     "esbenp.prettier-vscode",
-    "dbaeumer.vscode-eslint"
+    "dbaeumer.vscode-eslint",
+    "github.copilot",
+    "github.vscode-pull-request-github"
   ]
 }
