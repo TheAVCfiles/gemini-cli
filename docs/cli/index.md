@@ -11,6 +11,7 @@ Within Gemini CLI, `packages/cli` is the frontend for users to send and receive 
 - **[Token Caching](./token-caching.md):** Optimize API costs through token caching.
 - **[Themes](./themes.md)**: A guide to customizing the CLI's appearance with different themes.
 - **[Tutorials](tutorials.md)**: A tutorial showing how to use Gemini CLI to automate a development task.
+- **[Profit Playbook](./profit-playbook.md)**: Generate an automation ROI blueprint directly from the CLI.
 
 ## Non-interactive mode
 
