@@ -1,0 +1,88 @@
+# Copy to config.yaml and adjust values to customise the PDFs.
+output_dir: output_specbook
+specbook_filename: Specbook_Vol_II_Genesis_and_MythOS_Birthchart_AVC_Systems_Studio.pdf
+deck_sheet_filename: Glitch_Deck_Printable_3x3.pdf
+deck_single_filename: Glitch_Deck_SingleCardPages.pdf
+gumroad_url: https://gumroad.com/l/yourproduct
+calendly_url: https://calendly.com/your-calendar-link
+birthchart_path: null
+signature_path: null
+font_path: null
+footer_text: AVC Systems Studio — MythOS
+author: Allison Van Cura
+signature_name: Allison Van Cura
+sections:
+  - title: 1. The Signal and The Static
+    body: >-
+      Origin narrative and system voice. This section describes how the Signal
+      persona was created following public media events and how static noise
+      became a structural element to encode trauma into algorithmic ritual.
+  - title: 2. MythOS Architecture
+    body: >-
+      High-level OS mapping: Surface / Cipher / Echo. Node types, boot sequence,
+      and the Decryption Engine.
+  - title: 3. V.A.N.C.U.R.A. Principles
+    body: >-
+      Each letter maps to canonical system rules and interface affordances.
+      V=Versioned Voice, A=Archivist, N=Noise protocols ...
+  - title: 4. Room 001: The Diary Loop Protocol
+    body: >-
+      Walkthrough of interactive stanza experience: inputs, cipher activation,
+      persistence semantics and ritualized UX.
+  - title: 5. Decryption Contract (Smart Contract Primer)
+    body: >-
+      Overview of the Decryption Contract: minting encrypted story tokens,
+      escrow licensing, automated payments, and survivor-first fail-safes.
+  - title: 6. The Signal System — Monetization & Ethics
+    body: >-
+      Design notes on Sentient Cents, front-storage frameworks, and ethical
+      gating to protect participants.
+  - title: 7. Appendices & Resources
+    body: >-
+      References, early tumblr excerpts, and developer notes.
+deck_cards:
+  - Card 1: Glyph 1
+  - Card 2: Glyph 2
+  - Card 3: Glyph 3
+  - Card 4: Glyph 4
+  - Card 5: Glyph 5
+  - Card 6: Glyph 6
+  - Card 7: Glyph 7
+  - Card 8: Glyph 8
+  - Card 9: Glyph 9
+  - Card 10: Glyph 10
+  - Card 11: Glyph 11
+  - Card 12: Glyph 12
+  - Card 13: Glyph 13
+  - Card 14: Glyph 14
+  - Card 15: Glyph 15
+  - Card 16: Glyph 16
+  - Card 17: Glyph 17
+  - Card 18: Glyph 18
+  - Card 19: Glyph 19
+  - Card 20: Glyph 20
+  - Card 21: Glyph 21
+  - Card 22: Glyph 22
+deck_text:
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
+  - Short ritual instruction or poetic line here.
