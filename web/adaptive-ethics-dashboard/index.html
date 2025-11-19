@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adaptive Ethics · Vision to Verification</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <style>
+      :root {
+        --ivory: #fefbf8;
+        --ink: #101014;
+        --rose: #cf8da6;
+        --border: #d8d8e0;
+      }
+      body {
+        margin: 0;
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: var(--ivory);
+        color: var(--ink);
+      }
+      .btn-rose {
+        background: var(--rose);
+        color: white;
+        font-weight: 600;
+        border-radius: 0.75rem;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+        box-shadow: 0 10px 25px rgba(207, 141, 166, 0.25);
+        letter-spacing: 0.04em;
+      }
+      .btn-rose:hover {
+        filter: brightness(1.05);
+        transform: translateY(-1px);
+      }
+      .btn-rose:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+      .card {
+        box-shadow: 0 20px 40px rgba(16, 16, 20, 0.04);
+      }
+      details summary::marker {
+        color: var(--rose);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
