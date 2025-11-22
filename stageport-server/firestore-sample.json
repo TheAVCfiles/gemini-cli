@@ -1,0 +1,23 @@
+{
+  "faculties": {
+    "avc-founder": {
+      "id": "avc-founder",
+      "name": "Allison Van Cura",
+      "email": "acfwrites@gmail.com",
+      "vaultNamespace": "avc-founder"
+    }
+  },
+  "licenses": {
+    "license:2025-0001": {
+      "facultyId": "avc-founder",
+      "institution": "ModernArts Conservatory",
+      "auditHash": "0xabc123...",
+      "amount": 500000,
+      "currency": "usd",
+      "signed": false,
+      "checkoutSessionId": "cs_test_123",
+      "docusignEnvelopeId": null,
+      "createdAt": "2025-11-17T..."
+    }
+  }
+}
