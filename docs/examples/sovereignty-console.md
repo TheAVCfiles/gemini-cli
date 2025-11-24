@@ -31,7 +31,7 @@ function measureContinuum(state) {
 /**
  * Sovereignty Score 0.0–1.0
  */
-function Sovereignty(state) {
+function Sovereignty(state = {}) {
   const control = measureControl(state);
   const clarity = measureClarity(state);
   const continuum = measureContinuum(state);
@@ -107,7 +107,7 @@ export default function SovereigntyConsole() {
             onChange={v => setState(s => ({ ...s, selfDirectedRatio: v }))}
           />
 
-        {/* CLARITY */}
+          {/* CLARITY */}
           <SliderBlock
             label="Clarity"
             description="Signal vs panic / projection"
