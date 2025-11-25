@@ -16,7 +16,6 @@ import type {
 } from '@a2a-js/sdk';
 import type express from 'express';
 import type { Server } from 'node:http';
-import request from 'supertest';
 import {
   afterAll,
   afterEach,
@@ -35,6 +34,7 @@ import {
   createMockConfig,
 } from './testing_utils.js';
 import { MockTool } from '@google/gemini-cli-core';
+import type { AddressInfo } from 'node:net';
 
 const mockToolConfirmationFn = async () =>
   ({}) as unknown as ToolCallConfirmationDetails;
@@ -96,11 +96,25 @@ vi.mock('@google/gemini-cli-core', async () => {
 describe('E2E Tests', () => {
   let app: express.Express;
   let server: Server;
+  let baseUrl: string;
 
   beforeAll(async () => {
     app = await createApp();
-    server = app.listen(0); // Listen on a random available port
+    await new Promise<void>((resolve) => {
+      server = app.listen(0, () => {
+        const port = (server.address() as AddressInfo).port;
+        baseUrl = `http://localhost:${port}`;
+        resolve();
+      });
+    });
   });
+
+  const postAgentMessage = (message: string, messageId: string) =>
+    fetch(baseUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(createStreamMessageRequest(message, messageId)),
+    });
 
   beforeEach(() => {
     getApprovalModeSpy.mockReturnValue(ApprovalMode.DEFAULT);
@@ -124,14 +138,15 @@ describe('E2E Tests', () => {
       yield* [{ type: 'content', value: 'Hello how are you?' }];
     });
 
-    const agent = request.agent(app);
-    const res = await agent
-      .post('/')
-      .send(createStreamMessageRequest('hello', 'a2a-test-message'))
-      .set('Content-Type', 'application/json')
-      .expect(200);
+    const res = await fetch(baseUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(createStreamMessageRequest('hello', 'a2a-test-message')),
+    });
 
-    const events = streamToSSEEvents(res.text);
+    expect(res.status).toBe(200);
+    const bodyText = await res.text();
+    const events = streamToSSEEvents(bodyText);
 
     assertTaskCreationAndWorkingStatus(events);
 
@@ -186,14 +201,16 @@ describe('E2E Tests', () => {
       getTool: vi.fn().mockReturnValue(mockTool),
     });
 
-    const agent = request.agent(app);
-    const res = await agent
-      .post('/')
-      .send(createStreamMessageRequest('run a tool', 'a2a-tool-test-message'))
-      .set('Content-Type', 'application/json')
-      .expect(200);
+    const res = await fetch(baseUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(
+        createStreamMessageRequest('run a tool', 'a2a-tool-test-message'),
+      ),
+    });
 
-    const events = streamToSSEEvents(res.text);
+    expect(res.status).toBe(200);
+    const events = streamToSSEEvents(await res.text());
     assertTaskCreationAndWorkingStatus(events);
 
     // Status update: working
@@ -288,19 +305,14 @@ describe('E2E Tests', () => {
       }),
     });
 
-    const agent = request.agent(app);
-    const res = await agent
-      .post('/')
-      .send(
-        createStreamMessageRequest(
-          'run two tools',
-          'a2a-multi-tool-test-message',
-        ),
-      )
-      .set('Content-Type', 'application/json')
-      .expect(200);
+    const res = await postAgentMessage(
+      'run two tools',
+      'a2a-multi-tool-test-message',
+    );
 
-    const events = streamToSSEEvents(res.text);
+    expect(res.status).toBe(200);
+
+    const events = streamToSSEEvents(await res.text());
     assertTaskCreationAndWorkingStatus(events);
 
     // Second working update
@@ -398,19 +410,14 @@ describe('E2E Tests', () => {
       getTool: vi.fn().mockReturnValue(mockTool),
     });
 
-    const agent = request.agent(app);
-    const res = await agent
-      .post('/')
-      .send(
-        createStreamMessageRequest(
-          'run a tool without approval',
-          'a2a-no-approval-test-message',
-        ),
-      )
-      .set('Content-Type', 'application/json')
-      .expect(200);
+    const res = await postAgentMessage(
+      'run a tool without approval',
+      'a2a-no-approval-test-message',
+    );
 
-    const events = streamToSSEEvents(res.text);
+    expect(res.status).toBe(200);
+
+    const events = streamToSSEEvents(await res.text());
     assertTaskCreationAndWorkingStatus(events);
 
     // Status update: working
@@ -529,19 +536,14 @@ describe('E2E Tests', () => {
       getTool: vi.fn().mockReturnValue(mockTool),
     });
 
-    const agent = request.agent(app);
-    const res = await agent
-      .post('/')
-      .send(
-        createStreamMessageRequest(
-          'run a tool in yolo mode',
-          'a2a-yolo-mode-test-message',
-        ),
-      )
-      .set('Content-Type', 'application/json')
-      .expect(200);
+    const res = await postAgentMessage(
+      'run a tool in yolo mode',
+      'a2a-yolo-mode-test-message',
+    );
 
-    const events = streamToSSEEvents(res.text);
+    expect(res.status).toBe(200);
+
+    const events = streamToSSEEvents(await res.text());
     assertTaskCreationAndWorkingStatus(events);
 
     // Status update: working
