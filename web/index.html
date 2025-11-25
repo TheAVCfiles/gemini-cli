@@ -3,260 +3,112 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MWRA Interactive Glossary</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css"
-      integrity="sha384-5gL/zy5tr3I9k2feuw+ZQilnxVe3Qo8NMHGUbqeasTyVmbwSPZ7T++YaUHr8r68m"
-      crossorigin="anonymous"
-    />
-    <style>
-      body {
-        background: #f6f8fb;
-      }
-      header {
-        background: linear-gradient(135deg, #0f172a, #1e3a8a);
-        color: #fff;
-        padding: 3rem 0 2rem;
-        margin-bottom: 2rem;
-        text-align: center;
-      }
-      header h1 {
-        margin-bottom: 0.75rem;
-        font-size: 2.5rem;
-        font-weight: 700;
-      }
-      header p {
-        max-width: 720px;
-        margin: 0 auto;
-        font-size: 1.1rem;
-        line-height: 1.5;
-      }
-      .layout {
-        max-width: 1100px;
-        margin: 0 auto 3rem;
-        padding: 0 1.5rem 4rem;
-      }
-      .toolbar {
-        background: #fff;
-        padding: 1.5rem;
-        border-radius: 18px;
-        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.1);
-        margin-bottom: 1.5rem;
-      }
-      .toolbar-grid {
-        display: grid;
-        gap: 1rem;
-      }
-      @media (min-width: 768px) {
-        .toolbar-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          align-items: end;
-        }
-      }
-      .alphabet-nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 1rem;
-      }
-      .alphabet-nav button {
-        border-radius: 999px;
-        border: 1px solid transparent;
-        background: #e2e8f0;
-        color: #1e293b;
-        font-weight: 600;
-        padding: 0.25rem 0.75rem;
-        transition: all 0.15s ease;
-      }
-      .alphabet-nav button.active {
-        background: #1d4ed8;
-        color: #fff;
-        box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
-      }
-      .alphabet-nav button:hover {
-        background: #cbd5f5;
-      }
-      .results-card {
-        background: #fff;
-        border-radius: 18px;
-        padding: 1rem 1.5rem;
-        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
-      }
-      .results-meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-        color: #475569;
-        font-size: 0.95rem;
-      }
-      .glossary-list {
-        display: grid;
-        gap: 1rem;
-      }
-      .glossary-entry {
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        padding: 1rem 1.25rem;
-        transition: border 0.2s ease, box-shadow 0.2s ease;
-        background: #fff;
-      }
-      .glossary-entry:hover {
-        border-color: #94a3b8;
-        box-shadow: 0 8px 18px rgba(148, 163, 184, 0.25);
-      }
-      .glossary-entry h3 {
-        margin-bottom: 0.35rem;
-        font-size: 1.2rem;
-        color: #0f172a;
-      }
-      .glossary-entry p {
-        margin-bottom: 0.4rem;
-        line-height: 1.5;
-        color: #1e293b;
-      }
-      .glossary-entry .sources {
-        font-size: 0.9rem;
-        color: #475569;
-      }
-      .upload-zone {
-        border: 2px dashed #cbd5f5;
-        border-radius: 16px;
-        padding: 1rem;
-        text-align: center;
-        color: #475569;
-        transition: border-color 0.2s ease;
-      }
-      .upload-zone:hover {
-        border-color: #2563eb;
-        color: #1d4ed8;
-      }
-      .conflict-panel {
-        margin-top: 1.5rem;
-        padding: 1.5rem;
-        background: #f8fafc;
-        border-radius: 16px;
-        border: 1px solid #cbd5f5;
-      }
-      .conflict-panel h3 {
-        margin-bottom: 0.75rem;
-      }
-      .conflict-list {
-        display: grid;
-        gap: 0.75rem;
-      }
-      .conflict-item {
-        padding: 0.75rem 1rem;
-        background: #fff;
-        border-radius: 12px;
-        border-left: 4px solid #1d4ed8;
-        border-top: 1px solid #e2e8f0;
-        border-right: 1px solid #e2e8f0;
-        border-bottom: 1px solid #e2e8f0;
-      }
-      .conflict-item p {
-        margin: 0.25rem 0 0;
-        font-size: 0.95rem;
-        color: #334155;
-      }
-      .empty-state {
-        text-align: center;
-        color: #64748b;
-        padding: 3rem 0;
-      }
-      footer {
-        text-align: center;
-        padding: 3rem 0 2rem;
-        color: #475569;
-        font-size: 0.9rem;
-      }
-      footer a {
-        color: #1d4ed8;
-      }
-    </style>
+    <title>AVC Systems Studio · DeCrypt the Girl</title>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <header>
-      <h1>MWRA Interactive Glossary</h1>
-      <p>
-        A maintained reference of MWRA terminology backed by AI-assisted conflict
-        checks. Upload external glossaries, spot conflicts instantly, and export
-        the combined view.
-      </p>
-    </header>
-    <main class="layout">
-      <section class="toolbar" aria-labelledby="controls-heading">
-        <div class="toolbar-grid">
-          <fieldset>
-            <label for="search">Search terms or definitions</label>
-            <input
-              id="search"
-              type="search"
-              name="search"
-              placeholder="Search glossary (term, definition, or source)"
-              autocomplete="off"
-            />
-          </fieldset>
-          <div>
-            <label for="externalUpload">Upload CSV/JSON</label>
-            <div class="upload-zone">
-              <input id="externalUpload" name="externalUpload" type="file" accept=".csv,.json" />
-              <small>Drop a CSV/JSON file to compare with the canonical glossary.</small>
-            </div>
+  <body class="bg-slate-950 text-slate-50">
+    <main class="min-h-screen">
+      <!-- HERO -->
+      <section class="max-w-5xl mx-auto px-4 py-16">
+        <p class="text-xs uppercase tracking-[0.2em] text-pink-300 mb-2">
+          AVC Systems Studio · Intuition Labs · DeCrypt the Girl
+        </p>
+        <h1 class="text-4xl md:text-5xl font-semibold mb-4">
+          Decrypt the future. Protect the girl. Fund the studio.
+        </h1>
+        <p class="text-slate-300 max-w-2xl mb-8">
+          AVC Systems Studio builds myth-tech operating systems for real people:
+          choreographers, survivors, founders, and kids in dance class who somehow
+          end up writing code. DeCrypt the Girl is the flagship scroll; Intuition
+          Labs turns it into tools; Sentient Cents turns it into money.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="/scroll"
+            class="px-5 py-2 rounded-lg bg-pink-500 text-slate-950 font-medium"
+          >
+            Enter the Scroll
+          </a>
+          <a
+            href="https://ko-fi.com/decryptthegirl"
+            class="px-5 py-2 rounded-lg border border-slate-500"
+          >
+            Book a Systems Session
+          </a>
+        </div>
+      </section>
+
+      <!-- STACK -->
+      <section class="max-w-5xl mx-auto px-4 pb-12">
+        <h2 class="text-xl font-semibold mb-4">One studio. Three engines.</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="bg-slate-900/70 rounded-xl p-4 border border-slate-800">
+            <h3 class="font-semibold mb-1">DeCrypt the Girl</h3>
+            <p class="text-sm text-slate-300 mb-3">
+              Flagship literary operating system. Rooms 001–008, Glitch Deck, and the Mothernet storyworld.
+            </p>
+            <a href="/scroll" class="text-pink-300 text-sm underline">
+              Explore the Scroll →
+            </a>
+          </div>
+          <div class="bg-slate-900/70 rounded-xl p-4 border border-slate-800">
+            <h3 class="font-semibold mb-1">Intuition Labs</h3>
+            <p class="text-sm text-slate-300 mb-3">
+              R&D arm for astro-somatic tools and AI workflows: Synthescope™ Offline, Stageport Server,
+              BalletRubikTrader, and more.
+            </p>
+            <a href="/lab" class="text-pink-300 text-sm underline">
+              View Lab Notes →
+            </a>
+          </div>
+          <div class="bg-slate-900/70 rounded-xl p-4 border border-slate-800">
+            <h3 class="font-semibold mb-1">Sentient Cents</h3>
+            <p class="text-sm text-slate-300 mb-3">
+              Survivor-centric funding rails and patronage flows. Ko-fi support now; Angel registry and scholarship rails next.
+            </p>
+            <a href="https://ko-fi.com/decryptthegirl" class="text-pink-300 text-sm underline">
+              Support the Work →
+            </a>
           </div>
         </div>
-        <div class="alphabet-nav" role="tablist" aria-label="Glossary navigation"></div>
-        <div class="results-meta" id="resultsMeta" aria-live="polite"></div>
-        <div class="actions" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-          <button id="resetFilters" class="secondary">Reset filters</button>
-          <button id="exportCsv" class="contrast">Export visible entries</button>
-          <button id="triggerAsk" class="outline">Ask the glossary bot</button>
-        </div>
       </section>
 
-      <section class="results-card" aria-live="polite" aria-busy="false">
-        <div id="glossaryList" class="glossary-list" role="list"></div>
-        <div id="emptyState" class="empty-state" hidden>
-          <h3>No results</h3>
-          <p>Try adjusting your search or resetting the filters.</p>
-        </div>
-      </section>
-
-      <section class="conflict-panel" aria-labelledby="conflict-heading">
-        <h3 id="conflict-heading">Conflict agent</h3>
-        <p>
-          Upload an external glossary to surface new terms, definition changes,
-          or missing entries compared to the canonical dataset bundled with this
-          site.
+      <!-- MOTHERNET -->
+      <section class="max-w-5xl mx-auto px-4 pb-16 border-t border-slate-800 pt-10">
+        <h2 class="text-xl font-semibold mb-2">Room 008: Mothernet is online.</h2>
+        <p class="text-sm text-slate-300 mb-4">
+          When DeCrypt the Girl opened the broadcast, it stopped being one girl’s problem and started
+          being a pattern. Mothernet is the encrypted sister-network of mothers, daughters, and digital
+          prophets writing back in real time.
         </p>
-        <div id="conflictSummary" class="results-meta" style="margin-top: 0.5rem;"></div>
-        <div id="conflictList" class="conflict-list" role="list"></div>
+        <a
+          href="/mothernet"
+          class="inline-flex items-center px-4 py-2 rounded-lg border border-pink-400 text-pink-200 text-sm"
+        >
+          Join the List
+        </a>
       </section>
     </main>
 
-    <footer>
-      Maintained by the MWRA docs team · <a href="https://netlify.com" target="_blank" rel="noreferrer">Deploy on Netlify</a>
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800">
+      <div
+        class="max-w-5xl mx-auto px-4 py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-xs text-slate-400"
+      >
+        <div>
+          © <span id="year"></span> AVC Systems Studio · Myth-tech choreography for bodies, stories, and systems.
+        </div>
+        <div class="flex gap-3">
+          <span>@xoAVCxo</span>
+          <span>@DeCrypt_the_Girl</span>
+          <a href="https://ko-fi.com/decryptthegirl" class="underline">
+            Ko-fi /decryptthegirl
+          </a>
+        </div>
+      </div>
     </footer>
-
-    <dialog id="askDialog">
-      <article>
-        <header>
-          <a href="#close" aria-label="Close" rel="prev" class="close"></a>
-          <h2>Ask the glossary bot</h2>
-        </header>
-        <form>
-          <label for="askPrompt">Prompt</label>
-          <textarea id="askPrompt" name="askPrompt" rows="4" placeholder="Summarize the difference between slurry and grout"></textarea>
-          <footer style="display: flex; justify-content: space-between; gap: 0.75rem;">
-            <button id="cancelAsk" type="button" class="secondary">Cancel</button>
-            <button id="submitAsk" type="submit">Send</button>
-          </footer>
-        </form>
-        <div id="askResponse" style="margin-top: 1rem; white-space: pre-wrap;"></div>
-      </article>
-    </dialog>
-
-    <script src="boot_glossary.js"></script>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
   </body>
 </html>
