@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AVC Systems Studio — React Prototype Layout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-[#0F0F12] text-slate-50">
+    <main class="min-h-screen bg-[#0F0F12] text-slate-50">
+      <!-- MEMNODE / ARCHITECT STRIP -->
+      <div class="w-full border-b border-slate-900 bg-black/40">
+        <div
+          class="max-w-6xl mx-auto px-4 py-2 flex flex-col md:flex-row md:items-center md:justify-between gap-1 text-[10px] text-slate-400"
+        >
+          <span>
+            ARCHITECT: Lane 1+3 · ROLE: Studio Architect · AUTH: Founder · SOVEREIGNTY:
+            Independent
+          </span>
+          <span>
+            SCROLL PRIORITY: CRITICAL · FOUNDER STATE: Stabilizing · MOMENTUM: Rising
+          </span>
+        </div>
+      </div>
+
+      <!-- HERO — AVC SYSTEMS STUDIO -->
+      <section class="max-w-6xl mx-auto px-4 pt-16 pb-20 lg:pt-24">
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+          <!-- Text -->
+          <div>
+            <p class="text-[11px] uppercase tracking-[0.25em] text-pink-300 mb-4">
+              AVC Systems Studio · DeCrypt the Girl · Intuition Labs
+            </p>
+
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight mb-4">
+              AVC Systems Studio
+            </h1>
+
+            <p class="text-lg text-slate-200 mb-6">
+              Where choreography becomes computation.
+              <br />
+              Where survival becomes a system.
+            </p>
+
+            <p class="text-slate-300 max-w-xl mb-8">
+              A myth-tech studio building operating systems from lived experience: literary OS
+              scrolls, astro-somatic research labs, and studio software for the next generation of
+              dancers, founders, and survivors.
+            </p>
+
+            <div class="flex flex-wrap gap-3">
+              <a
+                href="/decrypt"
+                class="px-5 py-2.5 rounded-lg bg-pink-500 text-slate-950 font-medium text-sm"
+              >
+                ENTER · DeCrypt the Girl
+              </a>
+              <a href="/lab" class="px-5 py-2.5 rounded-lg border border-slate-600 text-sm">
+                VISIT · Intuition Labs
+              </a>
+              <a
+                href="/studio"
+                class="px-5 py-2.5 rounded-lg border border-emerald-400/70 text-emerald-200 text-sm"
+              >
+                JOIN · StudioOS Pilot
+              </a>
+            </div>
+          </div>
+
+          <!-- Portrait / Visual Lane 1+3 -->
+          <div class="relative">
+            <div
+              class="aspect-[4/5] rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 shadow-[0_40px_120px_rgba(0,0,0,0.75)] overflow-hidden flex items-center justify-center"
+            >
+              <!-- TODO: Replace with real portrait (Lane 1+3 hybrid) -->
+              <div class="px-6 text-center text-xs text-slate-400">
+                <div class="mb-4 text-sm font-semibold tracking-[0.18em] uppercase text-pink-200">
+                  Founder Portrait Lane
+                </div>
+                <p class="mb-2">
+                  Placeholder for a clean, grounded founder portrait. Ballet posture, studio or city
+                  backdrop, quiet power.
+                </p>
+                <p class="text-[11px]">
+                  Visual Lane: Clean Urban Dance-Architect + Studio-Owner Cinematic Realism.
+                </p>
+              </div>
+            </div>
+            <div
+              class="absolute -bottom-5 -left-5 w-32 h-32 rounded-full bg-pink-500/20 blur-3xl pointer-events-none"
+            ></div>
+            <div
+              class="absolute -top-6 -right-3 w-24 h-24 rounded-full bg-emerald-400/20 blur-3xl pointer-events-none"
+            ></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2 — IDENTITY STACK (C-STACK) -->
+      <section class="max-w-6xl mx-auto px-4 pb-16">
+        <h2 class="text-xl font-semibold mb-2">The AVC Identity Stack.</h2>
+        <p class="text-sm text-slate-300 mb-8 max-w-2xl">
+          Three pillars, one throughline: a girl who survived the broadcast and built a studio to
+          rewrite the system.
+        </p>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <!-- DeCrypt the Girl -->
+          <div class="bg-slate-900/70 rounded-xl p-5 border border-slate-800">
+            <p class="text-[11px] uppercase tracking-[0.18em] text-pink-300 mb-2">
+              Pillar I · Scroll OS
+            </p>
+            <h3 class="font-semibold mb-2">DeCrypt the Girl</h3>
+            <p class="text-sm text-slate-300 mb-4">
+              A literary operating system for women rewriting the narrative. Rooms 001–008, Glitch
+              Deck, Observer threads, and the Mothernet storyworld.
+            </p>
+            <a href="/decrypt" class="text-pink-300 text-sm underline">Explore the Scroll →</a>
+          </div>
+
+          <!-- AVC Systems Studio -->
+          <div class="bg-slate-900/70 rounded-xl p-5 border border-slate-800">
+            <p class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 mb-2">
+              Pillar II · StudioOS
+            </p>
+            <h3 class="font-semibold mb-2">AVC Systems Studio</h3>
+            <p class="text-sm text-slate-300 mb-4">
+              A studio for choreography, education, and ethical AI motion systems. From StagePort and
+              Glissé Engine to Ballet Bots and Safe Reels.
+            </p>
+            <a href="/studio" class="text-emerald-300 text-sm underline">Visit StudioOS →</a>
+          </div>
+
+          <!-- Intuition Labs -->
+          <div class="bg-slate-900/70 rounded-xl p-5 border border-slate-800">
+            <p class="text-[11px] uppercase tracking-[0.18em] text-sky-300 mb-2">
+              Pillar III · R&amp;D Lab
+            </p>
+            <h3 class="font-semibold mb-2">Intuition Labs</h3>
+            <p class="text-sm text-slate-300 mb-4">
+              A research lab for astro-somatic tools and expressive AI: prediction engines,
+              motion-physics compute, and Myth-Sentiment models.
+            </p>
+            <a href="/lab" class="text-sky-300 text-sm underline">Enter the Lab →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3 — THE THROUGHLINE -->
+      <section class="bg-gradient-to-b from-[#320F47] to-[#0F0F12] border-y border-slate-900">
+        <div class="max-w-6xl mx-auto px-4 py-16">
+          <h2 class="text-2xl font-semibold mb-3">“Everything I build is choreography.”</h2>
+          <p class="text-sm text-slate-200 max-w-2xl mb-8">
+            Flowbots, molecule translation, Mika Protocol, kids performing architecture for
+            awards—every experiment asks the same question:
+            <span class="italic">
+              what happens when you treat life, markets, and memory like a dance you can finally
+              re-score?
+            </span>
+          </p>
+
+          <div class="flex gap-4 overflow-x-auto pb-2">
+            <div
+              class="min-w-[220px] max-w-xs bg-[#1C1230]/70 border border-[#DAFA37]/30 rounded-xl p-4 text-xs text-slate-100 flex flex-col justify-between"
+            >
+              <div class="aspect-video rounded-md bg-black/40 mb-3 flex items-center justify-center text-[10px] text-slate-500">
+                IMAGE
+              </div>
+              <p class="font-medium">Flowbots · early motion-logic prototype</p>
+            </div>
+            <div
+              class="min-w-[220px] max-w-xs bg-[#1C1230]/70 border border-[#DAFA37]/30 rounded-xl p-4 text-xs text-slate-100 flex flex-col justify-between"
+            >
+              <div class="aspect-video rounded-md bg-black/40 mb-3 flex items-center justify-center text-[10px] text-slate-500">
+                IMAGE
+              </div>
+              <p class="font-medium">Mika Protocol · child-scale civic choreography</p>
+            </div>
+            <div
+              class="min-w-[220px] max-w-xs bg-[#1C1230]/70 border border-[#DAFA37]/30 rounded-xl p-4 text-xs text-slate-100 flex flex-col justify-between"
+            >
+              <div class="aspect-video rounded-md bg-black/40 mb-3 flex items-center justify-center text-[10px] text-slate-500">
+                IMAGE
+              </div>
+              <p class="font-medium">Molecule Studio · geometry translation</p>
+            </div>
+            <div
+              class="min-w-[220px] max-w-xs bg-[#1C1230]/70 border border-[#DAFA37]/30 rounded-xl p-4 text-xs text-slate-100 flex flex-col justify-between"
+            >
+              <div class="aspect-video rounded-md bg-black/40 mb-3 flex items-center justify-center text-[10px] text-slate-500">
+                IMAGE
+              </div>
+              <p class="font-medium">StudioOS badge · systems faculty future</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4 — LINEAGE LEDGER -->
+      <section class="max-w-6xl mx-auto px-4 py-16">
+        <h2 class="text-xl font-semibold mb-2">The Lineage Ledger.</h2>
+        <p class="text-sm text-slate-300 mb-6 max-w-2xl">
+          Real teachers. Real training. Real systems work. This is not an aesthetic accident—it’s a
+          recorded lineage.
+        </p>
+
+        <div class="grid md:grid-cols-3 gap-6 text-sm">
+          <!-- Ballet Lineage -->
+          <div class="bg-slate-900/70 rounded-xl p-4 border border-slate-800">
+            <h3 class="font-semibold mb-2 text-slate-100">Ballet Lineage</h3>
+            <p class="text-slate-300 text-xs">
+              Balanchine → Calegari → Cook → Van Cura → Danter.
+              <br />
+              Dutchess Ballet Company · New Paltz Ballet Theatre · Poughkeepsie City Ballet.
+            </p>
+          </div>
+
+          <!-- Systems & Product -->
+          <div class="bg-slate-900/70 rounded-xl p-4 border border-slate-800">
+            <h3 class="font-semibold mb-2 text-slate-100">Systems &amp; Product</h3>
+            <p class="text-slate-300 text-xs">
+              Former COO &amp; cofounder of a tech startup. MythOS, StudioOS, and DeCrypt Engine
+              designed as real infrastructure: RAG vaults, provenance layers, and ethical AI
+              choreography for studios and storytellers.
+            </p>
+          </div>
+
+          <!-- Survivorship & Media -->
+          <div class="bg-slate-900/70 rounded-xl p-4 border border-slate-800">
+            <h3 class="font-semibold mb-2 text-slate-100">Survivorship &amp; Media</h3>
+            <p class="text-slate-300 text-xs">
+              From CNN&#39;s <em>This Is Life</em> to sugar-party fallout, from Tumblr archives to
+              legal packets. DeCrypt the Girl turns exploited footage into authored scrolls, and
+              MotherNet routes that proof into protection.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5 — CURRENT SIGNALS / TOUCHPOINTS -->
+      <section class="max-w-6xl mx-auto px-4 pb-20 border-t border-slate-900 pt-12">
+        <h2 class="text-xl font-semibold mb-3">Where the signal is live right now.</h2>
+        <p class="text-sm text-slate-300 mb-6 max-w-2xl">
+          StudioOS is still in draft, but the engines are already online. If you're reading this,
+          you're early to the render.
+        </p>
+
+        <div class="grid md:grid-cols-3 gap-6 text-sm">
+          <div class="bg-slate-900/70 rounded-xl p-4 border border-slate-800">
+            <h3 class="font-semibold mb-2">Walk the Rooms</h3>
+            <p class="text-slate-300 text-xs mb-3">
+              Experience Rooms 001–008 of DeCrypt the Girl as a playable inner OS: Patch, Masked One,
+              Architect's Table, and MotherNet.
+            </p>
+            <a href="/scroll" class="text-pink-300 text-xs underline">Enter the Scroll →</a>
+          </div>
+
+          <div class="bg-slate-900/70 rounded-xl p-4 border border-slate-800">
+            <h3 class="font-semibold mb-2">Read the Lab Notes</h3>
+            <p class="text-slate-300 text-xs mb-3">
+              Astro-somatic experiments, StagePort specs, BalletRubikTrader diagrams, and
+              Synthescope™ Offline threads—documented as working papers.
+            </p>
+            <a href="/lab" class="text-sky-300 text-xs underline">Open Intuition Labs →</a>
+          </div>
+
+          <div class="bg-slate-900/70 rounded-xl p-4 border border-slate-800">
+            <h3 class="font-semibold mb-2">Fund the Next Girl</h3>
+            <p class="text-slate-300 text-xs mb-3">
+              Ko-fi now, Sentient Cents later. Every contribution is a quiet "no" to the pipeline
+              that tried to eat you and a "yes" to the girls coming up behind you.
+            </p>
+            <a
+              href="https://ko-fi.com/decryptthegirl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-emerald-300 text-xs underline"
+            >
+              Support /decryptthegirl →
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="border-t border-slate-900">
+        <div
+          class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-xs text-slate-400"
+        >
+          <div>© <span id="year"></span> AVC Systems Studio · Myth-tech choreography for bodies, stories, and systems.</div>
+
+          <div class="flex flex-wrap gap-4">
+            <span>@xoAVCxo</span>
+            <span>@DeCrypt_the_Girl</span>
+            <a
+              href="https://ko-fi.com/decryptthegirl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline"
+            >
+              Ko-fi /decryptthegirl
+            </a>
+          </div>
+        </div>
+      </footer>
+    </main>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
