@@ -16,13 +16,26 @@ export interface UpdateObject {
   update: UpdateInfo;
 }
 
+function withTimeoutOrNull<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+): Promise<T | null> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => resolve(null), timeoutMs);
+    promise
+      .then(resolve)
+      .catch(reject)
+      .finally(() => clearTimeout(timer));
+  });
+}
+
 /**
  * From a nightly and stable update, determines which is the "best" one to offer.
  * The rule is to always prefer nightly if the base versions are the same.
  */
 function getBestAvailableUpdate(
-  nightly?: UpdateInfo,
-  stable?: UpdateInfo,
+  nightly?: UpdateInfo | null,
+  stable?: UpdateInfo | null,
 ): UpdateInfo | null {
   if (!nightly) return stable || null;
   if (!stable) return nightly || null;
@@ -65,8 +78,14 @@ export async function checkForUpdates(): Promise<UpdateObject | null> {
 
     if (isNightly) {
       const [nightlyUpdateInfo, latestUpdateInfo] = await Promise.all([
-        createNotifier('nightly').fetchInfo(),
-        createNotifier('latest').fetchInfo(),
+        withTimeoutOrNull(
+          createNotifier('nightly').fetchInfo(),
+          FETCH_TIMEOUT_MS,
+        ),
+        withTimeoutOrNull(
+          createNotifier('latest').fetchInfo(),
+          FETCH_TIMEOUT_MS,
+        ),
       ]);
 
       const bestUpdate = getBestAvailableUpdate(
@@ -82,7 +101,10 @@ export async function checkForUpdates(): Promise<UpdateObject | null> {
         };
       }
     } else {
-      const updateInfo = await createNotifier('latest').fetchInfo();
+      const updateInfo = await withTimeoutOrNull(
+        createNotifier('latest').fetchInfo(),
+        FETCH_TIMEOUT_MS,
+      );
 
       if (updateInfo && semver.gt(updateInfo.latest, currentVersion)) {
         const message = `Gemini CLI update available! ${currentVersion} → ${updateInfo.latest}`;
