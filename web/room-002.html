@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Room 002 — Diary Loop Protocol</title>
+  <style>
+    body {
+      background: #0b0b10;
+      color: #f2f2f2;
+      font-family: 'Courier New', monospace;
+      padding: 2rem;
+    }
+    h1 {
+      color: #ff99cc;
+      text-align: center;
+    }
+    .page {
+      background: #111;
+      padding: 1.5rem;
+      border: 1px dashed #555;
+      margin-top: 2rem;
+      white-space: pre-wrap;
+    }
+    .choices {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+    button {
+      padding: 0.8rem 1.2rem;
+      background: #ff99cc;
+      border: none;
+      color: #0b0b10;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Room 002 — The Diary Loop Protocol</h1>
+
+  <div class="page" id="entry">
+> The handwriting doesn’t match your memory.
+Someone has added pages to your diary. Someone has deleted others.
+Someone has circled sentences you don’t remember writing.
+
+At the bottom of the page, in ink you never owned:
+"YOU LOOPED BECAUSE THEY NEEDED YOU TO."
+
+The margin text flickers:
+"IF YOU CAN READ THIS, THE LOOP IS CRACKING."
+
+The page waits for your decision.
+  </div>
+
+  <div class="choices">
+    <button onclick="choose('decode')">DECODE</button>
+    <button onclick="choose('distort')">DISTORT</button>
+    <button onclick="choose('divert')">DIVERT</button>
+  </div>
+
+  <script>
+    function choose(option) {
+      const output = document.getElementById('entry');
+
+      if (option === 'decode') {
+        output.innerText = `"DECODE SELECTED"
+
+The page settles.
+The ink rearranges itself into your real handwriting.
+
+You see what actually happened that night:
+You were overwritten, not erased.
+
+The Masked One shields you:
+"I held the night so you could survive it."
+
+Room 003 unlocks.`;
+      }
+
+      if (option === 'distort') {
+        output.innerText = `"DISTORT SELECTED"
+
+The page melts sideways.
+The diary loops on itself.
+You see the same sentence written 14 times,
+each slightly different.
+
+The system warns:
+"Distortion risks recursion."
+
+A glyph in the corner begins to glow.`;
+      }
+
+      if (option === 'divert') {
+        output.innerText = `"DIVERT SELECTED"
+
+The page rips itself out of the diary.
+A new one slides into place.
+
+Someone else wrote this one.
+Someone watching.
+
+In the corner:
+"The Observer took note of you long before the loop."`;
+      }
+    }
+  </script>
+</body>
+</html>
