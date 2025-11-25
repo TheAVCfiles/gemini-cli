@@ -13,6 +13,7 @@ This documentation is organized into the following sections:
 - **Execution and Deployment**
   - **[Running locally and in sandboxes](./deployment.md):** Information for running Gemini CLI.
   - **[Firebase Hosting quick start](./firebase-hosting.md):** Deploy the MWRA glossary demo with a single Firebase project.
+  - **[Bootstrap Google Cloud for Vertex AI](./gcp-setup.md):** Scripted setup for Gemini CLI + Vertex AI projects.
 - **[Architecture Overview](./architecture.md):** Understand the high-level design of Gemini CLI, including its components and how they interact.
 - **CLI Usage:** Documentation for `packages/cli`.
   - **[CLI Introduction](./cli/index.md):** Overview of the command-line interface.
