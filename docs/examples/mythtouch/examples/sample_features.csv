@@ -1,0 +1,2 @@
+Merkel_E_mean,Merkel_E_var,Meissner_E_mean,Meissner_E_var,Pacinian_E_mean,Pacinian_E_var,Ruffini_E_mean,Ruffini_E_var,Merkel_spike_rate,Merkel_fano,Meissner_spike_rate,Meissner_fano,Pacinian_spike_rate,Pacinian_fano,Ruffini_spike_rate,Ruffini_fano,Meissner_over_Merkel,Pacinian_over_Merkel,Ruffini_over_Merkel,label
+0.04769346158417655,0.0011363222362527608,0.0003505578521621701,2.0017746373431837e-06,0.28536939811581374,0.01331335304250951,0.04698209890038065,0.001142681442969404,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.00735007463169421,5.983281677520601,0.9850640376233488,metal
