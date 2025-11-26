@@ -4,9 +4,11 @@ const state = {
   letter: "ALL",
   search: "",
   external: [],
+  mode: "ALL",
 };
 
 const letters = ["ALL", "#", ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"]; // will expand into individual characters
+const modes = ["ALL", "Surface", "Cipher", "Echo"];
 const glossaryList = document.getElementById("glossaryList");
 const emptyState = document.getElementById("emptyState");
 const resultsMeta = document.getElementById("resultsMeta");
@@ -23,6 +25,7 @@ const submitAsk = document.getElementById("submitAsk");
 const cancelAsk = document.getElementById("cancelAsk");
 const askPrompt = document.getElementById("askPrompt");
 const askResponse = document.getElementById("askResponse");
+const modeFilters = document.getElementById("modeFilters");
 
 function normaliseTerm(term) {
   return (term || "").trim().toLowerCase();
@@ -49,6 +52,34 @@ function buildAlphabetNav() {
   });
 }
 
+function buildModeFilters() {
+  if (!modeFilters) return;
+  modeFilters.innerHTML = "";
+  modes.forEach((mode) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = mode === "ALL" ? "All modes" : mode;
+    button.dataset.mode = mode;
+    if (mode === state.mode) {
+      button.classList.add("active");
+      button.setAttribute("aria-pressed", "true");
+    } else {
+      button.setAttribute("aria-pressed", "false");
+    }
+    button.addEventListener("click", () => {
+      state.mode = mode;
+      updateFilteredEntries();
+      modeFilters
+        .querySelectorAll("button")
+        .forEach((btn) => btn.classList.toggle("active", btn.dataset.mode === state.mode));
+      modeFilters
+        .querySelectorAll("button")
+        .forEach((btn) => btn.setAttribute("aria-pressed", btn.dataset.mode === state.mode ? "true" : "false"));
+    });
+    modeFilters.appendChild(button);
+  });
+}
+
 function updateResultsMeta() {
   const total = state.filtered.length;
   const canonicalCount = state.canonical.length;
@@ -59,6 +90,9 @@ function updateResultsMeta() {
   }
   if (state.letter !== "ALL") {
     parts.push(`letter ${state.letter}`);
+  }
+  if (state.mode !== "ALL") {
+    parts.push(`mode ${state.mode}`);
   }
   if (externalCount) {
     parts.push(`${externalCount} external entr${externalCount === 1 ? "y" : "ies"} loaded`);
@@ -80,6 +114,13 @@ function renderEntries() {
     item.className = "glossary-entry";
     const title = document.createElement("h3");
     title.textContent = entry.term;
+    if (entry.mode) {
+      const modeTag = document.createElement("span");
+      modeTag.className = "mode-tag";
+      modeTag.textContent = entry.mode;
+      title.appendChild(document.createTextNode(" "));
+      title.appendChild(modeTag);
+    }
     const definition = document.createElement("p");
     definition.textContent = entry.definition;
     const sources = document.createElement("p");
@@ -108,6 +149,11 @@ function entryMatchesLetter(entry) {
   return first === state.letter;
 }
 
+function entryMatchesMode(entry) {
+  if (state.mode === "ALL") return true;
+  return (entry.mode || "").toLowerCase() === state.mode.toLowerCase();
+}
+
 function entryMatchesSearch(entry) {
   if (!state.search) return true;
   const target = `${entry.term} ${entry.definition} ${entry.sources || ""}`.toLowerCase();
@@ -115,7 +161,9 @@ function entryMatchesSearch(entry) {
 }
 
 function updateFilteredEntries() {
-  state.filtered = state.canonical.filter((entry) => entryMatchesLetter(entry) && entryMatchesSearch(entry));
+  state.filtered = state.canonical.filter(
+    (entry) => entryMatchesLetter(entry) && entryMatchesMode(entry) && entryMatchesSearch(entry)
+  );
   renderEntries();
   updateResultsMeta();
 }
@@ -123,15 +171,17 @@ function updateFilteredEntries() {
 function resetFilters() {
   state.letter = "ALL";
   state.search = "";
+  state.mode = "ALL";
   searchInput.value = "";
   updateFilteredEntries();
   buildAlphabetNav();
+  buildModeFilters();
 }
 
 function downloadCsv(entries) {
   if (!entries.length) return;
-  const header = ["term", "definition", "sources"];
-  const rows = entries.map((entry) => [entry.term, entry.definition, entry.sources || ""]);
+  const header = ["term", "definition", "sources", "mode"];
+  const rows = entries.map((entry) => [entry.term, entry.definition, entry.sources || "", entry.mode || ""]);
   const csv = [header, ...rows]
     .map((cols) =>
       cols
@@ -146,7 +196,7 @@ function downloadCsv(entries) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = "mwra-glossary-export.csv";
+  anchor.download = "decrypt-the-girl-deck.csv";
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();
@@ -162,6 +212,7 @@ function parseCsv(text) {
   const termIdx = headers.indexOf("term");
   const defIdx = headers.indexOf("definition");
   const sourceIdx = headers.indexOf("sources");
+  const modeIdx = headers.indexOf("mode");
   const entries = [];
   lines.forEach((line) => {
     const parts = [];
@@ -187,8 +238,14 @@ function parseCsv(text) {
     const term = parts[termIdx];
     const definition = parts[defIdx];
     const sources = sourceIdx > -1 ? parts[sourceIdx] : "";
+    const mode = modeIdx > -1 ? parts[modeIdx] : "";
     if (term && definition) {
-      entries.push({ term: term.trim(), definition: definition.trim(), sources: (sources || "").trim() });
+      entries.push({
+        term: term.trim(),
+        definition: definition.trim(),
+        sources: (sources || "").trim(),
+        mode: (mode || "").trim(),
+      });
     }
   });
   return entries;
@@ -215,7 +272,8 @@ function computeConflicts(external) {
       const canonicalEntry = canonicalMap.get(key);
       if (
         canonicalEntry.definition.trim() !== (entry.definition || "").trim() ||
-        (canonicalEntry.sources || "").trim() !== (entry.sources || "").trim()
+        (canonicalEntry.sources || "").trim() !== (entry.sources || "").trim() ||
+        (canonicalEntry.mode || "").trim().toLowerCase() !== (entry.mode || "").trim().toLowerCase()
       ) {
         changedTerms.push({ canonical: canonicalEntry, external: entry });
       }
@@ -258,7 +316,7 @@ function renderConflicts(report) {
     item.className = "conflict-item";
     const heading = document.createElement("strong");
     heading.textContent = `${entry.term} · New in external dataset`;
-    const detail = document.createElement("p");
+      const detail = document.createElement("p");
     detail.textContent = entry.definition;
     item.appendChild(heading);
     item.appendChild(detail);
@@ -277,6 +335,11 @@ function renderConflicts(report) {
     item.appendChild(heading);
     item.appendChild(canonicalP);
     item.appendChild(externalP);
+    if ((canonical.mode || "") || (external.mode || "")) {
+      const modeP = document.createElement("p");
+      modeP.textContent = `Mode: ${canonical.mode || "–"} → ${external.mode || "–"}`;
+      item.appendChild(modeP);
+    }
     fragment.appendChild(item);
   });
 
@@ -308,6 +371,7 @@ function handleUpload(event) {
               term: row.term?.toString().trim(),
               definition: row.definition?.toString().trim(),
               sources: row.sources?.toString().trim() || "",
+              mode: row.mode?.toString().trim() || "",
             }))
             .filter((row) => row.term && row.definition);
         }
@@ -344,6 +408,7 @@ async function fetchGlossary() {
     state.canonical = Array.isArray(data) ? data : [];
     updateFilteredEntries();
     buildAlphabetNav();
+    buildModeFilters();
   } catch (error) {
     console.error(error);
     glossaryList.innerHTML = "";
