@@ -1,0 +1,12 @@
+{
+  "name": "mythtech-proof-node",
+  "version": "1.1.0",
+  "description": "Myth-Tech Meta-Node Proof Engine (AVC · 4.21444)",
+  "type": "module",
+  "main": "src/cli.js",
+  "scripts": {
+    "start": "node src/cli.js Aquarius \"PSPVE IKPYC FH XJTFOW\"",
+    "engine": "node src/cli.js"
+  },
+  "license": "UNLICENSED"
+}
