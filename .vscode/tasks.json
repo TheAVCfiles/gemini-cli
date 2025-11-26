@@ -2,24 +2,63 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "type": "npm",
-      "script": "build",
+      "label": "StudioOS: Run Integration Pipeline (default PR 347)",
+      "type": "shell",
+      "command": "${workspaceFolder}/studioos_pipeline.sh",
+      "args": ["347"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
       "group": {
         "kind": "build",
         "isDefault": true
-      },
-      "problemMatcher": [],
-      "label": "npm: build",
-      "detail": "scripts/build.sh"
+      }
     },
     {
-      "type": "npm",
-      "script": "build",
-      "path": "packages/vscode-ide-companion",
-      "group": "build",
-      "problemMatcher": [],
-      "label": "npm: build: vscode-ide-companion",
-      "detail": "npm run build -w packages/vscode-ide-companion"
+      "label": "StudioOS: Run Integration Pipeline (choose PR)",
+      "type": "shell",
+      "command": "${workspaceFolder}/studioos_pipeline.sh",
+      "args": [
+        "${input:prNumber}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "StudioOS: Run Integration Pipeline (custom engine path)",
+      "type": "shell",
+      "command": "/bin/bash",
+      "args": [
+        "-lc",
+        "export REGIME_ENGINE_SRC='${input:enginePath}' && ${workspaceFolder}/studioos_pipeline.sh ${input:prNumberForEngine}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "prNumber",
+      "type": "promptString",
+      "description": "Enter PR number to run through StudioOS pipeline",
+      "default": "347"
+    },
+    {
+      "id": "enginePath",
+      "type": "promptString",
+      "description": "Path to REGIME_ENGINE_SRC (inside container or mounted)",
+      "default": "/workspaces/regime-engine"
+    },
+    {
+      "id": "prNumberForEngine",
+      "type": "promptString",
+      "description": "PR number to run with custom engine path",
+      "default": "347"
     }
   ]
 }

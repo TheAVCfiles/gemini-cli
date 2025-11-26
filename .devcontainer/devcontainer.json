@@ -1,0 +1,25 @@
+{
+  "name": "StudioOS Gemini-CLI Workspace",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+  // Optional: preinstall anything else you want via features
+  "features": {},
+  "containerEnv": {
+    // Set a default engine path; collaborators can override in terminal
+    "REGIME_ENGINE_SRC": "/workspaces/regime-engine"
+  },
+  "postCreateCommand": "/bin/bash -lc 'chmod +x studioos_pipeline.sh && ./studioos_pipeline.sh ${PR_NUMBER:-347}'",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.inheritEnv": true
+      },
+      "extensions": [
+        "ms-vscode.gitlens",
+        "eamodio.gitlens",
+        "ms-vscode.vscode-typescript-next"
+      ]
+    }
+  },
+  "remoteUser": "node"
+}

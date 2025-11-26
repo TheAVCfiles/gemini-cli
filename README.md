@@ -47,6 +47,98 @@ directory and point API calls to a deployed instance.
 
 ---
 
+## StudioOS Workspace: How to Run the Pipeline
+
+This repo is wired for fast, low-friction collaboration in Codespaces / Dev Containers / cloud IDEs.
+
+### 1. One-Time Setup
+
+1. Open the repo in **GitHub Codespaces** or **VS Code Dev Containers**.
+2. The workspace will:
+   - Build the container
+   - Run `studioos_pipeline.sh` automatically (default PR: `347`)
+
+> If `studioos_pipeline.sh` fails, fix the issue, then re-run it using the tasks below.
+
+---
+
+### 2. Run the StudioOS Pipeline (VS Code Tasks)
+
+You can run everything from the Command Palette — no remembering long commands.
+
+1. Open Command Palette: `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
+2. Select: **`Tasks: Run Task`**
+3. Choose one:
+
+#### a) Default: Run on PR 347
+
+```text
+StudioOS: Run Integration Pipeline (default PR 347)
+
+This is the “hit play and go” option.
+
+b) Run on a Specific PR
+
+StudioOS: Run Integration Pipeline (choose PR)
+
+You’ll be prompted for the PR number. The task will:
+    • Check out the PR
+    • Run the pipeline script end-to-end
+    • Output logs in the terminal
+
+c) Custom Engine Path (optional)
+If you have a local / mounted Regime Engine path to wire:
+
+StudioOS: Run Integration Pipeline (custom engine path)
+
+You’ll be prompted for:
+    • REGIME_ENGINE_SRC (path inside the container)
+    • PR number
+```
+
+---
+
+3. Manual Terminal Usage (if you like typing)
+
+From the workspace terminal:
+
+```bash
+# Make sure the script is executable
+chmod +x studioos_pipeline.sh
+
+# Run against default PR
+./studioos_pipeline.sh 347
+
+# Run against a custom PR
+./studioos_pipeline.sh 412
+
+# Run with a specific Regime Engine path
+export REGIME_ENGINE_SRC="/workspaces/regime-engine"
+./studioos_pipeline.sh 347
+```
+
+---
+
+4. Collaboration Norms
+    • Before pushing:
+Run one of the StudioOS tasks and make sure it completes without errors.
+    • When reviewing PRs:
+Re-run the pipeline for that PR using StudioOS: Run Integration Pipeline (choose PR).
+    • If something explodes:
+Paste the task output (logs) directly into the team chat so everyone can see the failure state.
+
+---
+
+That’s the wiring set:
+
+- Dev container spins up → pipeline auto-runs
+- VS Code Tasks give you one-click re-runs
+- README tells collaborators exactly which buttons to press
+  
+You now have a **“press play, get signal”** workspace instead of **“which branch / what command again?”** chaos.
+
+---
+
 ## 📘 Glossary data
 
 - `web/glossary.json` contains the canonical MWRA terminology (sample of 30 entries).
