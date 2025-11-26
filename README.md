@@ -71,6 +71,9 @@ Abutment,Part of a structure supporting an arch or span,MWRA SpecBook
 to enable live answers. Without the key, the function echoes a stub message so the
 frontend experience stays consistent.
 
+The handler supplies up to 50 currently visible glossary entries as reference
+context so answers remain grounded while avoiding oversized payloads.
+
 Environment variables:
 
 | Variable         | Description                                              |
