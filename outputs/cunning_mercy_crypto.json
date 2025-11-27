@@ -1,0 +1,45 @@
+{
+  "headline": {
+    "doge": "DOGE: BULLISH (Meme Pressure 3)",
+    "eth": "ETH: ASCENDING (MACD trend signal)",
+    "elon": "Elon Influence: HIGH (pressure=3)"
+  },
+  "detail": {
+    "regime": {
+      "DOGE": "BULLISH",
+      "ETH": "ASCENDING"
+    },
+    "elon_meme_pressure": "HIGH",
+    "raw": {
+      "doge": {
+        "symbol": "DOGE-USD",
+        "price": 0.14,
+        "buy_signals": [
+          "EMA_CROSS_UP",
+          "MACD_UP"
+        ],
+        "sell_signals": [],
+        "rsi": 48.2,
+        "macd": 0.003,
+        "macd_signal": 0.002,
+        "ema20": 0.135,
+        "ema50": 0.129
+      },
+      "eth": {
+        "symbol": "ETH-USD",
+        "price": 3200.0,
+        "buy_signals": [
+          "EMA_CROSS_UP",
+          "MACD_UP"
+        ],
+        "sell_signals": [],
+        "rsi": 55.1,
+        "macd": 8.5,
+        "macd_signal": 6.2,
+        "ema20": 3190.0,
+        "ema50": 3150.0
+      }
+    }
+  },
+  "mode": "stub"
+}
