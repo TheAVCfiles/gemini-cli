@@ -5,7 +5,6 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
-import request from 'supertest';
 import type express from 'express';
 import { createApp, updateCoderAgentCardUrl } from './agent.js';
 import * as fs from 'node:fs';
@@ -59,19 +58,27 @@ vi.mock('./task.js', () => {
 describe('Agent Server Endpoints', () => {
   let app: express.Express;
   let server: Server;
+  let baseUrl: string;
   let testWorkspace: string;
 
-  const createTask = (contextId: string) =>
-    request(app)
-      .post('/tasks')
-      .send({
+  const createTask = async (contextId: string) => {
+    const response = await fetch(`${baseUrl}/tasks`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         contextId,
         agentSettings: {
           kind: 'agent-settings',
           workspacePath: testWorkspace,
         },
-      })
-      .set('Content-Type', 'application/json');
+      }),
+    });
+
+    return {
+      status: response.status,
+      body: await response.json(),
+    };
+  };
 
   beforeAll(async () => {
     // Create a unique temporary directory for the workspace to avoid conflicts
@@ -82,6 +89,7 @@ describe('Agent Server Endpoints', () => {
     await new Promise<void>((resolve) => {
       server = app.listen(0, () => {
         const port = (server.address() as AddressInfo).port;
+        baseUrl = `http://localhost:${port}`;
         updateCoderAgentCardUrl(port);
         resolve();
       });
@@ -113,34 +121,34 @@ describe('Agent Server Endpoints', () => {
   it('should get metadata for a specific task via GET /tasks/:taskId/metadata', async () => {
     const createResponse = await createTask('test-context-2');
     const taskId = createResponse.body;
-    const response = await request(app).get(`/tasks/${taskId}/metadata`);
+    const response = await fetch(`${baseUrl}/tasks/${taskId}/metadata`);
     expect(response.status).toBe(200);
-    expect(response.body.metadata.id).toBe(taskId);
+    const body = await response.json();
+    expect(body.metadata.id).toBe(taskId);
   }, 6000);
 
   it('should get metadata for all tasks via GET /tasks/metadata', async () => {
     const createResponse = await createTask('test-context-3');
     const taskId = createResponse.body;
-    const response = await request(app).get('/tasks/metadata');
+    const response = await fetch(`${baseUrl}/tasks/metadata`);
     expect(response.status).toBe(200);
-    expect(Array.isArray(response.body)).toBe(true);
-    expect(response.body.length).toBeGreaterThan(0);
-    const taskMetadata = response.body.find(
-      (m: TaskMetadata) => m.id === taskId,
-    );
+    const body = await response.json();
+    expect(Array.isArray(body)).toBe(true);
+    expect(body.length).toBeGreaterThan(0);
+    const taskMetadata = body.find((m: TaskMetadata) => m.id === taskId);
     expect(taskMetadata).toBeDefined();
   });
 
   it('should return 404 for a non-existent task', async () => {
-    const response = await request(app).get('/tasks/fake-task/metadata');
+    const response = await fetch(`${baseUrl}/tasks/fake-task/metadata`);
     expect(response.status).toBe(404);
   });
 
   it('should return agent metadata via GET /.well-known/agent-card.json', async () => {
-    const response = await request(app).get('/.well-known/agent-card.json');
-    const port = (server.address() as AddressInfo).port;
+    const response = await fetch(`${baseUrl}/.well-known/agent-card.json`);
     expect(response.status).toBe(200);
-    expect(response.body.name).toBe('Gemini SDLC Agent');
-    expect(response.body.url).toBe(`http://localhost:${port}/`);
+    const body = await response.json();
+    expect(body.name).toBe('Gemini SDLC Agent');
+    expect(body.url).toBe(`${baseUrl}/`);
   });
 });

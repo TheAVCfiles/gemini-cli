@@ -185,7 +185,7 @@ function findEnvFile(startDir: string): string | null {
     if (parentDir === currentDir || !parentDir) {
       // check .env under home as fallback, again preferring gemini-specific .env
       const homeGeminiEnvPath = path.join(
-        process.cwd(),
+        homedir(),
         GEMINI_CONFIG_DIR,
         '.env',
       );

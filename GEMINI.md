@@ -10,6 +10,18 @@ npm run preflight
 
 This single command ensures that your changes meet all the quality gates of the project. While you can run the individual steps (`build`, `test`, `typecheck`, `lint`) separately, it is highly recommended to use `npm run preflight` to ensure a comprehensive validation.
 
+### Offline or air-gapped installs
+
+Some dependencies (for example, `@lvce-editor/ripgrep`) attempt to download platform-specific binaries during `npm install`. In environments without outbound network access, install with scripts disabled to avoid failures, then run the usual commands:
+
+```bash
+npm install --ignore-scripts
+# ...work in the repo...
+npm rebuild --ignore-scripts
+```
+
+Any functionality that relies on the missing binaries will remain unavailable until you reinstall in a networked environment, but the codebase can still be built and tested locally.
+
 ## Writing Tests
 
 This project uses **Vitest** as its primary testing framework. When writing tests, aim to follow existing patterns. Key conventions include:

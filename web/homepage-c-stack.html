@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AVC Systems Studio — C-Stack Homepage</title>
+    <style>
+      :root {
+        --charcoal: #0f0f12;
+        --slate: #12141c;
+        --navy: #141a2b;
+        --gold: #dafa37;
+        --violet: #320f47;
+        --text: #e8ebf5;
+        --muted: #aeb5c7;
+        --card: rgba(255, 255, 255, 0.04);
+        --border: rgba(255, 255, 255, 0.08);
+        --grid-gap: 1.5rem;
+        font-family: "Montserrat", "Inter", "Segoe UI", system-ui, -apple-system,
+          sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, var(--charcoal), var(--slate));
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: "Playfair Display", "Georgia", serif;
+        letter-spacing: 0.01em;
+        margin: 0 0 0.5rem;
+        color: #f7f8fb;
+      }
+
+      p {
+        margin: 0 0 1rem;
+        color: var(--muted);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem 3.5rem;
+      }
+
+      header.hero {
+        padding: 3.5rem 1.5rem 4.5rem;
+        background: radial-gradient(120% 120% at 50% 20%, #22263a, var(--charcoal));
+        border-bottom: 1px solid var(--border);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(60% 70% at 80% 20%, #1d1f2d, transparent);
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .hero-subhead {
+        font-size: 1.05rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--gold);
+        font-weight: 700;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.4rem, 4vw, 3.4rem);
+        line-height: 1.15;
+      }
+
+      .hero p {
+        max-width: 720px;
+        font-size: 1.05rem;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.85rem 1.25rem;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        color: #f7f8fb;
+        background: #1d2233;
+        text-decoration: none;
+        font-weight: 700;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        border-color: rgba(218, 250, 55, 0.5);
+        box-shadow: 0 10px 40px rgba(218, 250, 55, 0.25);
+      }
+
+      .btn.primary {
+        background: linear-gradient(120deg, #1f2a4d, #2d3560);
+        border-color: rgba(218, 250, 55, 0.4);
+      }
+
+      section {
+        margin: 3rem 0;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .section-header small {
+        color: var(--muted);
+        letter-spacing: 0.08em;
+      }
+
+      .grid {
+        display: grid;
+        gap: var(--grid-gap);
+      }
+
+      .pillars {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 1.5rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(4px);
+      }
+
+      .card h3 {
+        font-size: 1.2rem;
+      }
+
+      .tag {
+        display: inline-flex;
+        padding: 0.35rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(218, 250, 55, 0.08);
+        color: #e7efb8;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.35rem;
+      }
+
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        color: var(--gold);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .throughline {
+        background: radial-gradient(120% 120% at 0% 0%, #3b154d, var(--violet));
+        border-radius: 24px;
+        padding: 2rem;
+        border: 1px solid rgba(218, 250, 55, 0.2);
+      }
+
+      .throughline .scroll-row {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(220px, 1fr);
+        gap: 1rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+      }
+
+      .badge-card {
+        border: 1px dashed rgba(255, 255, 255, 0.25);
+        border-radius: 16px;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.15);
+      }
+
+      .ledger {
+        background: #0d0f16;
+        padding: 2rem;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      }
+
+      .ledger-list {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .engines {
+        background: linear-gradient(135deg, #0f1626, #121b2f);
+        padding: 2rem;
+        border-radius: 20px;
+        border: 1px solid rgba(63, 129, 255, 0.2);
+      }
+
+      .engine-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .engine-card h4 {
+        margin: 0 0 0.35rem;
+      }
+
+      .engine-meta {
+        color: #9fb8ff;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+      }
+
+      .studio-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
+      }
+
+      .photo-placeholder {
+        position: relative;
+        padding-top: 60%;
+        border-radius: 14px;
+        overflow: hidden;
+        background: linear-gradient(120deg, #1f2232, #2b3045);
+        border: 1px solid var(--border);
+      }
+
+      .photo-placeholder span {
+        position: absolute;
+        inset: 0.75rem;
+        border: 1px dashed rgba(255, 255, 255, 0.35);
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+      }
+
+      .offerings-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+
+      .tile {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .tile h4 {
+        margin-bottom: 0.25rem;
+      }
+
+      .footnote {
+        color: #c0c4ce;
+        font-size: 0.95rem;
+        margin-top: 0.75rem;
+      }
+
+      footer {
+        padding: 2rem 1.5rem 3rem;
+        background: #0b0c10;
+        color: var(--muted);
+      }
+
+      footer .page {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      footer a {
+        color: var(--gold);
+        text-decoration: none;
+      }
+
+      @media (max-width: 640px) {
+        .hero-actions {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="hero-subhead">AVC Systems Studio</div>
+        <h1>Where choreography becomes computation. Where survival becomes a system.</h1>
+        <p>
+          A single homepage concept that unifies every lane—dance lineage, spoken
+          mythos, predictive engines, studio practice, and the archival evidence that
+          proves it.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#decrypt">ENTER: DeCrypt the Girl</a>
+          <a class="btn" href="#lab">VISIT: Intuition Labs</a>
+          <a class="btn" href="#studio">JOIN: StudioOS Pilot</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="page">
+      <section id="stack">
+        <div class="section-header">
+          <h2>Identity Stack — C-Stack</h2>
+          <small>Three pillars, one system</small>
+        </div>
+        <div class="grid pillars">
+          <div class="card" id="decrypt">
+            <div class="tag">MythOS Core + Spoken Word</div>
+            <h3>DeCrypt the Girl</h3>
+            <p>A literary operating system for women rewriting the narrative.</p>
+            <a class="cta" href="#throughline">Explore the Scroll →</a>
+          </div>
+          <div class="card" id="studio">
+            <div class="tag">Cinematic Studio + Urban Architect</div>
+            <h3>AVC Systems Studio</h3>
+            <p>A studio for choreography, education, lineage, and ethical AI motion systems.</p>
+            <a class="cta" href="#ledger">Visit StudioOS →</a>
+          </div>
+          <div class="card" id="lab">
+            <div class="tag">Tech Founder + AstroTrader Pro</div>
+            <h3>Intuition Labs</h3>
+            <p>A research lab for expressive AI, prediction engines, and motion-physics compute.</p>
+            <a class="cta" href="#engines">Enter the Lab →</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="throughline">
+        <div class="throughline">
+          <div class="section-header">
+            <h2>“Everything I build is choreography.”</h2>
+            <small>Flowbots · Molecule Studio · Mika Protocol · StudioOS</small>
+          </div>
+          <p>
+            Your Flowbots video. Your molecule translation. Your Mika Protocol. Your kids
+            performing architecture so clean it won awards because the structure was correct.
+          </p>
+          <div class="scroll-row">
+            <div class="badge-card">
+              <h4>Flowbots</h4>
+              <p>Archive captures of kinetic logic in motion.</p>
+            </div>
+            <div class="badge-card">
+              <h4>Mika Protocol</h4>
+              <p>Protocol cover, signatures, and provenance.</p>
+            </div>
+            <div class="badge-card">
+              <h4>StudioOS Badge</h4>
+              <p>Badge mock that signals authority and stewardship.</p>
+            </div>
+            <div class="badge-card">
+              <h4>Molecule Studio</h4>
+              <p>React + code screenshots from the molecule translation stack.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ledger">
+        <div class="ledger">
+          <div class="section-header">
+            <h2>Lineage Ledger</h2>
+            <small>Real lineage. Real systems. Real provenance.</small>
+          </div>
+          <div class="ledger-list">
+            <p>Balanchine → Calegari → Cook → Van Cura → Danter</p>
+            <p>StagePort → Glissé Engine → Ballet Cipher</p>
+            <p>Archival posts, typographically rendered for clarity and receipt.</p>
+            <p>Hudson Valley Lineage Dossier → formal dossier link</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="engines">
+        <div class="engines">
+          <div class="section-header">
+            <h2>The Engines — Tech Layer</h2>
+            <small>Founder as engineer</small>
+          </div>
+          <div class="grid engine-grid">
+            <div class="card engine-card">
+              <div class="engine-meta">Destiny Engine</div>
+              <h4>Predictive, narrative, astro-logic.</h4>
+              <a class="cta" href="#">Learn more →</a>
+            </div>
+            <div class="card engine-card">
+              <div class="engine-meta">Descent Engine</div>
+              <h4>Underworld logic and error-state mapping.</h4>
+              <a class="cta" href="#">Learn more →</a>
+            </div>
+            <div class="card engine-card">
+              <div class="engine-meta">Glissé Engine</div>
+              <h4>Motion and tempo compute for dancers and systems.</h4>
+              <a class="cta" href="#">Learn more →</a>
+            </div>
+            <div class="card engine-card">
+              <div class="engine-meta">MythSentiment Engine</div>
+              <h4>Market, social, and media ingestion with mythic logic.</h4>
+              <a class="cta" href="#">Learn more →</a>
+            </div>
+            <div class="card engine-card">
+              <div class="engine-meta">AstroTrader Pro</div>
+              <h4>Prophecies, profits, and predictive trading palettes.</h4>
+              <a class="cta" href="#">Learn more →</a>
+            </div>
+            <div class="card engine-card">
+              <div class="engine-meta">Minute Runner</div>
+              <h4>ETH regime system for time-bound execution.</h4>
+              <a class="cta" href="#">Learn more →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="studio">
+        <div class="section-header">
+          <h2>The Studio — IRL Human Layer</h2>
+          <small>Warm, grounded, real</small>
+        </div>
+        <p>
+          “I am a studio owner. I am a choreographer. I am a mother. I am the archive.”
+        </p>
+        <div class="studio-gallery">
+          <div class="photo-placeholder"><span>Dancers</span></div>
+          <div class="photo-placeholder"><span>Pink tutu collage</span></div>
+          <div class="photo-placeholder"><span>Online rehearsals 2020</span></div>
+          <div class="photo-placeholder"><span>Mother-daughter lineage</span></div>
+        </div>
+      </section>
+
+      <section id="offerings">
+        <div class="section-header">
+          <h2>Offerings Grid</h2>
+          <small>Eight lanes, one ecosystem</small>
+        </div>
+        <div class="grid offerings-grid">
+          <div class="tile">
+            <h4>DeCrypt the Girl</h4>
+            <p>Scroll OS, narrative sovereignty.</p>
+          </div>
+          <div class="tile">
+            <h4>StudioOS</h4>
+            <p>Operating system for choreography and education.</p>
+          </div>
+          <div class="tile">
+            <h4>StagePort</h4>
+            <p>Performance logistics, lineage-aware routing.</p>
+          </div>
+          <div class="tile">
+            <h4>Ballet Bots</h4>
+            <p>Ethical AI motion partners for training.</p>
+          </div>
+          <div class="tile">
+            <h4>The Mika Protocol</h4>
+            <p>Protocolized guardianship of movement IP.</p>
+          </div>
+          <div class="tile">
+            <h4>AstroTrader Pro</h4>
+            <p>Prediction engines paired with choreography logic.</p>
+          </div>
+          <div class="tile">
+            <h4>Sojourner / Charmed Protocol</h4>
+            <p>Descent and recovery rituals in code.</p>
+          </div>
+          <div class="tile">
+            <h4>Intuition Labs</h4>
+            <p>AI and compute research for expressive systems.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="proof">
+        <div class="section-header">
+          <h2>Proof &amp; Traction</h2>
+          <small>Credentials · Lineage · Evidence · Receipts · Awards</small>
+        </div>
+        <div class="grid pillars">
+          <div class="card">
+            <h3>Jeri Kansas</h3>
+            <p>Founding Faculty Spotlight with institutional framing.</p>
+          </div>
+          <div class="card">
+            <h3>Crest Beads</h3>
+            <p>Luxury tech aesthetic product sheet and provenance.</p>
+          </div>
+          <div class="card">
+            <h3>Class Diagram</h3>
+            <p>Systems thinking, lessons mapped to lineage receipts.</p>
+          </div>
+          <div class="card">
+            <h3>Medium-form Posts</h3>
+            <p>Articles that demonstrate research rigor and articulation.</p>
+          </div>
+        </div>
+        <p class="footnote">
+          This homepage unifies dance lineage, trauma-to-tech authorship, predictive engines,
+          studio founder identity, choreography civic-logic, archives, AI motion physics, future
+          faculty, and offerings into one coherent, prestige-level presence.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <div class="page">
+        <div>© AVC Systems Studio</div>
+        <div>@xoAVCxo · @decrypt_the_girl</div>
+        <div>Ko-fi.com/decryptthegirl</div>
+        <div>avcstudios.studio · intuitionlabs.tech</div>
+        <div>Contact: guidedtarotpeutics@gmail.com</div>
+      </div>
+    </footer>
+  </body>
+</html>

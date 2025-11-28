@@ -17,10 +17,6 @@ export default defineConfig({
         dirname,
         '../core/src/index.ts',
       ),
-      '@google-cloud/storage': path.resolve(
-        dirname,
-        './src/__mocks__/@google-cloud/storage.ts',
-      ),
       '../../generated/git-commit.js': path.resolve(
         dirname,
         '../core/generated/git-commit.js',
