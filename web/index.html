@@ -1,262 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MWRA Interactive Glossary</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css"
-      integrity="sha384-5gL/zy5tr3I9k2feuw+ZQilnxVe3Qo8NMHGUbqeasTyVmbwSPZ7T++YaUHr8r68m"
-      crossorigin="anonymous"
-    />
-    <style>
-      body {
-        background: #f6f8fb;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DeCrypt The Girl — Lane-A Glossary Packet</title>
+
+  <!-- Base Variables -->
+  <style>
+    :root {
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Oxygen, Ubuntu, Cantarell, "Open Sans", sans-serif;
+      --mono: ui-monospace, Menlo, Consolas, monospace;
+      --accent: #222;
+      --bg: #fdfdfd;
+      --fg: #222;
+      --muted: #666;
+      --border: #ddd;
+      --radius: 8px;
+      --gap: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.55;
+    }
+
+    header.app-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .title-block h1 {
+      margin: 0;
+      font-size: 1.45rem;
+    }
+
+    .title-block .sub {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .controls input {
+      flex: 1;
+      padding: 10px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      font-size: 15px;
+    }
+
+    .controls button {
+      padding: 10px 14px;
+      font-size: 14px;
+      background: var(--accent);
+      color: white;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+    }
+
+    main {
+      padding: 32px 24px;
+    }
+
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .stats {
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .entry {
+      padding: 16px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .entry h3 {
+      margin: 0 0 4px;
+      font-size: 1.1rem;
+    }
+
+    .entry .def {
+      margin: 0 0 6px;
+    }
+
+    .entry .src {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    mark {
+      background: #fff8a6;
+      padding: 0 2px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 50px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    /* COVER PAGE */
+    .cover {
+      page-break-after: always;
+      text-align: center;
+      padding: 90px 24px;
+    }
+
+    .cover h1 {
+      font-size: 2.8rem;
+      margin: 0 0 10px;
+    }
+
+    .cover .sub {
+      color: var(--muted);
+      margin-bottom: 30px;
+    }
+
+    .cover blockquote {
+      font-style: italic;
+      color: var(--muted);
+      margin: 24px auto;
+      max-width: 500px;
+    }
+
+    .cover .date {
+      margin-top: 40px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* PRINT CLEANUP */
+    @media print {
+      header.app-header {
+        display: none;
       }
-      header {
-        background: linear-gradient(135deg, #0f172a, #1e3a8a);
-        color: #fff;
-        padding: 3rem 0 2rem;
-        margin-bottom: 2rem;
-        text-align: center;
+      .controls {
+        display: none;
       }
-      header h1 {
-        margin-bottom: 0.75rem;
-        font-size: 2.5rem;
-        font-weight: 700;
+      .entry {
+        page-break-inside: avoid;
       }
-      header p {
-        max-width: 720px;
-        margin: 0 auto;
-        font-size: 1.1rem;
-        line-height: 1.5;
+    }
+  </style>
+
+  <!-- SCOPED ONE-PAGER CSS -->
+  <style>
+    #onepager .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    #onepager .onepager-header {
+      margin-bottom: 16px;
+    }
+
+    #onepager .onepager-header h2 {
+      margin: 0 0 4px;
+      font-size: 1.4rem;
+    }
+
+    #onepager .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    #onepager .card {
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    #onepager .badge {
+      display: inline-block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      margin-right: 6px;
+    }
+
+    #onepager .pill {
+      display: inline-block;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-right: 6px;
+    }
+
+    #onepager .rule {
+      border-top: 1px solid var(--border);
+      margin: 8px 0 16px;
+    }
+
+    #onepager .foot {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      #onepager .grid {
+        grid-template-columns: 1fr;
       }
-      .layout {
-        max-width: 1100px;
-        margin: 0 auto 3rem;
-        padding: 0 1.5rem 4rem;
-      }
-      .toolbar {
-        background: #fff;
-        padding: 1.5rem;
-        border-radius: 18px;
-        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.1);
-        margin-bottom: 1.5rem;
-      }
-      .toolbar-grid {
-        display: grid;
-        gap: 1rem;
-      }
-      @media (min-width: 768px) {
-        .toolbar-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          align-items: end;
-        }
-      }
-      .alphabet-nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 1rem;
-      }
-      .alphabet-nav button {
-        border-radius: 999px;
-        border: 1px solid transparent;
-        background: #e2e8f0;
-        color: #1e293b;
-        font-weight: 600;
-        padding: 0.25rem 0.75rem;
-        transition: all 0.15s ease;
-      }
-      .alphabet-nav button.active {
-        background: #1d4ed8;
-        color: #fff;
-        box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
-      }
-      .alphabet-nav button:hover {
-        background: #cbd5f5;
-      }
-      .results-card {
-        background: #fff;
-        border-radius: 18px;
-        padding: 1rem 1.5rem;
-        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
-      }
-      .results-meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-        color: #475569;
-        font-size: 0.95rem;
-      }
-      .glossary-list {
-        display: grid;
-        gap: 1rem;
-      }
-      .glossary-entry {
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        padding: 1rem 1.25rem;
-        transition: border 0.2s ease, box-shadow 0.2s ease;
-        background: #fff;
-      }
-      .glossary-entry:hover {
-        border-color: #94a3b8;
-        box-shadow: 0 8px 18px rgba(148, 163, 184, 0.25);
-      }
-      .glossary-entry h3 {
-        margin-bottom: 0.35rem;
-        font-size: 1.2rem;
-        color: #0f172a;
-      }
-      .glossary-entry p {
-        margin-bottom: 0.4rem;
-        line-height: 1.5;
-        color: #1e293b;
-      }
-      .glossary-entry .sources {
-        font-size: 0.9rem;
-        color: #475569;
-      }
-      .upload-zone {
-        border: 2px dashed #cbd5f5;
-        border-radius: 16px;
-        padding: 1rem;
-        text-align: center;
-        color: #475569;
-        transition: border-color 0.2s ease;
-      }
-      .upload-zone:hover {
-        border-color: #2563eb;
-        color: #1d4ed8;
-      }
-      .conflict-panel {
-        margin-top: 1.5rem;
-        padding: 1.5rem;
-        background: #f8fafc;
-        border-radius: 16px;
-        border: 1px solid #cbd5f5;
-      }
-      .conflict-panel h3 {
-        margin-bottom: 0.75rem;
-      }
-      .conflict-list {
-        display: grid;
-        gap: 0.75rem;
-      }
-      .conflict-item {
-        padding: 0.75rem 1rem;
-        background: #fff;
-        border-radius: 12px;
-        border-left: 4px solid #1d4ed8;
-        border-top: 1px solid #e2e8f0;
-        border-right: 1px solid #e2e8f0;
-        border-bottom: 1px solid #e2e8f0;
-      }
-      .conflict-item p {
-        margin: 0.25rem 0 0;
-        font-size: 0.95rem;
-        color: #334155;
-      }
-      .empty-state {
-        text-align: center;
-        color: #64748b;
-        padding: 3rem 0;
-      }
-      footer {
-        text-align: center;
-        padding: 3rem 0 2rem;
-        color: #475569;
-        font-size: 0.9rem;
-      }
-      footer a {
-        color: #1d4ed8;
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <h1>MWRA Interactive Glossary</h1>
-      <p>
-        A maintained reference of MWRA terminology backed by AI-assisted conflict
-        checks. Upload external glossaries, spot conflicts instantly, and export
-        the combined view.
-      </p>
-    </header>
-    <main class="layout">
-      <section class="toolbar" aria-labelledby="controls-heading">
-        <div class="toolbar-grid">
-          <fieldset>
-            <label for="search">Search terms or definitions</label>
-            <input
-              id="search"
-              type="search"
-              name="search"
-              placeholder="Search glossary (term, definition, or source)"
-              autocomplete="off"
-            />
-          </fieldset>
-          <div>
-            <label for="externalUpload">Upload CSV/JSON</label>
-            <div class="upload-zone">
-              <input id="externalUpload" name="externalUpload" type="file" accept=".csv,.json" />
-              <small>Drop a CSV/JSON file to compare with the canonical glossary.</small>
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- COVER PAGE -->
+  <div class="cover">
+    <h1>DeCrypt The Girl</h1>
+    <div class="sub">Lane-A Glossary Packet</div>
+    <blockquote>
+      “A myth-tech operating system built from memory, signal, and sovereignty.”
+    </blockquote>
+    <div class="date">Prepared: <script>document.write(new Date().toLocaleDateString());</script></div>
+  </div>
+
+  <!-- ONE-PAGER -->
+  <section id="onepager">
+    <div class="wrap">
+      <div class="onepager-header">
+        <h2>DeCrypt The Girl — One-Page Showcase</h2>
+        <div class="meta">A.C. Van Cura · DeCrypt The Girl</div>
+        <hr class="rule" />
+      </div>
+
+      <section class="grid">
+        <div>
+          <h3>The Scroll</h3>
+          <p class="meta">Interactive memoir-engine</p>
+          <div class="card">
+            <p>A nonlinear poetic operating system—part memoir, part decryption ritual.</p>
+            <p>Readers navigate Surface → Cipher → Echo layers, uncovering hidden system logic while witnessing the reconstruction of a life misrendered by media.</p>
+          </div>
+
+          <h3 style="margin-top:24px;">The Engine</h3>
+          <div class="card">
+            <p><span class="badge">PoetUX™</span> <span class="badge">Zodiac Decoder</span> <span class="badge">Glitch Protocol</span></p>
+            <p>A recursive architecture where memory nodes, glyphs, and narrative algorithms interact to reveal the underlying signal of a life.</p>
+          </div>
+        </div>
+
+        <div>
+          <h3>Legend</h3>
+          <div class="card">
+            <p class="pill">Surface</p><p>Visible story</p>
+            <p class="pill">Cipher</p><p>Encoded meaning</p>
+            <p class="pill">Echo</p><p>Interpretive output</p>
+
+            <hr class="rule" />
+            <div class="foot">
+              <div>decryptthegirl.com</div>
+              <div class="mono">@xoAVCxo</div>
             </div>
           </div>
         </div>
-        <div class="alphabet-nav" role="tablist" aria-label="Glossary navigation"></div>
-        <div class="results-meta" id="resultsMeta" aria-live="polite"></div>
-        <div class="actions" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-          <button id="resetFilters" class="secondary">Reset filters</button>
-          <button id="exportCsv" class="contrast">Export visible entries</button>
-          <button id="triggerAsk" class="outline">Ask the glossary bot</button>
-        </div>
       </section>
+    </div>
 
-      <section class="results-card" aria-live="polite" aria-busy="false">
-        <div id="glossaryList" class="glossary-list" role="list"></div>
-        <div id="emptyState" class="empty-state" hidden>
-          <h3>No results</h3>
-          <p>Try adjusting your search or resetting the filters.</p>
-        </div>
-      </section>
+    <div style="height:40px;"></div>
+    <div style="page-break-after: always;"></div>
+  </section>
 
-      <section class="conflict-panel" aria-labelledby="conflict-heading">
-        <h3 id="conflict-heading">Conflict agent</h3>
-        <p>
-          Upload an external glossary to surface new terms, definition changes,
-          or missing entries compared to the canonical dataset bundled with this
-          site.
-        </p>
-        <div id="conflictSummary" class="results-meta" style="margin-top: 0.5rem;"></div>
-        <div id="conflictList" class="conflict-list" role="list"></div>
-      </section>
-    </main>
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="title-block">
+      <h1 id="t"></h1>
+      <div class="sub" id="s"></div>
+    </div>
 
-    <footer>
-      Maintained by the MWRA docs team · <a href="https://netlify.com" target="_blank" rel="noreferrer">Deploy on Netlify</a>
-    </footer>
+    <div class="controls">
+      <input
+        id="q"
+        type="search"
+        placeholder="Search term or text…"
+        aria-label="Search glossary"
+      />
+      <button id="print">Print / Save PDF</button>
+    </div>
+  </header>
 
-    <dialog id="askDialog">
-      <article>
-        <header>
-          <a href="#close" aria-label="Close" rel="prev" class="close"></a>
-          <h2>Ask the glossary bot</h2>
-        </header>
-        <form>
-          <label for="askPrompt">Prompt</label>
-          <textarea id="askPrompt" name="askPrompt" rows="4" placeholder="Summarize the difference between slurry and grout"></textarea>
-          <footer style="display: flex; justify-content: space-between; gap: 0.75rem;">
-            <button id="cancelAsk" type="button" class="secondary">Cancel</button>
-            <button id="submitAsk" type="submit">Send</button>
-          </footer>
-        </form>
-        <div id="askResponse" style="margin-top: 1rem; white-space: pre-wrap;"></div>
-      </article>
-    </dialog>
+  <!-- MAIN -->
+  <main>
+    <div class="wrap">
+      <div id="stats" class="stats"></div>
+      <div id="list"></div>
+    </div>
 
-    <script src="boot_glossary.js"></script>
-  </body>
+    <footer id="f"></footer>
+  </main>
+
+  <!-- CONFIG + DATA -->
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+
+  <!-- ENGINE -->
+  <script>
+    const cfg = window.LANE_A_CONFIG || {};
+    const logo = cfg.logoText || "Lane-A";
+
+    document.getElementById("t").textContent = cfg.title || "Glossary";
+    document.getElementById("s").textContent = cfg.subtitle || "";
+    document.getElementById("f").textContent = cfg.footerNote || "";
+
+    document.documentElement.style.setProperty(
+      "--accent",
+      cfg.accentColor || "#222"
+    );
+
+    function esc(s) {
+      return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function highlight(text, query) {
+      if (!query) return text;
+      const re = new RegExp(esc(query), "gi");
+      return text.replace(re, m => `<mark>${m}</mark>`);
+    }
+
+    function renderList(data, q) {
+      const list = document.getElementById("list");
+      list.innerHTML = "";
+
+      let filtered = data;
+      if (q) {
+        const qq = q.toLowerCase();
+        filtered = data.filter(d =>
+          d.term.toLowerCase().includes(qq) ||
+          d.definition.toLowerCase().includes(qq) ||
+          (d.sources || []).some(s => s.toLowerCase().includes(qq))
+        );
+      }
+
+      document.getElementById("stats").textContent =
+        `${filtered.length} entries` + (q ? ` • filter: '${q}'` : "");
+
+      filtered.forEach(d => {
+        const div = document.createElement("div");
+        div.className = "entry";
+        div.innerHTML = `
+          <h3>${highlight(d.term, q)}</h3>
+          <p class="def">${highlight(d.definition, q)}</p>
+          <p class="src">${(d.sources || []).join(", ")}</p>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    async function init() {
+      let data = window.LANE_A_DATA;
+      if (!data) {
+        try {
+          const res = await fetch("../data/data.json", { cache: "no-store" });
+          if (res.ok) data = await res.json();
+        } catch {}
+      }
+      data ||= [];
+
+      data.sort((a, b) => a.term.localeCompare(b.term));
+
+      window.GLOSSARY_DATA = data;
+      renderList(data, "");
+    }
+
+    document.getElementById("q").addEventListener("input", e =>
+      renderList(window.GLOSSARY_DATA, e.target.value)
+    );
+
+    document.getElementById("print").onclick = () => window.print();
+
+    init();
+  </script>
+
+</body>
 </html>
