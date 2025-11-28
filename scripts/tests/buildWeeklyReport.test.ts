@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { generateWeeklyReport } from '../buildWeeklyReport.ts';
+import { generateWeeklyReport } from '../buildWeeklyReport.js';
 
 describe('buildWeeklyReport', () => {
   beforeEach(() => {

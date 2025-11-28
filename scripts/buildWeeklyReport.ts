@@ -15,7 +15,7 @@
  * reducing serverless function usage on platforms like Vercel's free tier.
  */
 
-import { existsSync, mkdirSync, writeFileSync, copyFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync, copyFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
@@ -23,6 +23,15 @@ import { execSync } from 'node:child_process';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
 const publicDataDir = join(root, 'public', 'data');
+
+/**
+ * Serverless function paths - these consume quota on hosting platforms.
+ * Update this list when adding/removing serverless functions.
+ */
+const SERVERLESS_FUNCTIONS = [
+  '/ask',          // OpenAI queries (netlify/functions/ask.js)
+  '/api/gemini',   // Gemini queries (netlify/functions/gemini.js)
+] as const;
 
 interface WeeklyReportData {
   generatedAt: string;
@@ -38,6 +47,10 @@ interface WeeklyReportData {
   staticEndpoints: string[];
 }
 
+/**
+ * Gets the current git commit hash.
+ * Uses execSync with a hardcoded command string (no user input) which is safe.
+ */
 function getGitCommit(): string {
   try {
     return execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).trim();
@@ -61,40 +74,47 @@ function getWeekBounds(date: Date): { weekStart: string; weekEnd: string } {
   };
 }
 
-function countStaticRoutes(): number {
-  // Count HTML files in public and web directories as static routes
-  const publicDir = join(root, 'public');
-  const webDir = join(root, 'web');
+function countFilesRecursively(dir: string, filter?: (file: string) => boolean): number {
   let count = 0;
 
   try {
-    const result = execSync(
-      `find "${publicDir}" "${webDir}" -name "*.html" 2>/dev/null | wc -l`,
-      { encoding: 'utf-8' }
-    );
-    count = parseInt(result.trim(), 10) || 0;
+    if (!existsSync(dir)) {
+      return 0;
+    }
+
+    const entries = readdirSync(dir, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const fullPath = join(dir, entry.name);
+
+      if (entry.isDirectory()) {
+        count += countFilesRecursively(fullPath, filter);
+      } else if (entry.isFile()) {
+        if (!filter || filter(entry.name)) {
+          count++;
+        }
+      }
+    }
   } catch {
-    count = 0;
+    return 0;
   }
 
   return count;
 }
 
+function countStaticRoutes(): number {
+  // Count HTML files in public and web directories as static routes
+  const publicDir = join(root, 'public');
+  const webDir = join(root, 'web');
+
+  const htmlFilter = (file: string): boolean => file.endsWith('.html');
+
+  return countFilesRecursively(publicDir, htmlFilter) + countFilesRecursively(webDir, htmlFilter);
+}
+
 function countAssets(): number {
   const assetsDir = join(root, 'public', 'assets');
-  let count = 0;
-
-  try {
-    const result = execSync(
-      `find "${assetsDir}" -type f 2>/dev/null | wc -l`,
-      { encoding: 'utf-8' }
-    );
-    count = parseInt(result.trim(), 10) || 0;
-  } catch {
-    count = 0;
-  }
-
-  return count;
+  return countFilesRecursively(assetsDir);
 }
 
 function listStaticEndpoints(): string[] {
@@ -122,7 +142,7 @@ export function generateWeeklyReport(): WeeklyReportData {
     version: process.env.npm_package_version || '0.0.0',
     metrics: {
       staticRoutes: countStaticRoutes(),
-      dynamicRoutes: 2, // /ask and /api/gemini serverless functions
+      dynamicRoutes: SERVERLESS_FUNCTIONS.length,
       totalAssets: countAssets(),
     },
     staticEndpoints: listStaticEndpoints(),
