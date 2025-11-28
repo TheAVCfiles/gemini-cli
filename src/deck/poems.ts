@@ -1,0 +1,17 @@
+export const POEM_MAP: Record<string, string> = {
+  P01: "[Cipher:AURORA-001]",
+  P02: "[Cipher:AURORA-002]",
+  P03: "[Cipher:AURORA-003]",
+  P04: "[Cipher:AURORA-004]",
+  P05: "[Cipher:AURORA-005]",
+  P06: "[Cipher:AURORA-006]",
+  P07: "[Cipher:AURORA-007]",
+  P08: "[Cipher:AURORA-008]",
+  P09: "[Cipher:AURORA-009]",
+  P10: "[Cipher:AURORA-010]",
+  P11: "[Cipher:AURORA-011]",
+  P12: "[Cipher:AURORA-012]",
+  P13: "[Cipher:AURORA-013]",
+  P14: "[Cipher:AURORA-014]",
+  P15: "[Cipher:AURORA-015]",
+};

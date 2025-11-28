@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*", "./app/*", "./*"]
+    },
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
