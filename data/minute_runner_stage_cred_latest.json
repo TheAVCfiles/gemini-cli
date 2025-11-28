@@ -1,0 +1,86 @@
+{
+  "week_id": "2025-W48",
+  "as_of": "2025-11-27T03:47:41.435Z",
+  "market_regime": {
+    "label": "Cunning Mercy",
+    "profile": "Defensive / Fade-Short",
+    "element_bias": "Air-Fire tilt",
+    "tau_ci": 0.64,
+    "perm_p": 0.27,
+    "structural_confirmed": true,
+    "notes": [
+      "Tracking ETH short-bias coil above 3400",
+      "Size only in micro bands"
+    ]
+  },
+  "risk_band": {
+    "max_equity_risk": 0.02,
+    "scale_up_gate": false,
+    "advised_flavor": "Scout only / No pyramiding",
+    "allowed_modes": [
+      "paper",
+      "micro",
+      "study"
+    ]
+  },
+  "predictive_levels": {
+    "symbol": "ETH",
+    "levels": [
+      {
+        "label": "Upper coil",
+        "level": 3450,
+        "bias": "Short",
+        "note": "Fade wicks into supply"
+      },
+      {
+        "label": "Mean reversion",
+        "level": 3200,
+        "bias": "Long",
+        "note": "Only if breadth improves"
+      }
+    ],
+    "summary": "Rangebound structure with negative drift; avoid aggression until clarity."
+  },
+  "stage_cred": {
+    "street": {
+      "pnl_pct": 4.2,
+      "hit_rate": 0.58,
+      "obeyed_plan": true,
+      "notes": "Micro-sized, respected stop discipline.",
+      "coins": {
+        "minted": 4,
+        "delta": 1
+      }
+    },
+    "screen": {
+      "reels_posted": 2,
+      "essays_or_logs": 1,
+      "quality_pass_count": 3,
+      "notes": "Posted weekend log + quick reel.",
+      "coins": {
+        "minted": 3,
+        "delta": 0
+      }
+    },
+    "stage": {
+      "best_routine_id": "eth_spin_001",
+      "best_routine_score": 124.5,
+      "grade": "A",
+      "judge_tag": "Controlled risk, expressive exits",
+      "coins": {
+        "minted": 12,
+        "delta": 0
+      }
+    }
+  },
+  "coin_summary": {
+    "street": 4,
+    "screen": 3,
+    "stage": 12,
+    "total": 19
+  },
+  "protocol_notes": [
+    "No size increase until two consecutive green weeks.",
+    "Stage Gate: CLOSED for live trading; OPEN for paper/ritual reps only."
+  ]
+}

@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./*"]
+    },
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
