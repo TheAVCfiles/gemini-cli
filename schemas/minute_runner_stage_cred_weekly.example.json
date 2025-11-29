@@ -1,0 +1,88 @@
+{
+  "week_id": "2025-W47",
+  "as_of": "2025-11-23T23:59:00Z",
+
+  "market_regime": {
+    "label": "Cunning Mercy",
+    "profile": "Defensive / Fade-Short",
+    "element_bias": "Air-Fire tilt",
+    "tau_ci": 0.88,
+    "perm_p": 0.017,
+    "structural_confirmed": true,
+    "notes": [
+      "Regime C-3: mean-revert short favored.",
+      "Guard band around 4624."
+    ]
+  },
+
+  "risk_band": {
+    "max_equity_risk": 0.02,
+    "scale_up_gate": false,
+    "advised_flavor": "Scout only / No pyramiding",
+    "allowed_modes": ["paper", "micro", "study"]
+  },
+
+  "predictive_levels": {
+    "symbol": "ETH",
+    "levels": [
+      {
+        "label": "Guard",
+        "level": 4624,
+        "bias": "fade short",
+        "note": "defend above"
+      },
+      {
+        "label": "Mean-Revert Zone",
+        "level": 4475,
+        "bias": "short bounces",
+        "note": "primary hunting ground"
+      }
+    ],
+    "summary": "Bias: mean-revert short; guard @4624, only scout size."
+  },
+
+  "stage_cred": {
+    "street": {
+      "pnl_pct": -0.3,
+      "hit_rate": 0.52,
+      "obeyed_plan": true,
+      "notes": "One FOMO entry, but exits disciplined.",
+      "coins": {
+        "minted": 5,
+        "delta": 2
+      }
+    },
+    "screen": {
+      "reels_posted": 3,
+      "essays_or_logs": 2,
+      "quality_pass_count": 3,
+      "notes": "One strong demo reel; two ‘good enough’ clips.",
+      "coins": {
+        "minted": 3,
+        "delta": 0
+      }
+    },
+    "stage": {
+      "best_routine_id": "pyrouette_demo_B12I6RwlEzY",
+      "best_routine_score": 84.3,
+      "grade": "A-",
+      "judge_tag": "Controlled risk, expressive exits",
+      "coins": {
+        "minted": 4,
+        "delta": 4
+      }
+    }
+  },
+
+  "coin_summary": {
+    "street": 5,
+    "screen": 3,
+    "stage": 4,
+    "total": 12
+  },
+
+  "protocol_notes": [
+    "No size increase until two consecutive green weeks.",
+    "Stage Gate: CLOSED for live trading; OPEN for paper/ritual reps only."
+  ]
+}
