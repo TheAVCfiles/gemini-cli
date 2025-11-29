@@ -5,7 +5,7 @@
  */
 
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { checkForUpdates } from './updateCheck.js';
+import { FETCH_TIMEOUT_MS, checkForUpdates } from './updateCheck.js';
 
 const getPackageJson = vi.hoisted(() => vi.fn());
 vi.mock('../../utils/package.js', () => ({
@@ -119,6 +119,27 @@ describe('checkForUpdates', () => {
     });
 
     const result = await checkForUpdates();
+    expect(result).toBeNull();
+  });
+
+  it('should timeout a long-running update check', async () => {
+    getPackageJson.mockResolvedValue({
+      name: 'test-package',
+      version: '1.0.0',
+    });
+
+    const pendingUpdate = new Promise(() => {});
+    const fetchInfo = vi.fn().mockReturnValue(pendingUpdate);
+    updateNotifier.mockReturnValue({
+      fetchInfo,
+    });
+
+    const resultPromise = checkForUpdates();
+
+    await vi.advanceTimersByTimeAsync(FETCH_TIMEOUT_MS);
+    const result = await resultPromise;
+
+    expect(fetchInfo).toHaveBeenCalledTimes(1);
     expect(result).toBeNull();
   });
 
