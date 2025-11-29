@@ -1,4 +1,18 @@
 const DEFAULT_MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
+const CORS_HEADERS = {
+  "Content-Type": "application/json",
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
+function jsonResponse(statusCode, body) {
+  return {
+    statusCode,
+    headers: CORS_HEADERS,
+    body: typeof body === "string" ? body : JSON.stringify(body),
+  };
+}
 
 function buildContext(glossary = []) {
   if (!Array.isArray(glossary) || !glossary.length) {
@@ -25,37 +39,33 @@ function normaliseBody(body) {
 }
 
 exports.handler = async (event) => {
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 204, headers: CORS_HEADERS, body: "" };
+  }
+
   if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: "Method Not Allowed" }),
-    };
+    return jsonResponse(405, { message: "Method Not Allowed" });
   }
 
   let parsedBody = {};
   try {
     parsedBody = normaliseBody(JSON.parse(event.body || "{}"));
   } catch (error) {
-    return {
-      statusCode: 400,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: "Invalid JSON payload", details: error.message }),
-    };
+    return jsonResponse(400, { message: "Invalid JSON payload", details: error.message });
   }
 
   const prompt = (parsedBody.prompt || "").toString();
   const glossary = Array.isArray(parsedBody.glossary) ? parsedBody.glossary : [];
 
+  if (!prompt.trim()) {
+    return jsonResponse(400, { message: "Prompt is required" });
+  }
+
   if (!process.env.OPENAI_API_KEY) {
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        answer: stubAnswer(prompt),
-        offline: true,
-      }),
-    };
+    return jsonResponse(200, {
+      answer: stubAnswer(prompt),
+      offline: true,
+    });
   }
 
   try {
@@ -93,17 +103,9 @@ exports.handler = async (event) => {
       ? data.output.map((item) => item.content?.[0]?.text || "").join("\n").trim()
       : data.output_text || data.content?.[0]?.text || "";
 
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ answer: answer || "No response generated." }),
-    };
+    return jsonResponse(200, { answer: answer || "No response generated." });
   } catch (error) {
     console.error("Netlify ask function error", error);
-    return {
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: "Failed to reach the OpenAI API", details: error.message }),
-    };
+    return jsonResponse(500, { message: "Failed to reach the OpenAI API", details: error.message });
   }
 };
