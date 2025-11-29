@@ -1,0 +1,15 @@
+{
+  "routine_id": "eth_spin_001",
+  "elements": [
+    { "id": "axel", "bv": 8.5, "dd": 1.2, "goe": 1 },
+    { "id": "lutz", "bv": 9.0, "dd": 0.8, "goe": 0 },
+    { "id": "combo", "bv": 7.5, "dd": 1.5, "goe": 2 }
+  ],
+  "pcs": {
+    "skating_skills": 16,
+    "transitions": 14.5,
+    "performance": 16.5,
+    "choreo": 15.5,
+    "interpretation": 16
+  }
+}

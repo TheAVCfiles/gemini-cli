@@ -1,0 +1,32 @@
+{
+  "label": "Cunning Mercy",
+  "profile": "Defensive / Fade-Short",
+  "element_bias": "Air-Fire tilt",
+  "tau_ci": 0.64,
+  "perm_p": 0.27,
+  "structural_confirmed": true,
+  "notes": [
+    "Tracking ETH short-bias coil above 3400",
+    "Size only in micro bands"
+  ],
+  "max_equity_risk": 0.02,
+  "scale_up_gate": false,
+  "advised_flavor": "Scout only / No pyramiding",
+  "allowed_modes": ["paper", "micro", "study"],
+  "symbol": "ETH",
+  "levels": [
+    {
+      "label": "Upper coil",
+      "level": 3450,
+      "bias": "Short",
+      "note": "Fade wicks into supply"
+    },
+    {
+      "label": "Mean reversion",
+      "level": 3200,
+      "bias": "Long",
+      "note": "Only if breadth improves"
+    }
+  ],
+  "summary": "Rangebound structure with negative drift; avoid aggression until clarity."
+}
