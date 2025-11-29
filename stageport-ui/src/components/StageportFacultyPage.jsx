@@ -53,8 +53,23 @@ const initialFaculty = [
   }
 ];
 
-function Badge({ children, className = '' }) {
-  return <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-600 text-black ${className}`}>{children}</span>;
+function Badge({ children, className = '', tone = 'indigo' }) {
+  const palette = {
+    indigo: 'bg-indigo-500/80 text-white border border-indigo-200/40 shadow-sm',
+    amber: 'bg-amber-400/90 text-slate-900 border border-amber-200/60 shadow-sm',
+    emerald: 'bg-emerald-500/80 text-white border border-emerald-200/60 shadow-sm',
+    slate: 'bg-slate-700 text-white border border-slate-500/60 shadow-sm',
+  };
+
+  return (
+    <span
+      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+        palette[tone] || palette.indigo
+      } ${className}`}
+    >
+      {children}
+    </span>
+  );
 }
 
 function Modal({ children, title, onClose }) {
@@ -81,6 +96,13 @@ export default function StageportFacultyPage() {
   const [licenseOpen, setLicenseOpen] = useState(false);
   const [licenseLoading, setLicenseLoading] = useState(false);
   const [licenseSuccess, setLicenseSuccess] = useState(false);
+
+  const heroBadges = [
+    'StagePort — Studio OS',
+    'StageCred Ledgers',
+    'Py.rouette Scoring',
+    'Title IX Ready',
+  ];
 
   const fetchVaultArtifact = async (facultyId) => {
     const resp = await fetch('/api/vault-query', {
@@ -143,6 +165,11 @@ export default function StageportFacultyPage() {
           <p className="text-amber-300 uppercase text-xs tracking-wider mb-3">Agentic AI • Embodied Pedagogy • Licensed Faculty</p>
           <h2 className="text-2xl font-medium">{founder.name} <span className="text-gray-400 text-sm font-normal">— {founder.title}</span></h2>
           <p className="text-gray-300 mt-4 max-w-2xl leading-relaxed">{founder.bioShort}</p>
+          <div className="flex flex-wrap gap-2 mt-5">
+            {heroBadges.map((label) => (
+              <Badge key={label}>{label}</Badge>
+            ))}
+          </div>
           <div className="mt-6 flex flex-wrap gap-3 items-center">
             <Badge>Founding Studio</Badge>
             <Badge>DeCrypt the Girl</Badge>
