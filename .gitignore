@@ -46,3 +46,7 @@ packages/vscode-ide-companion/*.vsix
 
 # GHA credentials
 gha-creds-*.json
+
+# Static weekly reports (dated files regenerated during build)
+public/data/report-*.json
+!public/data/report-latest.json
