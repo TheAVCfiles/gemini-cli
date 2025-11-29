@@ -1,288 +1,508 @@
-import React, { useState } from 'react';
-import { X, Sparkles, ExternalLink } from 'lucide-react';
-
-/* StageportFacultyPage.jsx
-   - Polished Stageport demo UI.
-   - Calls /api/vault-query and /api/license-create-session on the server.
-   - Replace headshots and assets as desired.
-*/
-const founder = {
-  name: "Allison Van Cura",
-  title: "Founder & Artistic Systems Architect",
-  headshot: "https://placehold.co/400x400/111827/ffffff?text=Allison+Van+Cura",
-  bioShort: "Writer, choreographer, and myth-tech systems architect.",
-  bioLong: `Allison Van Cura (AVC) is a choreographer and systems architect who translates survival into syntax.`,
-  email: "acfwrites@gmail.com",
-  studio: "Intuition Labs / Stageport",
-  location: "Poughkeepsie, NY",
-};
-
-const initialFaculty = [
-  {
-    id: "avc-founder",
-    name: founder.name,
-    role: "Founding Faculty — Systems & Choreography",
-    pronouns: "she/her",
-    image: founder.headshot,
-    short: "Founder & Artistic Systems Architect. Myth-tech OS, choreography as cryptography.",
-    long: founder.bioLong,
-    tags: ["Founding", "Pedagogy", "MythOS"],
-    licensed: true,
-  },
-  {
-    id: "diana-castellanos",
-    name: "Diana Castellanos",
-    role: "Principal — Classical Lineage",
-    pronouns: "she/her",
-    image: "https://images.unsplash.com/photo-1508807526345-15e9b5f4eaff?q=80&w=600&h=800&fit=crop",
-    short: "Ethereal classical principal; Balanchine & Petipa lineage.",
-    long: "Diana's work integrates neoclassical clarity with fluid lyricism.",
-    tags: ["Principal", "Classical"],
-    licensed: false,
-  },
-  {
-    id: "aurora-psuedo",
-    name: "AURORA — Myth Persona",
-    role: "Agentic AI — Mythic Ballerina Persona",
-    pronouns: "she/they",
-    image: "https://placehold.co/600x800/6b21a8/ffffff?text=AURORA",
-    short: "Myth-tech persona trained on Aurora's natal myth and poetic choreography.",
-    long: "Aurora is a fully choreographed persona — part archival, part generated — designed to teach ritualized improvisation and emotional mapping.",
-    tags: ["Persona", "AI-Semblance"],
-    licensed: false,
-  }
-];
-
-function Badge({ children, className = '' }) {
-  return <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-600 text-black ${className}`}>{children}</span>;
-}
-
-function Modal({ children, title, onClose }) {
-  return (
-    <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center p-6">
-      <div className="absolute inset-0 bg-black/70" onClick={onClose} />
-      <div className="relative z-10 max-w-3xl w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 rounded-2xl shadow-2xl p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-serif">{title}</h3>
-          <button onClick={onClose} aria-label="Close" className="p-2 rounded-full hover:bg-gray-800">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-        <div>{children}</div>
-      </div>
-    </div>
-  );
-}
+import React from 'react';
 
 export default function StageportFacultyPage() {
-  const [faculty, setFaculty] = useState(initialFaculty);
-  const [selected, setSelected] = useState(null);
-  const [vaultOpen, setVaultOpen] = useState(false);
-  const [licenseOpen, setLicenseOpen] = useState(false);
-  const [licenseLoading, setLicenseLoading] = useState(false);
-  const [licenseSuccess, setLicenseSuccess] = useState(false);
-
-  const fetchVaultArtifact = async (facultyId) => {
-    const resp = await fetch('/api/vault-query', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ facultyId, query: 'Provide a short teaching artifact: class outline and program note.' })
-    });
-    if (!resp.ok) throw new Error('Vault query failed');
-    const j = await resp.json();
-    return { title: 'Vault Summary', excerpt: j.llmText || 'No artifact', content: j.llmText, sources: j.sources, auditHash: j.provenanceAuditHash };
-  };
-
-  const handlePurchaseLicense = async (facultyId, auditHash) => {
-    setLicenseLoading(true);
-    setLicenseSuccess(false);
-    try {
-      const resp = await fetch('/api/license-create-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ facultyId, licenseType: 'institutional', institution: 'Demo Institution', auditHash })
-      });
-      const j = await resp.json();
-      if (!j.sessionId) throw new Error('No session');
-      // If Stripe is loaded on page, redirect. Otherwise demo success.
-      if (window.Stripe && import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY) {
-        const stripe = window.Stripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-        await stripe.redirectToCheckout({ sessionId: j.sessionId });
-      } else {
-        // demo fallback
-        setLicenseSuccess(true);
-        setFaculty(prev => prev.map(f => f.id === facultyId ? { ...f, licensed: true } : f));
-      }
-    } catch (e) {
-      console.error(e);
-      alert('License flow failed: ' + e.message);
-    } finally {
-      setLicenseLoading(false);
-    }
-  };
-
-  const openVaultFor = async (member) => {
-    setSelected({ ...member, fetching: true });
-    setVaultOpen(true);
-    try {
-      const artifact = await fetchVaultArtifact(member.id);
-      setSelected(prev => ({ ...prev, artifact, fetching: false }));
-    } catch (e) {
-      setSelected(prev => ({ ...prev, artifact: { title: 'Error', excerpt: 'Failed to fetch artifact.' }, fetching: false }));
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white font-inter p-8">
-      <header className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-6 py-12">
-        <div className="w-44 h-44 rounded-2xl overflow-hidden ring-2 ring-amber-500">
-          <img src={founder.headshot} alt={founder.name} className="w-full h-full object-cover" />
-        </div>
-        <div className="flex-1">
-          <h1 className="text-4xl font-serif mb-2">Pyrouette Stageport</h1>
-          <p className="text-amber-300 uppercase text-xs tracking-wider mb-3">Agentic AI • Embodied Pedagogy • Licensed Faculty</p>
-          <h2 className="text-2xl font-medium">{founder.name} <span className="text-gray-400 text-sm font-normal">— {founder.title}</span></h2>
-          <p className="text-gray-300 mt-4 max-w-2xl leading-relaxed">{founder.bioShort}</p>
-          <div className="mt-6 flex flex-wrap gap-3 items-center">
-            <Badge>Founding Studio</Badge>
-            <Badge>DeCrypt the Girl</Badge>
-            <Badge>MythOS</Badge>
-            <button onClick={() => setVaultOpen(true)} className="ml-auto px-4 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-sm flex items-center gap-2">
-              <Sparkles className="w-4 h-4" /> View Vault (demo)
-            </button>
-          </div>
-        </div>
-      </header>
+    <div>
+      <style>{`
+        :root {
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+          color: #0b1120;
+          background: #020617;
+        }
+        body {
+          margin: 0;
+          background: radial-gradient(circle at top, #0f172a 0, #020617 55%);
+          color: #e5e7eb;
+        }
+        a {
+          text-decoration: none;
+          color: inherit;
+        }
+        .page {
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 2.5rem 1.25rem 3.5rem;
+        }
+        header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 1.5rem;
+          margin-bottom: 2rem;
+        }
+        .logo {
+          font-weight: 700;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          font-size: 0.85rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .logo-mark {
+          width: 22px;
+          height: 22px;
+          border-radius: 999px;
+          border: 2px solid #e5e7eb;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.7rem;
+        }
+        nav {
+          display: flex;
+          gap: 1.5rem;
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: #9ca3af;
+        }
+        .hero {
+          display: grid;
+          grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+          gap: 2.5rem;
+          align-items: center;
+          margin-bottom: 3rem;
+        }
+        .hero-kicker {
+          font-size: 0.78rem;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: #a5b4fc;
+          margin-bottom: 0.75rem;
+        }
+        .hero-title {
+          font-size: clamp(2.2rem, 3vw, 2.8rem);
+          font-weight: 750;
+          letter-spacing: 0.02em;
+          line-height: 1.1;
+          margin-bottom: 0.75rem;
+        }
+        .hero-highlight {
+          color: #f97316;
+        }
+        .hero-body {
+          font-size: 0.98rem;
+          color: #e5e7eb;
+          max-width: 32rem;
+          line-height: 1.5;
+          margin-bottom: 1.2rem;
+        }
+        .hero-sub {
+          font-size: 0.82rem;
+          color: #9ca3af;
+          max-width: 30rem;
+          margin-bottom: 1.6rem;
+        }
+        .hero-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.8rem;
+          align-items: center;
+          margin-bottom: 1.4rem;
+        }
+        .btn-primary {
+          border-radius: 999px;
+          padding: 0.7rem 1.5rem;
+          font-size: 0.9rem;
+          font-weight: 600;
+          border: none;
+          cursor: pointer;
+          background: linear-gradient(135deg, #f97316, #facc15);
+          color: #0b1120;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+        }
+        .btn-secondary {
+          border-radius: 999px;
+          padding: 0.65rem 1.3rem;
+          font-size: 0.85rem;
+          font-weight: 500;
+          border: 1px solid #4b5563;
+          cursor: pointer;
+          background: transparent;
+          color: #e5e7eb;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+        }
+        .btn-primary span.icon,
+        .btn-secondary span.icon {
+          font-size: 0.95rem;
+        }
+        .hero-footnote {
+          font-size: 0.75rem;
+          color: #6b7280;
+        }
+        .badge-strip {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.4rem;
+          font-size: 0.7rem;
+          color: #9ca3af;
+          margin-top: 1rem;
+        }
+        .badge-chip {
+          padding: 0.25rem 0.5rem;
+          border-radius: 999px;
+          border: 1px solid #374151;
+          background: rgba(15,23,42,0.9);
+        }
+        .hero-panel {
+          border-radius: 18px;
+          border: 1px solid #374151;
+          background: radial-gradient(circle at top left, #1f2937 0, #020617 70%);
+          padding: 1.5rem 1.4rem;
+          font-size: 0.82rem;
+          color: #e5e7eb;
+        }
+        .hero-panel-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.8rem;
+        }
+        .hero-panel-title {
+          font-size: 0.82rem;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: #9ca3af;
+        }
+        .hero-panel-tag {
+          padding: 0.25rem 0.55rem;
+          border-radius: 999px;
+          border: 1px solid #4b5563;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #a5b4fc;
+        }
+        .hero-panel-main {
+          font-size: 0.88rem;
+          margin-bottom: 0.8rem;
+        }
+        .hero-panel-main strong {
+          color: #facc15;
+        }
+        .hero-panel-metrics {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.75rem;
+          margin-top: 0.6rem;
+        }
+        .hero-panel-metric {
+          border-radius: 12px;
+          border: 1px solid #334155;
+          padding: 0.6rem 0.7rem;
+          font-size: 0.78rem;
+        }
+        .metric-label {
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          font-size: 0.66rem;
+          color: #9ca3af;
+          margin-bottom: 0.2rem;
+        }
+        .metric-value {
+          font-size: 0.95rem;
+          font-weight: 600;
+        }
+        .section {
+          margin-bottom: 3rem;
+        }
+        .section-kicker {
+          font-size: 0.78rem;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #9ca3af;
+          margin-bottom: 0.4rem;
+        }
+        .section-title {
+          font-size: 1.25rem;
+          font-weight: 650;
+          margin-bottom: 0.75rem;
+        }
+        .section-body {
+          font-size: 0.9rem;
+          color: #d1d5db;
+          max-width: 40rem;
+          line-height: 1.6;
+          margin-bottom: 1.5rem;
+        }
+        .offers-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 1.2rem;
+        }
+        .offer-card {
+          border-radius: 16px;
+          border: 1px solid #374151;
+          background: rgba(15,23,42,0.9);
+          padding: 1.2rem 1.1rem 1.3rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        .offer-name {
+          font-size: 0.95rem;
+          font-weight: 600;
+        }
+        .offer-price {
+          font-size: 1.05rem;
+          font-weight: 650;
+          color: #facc15;
+        }
+        .offer-tagline {
+          font-size: 0.8rem;
+          color: #9ca3af;
+        }
+        .offer-list {
+          margin: 0.25rem 0 0.4rem 1rem;
+          padding: 0;
+          font-size: 0.8rem;
+          color: #d1d5db;
+        }
+        .offer-list li {
+          margin-bottom: 0.18rem;
+        }
+        .offer-cta {
+          margin-top: auto;
+          padding-top: 0.4rem;
+        }
+        .offer-cta button {
+          width: 100%;
+          justify-content: center;
+        }
+        .footer-note {
+          font-size: 0.78rem;
+          color: #6b7280;
+          border-top: 1px solid #1f2937;
+          padding-top: 1.2rem;
+          text-align: center;
+        }
+        @media (max-width: 900px) {
+          .hero {
+            grid-template-columns: minmax(0, 1fr);
+          }
+          .offers-grid {
+            grid-template-columns: minmax(0,1fr);
+          }
+          header {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+        }
+      `}</style>
 
-      <main className="max-w-6xl mx-auto mt-8">
-        <section>
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-serif">Founding Faculty & Agentic Personas</h3>
-            <p className="text-sm text-gray-400">Licensing-ready — private vault for pedagogy, contracts & royalties.</p>
+      <div className="page">
+        <header>
+          <div className="logo">
+            <div className="logo-mark">SP</div>
+            StagePort Systems
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {faculty.map(member => (
-              <article key={member.id} className="bg-gray-800 rounded-2xl overflow-hidden shadow-lg">
-                <div className="relative h-80 overflow-hidden">
-                  <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                    <div>
-                      <h4 className="text-lg font-serif">{member.name}</h4>
-                      <p className="text-xs text-gray-300">{member.role}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <p className="text-sm text-gray-300">{member.short}</p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <div className="flex gap-2">
-                      {member.tags.map((t, i) => <span key={i} className="text-xs text-gray-400 bg-gray-700 px-2 py-1 rounded-full">{t}</span>)}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => openVaultFor(member)} className="px-3 py-1 rounded-full bg-amber-600 text-black text-xs hover:bg-amber-500">Vault</button>
-                      <button onClick={() => setLicenseOpen(member)} className={`px-3 py-1 rounded-full text-xs ${member.licensed ? 'bg-green-700' : 'bg-indigo-700 hover:bg-indigo-600'}`}>
-                        {member.licensed ? 'Licensed' : 'License'}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))}
+          <nav>
+            <span>Product</span>
+            <span>Pricing</span>
+            <span>Safety</span>
+            <span>Book a Call</span>
+          </nav>
+        </header>
+
+        <section className="hero">
+          <div>
+            <div className="hero-kicker">Transparent math • 28-day evolution clock</div>
+            <h1 className="hero-title">
+              Turn rehearsals into <span className="hero-highlight">credentials</span>,
+              tokens and Title&nbsp;IX-ready reports.
+            </h1>
+            <p className="hero-body">
+              StagePort is the operating system for movement-based studios.
+              We run every routine through transparent scoring, generate cryptographic
+              StageCred reports, and mint tokens that fund scholarships, travel, and leadership.
+            </p>
+            <p className="hero-sub">
+              Under the hood, your studio runs on a 28-day mutation engine:
+              every cycle we ship a new module, patch, or reporting upgrade so your
+              ledger stays alive, accurate, and impossible to ignore.
+            </p>
+            <div className="hero-actions">
+              <a href="stagecred_demo_url_here" target="_blank" rel="noopener">
+                <button className="btn-primary">
+                  <span className="icon">📊</span>
+                  View Live StageCred Report
+                </button>
+              </a>
+              <a href="#pricing">
+                <button className="btn-secondary">
+                  <span className="icon">💳</span>
+                  See Studio Pricing
+                </button>
+              </a>
+            </div>
+            <div className="hero-footnote">
+              Designed by a career choreographer & neurolinguistic consultant.
+              Built for studios who want receipts, not vibes.
+            </div>
+            <div className="badge-strip">
+              <div className="badge-chip">Clock-28 Evolution Beats™</div>
+              <div className="badge-chip">Py.rouette™ TES/PCS/GOE Engine</div>
+              <div className="badge-chip">StageCred™ Weekly Reports</div>
+              <div className="badge-chip">StageCoin™ Token Economy</div>
+              <div className="badge-chip">Director’s Chair OS™ Dashboard</div>
+            </div>
+          </div>
+          <aside className="hero-panel">
+            <div className="hero-panel-header">
+              <div className="hero-panel-title">Director’s Chair Snapshot</div>
+              <div className="hero-panel-tag">Studio OS</div>
+            </div>
+            <div className="hero-panel-main">
+              One console for <strong>students, offers, scores, tokens</strong> and
+              safety incidents. Built so a studio owner can see
+              <strong>who’s thriving and who needs support</strong> at a glance,
+              then evolve the system on a predictable 28-day rhythm.
+            </div>
+            <div className="hero-panel-metrics">
+              <div className="hero-panel-metric">
+                <div className="metric-label">This Week</div>
+                <div className="metric-value">37 StageCred Reports</div>
+                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Auto-emailed to parents</div>
+              </div>
+              <div className="hero-panel-metric">
+                <div className="metric-label">Tokens Minted</div>
+                <div className="metric-value">612 Stage / 184 Screen</div>
+                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Scholarships · Travel · Gear</div>
+              </div>
+              <div className="hero-panel-metric">
+                <div className="metric-label">Safety</div>
+                <div className="metric-value">0 Open Incidents</div>
+                <div style={{ fontSize: '0.75rem', color: '#22c55e' }}>Title IX view up to date</div>
+              </div>
+              <div className="hero-panel-metric">
+                <div className="metric-label">Pipeline</div>
+                <div className="metric-value">6 College-Track Dancers</div>
+                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Portfolios exporting as PDFs</div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section className="section">
+          <div className="section-kicker">Evolution beats</div>
+          <div className="section-title">Your studio runs on a 28-day mutation engine.</div>
+          <p className="section-body">
+            Your body already knows the pattern: attention, build, peak, reset. StagePort
+            hooks your studio into the same biological schedule. Not quarterly. Not
+            “when things slow down.” Every 28 days, the system pushes a new module,
+            patch, or release across your ledger.
+          </p>
+          <p className="section-body" style={{ marginTop: '-0.75rem' }}>
+            That rhythm drives pattern-recognition and endurance instead of burnout.
+            Dancers see fresh upgrades. Parents see steady receipts. You see a studio
+            that never stagnates, because the clock won’t let it.
+          </p>
+          <div className="offers-grid" style={{ gap: '0.9rem' }}>
+            <div className="offer-card">
+              <div className="offer-name">Week 1 – Scan &amp; Score</div>
+              <div className="offer-tagline">Baseline the work onstage and in class.</div>
+              <ul className="offer-list">
+                <li>Upload routines and rehearsals</li>
+                <li>Py.rouette engine scores TES/PCS/GOE</li>
+                <li>First StageCred reports land in inboxes</li>
+              </ul>
+            </div>
+            <div className="offer-card">
+              <div className="offer-name">Week 2 – Ledger &amp; Tokens</div>
+              <div className="offer-tagline">Turn effort into something bankable.</div>
+              <ul className="offer-list">
+                <li>StageCoin rules set for your studio</li>
+                <li>Leadership, consistency and artistry earn extra weight</li>
+                <li>Parents see how tokens fund scholarships and travel</li>
+              </ul>
+            </div>
+            <div className="offer-card">
+              <div className="offer-name">Week 3–4 – Patch &amp; Release</div>
+              <div className="offer-tagline">Ship the next evolution beat.</div>
+              <ul className="offer-list">
+                <li>Adjust rubrics based on what the data shows</li>
+                <li>Publish a new report view or parent dashboard tweak</li>
+                <li>Lock the cycle, then start the next 28-day pass</li>
+              </ul>
+            </div>
           </div>
         </section>
-      </main>
 
-      {vaultOpen && (
-        <Modal title="Faculty Vault — Demo Artifacts" onClose={() => { setVaultOpen(false); setSelected(null); }}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="md:col-span-1 space-y-3">
-              <h5 className="text-sm uppercase text-gray-400 mb-2">Founding Vault</h5>
-              {faculty.map(f => (
-                <button key={f.id} onClick={() => openVaultFor(f)} className="w-full text-left p-3 rounded-lg hover:bg-gray-800 flex items-center gap-3">
-                  <img src={f.image} alt={f.name} className="w-12 h-12 object-cover rounded-md" />
-                  <div>
-                    <div className="font-medium">{f.name}</div>
-                    <div className="text-xs text-gray-400">{f.role}</div>
-                  </div>
-                </button>
-              ))}
+        <section className="section">
+          <div className="section-kicker">The gap</div>
+          <div className="section-title">Robotics kids get ecosystems. Dancers get ribbons.</div>
+          <p className="section-body">
+            In tech and STEM, students collect badges, scores, and credentials that feed real
+            pipelines into scholarships, internships, and careers. In dance, cheer, gymnastics
+            and performance, most girls get subjective scores, one-night trophies and no ledger.
+            StagePort fixes that with transparent scoring, cryptographic StageCred reports and
+            a token economy that reinvests back into the students who carry your studio.
+          </p>
+        </section>
+
+        <section className="section" id="pricing">
+          <div className="section-kicker">Pricing</div>
+          <div className="section-title">Start small. Scale with your studio.</div>
+          <div className="section-body">
+            Three offers. No contracts. We start with your existing classes and performances
+            and layer StagePort on top.
+          </div>
+          <div className="offers-grid">
+            <div className="offer-card">
+              <div className="offer-name">StageCred Personal Ledger</div>
+              <div className="offer-price">$19 / month per dancer</div>
+              <div className="offer-tagline">For serious students and their parents.</div>
+              <ul className="offer-list">
+                <li>Weekly StageCred report (TES/PCS/GOE)</li>
+                <li>Badges for technique, leadership, effort</li>
+                <li>Stage / Screen / Street token earnings</li>
+                <li>Downloadable JSON + PDF portfolio pages</li>
+              </ul>
+              <div className="offer-cta">
+                <button className="btn-secondary"><span className="icon">📝</span>Enroll a dancer</button>
+              </div>
             </div>
-
-            <div className="md:col-span-2 bg-gray-800 p-4 rounded-lg min-h-[220px]">
-              {!selected && <p className="text-gray-400">Select a faculty member to view a sample archived artifact.</p>}
-              {selected && (
-                <>
-                  <div className="flex items-start gap-4 mb-4">
-                    <img src={selected.image} alt={selected.name} className="w-20 h-20 object-cover rounded-md" />
-                    <div>
-                      <h4 className="text-xl font-serif">{selected.name}</h4>
-                      <p className="text-xs text-gray-400">{selected.role}</p>
-                    </div>
-                    <div className="ml-auto text-right">
-                      <Badge>{selected.licensed ? 'Licensed' : 'Unlicensed'}</Badge>
-                      <div className="text-xs text-gray-500 mt-1">{selected.pronouns || ''}</div>
-                    </div>
-                  </div>
-                  <div className="p-3 bg-gray-900 rounded-md">
-                    {selected.fetching ? (
-                      <p className="text-gray-400">Fetching artifact…</p>
-                    ) : (
-                      <>
-                        <h5 className="font-medium">{selected.artifact?.title}</h5>
-                        <p className="text-sm text-gray-300 mt-2">{selected.artifact?.excerpt}</p>
-                        <div className="mt-4 text-xs text-gray-400">{selected.artifact?.content}</div>
-                        <div className="mt-6 flex gap-3">
-                          <button onClick={() => setLicenseOpen(selected)} className="px-4 py-2 rounded-full bg-amber-600 text-black">Request License</button>
-                          <a className="px-4 py-2 rounded-full border border-gray-700 text-sm hover:bg-gray-800 flex items-center gap-2" href="#"
-                             onClick={(e) => { e.preventDefault(); alert('Demo: open folder in private staging'); }}>
-                            <ExternalLink className="w-4 h-4" /> Open Archive
-                          </a>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </>
-              )}
+            <div className="offer-card">
+              <div className="offer-name">Py.rouette Judging Package</div>
+              <div className="offer-price">$249 intro · from $900 / event</div>
+              <div className="offer-tagline">Transparent scoring for auditions &amp; shows.</div>
+              <ul className="offer-list">
+                <li>Custom scoring rubric built on Py.rouette</li>
+                <li>Side-by-side routine comparison reports</li>
+                <li>Judge notes converted to clean parent-friendly language</li>
+                <li>JSON archive for future portfolios and appeals</li>
+              </ul>
+              <div className="offer-cta">
+                <button className="btn-secondary"><span className="icon">📆</span>Book a judging consult</button>
+              </div>
+            </div>
+            <div className="offer-card">
+              <div className="offer-name">StagePort Starter OS</div>
+              <div className="offer-price">$297 one-time</div>
+              <div className="offer-tagline">Your studio’s Director’s Chair in a week.</div>
+              <ul className="offer-list">
+                <li>People, offers, scores, tokens &amp; safety in one console</li>
+                <li>Templates for StageCred, tokens and Title IX log</li>
+                <li>Owner training: how to read the ledger in 15 minutes</li>
+                <li>Roadmap to expand into franchise or competition mode</li>
+              </ul>
+              <div className="offer-cta">
+                <button className="btn-primary"><span className="icon">🚀</span>Set up my studio OS</button>
+              </div>
             </div>
           </div>
-        </Modal>
-      )}
+        </section>
 
-      {licenseOpen && (
-        <Modal title={licenseOpen.name ? `License — ${licenseOpen.name}` : 'Purchase License'} onClose={() => { setLicenseOpen(false); setLicenseLoading(false); setLicenseSuccess(false); }}>
-          <div>
-            <p className="text-sm text-gray-400 mb-4">Licensing this faculty artifact will begin a private contract creation workflow, royalty schedule, and secure hosting. This is a demo flow — replace with real contract & payment handlers.</p>
-            <div className="bg-gray-800 p-4 rounded-md">
-              <div className="flex items-center gap-4 mb-4">
-                <img src={licenseOpen.image} alt={licenseOpen.name} className="w-16 h-16 object-cover rounded-md" />
-                <div>
-                  <div className="font-medium">{licenseOpen.name}</div>
-                  <div className="text-xs text-gray-400">{licenseOpen.role}</div>
-                </div>
-                <div className="ml-auto text-right">
-                  <div className="text-sm text-gray-300">License Type</div>
-                  <div className="text-amber-400 font-medium">Institutional — Per Term</div>
-                </div>
-              </div>
-              <div className="mt-3">
-                <label className="block text-xs text-gray-400">Your Institution / Company</label>
-                <input type="text" className="mt-1 w-full p-2 rounded-md bg-gray-900 border border-gray-700" placeholder="e.g., ModernArts Conservatory" />
-              </div>
-              <div className="mt-4 flex items-center gap-3">
-                <button onClick={() => handlePurchaseLicense(licenseOpen.id, selected?.artifact?.auditHash)} disabled={licenseLoading} className="px-4 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700">
-                  {licenseLoading ? 'Processing…' : 'Purchase License — Demo'}
-                </button>
-                {licenseSuccess && <div className="text-green-400 text-sm">Success — license registered (demo)</div>}
-              </div>
-              <div className="mt-4 text-xs text-gray-500">Legal: Demo uses a mock contract generator. For production, use Stripe Checkout + DocuSign + auditable license ledger.</div>
-            </div>
-          </div>
-        </Modal>
-      )}
-
-      <footer className="max-w-6xl mx-auto mt-12 text-center text-gray-500">
-        <p>Pyrouette Stageport — Agentic AI Faculty Demo • Built by Allison Van Cura</p>
-      </footer>
+        <div className="footer-note">
+          StagePort Systems™ — designed by a choreographer who got tired of vibes-only scoring.
+          Movement deserves math, ledgers and exits too.
+        </div>
+      </div>
     </div>
   );
 }
