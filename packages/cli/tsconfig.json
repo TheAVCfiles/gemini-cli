@@ -11,6 +11,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.json",
+    "src/generated/**/*.ts",
     "./package.json"
   ],
   "exclude": [
