@@ -1,0 +1,41 @@
+{
+  "mapping_notes": "Use this template to create StageCred CTDL badge JSON per credential level.",
+  "@context": [
+    "https://credreg.net/ctdl/schema/context/json",
+    "https://www.w3.org/ns/credentials/v2"
+  ],
+  "type": [
+    "ceterms:Credential",
+    "ceterms:Badge"
+  ],
+  "ceterms:name": "Stage Cred \u2014 <Level>",
+  "ceterms:description": "Performance credential per rubric and evidence policy.",
+  "ceterms:ctid": "ce-<unique-id>",
+  "ceterms:ownedBy": [
+    {
+      "type": "org:Organization",
+      "org:legalName": "did:example:avc-studio"
+    }
+  ],
+  "ceterms:requires": [
+    {
+      "type": "ceterms:ConditionProfile",
+      "ceterms:description": "Completion criteria; see rubric.",
+      "ceterms:targetAssessment": [
+        {
+          "type": "ceterms:AssessmentProfile",
+          "ceterms:name": "Pyrouette Assessment",
+          "ceterms:description": "Objective TES/PCS scoring with evidence-linked GOE bullets."
+        }
+      ]
+    }
+  ],
+  "evidenceDocument": [
+    {
+      "type": "ceterms:CredentialEvidenceDocument",
+      "ceterms:name": "ProofTag",
+      "ceterms:description": "Hash-linked proof of performance evidence and rubric audit."
+    }
+  ],
+  "issuedOn": "<ISO8601 timestamp>"
+}
