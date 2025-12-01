@@ -1,0 +1,1105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Sovereign Beta Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #1a1614 0%, #0f0d0c 50%, #1a1614 100%);
+        color: #fafaf9;
+        position: relative;
+      }
+
+      .font-serif {
+        font-family: "Playfair Display", serif;
+      }
+
+      .cosmic-bg {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+      }
+
+      .star {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 3s infinite;
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .floating-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        animation: float 8s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        33% {
+          transform: translate(50px, -50px);
+        }
+        66% {
+          transform: translate(-50px, 50px);
+        }
+      }
+
+      .orb-1 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(
+          circle,
+          rgba(16, 185, 129, 0.3) 0%,
+          transparent 70%
+        );
+        top: 10%;
+        right: 10%;
+        animation-delay: 0s;
+      }
+
+      .orb-2 {
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(
+          circle,
+          rgba(124, 58, 237, 0.25) 0%,
+          transparent 70%
+        );
+        bottom: 10%;
+        left: 10%;
+        animation-delay: 2s;
+      }
+
+      .orb-3 {
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(
+          circle,
+          rgba(251, 191, 36, 0.2) 0%,
+          transparent 70%
+        );
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation-delay: 4s;
+      }
+
+      .card-border {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(41, 37, 36, 0.92);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      }
+
+      .glow-button {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        color: #ffffff;
+        box-shadow: 0 0 30px rgba(16, 185, 129, 0.6),
+          0 4px 20px rgba(16, 185, 129, 0.4);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+      }
+
+      .glow-button:hover {
+        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        box-shadow: 0 0 40px rgba(16, 185, 129, 0.8),
+          0 6px 30px rgba(16, 185, 129, 0.6);
+        transform: translateY(-2px);
+      }
+
+      .glow-button-secondary {
+        background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+        color: #ffffff;
+        box-shadow: 0 0 30px rgba(124, 58, 237, 0.5),
+          0 4px 20px rgba(124, 58, 237, 0.3);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(124, 58, 237, 0.3);
+      }
+
+      .glow-button-secondary:hover {
+        background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+        box-shadow: 0 0 40px rgba(124, 58, 237, 0.8),
+          0 6px 30px rgba(124, 58, 237, 0.6);
+        transform: translateY(-2px);
+      }
+
+      .glow-button-gold {
+        background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+        color: #ffffff;
+        box-shadow: 0 0 30px rgba(251, 191, 36, 0.5),
+          0 4px 20px rgba(251, 191, 36, 0.3);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(251, 191, 36, 0.3);
+      }
+
+      .glow-button-gold:hover {
+        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        box-shadow: 0 0 40px rgba(251, 191, 36, 0.8),
+          0 6px 30px rgba(251, 191, 36, 0.6);
+        transform: translateY(-2px);
+      }
+
+      .timer-box {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        backdrop-filter: blur(10px);
+      }
+
+      .timer-box span:first-child {
+        font-size: 1.875rem;
+        line-height: 2.25rem;
+        font-weight: 700;
+        color: #fef3c7;
+        letter-spacing: 0.05em;
+      }
+
+      .timer-box span:last-child {
+        font-size: 0.75rem;
+        line-height: 1rem;
+        color: #e7e5e4;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .zodiac-wheel {
+        width: 100%;
+        height: 100%;
+        animation: rotate 60s linear infinite;
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .price-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 1rem;
+        padding: 2rem;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .price-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(16, 185, 129, 0.5),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+
+      .price-card:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(16, 185, 129, 0.4);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(16, 185, 129, 0.2);
+      }
+
+      .price-card:hover::before {
+        opacity: 1;
+      }
+
+      .input-field {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: #fafaf9;
+        border-radius: 0.5rem;
+        padding: 0.875rem;
+        width: 100%;
+        transition: all 0.3s ease;
+      }
+
+      .input-field:focus {
+        outline: none;
+        border-color: #10b981;
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+      }
+
+      .input-field::placeholder {
+        color: #d6d3d1;
+      }
+
+      select.input-field option {
+        background-color: #292524;
+        color: #fafaf9;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(12px);
+      }
+
+      .modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .modal-content {
+        max-width: 650px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: slideUp 0.4s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .close-modal {
+        color: #e7e5e4;
+        font-size: 2rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .close-modal:hover {
+        color: #10b981;
+        transform: rotate(90deg);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .badge-emerald {
+        background: rgba(16, 185, 129, 0.2);
+        color: #6ee7b7;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+      }
+
+      .hero-gradient {
+        background: linear-gradient(
+          180deg,
+          rgba(41, 37, 36, 0) 0%,
+          rgba(41, 37, 36, 0.95) 100%
+        );
+      }
+
+      .section-divider {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(16, 185, 129, 0.3),
+          transparent
+        );
+        margin: 3rem 0;
+      }
+
+      .text-bright {
+        color: #fafaf9;
+      }
+
+      .text-medium {
+        color: #e7e5e4;
+      }
+
+      .text-soft {
+        color: #d6d3d1;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen w-full p-4 md:p-8">
+    <div class="cosmic-bg" aria-hidden="true">
+      <div class="floating-orb orb-1"></div>
+      <div class="floating-orb orb-2"></div>
+      <div class="floating-orb orb-3"></div>
+    </div>
+
+    <section class="w-full max-w-6xl mx-auto mb-12">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden rounded-2xl card-border"
+      >
+        <div
+          class="relative w-full h-[500px] md:h-auto flex flex-col justify-between p-8 md:p-10 bg-gradient-to-br from-stone-900/60 to-stone-950/60"
+        >
+          <svg
+            class="zodiac-wheel absolute inset-0 w-full h-full opacity-25"
+            viewBox="0 0 400 400"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient id="wheelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color: #10b981; stop-opacity: 0.7" />
+                <stop offset="50%" style="stop-color: #7c3aed; stop-opacity: 0.7" />
+                <stop offset="100%" style="stop-color: #fbbf24; stop-opacity: 0.7" />
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="2" result="coloredBlur"></feGaussianBlur>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"></feMergeNode>
+                  <feMergeNode in="SourceGraphic"></feMergeNode>
+                </feMerge>
+              </filter>
+            </defs>
+            <circle
+              cx="200"
+              cy="200"
+              r="180"
+              fill="none"
+              stroke="url(#wheelGrad)"
+              stroke-width="2"
+              filter="url(#glow)"
+            ></circle>
+            <circle
+              cx="200"
+              cy="200"
+              r="140"
+              fill="none"
+              stroke="#10b981"
+              stroke-width="1.5"
+              opacity="0.6"
+            ></circle>
+            <circle
+              cx="200"
+              cy="200"
+              r="100"
+              fill="none"
+              stroke="#7c3aed"
+              stroke-width="1.5"
+              opacity="0.6"
+            ></circle>
+            <text
+              x="200"
+              y="50"
+              font-family="serif"
+              font-size="28"
+              fill="#10b981"
+              text-anchor="middle"
+              opacity="0.9"
+              >♈</text
+            >
+            <text
+              x="310"
+              y="110"
+              font-family="serif"
+              font-size="28"
+              fill="#7c3aed"
+              text-anchor="middle"
+              opacity="0.9"
+              >♉</text
+            >
+            <text
+              x="350"
+              y="210"
+              font-family="serif"
+              font-size="28"
+              fill="#fbbf24"
+              text-anchor="middle"
+              opacity="0.9"
+              >♊</text
+            >
+            <text
+              x="310"
+              y="300"
+              font-family="serif"
+              font-size="28"
+              fill="#10b981"
+              text-anchor="middle"
+              opacity="0.9"
+              >♋</text
+            >
+            <text
+              x="200"
+              y="360"
+              font-family="serif"
+              font-size="28"
+              fill="#7c3aed"
+              text-anchor="middle"
+              opacity="0.9"
+              >♌</text
+            >
+            <text
+              x="90"
+              y="300"
+              font-family="serif"
+              font-size="28"
+              fill="#fbbf24"
+              text-anchor="middle"
+              opacity="0.9"
+              >♍</text
+            >
+            <text
+              x="50"
+              y="210"
+              font-family="serif"
+              font-size="28"
+              fill="#10b981"
+              text-anchor="middle"
+              opacity="0.9"
+              >♎</text
+            >
+            <text
+              x="90"
+              y="110"
+              font-family="serif"
+              font-size="28"
+              fill="#7c3aed"
+              text-anchor="middle"
+              opacity="0.9"
+              >♏</text
+            >
+            <circle cx="200" cy="200" r="8" fill="#fbbf24" filter="url(#glow)"></circle>
+          </svg>
+
+          <div class="hero-gradient absolute inset-0 z-10"></div>
+
+          <div class="relative z-20">
+            <span class="badge badge-emerald mb-4">Limited Portal Access</span>
+            <h1
+              class="font-serif text-4xl md:text-5xl font-black text-white mb-2 leading-tight"
+            >
+              The Sovereign Beta
+            </h1>
+            <p class="text-xl text-emerald-300 font-light">Unlock the October Code</p>
+          </div>
+
+          <div class="relative z-20">
+            <h2 class="text-white text-xl font-semibold mb-4 flex items-center">
+              <span class="text-2xl mr-2">⧗</span>
+              The Portal is Closing
+            </h2>
+            <div id="countdown-timer" class="grid grid-cols-4 gap-3 text-center mb-3">
+              <div class="timer-box flex flex-col">
+                <span id="days">01</span>
+                <span>Days</span>
+              </div>
+              <div class="timer-box flex flex-col">
+                <span id="hours">11</span>
+                <span>Hours</span>
+              </div>
+              <div class="timer-box flex flex-col">
+                <span id="minutes">30</span>
+                <span>Mins</span>
+              </div>
+              <div class="timer-box flex flex-col">
+                <span id="seconds">00</span>
+                <span>Secs</span>
+              </div>
+            </div>
+            <p class="text-sm text-stone-200">
+              Portal access ends October 31, 2025 at midnight EST.
+            </p>
+          </div>
+        </div>
+
+        <div class="w-full p-8 md:p-10 flex flex-col justify-center bg-gradient-to-br from-stone-800/50 to-stone-900/50">
+          <h2
+            class="font-serif text-5xl md:text-6xl font-black text-white leading-tight mb-4 bg-gradient-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent"
+          >
+            Feel the Code
+          </h2>
+
+          <p class="text-lg text-bright mb-6 leading-relaxed">
+            This is not just a guide. It is a
+            <strong class="text-emerald-300">10-page karmic commission</strong>, a strategic
+            artifact for the October 15-30 portal. This is the blueprint for your
+            "Sovereign Beta."
+          </p>
+
+          <div
+            class="border-l-4 border-emerald-500 pl-5 mb-6 space-y-3 bg-gradient-to-r from-emerald-950/30 to-transparent py-4 rounded-r"
+          >
+            <h3 class="text-2xl font-bold text-white mb-3">This Is Your Karmic Code:</h3>
+            <p class="text-bright text-base">
+              <strong class="text-emerald-300">☉ Sun in Scorpio (12H):</strong>
+              Your power is mastery of the hidden.
+            </p>
+            <p class="text-bright text-base">
+              <strong class="text-purple-300">♂ Mars in Aquarius (2H):</strong>
+              Your battles are won by disruption.
+            </p>
+            <p class="text-bright text-base">
+              <strong class="text-amber-300">♇ Pluto in Sagittarius (1H):</strong>
+              You destroy and rebuild philosophies.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onclick="openModal('guideModal')"
+            class="w-full glow-button-gold font-bold text-xl text-center rounded-xl py-5 px-6 mb-3"
+          >
+            ✦ Unlock the Guide – $22 ✦
+          </button>
+
+          <p class="text-sm text-center text-soft">
+            10-page strategic artifact • Instant digital delivery
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <section class="w-full max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="badge badge-emerald mb-4">Personalized Astrology</span>
+        <h2 class="font-serif text-4xl md:text-5xl font-black text-white mb-4">
+          Unlock Your Cosmic Blueprint
+        </h2>
+        <p class="text-xl text-medium max-w-2xl mx-auto">
+          Choose your path to sovereign clarity through personalized astrological guidance
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <article class="price-card" aria-labelledby="transit-title">
+          <div class="absolute top-4 right-4" aria-hidden="true">
+            <span class="text-4xl">☿</span>
+          </div>
+
+          <div class="mb-6">
+            <h3 id="transit-title" class="font-serif text-3xl font-bold text-white mb-3">
+              Personal Transit Report
+            </h3>
+            <div class="flex items-baseline gap-2 mb-3">
+              <p class="text-5xl font-black text-emerald-400">$77</p>
+              <span class="text-soft line-through text-xl">$120</span>
+            </div>
+            <p class="text-bright text-base leading-relaxed">
+              Deep dive into your current cosmic weather and karmic opportunities
+            </p>
+          </div>
+
+          <ul class="space-y-3 mb-8 text-bright">
+            <li class="flex items-start">
+              <span class="text-emerald-400 mr-3 text-xl">✦</span>
+              <span><strong>15-page</strong> personalized transit analysis</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-emerald-400 mr-3 text-xl">✦</span>
+              <span>Key dates and <strong>activation windows</strong></span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-emerald-400 mr-3 text-xl">✦</span>
+              <span>Strategic rituals aligned to your chart</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-emerald-400 mr-3 text-xl">✦</span>
+              <span><strong>3-month</strong> outlook with actionable insights</span>
+            </li>
+          </ul>
+
+          <button
+            type="button"
+            onclick="openModal('transitModal')"
+            class="w-full glow-button font-bold text-lg rounded-xl py-4 px-6"
+          >
+            Order Transit Report →
+          </button>
+        </article>
+
+        <article class="price-card" aria-labelledby="call-title">
+          <div class="absolute top-4 right-4" aria-hidden="true">
+            <span class="text-4xl">☽</span>
+          </div>
+
+          <div class="mb-6">
+            <h3 id="call-title" class="font-serif text-3xl font-bold text-white mb-3">
+              Sovereign Strategy Call
+            </h3>
+            <div class="flex items-baseline gap-2 mb-3">
+              <p class="text-5xl font-black text-purple-400">$222</p>
+              <span class="text-soft line-through text-xl">$333</span>
+            </div>
+            <p class="text-bright text-base leading-relaxed">
+              60-minute deep dive consultation for transformational clarity
+            </p>
+          </div>
+
+          <ul class="space-y-3 mb-8 text-bright">
+            <li class="flex items-start">
+              <span class="text-purple-400 mr-3 text-xl">✦</span>
+              <span><strong>Live</strong> chart reading and Q&amp;A session</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-400 mr-3 text-xl">✦</span>
+              <span>Personalized <strong>sovereignty strategy</strong></span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-400 mr-3 text-xl">✦</span>
+              <span>Custom ritual design for your goals</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-400 mr-3 text-xl">✦</span>
+              <span>Full <strong>recording + follow-up notes</strong></span>
+            </li>
+          </ul>
+
+          <button
+            type="button"
+            onclick="openModal('callModal')"
+            class="w-full glow-button-secondary font-bold text-lg rounded-xl py-4 px-6"
+          >
+            Book Strategy Call →
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <div
+      id="guideModal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="guideModalTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-content card-border rounded-2xl p-8 md:p-10">
+        <div class="flex justify-between items-start mb-8">
+          <div>
+            <h3 id="guideModalTitle" class="font-serif text-3xl font-bold text-white mb-2">
+              Unlock the Guide
+            </h3>
+            <p class="text-medium">Your Sovereign Beta blueprint awaits</p>
+          </div>
+          <button
+            type="button"
+            class="close-modal"
+            aria-label="Close guide modal"
+            onclick="closeModal('guideModal')"
+          >
+            &times;
+          </button>
+        </div>
+
+        <p class="text-lg text-bright mb-8 leading-relaxed">
+          Complete your purchase to receive the
+          <strong class="text-emerald-300">10-page Sovereign Beta guide</strong> instantly via
+          email. This is your strategic artifact for the October 15-30 portal.
+        </p>
+
+        <div
+          class="bg-gradient-to-r from-emerald-950/40 to-transparent border-l-4 border-emerald-500 p-6 rounded-r-lg mb-8"
+        >
+          <p class="text-4xl font-black text-emerald-400 mb-2">$22</p>
+          <p class="text-base text-medium">
+            One-time payment • Instant digital delivery • Yours forever
+          </p>
+        </div>
+
+        <a
+          href="[YOUR_GUMROAD_OR_STRIPE_LINK]"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block w-full glow-button-gold font-bold text-xl text-center rounded-xl py-5 px-6 mb-4"
+        >
+          Complete Purchase →
+        </a>
+
+        <p class="text-sm text-soft text-center">🔒 Secure payment via Stripe/Gumroad</p>
+      </div>
+    </div>
+
+    <div
+      id="transitModal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="transitModalTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-content card-border rounded-2xl p-8 md:p-10">
+        <div class="flex justify-between items-start mb-8">
+          <div>
+            <h3
+              id="transitModalTitle"
+              class="font-serif text-3xl font-bold text-white mb-2"
+            >
+              Personal Transit Report
+            </h3>
+            <p class="text-medium">Enter your birth data for cosmic insights</p>
+          </div>
+          <button
+            type="button"
+            class="close-modal"
+            aria-label="Close transit modal"
+            onclick="closeModal('transitModal')"
+          >
+            &times;
+          </button>
+        </div>
+
+        <form id="transitForm" class="space-y-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-base font-semibold text-bright mb-2" for="transitName"
+                >Full Name</label
+              >
+              <input
+                id="transitName"
+                type="text"
+                name="name"
+                required
+                class="input-field"
+                placeholder="Your full name"
+              />
+            </div>
+
+            <div>
+              <label class="block text-base font-semibold text-bright mb-2" for="transitEmail"
+                >Email</label
+              >
+              <input
+                id="transitEmail"
+                type="email"
+                name="email"
+                required
+                class="input-field"
+                placeholder="your@email.com"
+              />
+            </div>
+          </div>
+
+          <div
+            class="bg-gradient-to-r from-amber-950/30 to-transparent border-l-4 border-amber-500 p-5 rounded-r-lg"
+          >
+            <h4 class="text-lg font-bold text-white mb-4 flex items-center">
+              <span class="text-2xl mr-2">☉</span>
+              Birth Chart Information
+            </h4>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label class="block text-sm font-semibold text-bright mb-2" for="transitBirthdate"
+                  >Birth Date</label
+                >
+                <input id="transitBirthdate" type="date" name="birthdate" required class="input-field" />
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-bright mb-2" for="transitBirthtime"
+                  >Birth Time</label
+                >
+                <input id="transitBirthtime" type="time" name="birthtime" required class="input-field" />
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-bright mb-2" for="transitTimezone"
+                  >Time Zone</label
+                >
+                <select id="transitTimezone" name="timezone" required class="input-field">
+                  <option value="">Select timezone...</option>
+                  <option value="EST">EST (UTC-5)</option>
+                  <option value="CST">CST (UTC-6)</option>
+                  <option value="MST">MST (UTC-7)</option>
+                  <option value="PST">PST (UTC-8)</option>
+                  <option value="GMT">GMT (UTC+0)</option>
+                  <option value="CET">CET (UTC+1)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-bright mb-2" for="transitLocation"
+                >Birth Location</label
+              >
+              <input
+                id="transitLocation"
+                type="text"
+                name="location"
+                required
+                class="input-field"
+                placeholder="City, Country"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-base font-semibold text-bright mb-2" for="transitNotes"
+              >Specific Questions or Focus Areas (Optional)</label
+            >
+            <textarea
+              id="transitNotes"
+              name="notes"
+              rows="3"
+              class="input-field"
+              placeholder="Career, relationships, personal growth, shadow work..."
+            ></textarea>
+          </div>
+
+          <div class="border-t border-stone-600 pt-6">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <p class="text-4xl font-black text-emerald-400 mb-1">$77</p>
+                <p class="text-medium">Delivered within 5 business days</p>
+              </div>
+              <p class="badge badge-emerald">Includes 3-month outlook</p>
+            </div>
+
+            <button type="submit" class="w-full glow-button font-bold text-lg rounded-xl py-4 px-6">
+              Submit Birth Data →
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div
+      id="callModal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="callModalTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-content card-border rounded-2xl p-8 md:p-10">
+        <div class="flex justify-between items-start mb-8">
+          <div>
+            <h3 id="callModalTitle" class="font-serif text-3xl font-bold text-white mb-2">
+              Book a Sovereign Strategy Call
+            </h3>
+            <p class="text-medium">Schedule your 60-minute session</p>
+          </div>
+          <button
+            type="button"
+            class="close-modal"
+            aria-label="Close call modal"
+            onclick="closeModal('callModal')"
+          >
+            &times;
+          </button>
+        </div>
+
+        <form id="callForm" class="space-y-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-base font-semibold text-bright mb-2" for="callName"
+                >Full Name</label
+              >
+              <input
+                id="callName"
+                type="text"
+                name="name"
+                required
+                class="input-field"
+                placeholder="Your full name"
+              />
+            </div>
+            <div>
+              <label class="block text-base font-semibold text-bright mb-2" for="callEmail"
+                >Email</label
+              >
+              <input
+                id="callEmail"
+                type="email"
+                name="email"
+                required
+                class="input-field"
+                placeholder="your@email.com"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-base font-semibold text-bright mb-2" for="callFocus"
+              >Focus for the Session</label
+            >
+            <textarea
+              id="callFocus"
+              name="focus"
+              rows="3"
+              class="input-field"
+              placeholder="What would you like to explore?"
+            ></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-base font-semibold text-bright mb-2" for="callDate"
+                >Preferred Date</label
+              >
+              <input id="callDate" type="date" name="date" class="input-field" />
+            </div>
+            <div>
+              <label class="block text-base font-semibold text-bright mb-2" for="callTime"
+                >Preferred Time</label
+              >
+              <input id="callTime" type="time" name="time" class="input-field" />
+            </div>
+          </div>
+
+          <div class="border-t border-stone-600 pt-6">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <p class="text-4xl font-black text-purple-400 mb-1">$222</p>
+                <p class="text-medium">Includes recording &amp; follow-up notes</p>
+              </div>
+              <p class="badge badge-emerald">Limited availability</p>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full glow-button-secondary font-bold text-lg rounded-xl py-4 px-6"
+            >
+              Request Your Call →
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const createStars = () => {
+        const starCount = 70;
+        const bg = document.querySelector(".cosmic-bg");
+        if (!bg) return;
+
+        for (let i = 0; i < starCount; i += 1) {
+          const star = document.createElement("div");
+          star.classList.add("star");
+          const size = Math.random() * 2 + 1;
+          star.style.width = `${size}px`;
+          star.style.height = `${size}px`;
+          star.style.top = `${Math.random() * 100}%`;
+          star.style.left = `${Math.random() * 100}%`;
+          star.style.animationDelay = `${Math.random() * 3}s`;
+          bg.appendChild(star);
+        }
+      };
+
+      const targetDate = new Date("2025-10-31T04:00:00Z");
+
+      const updateCountdown = () => {
+        const now = new Date();
+        const diff = targetDate.getTime() - now.getTime();
+
+        if (diff <= 0) {
+          document.getElementById("countdown-timer").textContent = "Portal access has closed.";
+          return;
+        }
+
+        const totalSeconds = Math.floor(diff / 1000);
+        const days = Math.floor(totalSeconds / (3600 * 24));
+        const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        document.getElementById("days").textContent = String(days).padStart(2, "0");
+        document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+        document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+        document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
+      };
+
+      const openModal = (id) => {
+        const modal = document.getElementById(id);
+        if (!modal) return;
+        modal.classList.add("active");
+        modal.setAttribute("aria-hidden", "false");
+      };
+
+      const closeModal = (id) => {
+        const modal = document.getElementById(id);
+        if (!modal) return;
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+      };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        createStars();
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        document.querySelectorAll(".modal").forEach((modal) => {
+          modal.addEventListener("click", (event) => {
+            if (event.target === modal) {
+              closeModal(modal.id);
+            }
+          });
+        });
+
+        const transitForm = document.getElementById("transitForm");
+        transitForm?.addEventListener("submit", (event) => {
+          event.preventDefault();
+          alert("Thank you! Your transit report request has been received.");
+          closeModal("transitModal");
+          transitForm.reset();
+        });
+
+        const callForm = document.getElementById("callForm");
+        callForm?.addEventListener("submit", (event) => {
+          event.preventDefault();
+          alert("Thank you! We will reach out to confirm your strategy call.");
+          closeModal("callModal");
+          callForm.reset();
+        });
+      });
+
+      window.openModal = openModal;
+      window.closeModal = closeModal;
+    </script>
+  </body>
+</html>
