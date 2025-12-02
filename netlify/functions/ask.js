@@ -47,6 +47,14 @@ exports.handler = async (event) => {
   const prompt = (parsedBody.prompt || "").toString();
   const glossary = Array.isArray(parsedBody.glossary) ? parsedBody.glossary : [];
 
+  if (!prompt.trim()) {
+    return {
+      statusCode: 400,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: "Provide a non-empty prompt." }),
+    };
+  }
+
   if (!process.env.OPENAI_API_KEY) {
     return {
       statusCode: 200,
