@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Adaptive Ethics: From Vision to Verification</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<style>
+:root {
+    --rose: #CF8DA6;
+    --ink: #101014;
+    --border: #202338;
+    --ivory: #F8F8F8;
+    --dark: #0b0b0c;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Inter', system-ui, Segoe UI, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--ivory); }
+.header { padding: 28px 20px 12px; border-bottom: 1px solid var(--border); background: white; }
+.h1 { font-size: 28px; font-weight: 700; color: var(--rose); }
+.sub { color: #545760; font-size: 13px }
+.container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+.card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: 300px; /* Base height */
+    max-height: 400px;
+    margin: 0 auto;
+}
+@media (min-width: 768px) {
+    .chart-container {
+        height: 350px;
+    }
+}
+.btn-rose { background: var(--rose); color: white; padding: 10px 18px; border-radius: 8px; font-weight: 600; transition: all 0.2s; }
+.btn-rose:hover { opacity: 0.9; }
+.tooltip-custom {
+    background: var(--dark);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 12px;
+}
+.loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--rose);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <h1 class="h1">Adaptive Ethics: From Vision to Verification</h1>
+        <p class="sub">Investor & Critic Response Live Metrics & Roadmap (2025)</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-2">Core Thesis: Intelligence as Care</h2>
+        <p class="text-gray-700">This report verifies the adaptive ethical framework that transforms poetic theory into quantitative proof. The system, based on the Glissé Engine, uses a dual-layer explainability model to align financial precision with ethical restraint, ensuring the model's complexity moves with the market's 'dance' rather than flattening it.</p>
+    </div>
+
+    <!-- Main Grid: Quant Snapshot, Equity Curve, and Rosetta Translator -->
+    <div class="grid md:grid-cols-3 gap-6 mb-8">
+
+        <!-- Quantitative Snapshot Card -->
+        <div class="card md:col-span-1 flex flex-col">
+            <h3 class="text-lg font-semibold mb-3 border-b pb-2">Quant Snapshot (Selected Metrics)</h3>
+            <p class="text-sm text-gray-600 mb-4">Risk-adjusted returns for 30, 60, and 90-day horizons, segmented by the system's internal confirmation status.</p>
+            <table class="w-full text-sm mb-4">
+                <thead>
+                    <tr class="text-left border-b">
+                        <th class="py-2">Is Confirmed</th>
+                        <th class="py-2">R_30d</th>
+                        <th class="py-2">R_60d</th>
+                        <th class="py-2">R_90d</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b">
+                        <td class="py-2">Unconfirmed</td>
+                        <td class="py-2 text-rose-600">1.12%</td>
+                        <td class="py-2 text-rose-600">5.35%</td>
+                        <td class="py-2 text-rose-600">8.92%</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 font-semibold">Confirmed</td>
+                        <td class="py-2 font-semibold text-rose-800">3.02%</td>
+                        <td class="py-2 font-semibold text-rose-800">5.21%</td>
+                        <td class="py-2 font-semibold text-rose-800">7.18%</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="chart-container flex-grow">
+                <canvas id="quantDoughnutChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Equity Curve Overlay Card -->
+        <div class="card md:col-span-2 flex flex-col">
+            <h3 class="text-lg font-semibold mb-3 border-b pb-2">Equity Curve Overlay (Strategy vs Benchmarks)</h3>
+            <p class="text-sm text-gray-600 mb-4">24-month backtest comparing the Glissé Engine's strategy (Confirmed Weight) against a Value/Equity composite (2020-07 to 2024-01).</p>
+            <div class="chart-container flex-grow">
+                <canvas id="equityCurveChart"></canvas>
+            </div>
+        </div>
+
+        <!-- LLM: Rosetta Translator Card -->
+        <div class="card md:col-span-3">
+            <h3 class="text-2xl font-bold mb-4 text-center text-rose-800">✨ Rosetta Translator Console</h3>
+            <p class="text-sm text-gray-600 mb-4 text-center">Use the power of Gemini to bridge the gap between the system's poetic concepts and its formal, technical mandate.</p>
+            
+            <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+                <div class="w-full sm:w-1/2">
+                    <label for="conceptSelector" class="block text-sm font-medium text-gray-700 mb-1">Select a Core Concept:</label>
+                    <select id="conceptSelector" class="w-full p-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-rose-500 focus:border-rose-500 transition">
+                        <option value="" disabled selected>— Choose Concept —</option>
+                        <!-- Options will be populated by JS -->
+                    </select>
+                </div>
+                <div class="w-full sm:w-1/2 flex justify-center sm:justify-start">
+                    <button onclick="translateConcept()" id="translateBtn" class="btn-rose w-full sm:w-auto flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="translateBtnText">GENERATE TRANSLATION</span>
+                        <div id="translateLoading" class="loading-spinner hidden"></div>
+                    </button>
+                </div>
+            </div>
+
+            <div id="translationOutput" class="mt-4 hidden p-4 border border-rose-300 bg-rose-50 rounded-lg">
+                <h4 class="text-xl font-semibold mb-3 border-b border-rose-300 pb-2">Translation Result</h4>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="font-bold text-lg text-rose-800 mb-1">Poetic/Analogous View</p>
+                        <p id="poeticOutput" class="text-gray-700 italic text-sm"></p>
+                    </div>
+                    <div class="pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-rose-300 md:pl-4">
+                        <p class="font-bold text-lg text-rose-800 mb-1">Technical/Algorithmic Definition</p>
+                        <p id="technicalOutput" class="text-gray-700 text-sm"></p>
+                    </div>
+                </div>
+            </div>
+            <p id="translateError" class="text-red-600 text-sm mt-2 hidden">An error occurred while fetching the translation.</p>
+        </div>
+    </div>
+
+    <!-- Fusion Insight and TTS Card -->
+    <div class="card mb-8">
+        <h3 class="text-lg font-semibold mb-3 border-b pb-2">3. Fusion Insight (Synthesis)</h3>
+        <p class="text-sm text-gray-600 mb-4">The core narrative derived from aligning the Market Gate (quant) output with the Artistic/Scoring (Pyrouette) output.</p>
+        <div class="bg-gray-100 p-4 rounded-lg border border-gray-300 relative">
+            <p id="fusionInsightText" class="text-gray-800 italic mb-4">
+                Both systems show parallel logic: cautious defense in markets mirrors strong artistic presence but restrained execution. Market = cautious Jeté, waiting for confirmation. Art = elegant performance, but timing gaps reduce scoring. Narrative: Hold back until confirmation is absolute.
+            </p>
+            <button onclick="narrateInsight()" id="narrateBtn" class="btn-rose text-sm px-3 py-1.5 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                <span id="narrateBtnText">🔊 Narrate Insight</span>
+                <div id="narrateLoading" class="loading-spinner hidden"></div>
+            </button>
+            <audio id="audioPlayer" controls class="mt-3 hidden w-full"></audio>
+            <p id="ttsError" class="text-red-600 text-sm mt-2 hidden">An error occurred while generating audio.</p>
+        </div>
+    </div>
+
+    <!-- Solvable Challenges Card -->
+    <div class="card mb-8">
+        <h3 class="text-lg font-semibold mb-3 border-b pb-2">From Poetic Theory to Quantitative Proof (Solvable Challenges)</h3>
+        <p class="text-sm text-gray-600 mb-4">Roadmap items detailing the necessary actions to transition concepts into verifiable, auditable systems.</p>
+        
+        <div class="space-y-4" id="challengesContainer">
+            <!-- Challenges populated by JS -->
+        </div>
+    </div>
+</div>
+
+<script>
+// ====================================================================
+// CORE DATA
+// ====================================================================
+
+const QUANT_DATA = {
+    labels: ['R_30d', 'R_60d', 'R_90d'],
+    confirmed: [0.0302, 0.0521, 0.0718],
+    unconfirmed: [0.0112, 0.0535, 0.0892],
+    equityCurve: [0, 10, 20, 30, 40, 50, 60, 70, 80],
+    equityLabels: ['2020-07', '2021-01', '2021-07', '2022-01', '2022-07', '2023-01', '2023-07', '2024-01'],
+    equityStrategy: [25, 30, 35, 38, 42, 45, 55, 65], // Strategy/Confirmed Weight
+    equityBenchmark: [20, 28, 38, 45, 40, 50, 60, 75], // Equity/Value Benchmark
+};
+
+const CHALLENGES = [
+    { id: 'c1', challenge: 'Statistical Proof / IP-as-Narrative', action: 'Publish a quantitative whitepaper: 24m backtest, Sharpe/Sortino/MaxDD vs 3-5 benchmarks.', active: false },
+    { id: 'c2', challenge: 'N=1 Kinesthetic → Generalizable Signal', action: 'Abstract CTR Z to non-somatic HRV/GSR inputs; N≥50 cohort test; arXiv preprint + operationalizing the Glissé Engine.', active: false },
+    { id: 'c3', challenge: 'Audit Friction → Dual-Layer Explainability', action: 'Keep poetic UI... while ensuring all gates log to an immutable ledger for auditor review.', active: false },
+];
+
+const KEY_CONCEPTS = [
+    { name: "Cunning Mercy Posture", description: "The system's defensive, capital preservation priority posture." },
+    { name: "Adaptive Ethics", description: "The governance framework allowing systems to move with complexity." },
+    { name: "Glissé Engine", description: "The core trading system designed to translate emotion into executable precision." },
+    { name: "Temporal Inversion Operator", description: "The mechanism in the Glissé Engine based on kinesthetic cognition." },
+];
+
+const TRANSLATOR_ENDPOINT = '/.netlify/functions/rosetta';
+const NARRATOR_ENDPOINT = '/.netlify/functions/narrator';
+
+// ====================================================================
+// LLM API CONFIG & UTILITIES
+// ====================================================================
+
+/**
+ * Executes a fetch request with exponential backoff for retries.
+ * @param {string} url The API endpoint URL.
+ * @param {object} options Fetch request options.
+ * @param {number} retries Max number of retries.
+ */
+async function fetchWithBackoff(url, options, retries = 3) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                if (response.status === 429 && i < retries - 1) {
+                    const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    continue; // Retry
+                }
+                const errorText = await response.text().catch(() => '');
+                throw new Error(errorText || `HTTP error! status: ${response.status}`);
+            }
+            return response;
+        } catch (error) {
+            if (i === retries - 1) throw error; // Last retry failed
+            const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+}
+
+// Utility functions for TTS audio conversion (PCM to WAV)
+
+function base64ToArrayBuffer(base64) {
+    const binaryString = atob(base64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+
+function pcmToWav(pcm16, sampleRate = 16000) {
+    const buffer = new ArrayBuffer(44 + pcm16.length * 2);
+    const view = new DataView(buffer);
+    const channels = 1;
+    const bitsPerSample = 16;
+    const byteRate = sampleRate * channels * (bitsPerSample / 8);
+    const blockAlign = channels * (bitsPerSample / 8);
+
+    // RIFF identifier 'RIFF'
+    writeString(view, 0, 'RIFF');
+    // RIFF chunk length
+    view.setUint32(4, 36 + pcm16.length * 2, true);
+    // 'WAVE' identifier
+    writeString(view, 8, 'WAVE');
+    // 'fmt ' chunk
+    writeString(view, 12, 'fmt ');
+    // fmt chunk length
+    view.setUint32(16, 16, true);
+    // audio format (PCM = 1)
+    view.setUint16(20, 1, true);
+    // number of channels
+    view.setUint16(22, channels, true);
+    // sample rate
+    view.setUint32(24, sampleRate, true);
+    // byte rate
+    view.setUint32(28, byteRate, true);
+    // block align
+    view.setUint16(32, blockAlign, true);
+    // bits per sample
+    view.setUint16(34, bitsPerSample, true);
+    // 'data' chunk
+    writeString(view, 36, 'data');
+    // data chunk length
+    view.setUint32(40, pcm16.length * 2, true);
+
+    // Write PCM data
+    let offset = 44;
+    for (let i = 0; i < pcm16.length; i++, offset += 2) {
+        view.setInt16(offset, pcm16[i], true);
+    }
+
+    return new Blob([buffer], { type: 'audio/wav' });
+
+    function writeString(view, offset, str) {
+        for (let i = 0; i < str.length; i++) {
+            view.setUint8(offset + i, str.charCodeAt(i));
+        }
+    }
+}
+
+
+// ====================================================================
+// LLM FEATURE 1: ROSETTA TRANSLATOR
+// ====================================================================
+
+async function translateConcept() {
+    const selector = document.getElementById('conceptSelector');
+    const conceptName = selector.value;
+    const button = document.getElementById('translateBtn');
+    const loading = document.getElementById('translateLoading');
+    const outputDiv = document.getElementById('translationOutput');
+    const errorMsg = document.getElementById('translateError');
+    const poeticOutput = document.getElementById('poeticOutput');
+    const technicalOutput = document.getElementById('technicalOutput');
+
+    if (!conceptName) {
+        errorMsg.textContent = "Please select a concept to translate.";
+        errorMsg.classList.remove('hidden');
+        return;
+    }
+
+    // Find the full description for better context
+    const conceptData = KEY_CONCEPTS.find(c => c.name === conceptName);
+
+    button.disabled = true;
+    loading.classList.remove('hidden');
+    outputDiv.classList.add('hidden');
+    errorMsg.classList.add('hidden');
+    poeticOutput.textContent = 'Translating...';
+    technicalOutput.textContent = 'Translating...';
+
+    const payload = {
+        concept: conceptName,
+        context: conceptData ? conceptData.description : ''
+    };
+
+    try {
+        const response = await fetchWithBackoff(TRANSLATOR_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        poeticOutput.textContent = result.poetic || 'Translation unavailable.';
+        technicalOutput.textContent = result.technical || 'Translation unavailable.';
+        outputDiv.classList.remove('hidden');
+    } catch (e) {
+        console.error('Rosetta Translator Error:', e);
+        errorMsg.textContent = 'Error: Could not generate translation. Please try again.';
+        errorMsg.classList.remove('hidden');
+    } finally {
+        button.disabled = false;
+        loading.classList.add('hidden');
+    }
+}
+
+// ====================================================================
+// LLM FEATURE 2: TTS NARRATOR
+// ====================================================================
+
+async function narrateInsight() {
+    const text = document.getElementById('fusionInsightText').textContent.trim();
+    const button = document.getElementById('narrateBtn');
+    const loading = document.getElementById('narrateLoading');
+    const errorMsg = document.getElementById('ttsError');
+    const audioPlayer = document.getElementById('audioPlayer');
+
+    button.disabled = true;
+    loading.classList.remove('hidden');
+    errorMsg.classList.add('hidden');
+    audioPlayer.classList.add('hidden');
+    audioPlayer.pause();
+    audioPlayer.removeAttribute('src');
+
+    try {
+        const response = await fetchWithBackoff(NARRATOR_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: `Say informatively: ${text}` })
+        });
+
+        const result = await response.json();
+        const audioData = result.audioData;
+        const mimeType = result.mimeType || '';
+
+        if (!audioData) {
+            throw new Error('No audio data returned');
+        }
+
+        let sampleRate = 16000;
+        if (mimeType.includes('rate=')) {
+            const match = mimeType.match(/rate=(\d+)/);
+            if (match) {
+                sampleRate = parseInt(match[1], 10);
+            }
+        }
+
+        if (mimeType.startsWith('audio/L16')) {
+            const pcmData = base64ToArrayBuffer(audioData);
+            const pcm16 = new Int16Array(pcmData);
+            const wavBlob = pcmToWav(pcm16, sampleRate);
+            const audioUrl = URL.createObjectURL(wavBlob);
+            audioPlayer.src = audioUrl;
+        } else {
+            const audioBuffer = base64ToArrayBuffer(audioData);
+            const blob = new Blob([audioBuffer], { type: mimeType || 'audio/wav' });
+            const audioUrl = URL.createObjectURL(blob);
+            audioPlayer.src = audioUrl;
+        }
+
+        audioPlayer.classList.remove('hidden');
+        audioPlayer.play();
+    } catch (e) {
+        console.error('TTS Narrator Error:', e);
+        errorMsg.textContent = 'Error: Could not generate audio. The text may be too long or the API may be unavailable.';
+        errorMsg.classList.remove('hidden');
+    } finally {
+        button.disabled = false;
+        loading.classList.add('hidden');
+    }
+}
+
+
+// ====================================================================
+// CHART INITIALIZATION
+// ====================================================================
+
+function initCharts() {
+    // Doughnut Chart (Confirmed/Unconfirmed R_90d Comparison)
+    const ctxDoughnut = document.getElementById('quantDoughnutChart').getContext('2d');
+    new Chart(ctxDoughnut, {
+        type: 'doughnut',
+        data: {
+            labels: ['Confirmed (7.18%)', 'Unconfirmed (8.92%)'],
+            datasets: [{
+                label: 'R_90d Return',
+                data: [QUANT_DATA.confirmed[2], QUANT_DATA.unconfirmed[2]], // Using R_90d
+                backgroundColor: [
+                    '#CF8DA6', // Rose
+                    '#E5E5E5' // Light Gray
+                ],
+                hoverOffset: 8,
+                borderWidth: 0,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '65%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: varCss('--ink'),
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (context) => {
+                            const value = context.parsed;
+                            return `${context.label}: ${(value * 100).toFixed(2)}%`;
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'R_90d Split (Absolute)',
+                    font: { size: 14, weight: 'bold' },
+                    color: varCss('--ink')
+                }
+            },
+        }
+    });
+
+    // Equity Curve Chart (Line Chart)
+    const ctxEquity = document.getElementById('equityCurveChart').getContext('2d');
+    new Chart(ctxEquity, {
+        type: 'line',
+        data: {
+            labels: QUANT_DATA.equityLabels,
+            datasets: [
+                {
+                    label: 'Strategy (Confirmed Weight)',
+                    data: QUANT_DATA.equityStrategy,
+                    borderColor: varCss('--rose'),
+                    backgroundColor: 'rgba(207, 141, 166, 0.2)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 4,
+                },
+                {
+                    label: 'Benchmark (Equity/Value)',
+                    data: QUANT_DATA.equityBenchmark,
+                    borderColor: '#202338', // Border color
+                    backgroundColor: 'rgba(32, 35, 56, 0.1)',
+                    borderWidth: 1,
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 4,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Equity / Value',
+                        color: varCss('--ink')
+                    },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date',
+                        color: varCss('--ink')
+                    },
+                    grid: { display: false }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { color: varCss('--ink') }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            }
+        }
+    });
+}
+
+// Helper to get CSS variable
+function varCss(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+// ====================================================================
+// GENERAL UI & LIFECYCLE
+// ====================================================================
+
+function renderChallenges() {
+    const container = document.getElementById('challengesContainer');
+    container.innerHTML = CHALLENGES.map(item => `
+        <div id="challenge-${item.id}" class="bg-white p-4 rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between cursor-pointer" onclick="toggleChallenge('${item.id}')">
+                <h4 class="font-semibold text-gray-800">${item.challenge}</h4>
+                <span id="icon-${item.id}" class="text-xl text-rose-500 transition-transform">${item.active ? '▼' : '▶'}</span>
+            </div>
+            <p id="action-${item.id}" class="mt-3 text-sm text-gray-600 border-l-4 border-rose-300 pl-4 py-1 ${item.active ? '' : 'hidden'}">
+                <span class="font-medium text-rose-700">Action Mandate:</span> ${item.action}
+            </p>
+        </div>
+    `).join('');
+}
+
+function toggleChallenge(id) {
+    const item = CHALLENGES.find(c => c.id === id);
+    item.active = !item.active;
+    document.getElementById(`action-${id}`).classList.toggle('hidden', !item.active);
+    document.getElementById(`icon-${id}`).textContent = item.active ? '▼' : '▶';
+}
+
+function populateConceptSelector() {
+    const selector = document.getElementById('conceptSelector');
+    KEY_CONCEPTS.forEach(concept => {
+        const option = document.createElement('option');
+        option.value = concept.name;
+        option.textContent = concept.name;
+        selector.appendChild(option);
+    });
+}
+
+// Initialization on window load
+window.onload = function() {
+    initCharts();
+    renderChallenges();
+    populateConceptSelector();
+};
+</script>
+</body>
+</html>
