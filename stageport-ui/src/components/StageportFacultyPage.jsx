@@ -1,6 +1,276 @@
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+
+const layerData = {
+  layer1: {
+    title: "Director's Chair OS",
+    desc: 'Ledger for people, offers, scores, safety and tokens.',
+    specs: {
+      input: 'Classes, rehearsals, rosters, incident logs',
+      function: 'One console with 28-day mutation clock and receipts',
+      status: 'Built & Sellable'
+    }
+  },
+  layer2: {
+    title: 'Py.rouette TES/PCS Engine',
+    desc: 'Transparent scoring with parent-safe language and JSON exports.',
+    specs: {
+      input: 'Videos, judge notes, rubric weights',
+      function: 'Side-by-side comparisons, TES/PCS/GOE scoring, clean translations',
+      status: 'Built for Pilots'
+    }
+  },
+  layer3: {
+    title: 'StageCred Marketplace',
+    desc: 'Weekly receipts, badges, and portfolios to fund student travel.',
+    specs: {
+      input: 'Ledger events, token rules, parental preferences',
+      function: 'Exports StageCred PDFs/JSON, auto emails, college-ready evidence',
+      status: 'Asset · Ready to Sell'
+    }
+  },
+  layer4: {
+    title: 'StageCoin Bank',
+    desc: 'Token economy for scholarships, travel, gear and leadership.',
+    specs: {
+      input: 'Attendance, leadership points, safety compliance',
+      function: 'Mints Stage/Screen/Street tokens with clear redemption rules',
+      status: 'Pilot-ready'
+    }
+  }
+};
+
+const taskItems = [
+  { id: 'stagecred', label: 'Wire weekly StageCred email automation' },
+  { id: 'titleix', label: 'Validate Title IX incident export and audit trail' },
+  { id: 'tokens', label: 'Finalize StageCoin weighting for leadership vs. effort' },
+  { id: 'update', label: 'Ship founder weekly update for investors' }
+];
+
+const defaultTaskState = taskItems.reduce((acc, item) => {
+  acc[item.id] = false;
+  return acc;
+}, {});
+
+function offlineAiFallback(prompt = '', systemInstruction = '') {
+  const p = prompt.toLowerCase();
+  if (p.includes('pricing') || p.includes('tier')) {
+    return "Starter: $35/mo — basic Director's Chair; Pro: $349/mo — StageCreds + API; Scale: $1,999/mo — SLA + on-prem connectors. Rationale: runway-friendly pricing with clear upgrade paths.";
+  }
+  if (p.includes('objection')) {
+    return 'Acknowledged. I hear the concern. Short reply: pilot the feature with a single class (2 weeks), verify judges and reduce admin by X hours/week. Offer to run a forensic scoring sample for one routine.';
+  }
+  if (p.includes('analyze') || p.includes('risk')) {
+    return 'Top risk: sensor drift & data quality. Opportunity: batch reprocessing + per-studio sharding to scale to 10k users. Mitigation: input validation, local buffer + replay queue for re-scoring.';
+  }
+  if (p.includes('investor') || p.includes('report')) {
+    return "Executive summary: momentum on product velocity, pilot plan (30 studios), and clear ask of $850k for product, pilots, and compliance. Key milestones: Director's Chair MVP, StageCred marketplace.";
+  }
+  return 'Demo Strategist: This is a demo fallback. For live analysis, connect to the strategy engine. Example output: 1 risk, 1 scalability opportunity, 1 mitigation step.';
+}
+
+async function callGemini(prompt, systemInstruction = '') {
+  if (!prompt || !prompt.trim()) return 'No prompt provided.';
+
+  try {
+    const resp = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, system: systemInstruction })
+    });
+
+    if (!resp.ok) {
+      let errBody = await resp.text();
+      try {
+        const pj = JSON.parse(errBody);
+        errBody = pj.detail || pj.error || JSON.stringify(pj);
+      } catch (e) {
+        // ignore JSON parse errors
+      }
+      throw new Error(`Proxy error: ${errBody}`);
+    }
+
+    const j = await resp.json();
+    return (j.text || '').trim() || offlineAiFallback(prompt, systemInstruction);
+  } catch (err) {
+    console.warn('Proxy error:', err);
+    return offlineAiFallback(prompt, systemInstruction);
+  }
+}
+
+function formatAiHtml(resultText) {
+  const formatted = resultText
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^\* (.*)/gm, '<li>$1</li>')
+    .replace(/^- (.*)/gm, '<li>$1</li>');
+
+  if (formatted.includes('<li>')) {
+    return formatted.replace(/((<li>.*<\/li>\s*)+)/g, '<ul>$1</ul>');
+  }
+
+  return formatted.replace(/\n/g, '<br>');
+}
 
 export default function StageportFacultyPage() {
+  const [selectedLayer, setSelectedLayer] = useState('layer1');
+  const [taskState, setTaskState] = useState(defaultTaskState);
+  const [aiModalOpen, setAiModalOpen] = useState(false);
+  const [aiTitle, setAiTitle] = useState('');
+  const [aiContent, setAiContent] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const modalTitleRef = useRef(null);
+  const lastFocusRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const savedLayer = localStorage.getItem('stageport.selectedLayer');
+    if (savedLayer && layerData[savedLayer]) {
+      setSelectedLayer(savedLayer);
+    }
+    const savedTasks = localStorage.getItem('stageport.tasks');
+    if (savedTasks) {
+      const parsed = JSON.parse(savedTasks);
+      setTaskState({ ...defaultTaskState, ...parsed });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem('stageport.selectedLayer', selectedLayer);
+  }, [selectedLayer]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem('stageport.tasks', JSON.stringify(taskState));
+  }, [taskState]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === 'Escape' && aiModalOpen) {
+        closeAiModal();
+      }
+    };
+
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [aiModalOpen]);
+
+  const progress = useMemo(() => {
+    const completed = Object.values(taskState).filter(Boolean).length;
+    const total = taskItems.length;
+    return {
+      completed,
+      total,
+      percent: total ? Math.round((completed / total) * 100) : 0
+    };
+  }, [taskState]);
+
+  const closeAiModal = () => {
+    setAiModalOpen(false);
+    setAiLoading(false);
+    setAiContent('');
+    const lastFocused = lastFocusRef.current;
+    if (lastFocused && typeof lastFocused.focus === 'function') {
+      lastFocused.focus();
+    }
+  };
+
+  const runAiAction = async (title, prompt, system) => {
+    lastFocusRef.current = document.activeElement;
+    setAiTitle(title);
+    setAiModalOpen(true);
+    setAiLoading(true);
+    setAiContent('');
+
+    try {
+      const text = await callGemini(prompt, system);
+      setAiContent(formatAiHtml(text));
+    } catch (err) {
+      setAiContent(
+        `<p style="color:#fca5a5">AI unavailable — showing fallback.</p><div>${formatAiHtml(offlineAiFallback(prompt, system))}</div>`
+      );
+    } finally {
+      setAiLoading(false);
+      setTimeout(() => {
+        modalTitleRef.current?.focus();
+      }, 60);
+    }
+  };
+
+  const analyzeLayer = () => {
+    const data = layerData[selectedLayer];
+    const system = 'You are a seasoned CTO and Product Strategist. Analyze software architecture components for risk and scalability.';
+    const prompt = `Analyze this component of the StagePort platform:\n\nComponent: ${data.title}\nDescription: ${data.desc}\nSpecs: ${JSON.stringify(data.specs)}\n\nIdentify:\n1. One critical technical risk.\n2. One scalability opportunity.\nKeep it concise (max 3 bullets).`;
+    runAiAction(`Analysis: ${data.title}`, prompt, system);
+  };
+
+  const generatePitch = () => {
+    const data = layerData[selectedLayer];
+    const system = 'You are an expert sales strategist for a B2B SaaS in the performing arts space.';
+    const prompt = `Write a short, effective cold email pitch to a dance studio owner selling "${data.title}".\n\nKey Context: ${data.desc}\nKeep it under 150 words.`;
+    runAiAction(`Drafting Pitch: ${data.title}`, prompt, system);
+  };
+
+  const handleObjection = () => {
+    const data = layerData[selectedLayer];
+    const system = 'You are a master negotiator and sales coach. Provide a calm 3-sentence rebuttal.';
+    const prompt = `I am selling ${data.title}. They said: "We already have a portal for parents."\nGive a concise, persuasive 3-sentence response.`;
+    runAiAction(`Handling Objection: ${data.title}`, prompt, system);
+  };
+
+  const generatePricingModel = () => {
+    const data = layerData[selectedLayer];
+    const system = 'You are a SaaS Pricing Expert. Suggest a 3-tier pricing model.';
+    const prompt = `Suggest Starter/Pro/Scale pricing for ${data.title} (StagePort module). Output format: - Tier: Price - rationale.`;
+    runAiAction(`Pricing Strategy: ${data.title}`, prompt, system);
+  };
+
+  const generateInvestorUpdate = () => {
+    const completed = taskItems
+      .filter((item) => taskState[item.id])
+      .map((item) => item.label);
+    const pending = taskItems
+      .filter((item) => !taskState[item.id])
+      .map((item) => item.label);
+    const percent = progress.percent;
+    const system = 'You are a founder writing a 1-paragraph update.';
+    const prompt = `Weekly update. Completion ${percent}%. Completed: ${completed.join(', ')}. Next: ${pending.slice(0, 2).join(', ')}.`;
+    runAiAction('Generating Weekly Report', prompt, system);
+  };
+
+  const copyToClipboard = async () => {
+    const plainText = aiContent.replace(/<[^>]+>/g, ' ');
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(plainText);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = plainText;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+      alert('Copied to clipboard');
+    } catch (err) {
+      alert('Copy failed — please select & copy manually');
+    }
+  };
+
+  const downloadAiReport = (filename = 'stageport_report.md') => {
+    const plainText = aiContent.replace(/<[^>]+>/g, ' ');
+    const blob = new Blob([plainText], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const activeLayer = layerData[selectedLayer];
+
   return (
     <div>
       <style>{`
@@ -121,141 +391,139 @@ export default function StageportFacultyPage() {
           font-weight: 500;
           border: 1px solid #4b5563;
           cursor: pointer;
-          background: transparent;
+          background: #111827;
           color: #e5e7eb;
           display: inline-flex;
           align-items: center;
-          gap: 0.4rem;
+          gap: 0.35rem;
         }
-        .btn-primary span.icon,
-        .btn-secondary span.icon {
-          font-size: 0.95rem;
+        .btn-secondary:hover,
+        .btn-primary:hover {
+          opacity: 0.92;
+        }
+        .icon {
+          font-size: 1rem;
         }
         .hero-footnote {
-          font-size: 0.75rem;
-          color: #6b7280;
+          font-size: 0.82rem;
+          color: #9ca3af;
+          margin-top: 0.5rem;
         }
         .badge-strip {
           display: flex;
           flex-wrap: wrap;
-          gap: 0.4rem;
-          font-size: 0.7rem;
-          color: #9ca3af;
-          margin-top: 1rem;
+          gap: 0.5rem;
+          margin-top: 1.2rem;
         }
         .badge-chip {
-          padding: 0.25rem 0.5rem;
+          padding: 0.45rem 0.75rem;
+          background: #0b1224;
           border-radius: 999px;
-          border: 1px solid #374151;
-          background: rgba(15,23,42,0.9);
+          border: 1px solid #1f2937;
+          font-size: 0.8rem;
+          color: #c4d3f6;
         }
         .hero-panel {
-          border-radius: 18px;
-          border: 1px solid #374151;
-          background: radial-gradient(circle at top left, #1f2937 0, #020617 70%);
-          padding: 1.5rem 1.4rem;
-          font-size: 0.82rem;
-          color: #e5e7eb;
+          background: #0b1224;
+          border: 1px solid #1f2937;
+          padding: 1.25rem;
+          border-radius: 16px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.35);
         }
         .hero-panel-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 0.8rem;
+          margin-bottom: 0.85rem;
         }
         .hero-panel-title {
-          font-size: 0.82rem;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: #9ca3af;
+          font-weight: 700;
+          font-size: 1.05rem;
         }
         .hero-panel-tag {
-          padding: 0.25rem 0.55rem;
+          font-size: 0.75rem;
+          padding: 0.35rem 0.65rem;
           border-radius: 999px;
-          border: 1px solid #4b5563;
-          font-size: 0.7rem;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          color: #a5b4fc;
+          border: 1px solid #4338ca;
+          color: #c7d2fe;
+          background: rgba(79, 70, 229, 0.15);
         }
         .hero-panel-main {
-          font-size: 0.88rem;
-          margin-bottom: 0.8rem;
-        }
-        .hero-panel-main strong {
-          color: #facc15;
+          font-size: 0.92rem;
+          color: #d1d5db;
+          line-height: 1.5;
+          margin-bottom: 1rem;
         }
         .hero-panel-metrics {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
           gap: 0.75rem;
-          margin-top: 0.6rem;
         }
         .hero-panel-metric {
+          padding: 0.85rem;
+          background: #0f172a;
           border-radius: 12px;
-          border: 1px solid #334155;
-          padding: 0.6rem 0.7rem;
-          font-size: 0.78rem;
+          border: 1px solid #1f2937;
         }
         .metric-label {
-          text-transform: uppercase;
-          letter-spacing: 0.12em;
-          font-size: 0.66rem;
           color: #9ca3af;
+          font-size: 0.78rem;
           margin-bottom: 0.2rem;
         }
         .metric-value {
-          font-size: 0.95rem;
-          font-weight: 600;
+          font-weight: 700;
+          font-size: 0.98rem;
         }
         .section {
-          margin-bottom: 3rem;
+          margin: 2.5rem 0;
         }
         .section-kicker {
           font-size: 0.78rem;
-          letter-spacing: 0.14em;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
-          color: #9ca3af;
-          margin-bottom: 0.4rem;
+          color: #a5b4fc;
+          margin-bottom: 0.35rem;
         }
         .section-title {
-          font-size: 1.25rem;
-          font-weight: 650;
-          margin-bottom: 0.75rem;
+          font-size: 1.6rem;
+          font-weight: 720;
+          margin-bottom: 0.7rem;
+          color: #e5e7eb;
         }
         .section-body {
-          font-size: 0.9rem;
+          font-size: 0.96rem;
           color: #d1d5db;
-          max-width: 40rem;
-          line-height: 1.6;
-          margin-bottom: 1.5rem;
+          line-height: 1.55;
+          max-width: 920px;
         }
         .offers-grid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 1.2rem;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 1.1rem;
+          margin-top: 1.1rem;
         }
         .offer-card {
-          border-radius: 16px;
-          border: 1px solid #374151;
-          background: rgba(15,23,42,0.9);
-          padding: 1.2rem 1.1rem 1.3rem;
+          background: #0b1224;
+          border: 1px solid #1f2937;
+          border-radius: 14px;
+          padding: 1rem 1.15rem;
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 0.35rem;
+          min-height: 210px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.25);
         }
         .offer-name {
-          font-size: 0.95rem;
-          font-weight: 600;
+          font-weight: 700;
         }
         .offer-price {
-          font-size: 1.05rem;
-          font-weight: 650;
-          color: #facc15;
+          color: #fbbf24;
+          font-weight: 700;
+          font-size: 1.1rem;
         }
         .offer-tagline {
-          font-size: 0.8rem;
           color: #9ca3af;
+          font-size: 0.9rem;
         }
         .offer-list {
           margin: 0.25rem 0 0.4rem 1rem;
@@ -274,6 +542,257 @@ export default function StageportFacultyPage() {
           width: 100%;
           justify-content: center;
         }
+        .ai-workbench {
+          background: #0b1224;
+          border: 1px solid #1f2937;
+          padding: 1.5rem;
+          border-radius: 18px;
+          box-shadow: 0 15px 60px rgba(0,0,0,0.35);
+        }
+        .workbench-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 1rem;
+          margin-bottom: 1rem;
+        }
+        .workbench-head h3 {
+          margin: 0;
+          font-size: 1.15rem;
+          letter-spacing: 0.01em;
+        }
+        .workbench-sub {
+          color: #9ca3af;
+          font-size: 0.9rem;
+          margin: 0.3rem 0 0;
+        }
+        .stack-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+          gap: 1rem;
+        }
+        .layer-card {
+          background: #0f172a;
+          border: 1px solid #1f2937;
+          border-radius: 12px;
+          padding: 0.9rem 1rem;
+          cursor: pointer;
+          transition: border-color 0.2s ease, transform 0.2s ease;
+          outline: none;
+        }
+        .layer-card:hover,
+        .layer-card:focus {
+          border-color: #6366f1;
+          transform: translateY(-1px);
+        }
+        .layer-card.active {
+          border-color: #f97316;
+          box-shadow: 0 10px 30px rgba(249, 115, 22, 0.15);
+        }
+        .layer-card h4 {
+          margin: 0 0 0.15rem 0;
+          font-size: 1rem;
+        }
+        .layer-card p {
+          margin: 0;
+          color: #a5b4fc;
+          font-size: 0.88rem;
+        }
+        .layer-details {
+          background: #0f172a;
+          border: 1px solid #1f2937;
+          border-radius: 14px;
+          padding: 1rem 1.1rem;
+          min-height: 220px;
+        }
+        .detail-title {
+          margin: 0;
+          font-size: 1.05rem;
+        }
+        .detail-desc {
+          color: #9ca3af;
+          margin: 0.35rem 0 0.7rem;
+          line-height: 1.45;
+        }
+        .spec-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          gap: 0.55rem;
+        }
+        .spec-pill {
+          padding: 0.7rem 0.8rem;
+          border-radius: 10px;
+          background: #0b1224;
+          border: 1px solid #1f2937;
+          font-size: 0.88rem;
+        }
+        .spec-label {
+          display: block;
+          color: #9ca3af;
+          font-size: 0.76rem;
+          margin-bottom: 0.2rem;
+        }
+        .status-good {
+          color: #22c55e;
+          border-color: #15803d;
+          background: rgba(34, 197, 94, 0.08);
+        }
+        .status-asset {
+          color: #c084fc;
+          border-color: #a855f7;
+          background: rgba(168, 85, 247, 0.1);
+        }
+        .ai-actions {
+          margin-top: 1rem;
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 0.6rem;
+        }
+        .ai-action-btn {
+          padding: 0.75rem 0.9rem;
+          border-radius: 12px;
+          border: 1px solid #1f2937;
+          background: #0b1224;
+          color: #e5e7eb;
+          display: flex;
+          align-items: center;
+          gap: 0.55rem;
+          cursor: pointer;
+          transition: transform 0.18s ease, border-color 0.18s ease;
+        }
+        .ai-action-btn:hover,
+        .ai-action-btn:focus {
+          transform: translateY(-1px);
+          border-color: #6366f1;
+        }
+        .task-panel {
+          background: #0f172a;
+          border: 1px solid #1f2937;
+          border-radius: 14px;
+          padding: 1rem;
+        }
+        .task-list {
+          list-style: none;
+          padding: 0;
+          margin: 0.5rem 0 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+        }
+        .task-item {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          font-size: 0.9rem;
+        }
+        .task-item input {
+          accent-color: #f97316;
+          width: 17px;
+          height: 17px;
+        }
+        .progress-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 0.7rem;
+        }
+        .progress-track {
+          background: #0b1224;
+          border: 1px solid #1f2937;
+          border-radius: 999px;
+          width: 100%;
+          height: 10px;
+          overflow: hidden;
+        }
+        .progress-fill {
+          background: linear-gradient(135deg, #f97316, #facc15);
+          height: 100%;
+          border-radius: 999px;
+          transition: width 0.25s ease;
+        }
+        .progress-label {
+          font-size: 0.85rem;
+          color: #cbd5e1;
+        }
+        .ai-modal-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(2, 6, 23, 0.6);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          backdrop-filter: blur(6px);
+          z-index: 50;
+          padding: 1rem;
+        }
+        .ai-modal {
+          background: #0b1224;
+          border: 1px solid #1f2937;
+          border-radius: 16px;
+          max-width: 680px;
+          width: 100%;
+          box-shadow: 0 25px 80px rgba(0,0,0,0.45);
+          max-height: 85vh;
+          display: flex;
+          flex-direction: column;
+        }
+        .ai-modal header {
+          padding: 1rem 1.2rem 0.4rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 0.6rem;
+        }
+        .ai-modal h3 {
+          margin: 0;
+          font-size: 1rem;
+        }
+        .ai-modal-body {
+          padding: 0.6rem 1.2rem 1rem;
+          overflow: auto;
+        }
+        .ai-modal-footer {
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.5rem;
+          padding: 0.6rem 1.2rem 1rem;
+        }
+        .ai-support-btn {
+          border-radius: 10px;
+          padding: 0.55rem 0.9rem;
+          border: 1px solid #1f2937;
+          background: #0f172a;
+          color: #e5e7eb;
+          cursor: pointer;
+        }
+        .ai-support-btn:hover,
+        .ai-support-btn:focus {
+          border-color: #6366f1;
+        }
+        .ai-loading {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          color: #cbd5e1;
+          font-size: 0.9rem;
+        }
+        .spinner {
+          width: 18px;
+          height: 18px;
+          border: 3px solid #1f2937;
+          border-top-color: #f97316;
+          border-radius: 999px;
+          animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .ai-content {
+          font-size: 0.95rem;
+          color: #e5e7eb;
+          line-height: 1.5;
+        }
+        .ai-content ul {
+          padding-left: 1.2rem;
+        }
         .footer-note {
           font-size: 0.78rem;
           color: #6b7280;
@@ -291,6 +810,12 @@ export default function StageportFacultyPage() {
           header {
             flex-direction: column;
             align-items: flex-start;
+          }
+          .stack-grid {
+            grid-template-columns: minmax(0,1fr);
+          }
+          .ai-modal {
+            max-height: 90vh;
           }
         }
       `}</style>
@@ -360,7 +885,7 @@ export default function StageportFacultyPage() {
             <div className="hero-panel-main">
               One console for <strong>students, offers, scores, tokens</strong> and
               safety incidents. Built so a studio owner can see
-              <strong>who’s thriving and who needs support</strong> at a glance,
+              <strong> who’s thriving and who needs support</strong> at a glance,
               then evolve the system on a predictable 28-day rhythm.
             </div>
             <div className="hero-panel-metrics">
@@ -386,6 +911,114 @@ export default function StageportFacultyPage() {
               </div>
             </div>
           </aside>
+        </section>
+
+        <section className="section ai-workbench" id="stack">
+          <div className="workbench-head">
+            <div>
+              <h3>Director’s Chair Workbench</h3>
+              <p className="workbench-sub">
+                Persisted selections, local task tracking, and AI assistance backed by the secure /api/generate proxy.
+              </p>
+            </div>
+            <div className="progress-label">{progress.completed} / {progress.total} tasks</div>
+          </div>
+          <div className="stack-grid">
+            <div>
+              <div className="offers-grid" style={{ gap: '0.75rem' }}>
+                {Object.entries(layerData).map(([key, data]) => (
+                  <div
+                    key={key}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={selectedLayer === key}
+                    className={`layer-card ${selectedLayer === key ? 'active' : ''}`}
+                    data-layer={key}
+                    onClick={() => setSelectedLayer(key)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        setSelectedLayer(key);
+                      }
+                    }}
+                  >
+                    <h4>{data.title}</h4>
+                    <p>{data.desc}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="layer-details" id="layer-details">
+                <h4 className="detail-title" id="detail-title">
+                  {activeLayer.title}
+                </h4>
+                <p className="detail-desc" id="detail-desc">
+                  {activeLayer.desc}
+                </p>
+                <div className="spec-grid" id="detail-specs">
+                  <div className="spec-pill">
+                    <span className="spec-label">Input</span>
+                    <span id="spec-input">{activeLayer.specs.input}</span>
+                  </div>
+                  <div className="spec-pill">
+                    <span className="spec-label">Function</span>
+                    <span id="spec-function">{activeLayer.specs.function}</span>
+                  </div>
+                  <div
+                    className={`spec-pill ${activeLayer.specs.status.includes('Sell') || activeLayer.specs.status.includes('Built') ? 'status-good' : 'status-asset'}`}
+                  >
+                    <span className="spec-label">Status</span>
+                    <span id="spec-status">{activeLayer.specs.status}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="task-panel">
+              <div className="progress-row">
+                <div className="progress-label">Local tasks</div>
+                <div className="progress-label">{progress.percent}%</div>
+              </div>
+              <div className="progress-track" aria-hidden="true">
+                <div className="progress-fill" style={{ width: `${progress.percent}%` }} />
+              </div>
+              <ul className="task-list">
+                {taskItems.map((task) => (
+                  <li key={task.id} className="task-item">
+                    <input
+                      type="checkbox"
+                      className="task-checkbox"
+                      data-task={task.id}
+                      checked={taskState[task.id]}
+                      onChange={(e) =>
+                        setTaskState({ ...taskState, [task.id]: e.target.checked })
+                      }
+                    />
+                    <span>{task.label}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="ai-actions">
+                <button className="ai-action-btn" onClick={analyzeLayer} aria-label="Analyze current layer">
+                  <span className="icon">🧭</span>
+                  Analyze risk & scale
+                </button>
+                <button className="ai-action-btn" onClick={generatePitch} aria-label="Generate pitch copy">
+                  <span className="icon">✉️</span>
+                  Draft pitch email
+                </button>
+                <button className="ai-action-btn" onClick={handleObjection} aria-label="Handle objection">
+                  <span className="icon">🛡️</span>
+                  Handle objection
+                </button>
+                <button className="ai-action-btn" onClick={generatePricingModel} aria-label="Generate pricing">
+                  <span className="icon">💸</span>
+                  3-tier pricing
+                </button>
+                <button className="ai-action-btn" onClick={generateInvestorUpdate} aria-label="Generate investor update">
+                  <span className="icon">📜</span>
+                  Weekly investor update
+                </button>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section className="section">
@@ -503,6 +1136,38 @@ export default function StageportFacultyPage() {
           Movement deserves math, ledgers and exits too.
         </div>
       </div>
+
+      {aiModalOpen && (
+        <div className="ai-modal-backdrop" role="presentation">
+          <div className="ai-modal" role="dialog" aria-modal="true" aria-labelledby="ai-modal-title">
+            <header>
+              <h3 id="ai-modal-title" ref={modalTitleRef} tabIndex={-1}>
+                {aiTitle}
+              </h3>
+              <button className="ai-support-btn" onClick={closeAiModal} aria-label="Close modal">
+                Close
+              </button>
+            </header>
+            <div className="ai-modal-body">
+              {aiLoading ? (
+                <div className="ai-loading">
+                  <span className="spinner" aria-hidden="true" /> Loading secure proxy…
+                </div>
+              ) : (
+                <div className="ai-content" id="ai-content" dangerouslySetInnerHTML={{ __html: aiContent }} />
+              )}
+            </div>
+            <div className="ai-modal-footer">
+              <button className="ai-support-btn" onClick={copyToClipboard} disabled={aiLoading}>
+                Copy
+              </button>
+              <button className="ai-support-btn" onClick={() => downloadAiReport()} disabled={aiLoading}>
+                Download
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
