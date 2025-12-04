@@ -31,8 +31,8 @@ What you'll find:
 **Best for:** Visual learners, understanding repository structure, seeing the big picture
 
 **How to view:** 
-- Copy contents and paste into [Mermaid Live Editor](https://mermaid.live/)
-- View on GitHub (automatic rendering)
+- Copy the file contents and paste into [Mermaid Live Editor](https://mermaid.live/)
+- View directly on GitHub (renders Mermaid automatically)
 - Use any Markdown viewer with Mermaid support
 
 ---

@@ -44,12 +44,14 @@ stageport-portal/                    (To be created)
 
 ```jsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FacultyList } from '../components/faculty/FacultyList';
 import { FacultyFilters } from '../components/faculty/FacultyFilters';
 import { FacultySearch } from '../components/faculty/FacultySearch';
 import { useFacultyData } from '../hooks/useFacultyData';
 
 export function StageportFacultyPage() {
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({
     credentialLevel: 'all', // 'all', 'bronze', 'silver', 'gold'
     status: 'active',       // 'all', 'active', 'prospect', 'alumni'
@@ -64,7 +66,7 @@ export function StageportFacultyPage() {
     <div className="faculty-page">
       <header className="page-header">
         <h1>Faculty Management</h1>
-        <button onClick={() => window.location.href = '/faculty/new'}>
+        <button onClick={() => navigate('/faculty/new')}>
           Add Faculty Member
         </button>
       </header>
@@ -109,7 +111,7 @@ export function FacultyList({ faculty, groupBy, onUpdate }) {
       gold: faculty.filter(f => f.credentialLevel === 'gold'),
       silver: faculty.filter(f => f.credentialLevel === 'silver'),
       bronze: faculty.filter(f => f.credentialLevel === 'bronze'),
-      none: faculty.filter(f => !f.credentialLevel)
+      none: faculty.filter(f => !f.credentialLevel || f.credentialLevel === 'none')
     };
 
     return (
@@ -250,7 +252,11 @@ export function CredentialBadges({ credentials, compact, detailed }) {
 
   if (compact) {
     // Just show level icons
-    const levels = new Set(credentials.map(c => c.level));
+    const levels = new Set(
+      credentials
+        .map(c => c.level)
+        .filter(level => level != null)
+    );
     return (
       <div className="credential-badges-compact">
         {Array.from(levels).map(level => (
@@ -281,7 +287,7 @@ export function CredentialBadges({ credentials, compact, detailed }) {
             </div>
             <dl className="credential-meta">
               <dt>Issued:</dt>
-              <dd>{new Date(cred.issuedOn).toLocaleDateString()}</dd>
+              <dd>{cred.issuedOn ? new Date(cred.issuedOn).toLocaleDateString() : 'N/A'}</dd>
               {cred.ctid && (
                 <>
                   <dt>CTID:</dt>

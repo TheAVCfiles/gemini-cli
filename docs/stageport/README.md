@@ -373,4 +373,8 @@ Each repository should:
 
 ## Support
 
-For questions about StagePort architecture or implementation, please refer to the main repository documentation or create an issue with the "stageport" label.
+For questions about StagePort architecture or implementation:
+- Start with the [INDEX.md](./INDEX.md) to find the right documentation
+- Review the relevant sections in this guide
+- Check the specific implementation guides (e.g., FACULTY_PAGE_IMPLEMENTATION.md)
+- Create an issue in the repository with the "stageport" label for questions not covered here
