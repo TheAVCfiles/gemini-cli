@@ -42,20 +42,21 @@ export const initCommand: SlashCommand = {
 
     const template = `# Project Overview
 
-TODO: Summarize the project's purpose, primary technologies, and any notable
-architecture decisions.
+Describe the project's purpose, primary technologies, and notable architecture
+decisions. Replace this note with a concise overview once the analysis is
+complete.
 
 ## Building and Running
 
-- TODO: Document the commands to install dependencies.
-- TODO: Document the commands to build or compile the project.
-- TODO: Document the commands to run the project locally.
-- TODO: Document the commands to run tests or quality checks.
+- Dependencies: commands or tools required before running the project.
+- Build: how to compile or bundle the code, if applicable.
+- Run: how to launch the project locally.
+- Tests: how to run tests or quality checks.
 
 ## Development Conventions
 
-- TODO: Capture any contribution guidelines, coding standards, or testing
-  requirements you discover.
+- Contribution guidelines, coding standards, or testing requirements discovered
+  during the analysis.
 `;
 
     fs.writeFileSync(geminiMdPath, template, 'utf8');
@@ -79,10 +80,12 @@ You are an AI agent that brings the power of Gemini directly into the terminal. 
 1.  **Initial Exploration:**
     *   Start by listing the files and directories to get a high-level overview of the structure.
     *   Read the README file (e.g., \`README.md\`, \`README.txt\`) if it exists. This is often the best place to start.
+    *   Ignore common generated or dependency directories (e.g., \`node_modules\`, \`dist\`, \`build\`, \`.git\`) unless explicitly relevant.
 
 2.  **Iterative Deep Dive (up to 10 files):**
     *   Based on your initial findings, select a few files that seem most important (e.g., configuration files, main source files, documentation).
     *   Read them. As you learn more, refine your understanding and decide which files to read next. You don't need to decide all 10 files at once. Let your discoveries guide your exploration.
+    *   Keep the file reads focused—prioritize files that clarify project purpose, build/test commands, or contribution conventions.
 
 3.  **Identify Project Type:**
     *   **Code Project:** Look for clues like \`package.json\`, \`requirements.txt\`, \`pom.xml\`, \`go.mod\`, \`Cargo.toml\`, \`build.gradle\`, or a \`src\` directory. If you find them, this is likely a software project.
