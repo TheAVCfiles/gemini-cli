@@ -1,0 +1,139 @@
+%% StagePort Component Map — Cross-Repository Organization
+%% Date: 2025-12-04
+%% This diagram shows how components are organized across different repositories and systems
+
+flowchart TB
+    subgraph DOCS["📚 gemini-cli/docs/stageport (This Repo)"]
+        README["README.md<br/><i>Architecture Guide</i>"]
+        MMD["stageport_directors_chair.mmd<br/><i>System Diagram</i>"]
+        NOTION_TPL["stageport_notion_master_template.md<br/><i>Database Schema</i>"]
+        CTDL["stagecred_ctdl_template.json<br/><i>Credential Template</i>"]
+        COMP_MAP["component_map.mmd<br/><i>This Diagram</i>"]
+    end
+
+    subgraph NOTION["🗄️ Notion Workspace"]
+        direction LR
+        PEOPLE_DB["People Database<br/><i>CRM Records</i>"]
+        FACULTY_VIEW["Faculty Panel View<br/><i>Filtered by Role=Faculty</i>"]
+        PROJ_DB["Projects Database"]
+        CRED_DB["Credentials Database"]
+        LEDGER_DB["Ledger Database"]
+        OFFERS_DB["Offers Database"]
+        SALES_DB["Sales Pipeline"]
+        SAFETY_DB["Safety/Title IX"]
+    end
+
+    subgraph API_REPO["🔧 stageport-api Repository (TBD)"]
+        direction TB
+        API_MAIN["stagecred_api.py<br/><i>Main API Server</i>"]
+        API_ROUTES["API Routes"]
+        API_MODELS["Data Models"]
+        
+        subgraph API_ENDPOINTS["Endpoints"]
+            EP_CRED["/api/credentials"]
+            EP_PEOPLE["/api/people"]
+            EP_PROJ["/api/projects"]
+            EP_LEDGER["/api/ledger"]
+        end
+    end
+
+    subgraph PORTAL_REPO["🌐 stageport-portal Repository (TBD)"]
+        direction TB
+        PORTAL_APP["Next.js/React App"]
+        
+        subgraph PORTAL_PAGES["Pages & Components"]
+            VENDING["VendingPortal.jsx<br/><i>Catalog View</i>"]
+            DASHBOARD["StudioDashboard.jsx<br/><i>Instructor/Student View</i>"]
+            FACULTY_PAGE["StageportFacultyPage.jsx<br/><i>Faculty Management</i>"]
+            KIOSK["StudioKiosk.jsx<br/><i>On-site Interface</i>"]
+        end
+        
+        subgraph PORTAL_COMPS["Shared Components"]
+            FAC_LIST["FacultyList.jsx"]
+            CRED_BADGES["CredentialBadges.jsx"]
+            PROJ_ASSIGN["ProjectAssignments.jsx"]
+        end
+    end
+
+    subgraph ENGINE_REPO["⚙️ stagecred-engine Repository (TBD)"]
+        PREVIEW_ENG["preview_engine.py<br/><i>Badge Preview Generator</i>"]
+        CTDL_ISSUER["ctdl_issuer.py<br/><i>Credential Issuer</i>"]
+        ASTRO_ENG["astro_economic.py<br/><i>Market Analysis</i>"]
+    end
+
+    subgraph EXTERNAL["🌍 External Services"]
+        STRIPE["Stripe/Lemon Squeezy<br/><i>Payments</i>"]
+        VERCEL["Vercel/Netlify<br/><i>Hosting</i>"]
+        GITHUB["GitHub<br/><i>Repos</i>"]
+        JACKRABBIT["Jackrabbit/Mindbody<br/><i>CRM Import</i>"]
+    end
+
+    %% Documentation flows
+    README -.-> MMD
+    README -.-> NOTION_TPL
+    README -.-> CTDL
+    README -.-> COMP_MAP
+    
+    NOTION_TPL -.-|"setup guide"| NOTION
+    CTDL -.-|"template"| CTDL_ISSUER
+
+    %% Notion internal flows
+    PEOPLE_DB --> FACULTY_VIEW
+    PEOPLE_DB -.relation.-> PROJ_DB
+    PEOPLE_DB -.relation.-> CRED_DB
+    PEOPLE_DB -.relation.-> LEDGER_DB
+    PROJ_DB -.relation.-> OFFERS_DB
+    SALES_DB -.relation.-> OFFERS_DB
+
+    %% API to Notion
+    API_MAIN --> EP_PEOPLE
+    API_MAIN --> EP_CRED
+    API_MAIN --> EP_PROJ
+    API_MAIN --> EP_LEDGER
+    
+    EP_PEOPLE <-->|"read/write"| PEOPLE_DB
+    EP_CRED <-->|"read/write"| CRED_DB
+    EP_PROJ <-->|"read/write"| PROJ_DB
+    EP_LEDGER <-->|"read/write"| LEDGER_DB
+
+    %% Portal to API
+    PORTAL_APP -->|"API calls"| API_MAIN
+    VENDING --> API_ROUTES
+    DASHBOARD --> API_ROUTES
+    FACULTY_PAGE --> API_ROUTES
+    KIOSK --> API_ROUTES
+
+    %% Faculty Page component structure
+    FACULTY_PAGE --> FAC_LIST
+    FACULTY_PAGE --> CRED_BADGES
+    FACULTY_PAGE --> PROJ_ASSIGN
+    
+    FAC_LIST -->|"fetch data"| EP_PEOPLE
+    CRED_BADGES -->|"fetch data"| EP_CRED
+    PROJ_ASSIGN -->|"fetch data"| EP_PROJ
+
+    %% Engine integrations
+    PREVIEW_ENG -->|"generate badges"| CTDL_ISSUER
+    CTDL_ISSUER -->|"issue credentials"| EP_CRED
+    ASTRO_ENG -->|"analytics"| API_MAIN
+
+    %% External integrations
+    EP_LEDGER --> STRIPE
+    PORTAL_APP -.deploy.-> VERCEL
+    GITHUB -.ingest.-> OFFERS_DB
+    JACKRABBIT -.import.-> PEOPLE_DB
+
+    %% Styling
+    classDef docsClass fill:#e1f5ff,stroke:#01579b
+    classDef notionClass fill:#fff3e0,stroke:#e65100
+    classDef apiClass fill:#f3e5f5,stroke:#4a148c
+    classDef portalClass fill:#e8f5e9,stroke:#1b5e20
+    classDef engineClass fill:#fce4ec,stroke:#880e4f
+    classDef externalClass fill:#f5f5f5,stroke:#616161
+
+    class README,MMD,NOTION_TPL,CTDL,COMP_MAP docsClass
+    class PEOPLE_DB,FACULTY_VIEW,PROJ_DB,CRED_DB,LEDGER_DB,OFFERS_DB,SALES_DB,SAFETY_DB notionClass
+    class API_MAIN,API_ROUTES,API_MODELS,EP_CRED,EP_PEOPLE,EP_PROJ,EP_LEDGER apiClass
+    class PORTAL_APP,VENDING,DASHBOARD,FACULTY_PAGE,KIOSK,FAC_LIST,CRED_BADGES,PROJ_ASSIGN portalClass
+    class PREVIEW_ENG,CTDL_ISSUER,ASTRO_ENG engineClass
+    class STRIPE,VERCEL,GITHUB,JACKRABBIT externalClass
