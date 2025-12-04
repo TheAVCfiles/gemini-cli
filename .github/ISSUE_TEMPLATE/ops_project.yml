@@ -1,0 +1,54 @@
+name: 'Ops / Milestone'
+description: 'Track operational deliverables, deployments, or repeatable SOPs'
+labels:
+  - 'area/ops'
+  - 'status/need-triage'
+body:
+  - type: 'markdown'
+    attributes:
+      value: |-
+        > [!NOTE]
+        > Keep this issue focused on a shippable outcome (deployment, SOP, or milestone).
+
+  - type: 'textarea'
+    id: 'objective'
+    attributes:
+      label: 'Objective'
+      description: 'What outcome are we shipping (e.g., Vercel deploy, SOP publish, stability tag)?'
+    validations:
+      required: true
+
+  - type: 'textarea'
+    id: 'scope'
+    attributes:
+      label: 'Scope'
+      description: 'Boundaries and repos touched. Keep it small and automatable.'
+
+  - type: 'textarea'
+    id: 'acceptance'
+    attributes:
+      label: 'Acceptance criteria'
+      description: 'Checkpoints that prove this is done (URLs, tags, screenshots, or logs).'
+    validations:
+      required: true
+
+  - type: 'textarea'
+    id: 'automation'
+    attributes:
+      label: 'Automation hooks'
+      description: 'Webhooks, CI steps, or scripts that keep this repeatable.'
+
+  - type: 'textarea'
+    id: 'dependencies'
+    attributes:
+      label: 'Dependencies / risks'
+      description: 'Secrets, services, or blockers to resolve early.'
+
+  - type: 'checkboxes'
+    id: 'readiness'
+    attributes:
+      label: 'Readiness checks'
+      options:
+        - label: 'Secrets available'
+        - label: 'Docs updated (OPS_PROJECT.md or relevant README)'
+        - label: 'Smoke test defined'

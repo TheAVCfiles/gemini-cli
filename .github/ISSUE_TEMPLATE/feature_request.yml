@@ -29,6 +29,20 @@ body:
       required: true
 
   - type: 'textarea'
+    id: 'acceptance'
+    attributes:
+      label: 'Acceptance criteria'
+      description: 'What proof shows this is done? (URLs, logs, UI changes, or API responses).'
+    validations:
+      required: true
+
+  - type: 'textarea'
+    id: 'dependencies'
+    attributes:
+      label: 'Dependencies / risks'
+      description: 'Secrets, services, or related work that could block shipping.'
+
+  - type: 'textarea'
     id: 'additional-context'
     attributes:
       label: 'Additional context'
