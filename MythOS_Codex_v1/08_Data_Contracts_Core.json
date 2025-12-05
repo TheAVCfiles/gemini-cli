@@ -1,0 +1,54 @@
+{
+  "version": "1.0.0",
+  "ual_reference": "UAL-CHANGE-2024-01",
+  "entities": {
+    "Student": {
+      "fields": {
+        "id": "uuid",
+        "legal_name": "string",
+        "preferred_name": "string",
+        "consent_status": "enum: pending|active|revoked",
+        "wallet_address": "string",
+        "guardians": "array<contact>"
+      },
+      "notes": "Consent artifacts must be attached before ingesting movement data."
+    },
+    "Routine": {
+      "fields": {
+        "id": "uuid",
+        "student_id": "uuid",
+        "capture_at": "timestamp",
+        "sensor_bundle_uri": "uri",
+        "music_bpm": "integer",
+        "difficulty": "float",
+        "submission_signature": "hex"
+      },
+      "notes": "All submissions require provenance hash and replay window metadata."
+    },
+    "Scorecard": {
+      "fields": {
+        "id": "uuid",
+        "routine_id": "uuid",
+        "model_version": "string",
+        "stability_index": "float",
+        "element_scores": "array<object>",
+        "volatility_flags": "array<string>",
+        "confidence": "float"
+      },
+      "notes": "Includes cryptographic receipt stub and reviewer signature block."
+    },
+    "StageCred": {
+      "fields": {
+        "id": "uuid",
+        "student_id": "uuid",
+        "scorecard_id": "uuid",
+        "issued_at": "timestamp",
+        "expires_at": "timestamp",
+        "revocation_uri": "uri",
+        "pdf_uri": "uri",
+        "json_uri": "uri"
+      },
+      "notes": "Revocation must cascade to dependent wallets and badges."
+    }
+  }
+}
