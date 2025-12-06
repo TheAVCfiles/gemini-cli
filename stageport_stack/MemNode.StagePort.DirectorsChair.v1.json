@@ -1,0 +1,21 @@
+{
+  "memnode_id": "MemNode.StagePort.DirectorsChair.v1",
+  "purpose": "Pocket parliament for studios: one iPhone hub that runs timing, safety, casting, ledger, and economy.",
+  "anchor_files": [
+    "stageport_stack/20_product/director_chair_dashboard.fig",
+    "stageport_stack/20_product/director_chair_mobile_spec.md",
+    "stageport_stack/30_facility/StagePort_Facility_OS_v4.pdf",
+    "stageport_stack/40_ledger/StageCred_Ledger_Spec.md"
+  ],
+  "dimensions": ["Surface", "Movement", "Safety", "Economy", "Narrative", "Enterprise"],
+  "engines": ["PyRouette", "SafetyEngine", "DestinyEngine", "DescentEngine", "LedgerShield"],
+  "primary_user": "Studio Owner / Director / Parent-Founder",
+  "ui_nav": ["HOME", "CALLBOARD", "STUDY", "SALON", "SOVEREIGN"],
+  "status": "authoring",
+  "next_actions": [
+    "Design mobile-first HOME screen in Figma",
+    "Wire API for HumanIndexSnapshot → HOME cards",
+    "Draft CTDL credentials for StageCred badges",
+    "Pilot with 1 studio as closed beta"
+  ]
+}
