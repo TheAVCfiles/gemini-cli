@@ -9,7 +9,12 @@ A minimal Express + PostgreSQL + S3 API powering asset search, artifact sharing,
    cp server/.env.example server/.env
    ```
 2. Ensure the SQL schema in [`schema.sql`](./schema.sql) has been applied to your database.
-3. Install dependencies from the repository root (ignore optional postinstall scripts if needed):
+3. For the Proof Layer (StagePort Ledger, Credential Minting, and AURA/AURE runtime), apply [`decrypt_app_schema.sql`](./decrypt_app_schema.sql) to the Neon `decrypt_app` database:
+   ```bash
+   psql "$NEON_DATABASE_URL" -f server/decrypt_app_schema.sql
+   ```
+   The schema enables `pgcrypto` (for `gen_random_uuid()`), defines minted credentials, Sentient Cents ledger entries, archival capsule metadata, and runtime AURA/AURE states.
+4. Install dependencies from the repository root (ignore optional postinstall scripts if needed):
    ```bash
    npm install --ignore-scripts
    ```
