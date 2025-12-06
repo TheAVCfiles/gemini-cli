@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MythOS Studio System",
+  "type": "object",
+  "properties": {
+    "model": { "type": "string", "const": "DTG-∞-Pearl-Core" },
+    "designer": { "type": "string", "const": "A.C. Van Cura (Alli)" },
+    "location": { "type": "string", "const": "Esopus, NY" },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "code", "function", "notes"],
+        "properties": {
+          "name": { "type": "string" },
+          "code": { "type": "string" },
+          "function": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "logic": {
+      "type": "object",
+      "properties": {
+        "entry_gate": { "type": "string" },
+        "badge_minting": { "type": "string" },
+        "glitch_notarization": { "type": "string" },
+        "conviction_tiers": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "flows": {
+      "type": "object",
+      "properties": {
+        "developer": { "type": "array", "items": { "type": "string" } },
+        "audience": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "vault": {
+      "type": "object",
+      "properties": {
+        "reminders": { "type": "array", "items": { "type": "string" } },
+        "entry": {
+          "type": "object",
+          "properties": {
+            "vault_id": { "type": "string" },
+            "glyph": { "type": "string" },
+            "meaning": { "type": "string" },
+            "trigger": { "type": "string" },
+            "reminder": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "required": ["model", "designer", "location", "modules", "logic", "flows", "vault"]
+}
