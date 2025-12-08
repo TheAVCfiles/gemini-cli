@@ -1,0 +1,50 @@
+:root {
+  color-scheme: light dark;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  background: #0b0f14;
+  color: #e8edf2;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+}
+
+main {
+  max-width: 640px;
+  width: 100%;
+  background: linear-gradient(145deg, #0d1219, #0b0f14);
+  border: 1px solid #1c2530;
+  border-radius: 16px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+}
+
+h1 {
+  margin-top: 0;
+  letter-spacing: 0.02em;
+}
+
+code {
+  background: #111827;
+  color: #cbeafe;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+ul {
+  padding-left: 1.2rem;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  margin: 0 0 0.5rem;
+  color: #7fb3ff;
+}
