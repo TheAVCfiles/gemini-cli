@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import StageCrest from './StageCrest.jsx';
+import operatorLiteracyCredential from '../credentials/operatorLiteracyCredential.js';
 
 const layerData = {
   layer1: {
@@ -271,6 +273,24 @@ export default function StageportFacultyPage() {
 
   const activeLayer = layerData[selectedLayer];
 
+  const credentialPreview = useMemo(() => {
+    const svgPreview = operatorLiteracyCredential.credential.visual_archetype.visual_asset.svg
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 140);
+
+    return {
+      ...operatorLiteracyCredential.credential,
+      visual_archetype: {
+        ...operatorLiteracyCredential.credential.visual_archetype,
+        visual_asset: {
+          ...operatorLiteracyCredential.credential.visual_archetype.visual_asset,
+          svg: `${svgPreview}…`
+        }
+      }
+    };
+  }, []);
+
   return (
     <div>
       <style>{`
@@ -422,6 +442,87 @@ export default function StageportFacultyPage() {
           border: 1px solid #1f2937;
           font-size: 0.8rem;
           color: #c4d3f6;
+        }
+        .crest-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          gap: 1rem;
+          margin-top: 1rem;
+        }
+        .crest-card {
+          background: #0b1224;
+          border: 1px solid #1f2937;
+          border-radius: 16px;
+          padding: 1rem 1.1rem;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+        }
+        .crest-card-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 0.6rem;
+          margin-bottom: 0.6rem;
+        }
+        .crest-card-title {
+          margin: 0;
+          font-size: 1rem;
+          font-weight: 700;
+        }
+        .crest-chip {
+          font-size: 0.75rem;
+          padding: 0.3rem 0.65rem;
+          border-radius: 999px;
+          border: 1px solid #4338ca;
+          color: #c7d2fe;
+          background: rgba(79, 70, 229, 0.15);
+          white-space: nowrap;
+        }
+        .crest-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          align-items: center;
+          margin-bottom: 0.75rem;
+        }
+        .stagecrest-wrapper svg {
+          width: 100%;
+          height: 100%;
+          display: block;
+        }
+        .crest-legend {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          gap: 0.55rem;
+        }
+        .crest-pill {
+          padding: 0.6rem 0.7rem;
+          border-radius: 12px;
+          border: 1px solid #1f2937;
+          background: #0f172a;
+          font-size: 0.85rem;
+          color: #d1d5db;
+        }
+        .crest-pill small {
+          display: block;
+          color: #9ca3af;
+          margin-top: 0.15rem;
+          font-size: 0.75rem;
+        }
+        .crest-json {
+          background: #0f172a;
+          border: 1px solid #1f2937;
+          border-radius: 12px;
+          padding: 0.8rem;
+          overflow: auto;
+          max-height: 320px;
+          color: #e5e7eb;
+          font-size: 0.8rem;
+          line-height: 1.4;
+        }
+        .crest-note {
+          color: #9ca3af;
+          font-size: 0.86rem;
+          margin-top: 0.5rem;
         }
         .hero-panel {
           background: #0b1224;
@@ -807,6 +908,9 @@ export default function StageportFacultyPage() {
           .offers-grid {
             grid-template-columns: minmax(0,1fr);
           }
+          .crest-grid {
+            grid-template-columns: minmax(0,1fr);
+          }
           header {
             flex-direction: column;
             align-items: flex-start;
@@ -911,6 +1015,55 @@ export default function StageportFacultyPage() {
               </div>
             </div>
           </aside>
+        </section>
+
+        <section className="section" id="operator-literacy">
+          <div className="section-kicker">Operator Literacy crest</div>
+          <div className="section-title">Ceremonial seal + notarized halo</div>
+          <p className="section-body crest-note">
+            The crest packages the Operator Literacy v1 credential into a reusable badge. Inline SVG keeps the notarized halo
+            animation, and the JSON credential below includes the full SVG so you can mint it directly into the memnode stack.
+          </p>
+          <div className="crest-grid">
+            <div className="crest-card">
+              <div className="crest-card-head">
+                <p className="crest-card-title">Badge states</p>
+                <span className="crest-chip">Halo notarizes on mint</span>
+              </div>
+              <div className="crest-row" role="group" aria-label="Crest badge states">
+                <StageCrest state="inactive" ariaLabel="Operator crest inactive" />
+                <StageCrest state="active" ariaLabel="Operator crest active" />
+                <StageCrest state="notarized" ariaLabel="Operator crest notarized" />
+              </div>
+              <div className="crest-legend">
+                <div className="crest-pill">
+                  Inactive
+                  <small>Muted ring and glyph; no motion for low-priority lists.</small>
+                </div>
+                <div className="crest-pill">
+                  Active
+                  <small>Full palette + Motherboard Green glyph. Hover/press micro-motion lives in CSS.</small>
+                </div>
+                <div className="crest-pill">
+                  Notarized
+                  <small>Glow + rotating halo + star pulse. Best for minted/verified badges.</small>
+                </div>
+              </div>
+            </div>
+            <div className="crest-card">
+              <div className="crest-card-head">
+                <p className="crest-card-title">Operator Literacy v1 credential</p>
+                <span className="crest-chip">Inline SVG attached</span>
+              </div>
+              <pre className="crest-json" aria-label="Operator Literacy credential JSON">
+                {JSON.stringify(credentialPreview, null, 2)}
+              </pre>
+              <div className="crest-note">
+                Full payload retains the notarized halo animation. Swap state via class name (state--inactive | state--active |
+                state--notarized) on the crest root.
+              </div>
+            </div>
+          </div>
         </section>
 
         <section className="section ai-workbench" id="stack">
