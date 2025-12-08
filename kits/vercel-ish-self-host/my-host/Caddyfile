@@ -1,0 +1,7 @@
+yourdomain.com, www.yourdomain.com {
+  encode gzip zstd
+  @api path /api*
+  reverse_proxy @api api:8000
+  reverse_proxy web:3000
+  tls you@youremail.com
+}
