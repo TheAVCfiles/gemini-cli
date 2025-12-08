@@ -1,0 +1,53 @@
+export const stageportCrestSvg = `<!-- StagePort / DeCrypt the Girl — Crest (torus + inner Y glyph + notarize halo) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%" aria-label="StagePort Crest">
+  <defs>
+    <linearGradient id="gp-ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#D9AF6A" />
+      <stop offset="45%" stop-color="#6A4CFF" />
+      <stop offset="100%" stop-color="#003F7D" />
+    </linearGradient>
+
+    <filter id="f-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <style>
+      .crest-root { isolation: isolate; }
+      .ring { stroke: url(#gp-ring); stroke-width: 18; fill: none; stroke-linecap: round; }
+      .inner-hole { fill: #0b0b0b; }
+      .y-glyph { stroke: #00A86B; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .notarize-halo { stroke: url(#gp-ring); stroke-width: 6; fill: none; stroke-opacity: 0.9; filter: url(#f-glow); stroke-dasharray: 8 6; transform-box: fill-box; transform-origin: center; animation: halo-spin 4.5s linear infinite; }
+      .notarize-star { fill: #FFD98A; filter: url(#f-glow); opacity: 0; transform-box: fill-box; transform-origin: center; animation: star-pulse 1.6s ease-in-out infinite; }
+      @keyframes halo-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      @keyframes star-pulse {
+        0% { opacity: 0; transform: scale(0.85); }
+        40% { opacity: 1; transform: scale(1.15); }
+        100% { opacity: 0; transform: scale(0.95); }
+      }
+      .state--inactive .ring { stroke-opacity: 0.18; }
+      .state--inactive .y-glyph { stroke: #9CA3AF; stroke-opacity: 0.5; }
+      .state--active .ring { stroke-opacity: 1; }
+      .state--active .y-glyph { stroke: #00A86B; stroke-opacity: 1; }
+      .state--notarized .ring { stroke-opacity: 1; filter: url(#f-glow); }
+      .state--notarized .notarize-star { opacity: 1; }
+    </style>
+  </defs>
+
+  <g class="crest-root state--inactive" transform="translate(0,0)">
+    <g transform="translate(100,100)">
+      <circle class="ring" r="68" />
+      <circle class="inner-hole" r="36" fill="none" stroke="none" />
+      <path class="y-glyph" d="M0 -28 L0 26 M0 -28 L -22 12 M0 -28 L 22 12" />
+      <circle class="notarize-halo" r="86" />
+      <g transform="translate(44,-58) scale(0.85)">
+        <path class="notarize-star" d="M0,-6 L1.8,-1.5 L6,-1.2 L2.5,1.3 L3.6,6 L0,3.2 L-3.6,6 L-2.5,1.3 L-6,-1.2 L-1.8,-1.5 Z" />
+      </g>
+    </g>
+  </g>
+</svg>`;
+
+export default stageportCrestSvg;
