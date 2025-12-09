@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MWRA Interactive Glossary</title>
+    <title>Decrypt The Girl · Decryption Deck</title>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css"
@@ -12,25 +12,29 @@
     />
     <style>
       body {
-        background: #f6f8fb;
+        background: radial-gradient(circle at top, #020617 0%, #0f172a 40%, #111827 100%);
+        color: #e2e8f0;
       }
       header {
-        background: linear-gradient(135deg, #0f172a, #1e3a8a);
-        color: #fff;
-        padding: 3rem 0 2rem;
-        margin-bottom: 2rem;
+        background: linear-gradient(135deg, rgba(45, 212, 191, 0.18), rgba(59, 130, 246, 0.12));
+        border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+        padding: 3.5rem 0 2.5rem;
+        margin-bottom: 2.5rem;
         text-align: center;
       }
       header h1 {
         margin-bottom: 0.75rem;
-        font-size: 2.5rem;
+        font-size: 2.75rem;
         font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
       }
       header p {
-        max-width: 720px;
+        max-width: 780px;
         margin: 0 auto;
         font-size: 1.1rem;
-        line-height: 1.5;
+        line-height: 1.7;
+        color: #cbd5f5;
       }
       .layout {
         max-width: 1100px;
@@ -38,10 +42,10 @@
         padding: 0 1.5rem 4rem;
       }
       .toolbar {
-        background: #fff;
+        background: rgba(15, 23, 42, 0.88);
         padding: 1.5rem;
         border-radius: 18px;
-        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.1);
+        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.35);
         margin-bottom: 1.5rem;
       }
       .toolbar-grid {
@@ -62,33 +66,58 @@
       }
       .alphabet-nav button {
         border-radius: 999px;
-        border: 1px solid transparent;
-        background: #e2e8f0;
-        color: #1e293b;
+        border: 1px solid rgba(94, 234, 212, 0.25);
+        background: rgba(14, 116, 144, 0.15);
+        color: #5eead4;
         font-weight: 600;
         padding: 0.25rem 0.75rem;
         transition: all 0.15s ease;
       }
       .alphabet-nav button.active {
-        background: #1d4ed8;
-        color: #fff;
-        box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+        background: rgba(94, 234, 212, 0.25);
+        color: #ecfeff;
+        box-shadow: 0 8px 16px rgba(14, 116, 144, 0.45);
       }
       .alphabet-nav button:hover {
-        background: #cbd5f5;
+        background: rgba(94, 234, 212, 0.35);
+      }
+      .mode-chips {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+      .mode-chips button {
+        border-radius: 0.75rem;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        background: rgba(30, 64, 175, 0.35);
+        color: #cbd5f5;
+        font-weight: 600;
+        padding: 0.35rem 0.9rem;
+        transition: transform 0.15s ease, background 0.15s ease, border 0.15s ease;
+      }
+      .mode-chips button.active {
+        background: rgba(79, 70, 229, 0.6);
+        border-color: rgba(129, 140, 248, 0.7);
+        color: #f8fafc;
+        transform: translateY(-2px);
+      }
+      .mode-chips button:hover {
+        background: rgba(59, 130, 246, 0.5);
+        border-color: rgba(59, 130, 246, 0.6);
       }
       .results-card {
-        background: #fff;
+        background: rgba(15, 23, 42, 0.88);
         border-radius: 18px;
         padding: 1rem 1.5rem;
-        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.4);
       }
       .results-meta {
         display: flex;
         flex-wrap: wrap;
         gap: 0.75rem;
         margin-bottom: 1rem;
-        color: #475569;
+        color: #94a3b8;
         font-size: 0.95rem;
       }
       .glossary-list {
@@ -97,50 +126,64 @@
       }
       .glossary-entry {
         border-radius: 12px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid rgba(148, 163, 184, 0.35);
         padding: 1rem 1.25rem;
         transition: border 0.2s ease, box-shadow 0.2s ease;
-        background: #fff;
+        background: rgba(2, 6, 23, 0.75);
       }
       .glossary-entry:hover {
-        border-color: #94a3b8;
-        box-shadow: 0 8px 18px rgba(148, 163, 184, 0.25);
+        border-color: rgba(94, 234, 212, 0.6);
+        box-shadow: 0 8px 18px rgba(94, 234, 212, 0.25);
       }
       .glossary-entry h3 {
         margin-bottom: 0.35rem;
-        font-size: 1.2rem;
-        color: #0f172a;
+        font-size: 1.25rem;
+        color: #f8fafc;
       }
       .glossary-entry p {
         margin-bottom: 0.4rem;
         line-height: 1.5;
-        color: #1e293b;
+        color: #cbd5f5;
       }
       .glossary-entry .sources {
         font-size: 0.9rem;
-        color: #475569;
+        color: #94a3b8;
+      }
+      .glossary-entry .mode-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        background: rgba(59, 130, 246, 0.25);
+        color: #e0f2fe;
+        border-radius: 999px;
+        padding: 0.25rem 0.75rem;
       }
       .upload-zone {
-        border: 2px dashed #cbd5f5;
+        border: 2px dashed rgba(148, 163, 184, 0.6);
         border-radius: 16px;
         padding: 1rem;
         text-align: center;
-        color: #475569;
+        color: #94a3b8;
         transition: border-color 0.2s ease;
       }
       .upload-zone:hover {
-        border-color: #2563eb;
-        color: #1d4ed8;
+        border-color: rgba(94, 234, 212, 0.75);
+        color: #f8fafc;
       }
       .conflict-panel {
         margin-top: 1.5rem;
         padding: 1.5rem;
-        background: #f8fafc;
+        background: rgba(15, 23, 42, 0.88);
         border-radius: 16px;
-        border: 1px solid #cbd5f5;
+        border: 1px solid rgba(148, 163, 184, 0.3);
       }
       .conflict-panel h3 {
         margin-bottom: 0.75rem;
+        color: #f8fafc;
       }
       .conflict-list {
         display: grid;
@@ -148,70 +191,123 @@
       }
       .conflict-item {
         padding: 0.75rem 1rem;
-        background: #fff;
+        background: rgba(2, 6, 23, 0.75);
         border-radius: 12px;
-        border-left: 4px solid #1d4ed8;
-        border-top: 1px solid #e2e8f0;
-        border-right: 1px solid #e2e8f0;
-        border-bottom: 1px solid #e2e8f0;
+        border-left: 4px solid rgba(94, 234, 212, 0.65);
+        border-top: 1px solid rgba(148, 163, 184, 0.35);
+        border-right: 1px solid rgba(148, 163, 184, 0.35);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.35);
       }
       .conflict-item p {
         margin: 0.25rem 0 0;
         font-size: 0.95rem;
-        color: #334155;
+        color: #cbd5f5;
       }
       .empty-state {
         text-align: center;
-        color: #64748b;
+        color: #a5b4fc;
         padding: 3rem 0;
+      }
+      .mode-lore {
+        background: rgba(15, 23, 42, 0.88);
+        border-radius: 18px;
+        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.4);
+        margin: 2.5rem 0;
+        padding: 2rem 2.25rem;
+      }
+      .mode-lore h2 {
+        margin-top: 0;
+        color: #f8fafc;
+      }
+      .context-grid {
+        display: grid;
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+      }
+      @media (min-width: 900px) {
+        .context-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+      .context-card {
+        border-radius: 16px;
+        padding: 1.25rem;
+        background: rgba(2, 6, 23, 0.8);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .context-card h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #bae6fd;
+      }
+      .context-card p {
+        margin: 0;
+        color: #cbd5f5;
+        line-height: 1.6;
+      }
+      .context-card ul {
+        margin: 0;
+        padding-left: 1.1rem;
+        color: #94a3b8;
+        font-size: 0.95rem;
+      }
+      .context-card li + li {
+        margin-top: 0.35rem;
       }
       footer {
         text-align: center;
         padding: 3rem 0 2rem;
-        color: #475569;
+        color: #94a3b8;
         font-size: 0.9rem;
       }
       footer a {
-        color: #1d4ed8;
+        color: #38bdf8;
       }
     </style>
   </head>
   <body>
     <header>
-      <h1>MWRA Interactive Glossary</h1>
+      <h1>Decrypt The Girl</h1>
       <p>
-        A maintained reference of MWRA terminology backed by AI-assisted conflict
-        checks. Upload external glossaries, spot conflicts instantly, and export
-        the combined view.
+        A recursive poetic operating system that braids trauma records, live code,
+        and choreography. Consult the Decryption Deck, sift modes of Surface,
+        Cipher, and Echo, and keep witness as the ritual engine evolves session by
+        session.
       </p>
     </header>
     <main class="layout">
       <section class="toolbar" aria-labelledby="controls-heading">
         <div class="toolbar-grid">
           <fieldset>
-            <label for="search">Search terms or definitions</label>
+            <label for="search">Search the Decryption Deck</label>
             <input
               id="search"
               type="search"
               name="search"
-              placeholder="Search glossary (term, definition, or source)"
+              placeholder="Search by ritual, component, or archive path"
               autocomplete="off"
             />
           </fieldset>
           <div>
-            <label for="externalUpload">Upload CSV/JSON</label>
+            <label for="externalUpload">Upload new testimonies</label>
             <div class="upload-zone">
               <input id="externalUpload" name="externalUpload" type="file" accept=".csv,.json" />
-              <small>Drop a CSV/JSON file to compare with the canonical glossary.</small>
+              <small>Drop a CSV/JSON file to compare with the canonical Decryption Deck.</small>
             </div>
           </div>
         </div>
+        <div class="mode-chips" id="modeFilters" role="radiogroup" aria-label="Mode filter"></div>
         <div class="alphabet-nav" role="tablist" aria-label="Glossary navigation"></div>
         <div class="results-meta" id="resultsMeta" aria-live="polite"></div>
         <div class="actions" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
           <button id="resetFilters" class="secondary">Reset filters</button>
           <button id="exportCsv" class="contrast">Export visible entries</button>
-          <button id="triggerAsk" class="outline">Ask the glossary bot</button>
+          <button id="triggerAsk" class="outline">Ask the witness bot</button>
         </div>
       </section>
 
@@ -219,15 +315,62 @@
         <div id="glossaryList" class="glossary-list" role="list"></div>
         <div id="emptyState" class="empty-state" hidden>
           <h3>No results</h3>
-          <p>Try adjusting your search or resetting the filters.</p>
+          <p>Try shifting mode, changing the letter gate, or resetting the filters.</p>
+        </div>
+      </section>
+
+      <section class="mode-lore" aria-labelledby="lore-heading">
+        <h2 id="lore-heading">Mode loci</h2>
+        <p>
+          Three modes anchor the engine. Each filters the deck and points toward
+          the files that shape this ritual OS. Surface holds the reader-visible
+          UX, Cipher safeguards hidden logic, and Echo gathers responses.
+        </p>
+        <div class="context-grid">
+          <article class="context-card">
+            <h3>Surface</h3>
+            <p>
+              The luminous presentation layer: where choreography, projection,
+              and interface merge to welcome participants.
+            </p>
+            <ul>
+              <li>docs/Decryption-Deck/</li>
+              <li>web/decoder/</li>
+              <li>assets/images/</li>
+            </ul>
+          </article>
+          <article class="context-card">
+            <h3>Cipher</h3>
+            <p>
+              Keys, structural constraints, and recursive loops that steer the
+              playable archive beneath the stage lights.
+            </p>
+            <ul>
+              <li>web/engine/</li>
+              <li>docs/Dossier/</li>
+              <li>web/components/</li>
+            </ul>
+          </article>
+          <article class="context-card">
+            <h3>Echo</h3>
+            <p>
+              The reflection chamber where testimonies, AI witness logs, and
+              ritual responses return to the circle.
+            </p>
+            <ul>
+              <li>docs/Manuscript/</li>
+              <li>web/decoder/</li>
+              <li>press/</li>
+            </ul>
+          </article>
         </div>
       </section>
 
       <section class="conflict-panel" aria-labelledby="conflict-heading">
-        <h3 id="conflict-heading">Conflict agent</h3>
+        <h3 id="conflict-heading">Conflict divination</h3>
         <p>
-          Upload an external glossary to surface new terms, definition changes,
-          or missing entries compared to the canonical dataset bundled with this
+          Upload an external deck to surface new rituals, definition shifts, or
+          missing memories compared to the canonical spread bundled with this
           site.
         </p>
         <div id="conflictSummary" class="results-meta" style="margin-top: 0.5rem;"></div>
@@ -236,18 +379,18 @@
     </main>
 
     <footer>
-      Maintained by the MWRA docs team · <a href="https://netlify.com" target="_blank" rel="noreferrer">Deploy on Netlify</a>
+      Authored by Allison Van Cura · <a href="https://netlify.com" target="_blank" rel="noreferrer">Deploy on Netlify</a>
     </footer>
 
     <dialog id="askDialog">
       <article>
         <header>
           <a href="#close" aria-label="Close" rel="prev" class="close"></a>
-          <h2>Ask the glossary bot</h2>
+          <h2>Ask the witness bot</h2>
         </header>
         <form>
           <label for="askPrompt">Prompt</label>
-          <textarea id="askPrompt" name="askPrompt" rows="4" placeholder="Summarize the difference between slurry and grout"></textarea>
+          <textarea id="askPrompt" name="askPrompt" rows="4" placeholder="Request a reading from the Decryption Deck"></textarea>
           <footer style="display: flex; justify-content: space-between; gap: 0.75rem;">
             <button id="cancelAsk" type="button" class="secondary">Cancel</button>
             <button id="submitAsk" type="submit">Send</button>
