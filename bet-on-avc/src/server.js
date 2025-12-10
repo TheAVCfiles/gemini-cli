@@ -10,6 +10,7 @@ import path from 'path';
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const PORT = process.env.PORT || 3000;
+const LEDGER_LIMIT = 100;
 
 app.use(cors({ origin: true }));
 
@@ -32,7 +33,11 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), (req,
       const tierName =
         payload.metadata?.tierName || payload.display_items?.[0]?.custom?.name || 'Bet';
 
-      appendLedger({ event: event.type, amount, email, tierName });
+      appendLedger({
+        action: 'stripe_event',
+        amount,
+        meta: { event: event.type, email, tierName }
+      });
       // Hook for social integrations lives in src/socials.js
     }
 
@@ -47,20 +52,20 @@ app.use('/api', express.json());
 
 const LEDGER_PATH = path.join(path.dirname(fileURLToPath(import.meta.url)), 'ledger.json');
 
-function readLedger() {
+function readLedgerFile() {
   try {
     const raw = fs.readFileSync(LEDGER_PATH, 'utf-8');
-    return JSON.parse(raw);
+    const data = JSON.parse(raw);
+    return Array.isArray(data) ? data : [];
   } catch (error) {
-    if (error.code === 'ENOENT') {
-      return [];
+    if (error.code !== 'ENOENT') {
+      console.error('Failed to read ledger', error);
     }
-    console.error('Failed to read ledger', error);
     return [];
   }
 }
 
-function writeLedger(entries) {
+function writeLedgerFile(entries) {
   try {
     fs.writeFileSync(LEDGER_PATH, JSON.stringify(entries, null, 2));
   } catch (error) {
@@ -68,10 +73,31 @@ function writeLedger(entries) {
   }
 }
 
+function sanitizeMeta(meta) {
+  if (meta == null) return {};
+  if (typeof meta === 'string') return { note: meta };
+  if (typeof meta === 'object' && !Array.isArray(meta)) return meta;
+  return { note: 'invalid_meta' };
+}
+
+let ledgerStore = readLedgerFile().slice(0, LEDGER_LIMIT);
+
+if (ledgerStore.length > LEDGER_LIMIT) {
+  ledgerStore = ledgerStore.slice(0, LEDGER_LIMIT);
+  writeLedgerFile(ledgerStore);
+}
+
 function appendLedger(entry) {
-  const ledger = readLedger();
-  ledger.unshift({ ts: Date.now(), ...entry });
-  writeLedger(ledger.slice(0, 500));
+  const sanitized = {
+    id: crypto.randomUUID(),
+    ts: Date.now(),
+    ...entry,
+    meta: sanitizeMeta(entry.meta)
+  };
+
+  ledgerStore = [sanitized, ...ledgerStore].slice(0, LEDGER_LIMIT);
+  writeLedgerFile(ledgerStore);
+  return sanitized;
 }
 
 app.post('/api/stripe/create_link', async (req, res) => {
@@ -138,16 +164,26 @@ app.get('/api/stripe/list_products', async (req, res) => {
 
 app.get('/api/ledger', (req, res) => {
   try {
-    const data = readLedger();
-    const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
-    const lastDay = data.filter((item) => item.ts >= dayAgo);
-    const total = lastDay.reduce((sum, item) => sum + (item.amount || 0), 0) / 100;
-
-    res.json({ ok: true, confidence_24h: total, events: data.slice(0, 50) });
+    res.json(ledgerStore);
   } catch (error) {
     console.error('ledger_failed', error);
-    res.json({ ok: true, confidence_24h: 0, events: [] });
+    res.status(500).json({ success: false, error: 'ledger_read_failed' });
   }
+});
+
+app.post('/api/ledger', (req, res) => {
+  const { action, amount, meta } = req.body || {};
+
+  if (typeof action !== 'string' || !action.trim()) {
+    return res.status(400).json({ success: false, error: 'invalid_action' });
+  }
+
+  if (amount !== undefined && (typeof amount !== 'number' || Number.isNaN(amount))) {
+    return res.status(400).json({ success: false, error: 'invalid_amount' });
+  }
+
+  const entry = appendLedger({ action: action.trim(), amount: Number(amount) || 0, meta });
+  res.json({ success: true, entry });
 });
 
 app.listen(PORT, () => {

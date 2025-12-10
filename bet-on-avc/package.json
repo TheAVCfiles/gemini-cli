@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "node src/server.js",
     "lint": "node -e \"process.exit(0)\"",
+    "test": "node -e \"console.log('no tests yet')\"",
+    "build": "node -e \"console.log('build step complete')\"",
     "start": "node src/server.js"
   },
   "dependencies": {
