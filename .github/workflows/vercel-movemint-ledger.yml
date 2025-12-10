@@ -1,25 +1,18 @@
-name: Deploy MoveMint Ledger
+name: MoveMint Ledger CI
 
 on:
   push:
     branches: [main]
-    paths:
-      - 'bet-on-avc/**'
-      - '.github/workflows/vercel-movemint-ledger.yml'
-  workflow_dispatch:
+  pull_request:
+    branches: [main]
 
 jobs:
-  deploy-ledger:
-    name: Deploy and smoke test
+  ledger-ci:
+    name: Build and smoke test
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
-
-    env:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      MOVEMINT_LEDGER_URL: ${{ secrets.MOVEMINT_LEDGER_URL }}
+    defaults:
+      run:
+        working-directory: bet-on-avc
 
     steps:
       - name: Checkout
@@ -28,41 +21,38 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: bet-on-avc/package-lock.json
 
       - name: Install dependencies
-        working-directory: bet-on-avc
         run: npm ci
 
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+      - name: Lint
+        run: npm run lint --if-present
 
-      - name: Pull Vercel env
-        working-directory: bet-on-avc
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: vercel pull --yes --environment=production
+      - name: Test
+        run: npm run test --if-present
 
       - name: Build
-        working-directory: bet-on-avc
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: vercel build --prod
+        run: npm run build
 
-      - name: Deploy
-        id: deploy
-        working-directory: bet-on-avc
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      - name: Start app
         run: |
-          url=$(vercel deploy --prod --prebuilt --token "$VERCEL_TOKEN")
-          echo "deployment_url=$url" >> "$GITHUB_OUTPUT"
+          PORT=3000 npm run start > ../ledger.log 2>&1 &
+          echo $! > ../ledger.pid
+          sleep 5
 
       - name: Smoke test /api/ledger
+        run: curl --fail http://localhost:3000/api/ledger
+
+      - name: Dump app logs on failure
+        if: failure()
+        run: cat ../ledger.log
+
+      - name: Stop app
+        if: always()
         run: |
-          target="${MOVEMINT_LEDGER_URL:-${{ steps.deploy.outputs.deployment_url }}}"
-          test_url="$target/api/ledger"
-          echo "Hitting $test_url"
-          curl -sSf "$test_url" | head
+          if [ -f ../ledger.pid ]; then
+            kill $(cat ../ledger.pid) || true
+          fi

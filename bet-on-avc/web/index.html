@@ -142,9 +142,17 @@
       async function refreshConfidence() {
         try {
           const response = await fetch('/api/ledger');
-          const data = await response.json();
-          const total = Number(data.confidence_24h || 0).toFixed(2);
-          document.getElementById('confidence').textContent = `24h Confidence Index: $${total}`;
+          const entries = await response.json();
+          if (!Array.isArray(entries)) {
+            throw new Error('invalid_payload');
+          }
+
+          const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
+          const total = entries
+            .filter((item) => item?.ts >= dayAgo)
+            .reduce((sum, item) => sum + (Number(item.amount) || 0), 0) / 100;
+
+          document.getElementById('confidence').textContent = `24h Confidence Index: $${total.toFixed(2)}`;
         } catch (error) {
           console.error('Ledger fetch failed', error);
           document.getElementById('confidence').textContent = 'Confidence index unavailable';
