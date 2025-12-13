@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FacilityOSCathedral from './components/FacilityOSCathedral.jsx';
 import StageportFacultyPage from './components/StageportFacultyPage.jsx';
+import StudioOSConsole from './components/StudioOSConsole.jsx';
 
 export default function App() {
   const [view, setView] = useState('facility');
@@ -20,8 +21,16 @@ export default function App() {
         >
           Faculty Vault
         </button>
+        <button
+          onClick={() => setView('console')}
+          className={`px-3 py-2 border border-slate-700 bg-slate-900/70 text-white ${view === 'console' ? 'opacity-100' : 'opacity-60'}`}
+        >
+          StudioOS Console
+        </button>
       </div>
-      {view === 'facility' ? <FacilityOSCathedral /> : <StageportFacultyPage />}
+      {view === 'facility' && <FacilityOSCathedral />}
+      {view === 'faculty' && <StageportFacultyPage />}
+      {view === 'console' && <StudioOSConsole />}
     </div>
   );
 }
