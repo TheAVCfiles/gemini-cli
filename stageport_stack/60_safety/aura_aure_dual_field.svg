@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450">
+  <defs>
+    <style>
+      .title { font: 700 22px "Inter", system-ui, sans-serif; fill: #f9fafb; }
+      .label { font: 600 16px "Inter", system-ui, sans-serif; fill: #e5e7eb; }
+      .small { font: 400 13px "Inter", system-ui, sans-serif; fill: #9ca3af; }
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 z" fill="#e5e7eb"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="800" height="450" fill="#020617"/>
+  <text x="50%" y="50" text-anchor="middle" class="title">
+    Dual Field Kernel — AURA / AURE
+  </text>
+
+  <!-- AURA circle -->
+  <circle cx="290" cy="230" r="150" fill="#7c3aed22" stroke="#a855f7" stroke-width="2"/>
+  <text x="230" y="210" class="label">AURA</text>
+  <text x="230" y="235" class="small">Auric Audience Field</text>
+  <text x="230" y="260" class="small">Resonance • Mythic Load •</text>
+  <text x="230" y="280" class="small">Permeability</text>
+
+  <!-- AURE circle -->
+  <circle cx="510" cy="230" r="150" fill="#0ea5e922" stroke="#22d3ee" stroke-width="2"/>
+  <text x="555" y="210" class="label">AURE</text>
+  <text x="555" y="235" class="small">Adaptive Unified</text>
+  <text x="555" y="255" class="small">Regulation Engine</text>
+  <text x="555" y="280" class="small">Mode • Load • Reversibility</text>
+
+  <!-- Overlap: Sovereign Gap -->
+  <ellipse cx="400" cy="230" rx="80" ry="140" fill="#22c55e33" stroke="#4ade80" stroke-width="2"/>
+  <text x="400" y="215" text-anchor="middle" class="label">SOVEREIGN GAP</text>
+  <text x="400" y="240" text-anchor="middle" class="small">Overlap of mythic</text>
+  <text x="400" y="260" text-anchor="middle" class="small">sovereignty &amp; safety</text>
+
+  <!-- human / machine anchors -->
+  <text x="120" y="400" class="small">Human operator · body · story</text>
+  <text x="550" y="400" class="small">Machine stack · models · automations</text>
+
+  <!-- arrows from anchors into fields -->
+  <line x1="170" y1="380" x2="260" y2="300"
+        stroke="#e5e7eb" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="630" y1="380" x2="540" y2="300"
+        stroke="#e5e7eb" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Legend -->
+  <rect x="40" y="80" width="230" height="95" rx="12"
+        fill="#020617" stroke="#111827" stroke-width="1.5"/>
+  <circle cx="65" cy="105" r="8" fill="#7c3aedaa"/>
+  <text x="85" y="110" class="small">Human-resonant signals (AURA)</text>
+  <circle cx="65" cy="135" r="8" fill="#0ea5e9aa"/>
+  <text x="85" y="140" class="small">Machine regulation envelope (AURE)</text>
+  <rect x="57" y="155" width="16" height="8" fill="#22c55eaa"/>
+  <text x="85" y="162" class="small">Safe action band (SOVEREIGN GAP)</text>
+</svg>

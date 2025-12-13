@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420">
+  <defs>
+    <style>
+      .title { font: 700 22px "Inter", system-ui, sans-serif; fill: #f9fafb; }
+      .label { font: 600 16px "Inter", system-ui, sans-serif; fill: #e5e7eb; }
+      .small { font: 400 13px "Inter", system-ui, sans-serif; fill: #9ca3af; }
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8"
+            refX="4" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 z" fill="#e5e7eb"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="420" fill="#020617"/>
+  <text x="50%" y="40" text-anchor="middle" class="title">
+    AURE Regulation Modes — State Machine
+  </text>
+
+  <!-- BASELINE -->
+  <rect x="70" y="150" width="170" height="110" rx="16"
+        fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+  <text x="155" y="180" text-anchor="middle" class="label">BASELINE</text>
+  <text x="155" y="205" text-anchor="middle" class="small">Normal load</text>
+  <text x="155" y="225" text-anchor="middle" class="small">Full fork-choice</text>
+
+  <!-- MAINTENANCE -->
+  <rect x="270" y="70" width="200" height="110" rx="16"
+        fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+  <text x="370" y="100" text-anchor="middle" class="label">MAINTENANCE</text>
+  <text x="370" y="125" text-anchor="middle" class="small">Elevated, stable</text>
+  <text x="370" y="145" text-anchor="middle" class="small">Reduced branching</text>
+
+  <!-- RESTORE -->
+  <rect x="270" y="250" width="200" height="110" rx="16"
+        fill="#0f172a" stroke="#f97316" stroke-width="2"/>
+  <text x="370" y="280" text-anchor="middle" class="label">RESTORE</text>
+  <text x="370" y="305" text-anchor="middle" class="small">Recovery bias</text>
+  <text x="370" y="325" text-anchor="middle" class="small">Soft re-entry</text>
+
+  <!-- OVERWHELM -->
+  <rect x="540" y="150" width="210" height="110" rx="16"
+        fill="#0f172a" stroke="#ef4444" stroke-width="2.5"/>
+  <text x="645" y="180" text-anchor="middle" class="label">OVERWHELM</text>
+  <text x="645" y="205" text-anchor="middle" class="small">Hard throttle</text>
+  <text x="645" y="225" text-anchor="middle" class="small">Zero irreversible</text>
+
+  <!-- Transitions -->
+  <!-- Baseline -> Maintenance -->
+  <line x1="240" y1="205" x2="270" y2="150"
+        stroke="#e5e7eb" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="255" y="165" class="small" transform="rotate(-25 255 165)">load↑</text>
+
+  <!-- Maintenance -> Baseline -->
+  <line x1="270" y1="210" x2="240" y2="210"
+        stroke="#e5e7eb" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="255" y="195" class="small">load↓</text>
+
+  <!-- Maintenance -> Overwhelm -->
+  <line x1="470" y1="125" x2="540" y2="185"
+        stroke="#e5e7eb" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="505" y="150" class="small">spike↑</text>
+
+  <!-- Overwhelm -> Restore -->
+  <line x1="540" y1="225" x2="470" y2="285"
+        stroke="#e5e7eb" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="505" y="260" class="small">safe window</text>
+
+  <!-- Restore -> Baseline -->
+  <line x1="270" y1="305" x2="240" y2="215"
+        stroke="#e5e7eb" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="255" y="260" class="small">restored</text>
+
+  <!-- Guard-rails copy -->
+  <text x="60" y="360" class="small">
+    Inputs: AURA load index, somatic flags, operator overrides.
+  </text>
+  <text x="60" y="380" class="small">
+    Outputs: throttle level, reversible-only guard, UI warning badges.
+  </text>
+</svg>
