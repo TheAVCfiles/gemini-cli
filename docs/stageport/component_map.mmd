@@ -1,0 +1,59 @@
+%% StagePort component map (open in Mermaid Live Editor)
+%% Legend:
+%% 🔵 Documentation repo (this repo)
+%% 🟢 Notion workspace
+%% 🟣 Future API service
+%% 🟠 Portal frontend
+%% ⚪ External services (Stripe, Vercel, GitHub)
+
+flowchart TD
+  subgraph Docs[🔵 Documentation]
+    INDEX[INDEX.md]
+    README[README.md]
+    FACULTY[FACULTY_PAGE_IMPLEMENTATION.md]
+    COMPONENT[component_map.mmd]
+  end
+
+  subgraph Notion[🟢 Notion Workspace]
+    FacultyDB[Faculty database]
+    AssignmentsDB[Assignments]
+    MemoryDB[Recordings & Ledgers]
+  end
+
+  subgraph API[🟣 stageport-server (future)]
+    Adapter[Notion adapters]
+    FacultyAPI[GET /faculty]
+    CredentialAPI[Credential engine bridge]
+  end
+
+  subgraph Portal[🟠 stageport-ui]
+    FacultyPage[StageportFacultyPage]
+    FacultyList[FacultyList]
+    FacultyCard[FacultyCard]
+    Filters[FacultyFilters]
+  end
+
+  subgraph External[⚪ External Services]
+    Stripe[Stripe]
+    Vercel[Vercel hosting]
+    GitHub[GitHub automations]
+  end
+
+  INDEX --> README
+  INDEX --> FACULTY
+  INDEX --> COMPONENT
+  README --> COMPONENT
+  FACULTY --> FacultyPage
+
+  FacultyDB --> Adapter
+  AssignmentsDB --> Adapter
+  MemoryDB --> Adapter
+
+  Adapter --> FacultyAPI
+  FacultyAPI --> FacultyPage
+  FacultyPage --> FacultyList --> FacultyCard
+  FacultyPage --> Filters
+
+  FacultyCard --> Stripe
+  FacultyPage --> Vercel
+  Adapter --> GitHub
