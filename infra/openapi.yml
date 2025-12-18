@@ -1,0 +1,178 @@
+openapi: 3.0.3
+info:
+  title: AVC Enhancement Layer API
+  version: "1.0.0"
+  description: API for Relay / Draft / Send workflows
+servers:
+  - url: https://api.example.com
+    description: Production
+  - url: http://localhost:3000
+    description: Local
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+    DraftApp:
+      type: object
+      properties:
+        id:
+          type: string
+        project_id:
+          type: string
+        opportunity_id:
+          type: string
+          nullable: true
+        template_id:
+          type: string
+          nullable: true
+        generated_body:
+          type: string
+          nullable: true
+        attachments:
+          type: array
+          items:
+            type: object
+        status:
+          type: string
+paths:
+  /api/v1/auth/login:
+    post:
+      summary: Login (simple)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Auth response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  /api/v1/drafts:
+    post:
+      summary: Create a draft (optionally send)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_id:
+                  type: string
+                opportunity_id:
+                  type: string
+                template_id:
+                  type: string
+                send:
+                  type: boolean
+                  default: false
+      responses:
+        '200':
+          description: Draft created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DraftApp'
+  /api/v1/relay/publish:
+    post:
+      summary: Publish a domain event
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event:
+                  type: object
+                  example:
+                    type: opportunity.matched
+                    payload:
+                      opportunity_id: "..."
+      responses:
+        '200':
+          description: Published
+  /api/v1/snapshots:
+    post:
+      summary: Upload encrypted snapshot
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room:
+                  type: string
+                payload:
+                  type: string
+                  description: Base64-encoded encrypted blob
+                meta:
+                  type: object
+      responses:
+        '200':
+          description: Snapshot stored
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+  /api/v1/snapshots/{id}:
+    get:
+      summary: Get snapshot by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Snapshot
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  payload:
+                    type: string
+                  meta:
+                    type: object
