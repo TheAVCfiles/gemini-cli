@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "avc-relay.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "avc-relay.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "avc-relay.name" . }}
+    spec:
+      containers:
+        - name: avc-relay
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: NODE_ENV
+              value: "{{ .Values.env.NODE_ENV }}"
+            - name: PORT
+              value: "{{ .Values.env.PORT }}"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: avc-relay-secret
+                  key: database_url
+            - name: RABBIT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: avc-relay-secret
+                  key: rabbit_url
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: avc-relay-secret
+                  key: redis_url
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: avc-relay-secret
+                  key: jwt_secret
+          ports:
+            - containerPort: 3000

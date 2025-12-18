@@ -1,0 +1,5 @@
+line,item,month1,month2,month3,month12
+rev_relay,relay_subscriptions,0,0,500,12500
+rev_enterprise,enterprise_projects,0,0,0,60000
+cost_dev,dev_salaries,4000,4000,4000,48000
+cost_infra,infra,50,50,50,600

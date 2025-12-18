@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  relay:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - RELAY_API_KEY=${RELAY_API_KEY}
+      - RELAY_PERSIST=${RELAY_PERSIST}
+      - WAL_FILE=/data/relay_wal.log
+    volumes:
+      - relay_data:/usr/src/app
+      - relay_wal:/data
+volumes:
+  relay_data:
+  relay_wal:

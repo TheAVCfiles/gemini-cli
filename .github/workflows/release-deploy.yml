@@ -1,0 +1,117 @@
+name: Build, Sign & Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/avc-relay
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up QEMU (for cross-platform)
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Build Docker image
+        run: |
+          docker build -t $IMAGE:${{ github.sha }} .
+          echo "Built $IMAGE:${{ github.sha }}"
+
+      - name: Run tests (optional)
+        run: |
+          # run any unit tests / lint here
+          echo "No tests defined"
+
+      - name: Create artifact tarball
+        run: |
+          mkdir -p dist-artifact
+          tar -czf dist-artifact/relay-${{ github.sha }}.tar.gz .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: relay-artifact-${{ github.sha }}
+          path: dist-artifact/relay-${{ github.sha }}.tar.gz
+
+      - name: Install cosign
+        run: |
+          curl -fsSL "https://github.com/sigstore/cosign/releases/download/v2.1.0/cosign-linux-amd64" -o /usr/local/bin/cosign
+          chmod +x /usr/local/bin/cosign
+          cosign version
+
+      - name: Write cosign key
+        env:
+          COSIGN_KEY_B64: ${{ secrets.COSIGN_KEY_B64 }}
+        run: |
+          if [ -z "$COSIGN_KEY_B64" ]; then echo "COSIGN_KEY_B64 missing"; exit 1; fi
+          echo "$COSIGN_KEY_B64" | base64 -d > cosign.key
+          chmod 600 cosign.key
+
+      - name: Sign artifact with cosign
+        run: |
+          ART=dist-artifact/relay-${{ github.sha }}.tar.gz
+          cosign sign-blob --key cosign.key --yes $ART
+          ls -la dist-artifact
+
+      - name: Login to ghcr (if pushing image)
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag & push image
+        run: |
+          docker tag $IMAGE:${{ github.sha }} $IMAGE:latest
+          docker push $IMAGE:${{ github.sha }}
+          docker push $IMAGE:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: '1.28.0'
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.0
+
+      - name: Configure Kubeconfig
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        run: |
+          echo "$KUBE_CONFIG_DATA" | base64 -d > kubeconfig
+          export KUBECONFIG=$PWD/kubeconfig
+          kubectl version --client
+
+      - name: Helm upgrade/install
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+        run: |
+          export KUBECONFIG=$PWD/kubeconfig
+          helm upgrade --install avc-relay infra/helm/avc-relay --set image.repository=${{ env.IMAGE }} --set image.tag=latest

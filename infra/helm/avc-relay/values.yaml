@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/yourorg/avc-relay
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3000
+
+env:
+  NODE_ENV: production
+  PORT: 3000
+  DATABASE_URL: "postgres://postgres:postgres@db:5432/enhancement"
+  RABBIT_URL: "amqp://rabbitmq:5672"
+  REDIS_URL: "redis://redis:6379"
+  JWT_SECRET: "REPLACE_ME" # set via secret
+
+resources: {}
+
+ingress:
+  enabled: false
