@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>AVC Client Relay SDK — Usage Example</title>
+  </head>
+  <body>
+    <h1>AVC Client Relay SDK — Usage Example</h1>
+    <pre id="out"></pre>
+
+    <script type="module">
+      import { generateIdentity, importSigningKeys, postSnapshot } from "./client-relay.js";
+
+      const out = document.getElementById("out");
+      const log = (...args) => out.textContent += args.join(" ") + "\n";
+
+      const BASE_URL = "http://localhost:3000";
+      const TOKEN = ""; // paste JWT if required by your relay
+      const PROJECT_ID = "REPLACE_WITH_PROJECT_UUID";
+
+      async function main() {
+        // Create identity once (store safely)
+        const { publicJwk, privateJwk } = await generateIdentity();
+        const { privateKey } = await importSigningKeys({ publicJwk, privateJwk });
+
+        const payload = {
+          kind: "demo",
+          message: "hello artifact factory",
+          when: new Date().toISOString()
+        };
+
+        const res = await postSnapshot({
+          baseUrl: BASE_URL,
+          token: TOKEN,
+          projectId: PROJECT_ID,
+          type: "project.snapshot",
+          payload,
+          signingKeys: { privateKey, publicJwk },
+          meta: { channel: "demo" }
+        });
+
+        log("✅ uploaded snapshot:", JSON.stringify(res, null, 2));
+      }
+
+      main().catch(err => log("❌ error:", err.message));
+    </script>
+  </body>
+</html>
