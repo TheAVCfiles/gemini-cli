@@ -1,0 +1,15 @@
+{
+  "name": "avc-enhancement-next-pack",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "migrate": "node ./scripts/migrate.mjs",
+    "migrate:up": "node ./scripts/migrate.mjs up",
+    "migrate:down": "node ./scripts/migrate.mjs down",
+    "migrate:status": "node ./scripts/migrate.mjs status"
+  },
+  "dependencies": {
+    "pg": "^8.11.5"
+  }
+}
