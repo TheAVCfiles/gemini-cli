@@ -1,96 +1,103 @@
 const POWERS = new Set([
-  "SPEED",
-  "POWER",
-  "STEALTH",
-  "ENERGY",
-  "SHIELD",
-  "STRIKE",
-  "MAGIC",
-  "CHARM",
+  'SPEED',
+  'POWER',
+  'STEALTH',
+  'ENERGY',
+  'SHIELD',
+  'STRIKE',
+  'MAGIC',
+  'CHARM',
 ]);
 
 const FALLBACK_MOVE = {
-  name: "Starlight Elbow Pop",
-  emoji: "✨",
-  description: "Pop elbows out, snap to star pose.",
-  power: "CHARM",
+  name: 'Starlight Elbow Pop',
+  emoji: '✨',
+  description: 'Pop elbows out, snap to star pose.',
+  power: 'CHARM',
   duration: 3000,
 };
 
 const BASE_MOVES = [
   {
-    id: "move-intro",
-    name: "Star Tunnel Strut",
-    emoji: "🌠",
-    description: "Stride forward, slide back, and lock eyes with the crowd.",
-    power: "SPEED",
+    id: 'move-intro',
+    name: 'Star Tunnel Strut',
+    emoji: '🌠',
+    description: 'Stride forward, slide back, and lock eyes with the crowd.',
+    power: 'SPEED',
     duration: 2600,
   },
   {
-    id: "move-bridge",
-    name: "Phantom Switch Hit",
-    emoji: "🕶️",
-    description: "Switch feet, swing elbows wide, and cut to a diagonal stance.",
-    power: "STEALTH",
+    id: 'move-bridge',
+    name: 'Phantom Switch Hit',
+    emoji: '🕶️',
+    description:
+      'Switch feet, swing elbows wide, and cut to a diagonal stance.',
+    power: 'STEALTH',
     duration: 3200,
   },
   {
-    id: "move-chorus",
-    name: "Vortex Heel Snap",
-    emoji: "🌀",
-    description: "Twist on heels, snap arms overhead, then drop into a hover squat.",
-    power: "POWER",
+    id: 'move-chorus',
+    name: 'Vortex Heel Snap',
+    emoji: '🌀',
+    description:
+      'Twist on heels, snap arms overhead, then drop into a hover squat.',
+    power: 'POWER',
     duration: 3400,
   },
 ];
 
 const SHOP_ITEMS = [
   {
-    id: "item-cape",
-    name: "Neon Rift Cape",
-    emoji: "🦇",
-    description: "Flowing cape stitched with ultraviolet thread.",
-    price: "420 crystals",
+    id: 'item-cape',
+    name: 'Neon Rift Cape',
+    emoji: '🦇',
+    description: 'Flowing cape stitched with ultraviolet thread.',
+    price: '420 crystals',
   },
   {
-    id: "item-gloves",
-    name: "Signal Spark Gloves",
-    emoji: "🧤",
-    description: "Fingerless gloves that trigger glitter pulses on pops.",
-    price: "260 crystals",
+    id: 'item-gloves',
+    name: 'Signal Spark Gloves',
+    emoji: '🧤',
+    description: 'Fingerless gloves that trigger glitter pulses on pops.',
+    price: '260 crystals',
   },
   {
-    id: "item-boots",
-    name: "Thruster Boots",
-    emoji: "🥾",
-    description: "Holographic boots with cushioned rebound soles.",
-    price: "510 crystals",
+    id: 'item-boots',
+    name: 'Thruster Boots',
+    emoji: '🥾',
+    description: 'Holographic boots with cushioned rebound soles.',
+    price: '510 crystals',
   },
 ];
 
 const CUES = [
   {
     t: 12.4,
-    title: "Catwalk Hand-on-Hip",
+    title: 'Catwalk Hand-on-Hip',
     snapshotKeypointAngles: { leftElbow: 165, rightElbow: 70, pelvisTilt: 4 },
-    notes: "Right hand on hip, left arm relaxed. Chin slightly down, eyes fierce.",
+    notes:
+      'Right hand on hip, left arm relaxed. Chin slightly down, eyes fierce.',
   },
   {
     t: 18.1,
-    title: "Leopard Lean",
+    title: 'Leopard Lean',
     snapshotKeypointAngles: {
       shouldersLevel: true,
       spineCurve: 8,
       rightKnee: 170,
       leftKnee: 155,
     },
-    notes: "Weight over right leg, left knee soft. Pop the hip.",
+    notes: 'Weight over right leg, left knee soft. Pop the hip.',
   },
   {
     t: 26.25,
-    title: "Side Glance Strike",
-    snapshotKeypointAngles: { headYaw: -15, rightElbow: 160, wristHeight: 0.62 },
-    notes: "Eyes left, smirk. Snap into stillness for one beat.",
+    title: 'Side Glance Strike',
+    snapshotKeypointAngles: {
+      headYaw: -15,
+      rightElbow: 160,
+      wristHeight: 0.62,
+    },
+    notes: 'Eyes left, smirk. Snap into stillness for one beat.',
   },
 ];
 
@@ -99,32 +106,32 @@ const state = {
   generatedMove: null,
   busy: false,
   modalOpen: false,
-  error: "",
+  error: '',
   descriptions: {},
   descLoadingId: null,
   activeCue: null,
 };
 
-const movesList = document.getElementById("movesList");
-const shopList = document.getElementById("shopList");
-const cueGrid = document.getElementById("cueGrid");
-const timeline = document.getElementById("timeline");
-const cueOverlay = document.getElementById("cueOverlay");
-const cueOverlayTitle = document.getElementById("cueOverlayTitle");
-const cueOverlayNotes = document.getElementById("cueOverlayNotes");
+const movesList = document.getElementById('movesList');
+const shopList = document.getElementById('shopList');
+const cueGrid = document.getElementById('cueGrid');
+const timeline = document.getElementById('timeline');
+const cueOverlay = document.getElementById('cueOverlay');
+const cueOverlayTitle = document.getElementById('cueOverlayTitle');
+const cueOverlayNotes = document.getElementById('cueOverlayNotes');
 
-const modalRoot = document.getElementById("modalRoot");
-const modalSpinner = document.getElementById("modalSpinner");
-const modalError = document.getElementById("modalError");
-const modalDetails = document.getElementById("modalDetails");
-const modalEmoji = document.getElementById("modalEmoji");
-const modalName = document.getElementById("modalName");
-const modalDescription = document.getElementById("modalDescription");
-const modalMeta = document.getElementById("modalMeta");
-const addMoveBtn = document.getElementById("addMoveBtn");
-const shuffleBtn = document.getElementById("shuffleBtn");
-const closeBtn = document.getElementById("closeBtn");
-const generateMoveBtn = document.getElementById("generateMoveBtn");
+const modalRoot = document.getElementById('modalRoot');
+const modalSpinner = document.getElementById('modalSpinner');
+const modalError = document.getElementById('modalError');
+const modalDetails = document.getElementById('modalDetails');
+const modalEmoji = document.getElementById('modalEmoji');
+const modalName = document.getElementById('modalName');
+const modalDescription = document.getElementById('modalDescription');
+const modalMeta = document.getElementById('modalMeta');
+const addMoveBtn = document.getElementById('addMoveBtn');
+const shuffleBtn = document.getElementById('shuffleBtn');
+const closeBtn = document.getElementById('closeBtn');
+const generateMoveBtn = document.getElementById('generateMoveBtn');
 
 function formatSeconds(durationMs) {
   return (Math.round(durationMs / 100) / 10).toFixed(1);
@@ -132,32 +139,32 @@ function formatSeconds(durationMs) {
 
 function renderMoves() {
   if (!movesList) return;
-  movesList.innerHTML = "";
+  movesList.innerHTML = '';
   if (!state.danceMoves.length) {
-    const empty = document.createElement("p");
-    empty.textContent = "No moves yet. Generate one to get started.";
+    const empty = document.createElement('p');
+    empty.textContent = 'No moves yet. Generate one to get started.';
     movesList.append(empty);
     return;
   }
 
   state.danceMoves.forEach((move) => {
-    const card = document.createElement("article");
-    card.className = "move-card";
+    const card = document.createElement('article');
+    card.className = 'move-card';
 
-    const name = document.createElement("div");
-    name.className = "move-name";
-    const emoji = document.createElement("span");
+    const name = document.createElement('div');
+    name.className = 'move-name';
+    const emoji = document.createElement('span');
     emoji.textContent = move.emoji;
-    const label = document.createElement("span");
+    const label = document.createElement('span');
     label.textContent = move.name;
     name.append(emoji, label);
 
-    const description = document.createElement("div");
-    description.className = "move-description";
+    const description = document.createElement('div');
+    description.className = 'move-description';
     description.textContent = move.description;
 
-    const meta = document.createElement("div");
-    meta.className = "move-meta";
+    const meta = document.createElement('div');
+    meta.className = 'move-meta';
     meta.textContent = `Power: ${move.power} • ${formatSeconds(move.duration)}s`;
 
     card.append(name, description, meta);
@@ -167,34 +174,34 @@ function renderMoves() {
 
 function renderShop() {
   if (!shopList) return;
-  shopList.innerHTML = "";
+  shopList.innerHTML = '';
   SHOP_ITEMS.forEach((item) => {
-    const card = document.createElement("article");
-    card.className = "shop-card";
+    const card = document.createElement('article');
+    card.className = 'shop-card';
 
-    const name = document.createElement("div");
-    name.className = "move-name";
-    const emoji = document.createElement("span");
+    const name = document.createElement('div');
+    name.className = 'move-name';
+    const emoji = document.createElement('span');
     emoji.textContent = item.emoji;
-    const label = document.createElement("span");
+    const label = document.createElement('span');
     label.textContent = item.name;
     name.append(emoji, label);
 
-    const meta = document.createElement("div");
-    meta.className = "shop-meta";
+    const meta = document.createElement('div');
+    meta.className = 'shop-meta';
     meta.textContent = item.price;
 
-    const description = document.createElement("div");
-    description.className = "shop-description";
+    const description = document.createElement('div');
+    description.className = 'shop-description';
     description.textContent = state.descriptions[item.id] || item.description;
 
-    const actions = document.createElement("div");
-    actions.className = "shop-actions";
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = state.descLoadingId === item.id ? "…" : "AI rewrite";
+    const actions = document.createElement('div');
+    actions.className = 'shop-actions';
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = state.descLoadingId === item.id ? '…' : 'AI rewrite';
     button.disabled = state.descLoadingId === item.id;
-    button.addEventListener("click", () => requestItemDescription(item));
+    button.addEventListener('click', () => requestItemDescription(item));
     actions.append(button);
 
     card.append(name, meta, description, actions);
@@ -204,18 +211,18 @@ function renderShop() {
 
 function renderCueGrid() {
   if (!cueGrid) return;
-  cueGrid.innerHTML = "";
+  cueGrid.innerHTML = '';
   CUES.forEach((cue) => {
-    const card = document.createElement("article");
-    card.className = "cue-card-static";
+    const card = document.createElement('article');
+    card.className = 'cue-card-static';
 
-    const title = document.createElement("h3");
+    const title = document.createElement('h3');
     title.textContent = cue.title;
 
-    const notes = document.createElement("p");
+    const notes = document.createElement('p');
     notes.textContent = cue.notes;
 
-    const json = document.createElement("pre");
+    const json = document.createElement('pre');
     json.textContent = JSON.stringify(cue.snapshotKeypointAngles, null, 2);
 
     card.append(title, notes, json);
@@ -227,17 +234,17 @@ function updateActiveCue(time) {
   const cue = CUES.find((entry) => Math.abs(entry.t - time) < 0.4) || null;
   state.activeCue = cue;
   if (!cue) {
-    cueOverlay?.classList.add("hidden");
+    cueOverlay?.classList.add('hidden');
     return;
   }
 
   cueOverlayTitle.textContent = cue.title;
   cueOverlayNotes.textContent = cue.notes;
-  cueOverlay.classList.remove("hidden");
+  cueOverlay.classList.remove('hidden');
 }
 
 function coerceJsonText(text) {
-  const trimmed = (text || "").trim();
+  const trimmed = (text || '').trim();
   const fenceMatch = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
   if (fenceMatch) {
     return fenceMatch[1].trim();
@@ -254,15 +261,23 @@ function safeParseJson(text) {
 }
 
 function validateMove(candidate) {
-  if (!candidate || typeof candidate !== "object") return false;
-  if (typeof candidate.name !== "string" || candidate.name.length === 0 || candidate.name.length > 40) {
-    return false;
-  }
-  if (typeof candidate.emoji !== "string" || candidate.emoji.length === 0 || candidate.emoji.length > 4) {
+  if (!candidate || typeof candidate !== 'object') return false;
+  if (
+    typeof candidate.name !== 'string' ||
+    candidate.name.length === 0 ||
+    candidate.name.length > 40
+  ) {
     return false;
   }
   if (
-    typeof candidate.description !== "string" ||
+    typeof candidate.emoji !== 'string' ||
+    candidate.emoji.length === 0 ||
+    candidate.emoji.length > 4
+  ) {
+    return false;
+  }
+  if (
+    typeof candidate.description !== 'string' ||
     candidate.description.length === 0 ||
     candidate.description.length > 120
   ) {
@@ -271,7 +286,7 @@ function validateMove(candidate) {
   if (!POWERS.has(candidate.power)) {
     return false;
   }
-  if (typeof candidate.duration !== "number") {
+  if (typeof candidate.duration !== 'number') {
     return false;
   }
   if (candidate.duration < 1500 || candidate.duration > 5000) {
@@ -282,31 +297,31 @@ function validateMove(candidate) {
 
 function extractCandidateText(payload) {
   const candidates = payload?.candidates;
-  if (!Array.isArray(candidates)) return "";
+  if (!Array.isArray(candidates)) return '';
   for (const candidate of candidates) {
     const parts = candidate?.content?.parts;
     if (!Array.isArray(parts)) continue;
-    const part = parts.find((entry) => typeof entry?.text === "string");
+    const part = parts.find((entry) => typeof entry?.text === 'string');
     if (part?.text) {
       return part.text;
     }
   }
-  return "";
+  return '';
 }
 
 async function callGemini(prompt) {
-  const response = await fetch("/api/gemini", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  const response = await fetch('/api/gemini', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ prompt }),
   });
 
   const text = await response.text();
   let data;
   try {
-    data = JSON.parse(text || "{}");
+    data = JSON.parse(text || '{}');
   } catch (error) {
-    throw new Error("Gemini proxy returned invalid JSON");
+    throw new Error('Gemini proxy returned invalid JSON');
   }
 
   if (!response.ok) {
@@ -336,12 +351,15 @@ Example:
   if (validateMove(parsed)) {
     return parsed;
   }
-  throw new Error("Gemini returned an unexpected schema");
+  throw new Error('Gemini returned an unexpected schema');
 }
 
 function validateDescription(candidate) {
-  if (!candidate || typeof candidate !== "object") return false;
-  if (typeof candidate.description !== "string" || !candidate.description.trim()) {
+  if (!candidate || typeof candidate !== 'object') return false;
+  if (
+    typeof candidate.description !== 'string' ||
+    !candidate.description.trim()
+  ) {
     return false;
   }
   return true;
@@ -367,22 +385,22 @@ Write a fun 1-sentence description (<=80 chars) for a kids dance game shop item 
       return { description: trimDescription(parsed.description.trim()) };
     }
   } catch (error) {
-    console.warn("describeItem fallback", error);
+    console.warn('describeItem fallback', error);
   }
-  return { description: "Fresh from the vault." };
+  return { description: 'Fresh from the vault.' };
 }
 
 function updateModal() {
   if (!modalRoot) return;
-  modalRoot.classList.toggle("hidden", !state.modalOpen);
+  modalRoot.classList.toggle('hidden', !state.modalOpen);
   if (!state.modalOpen) {
     return;
   }
 
-  modalSpinner.classList.toggle("hidden", !state.busy);
-  modalDetails.classList.toggle("hidden", state.busy || !state.generatedMove);
-  modalError.classList.toggle("hidden", !state.error);
-  modalError.textContent = state.error || "";
+  modalSpinner.classList.toggle('hidden', !state.busy);
+  modalDetails.classList.toggle('hidden', state.busy || !state.generatedMove);
+  modalError.classList.toggle('hidden', !state.error);
+  modalError.textContent = state.error || '';
   addMoveBtn.disabled = state.busy || !state.generatedMove;
   shuffleBtn.disabled = state.busy;
 
@@ -391,7 +409,7 @@ function updateModal() {
     modalName.textContent = state.generatedMove.name;
     modalDescription.textContent = state.generatedMove.description;
     modalMeta.textContent = `Power: ${state.generatedMove.power} • ${formatSeconds(
-      state.generatedMove.duration
+      state.generatedMove.duration,
     )}s`;
   }
 }
@@ -399,15 +417,16 @@ function updateModal() {
 async function requestGenerateMove() {
   state.modalOpen = true;
   state.busy = true;
-  state.error = "";
+  state.error = '';
   state.generatedMove = null;
   updateModal();
 
   try {
     state.generatedMove = await generateMove();
   } catch (error) {
-    console.warn("generateMove fallback", error);
-    state.error = "Gemini could not produce a clean move. Using the fallback pose.";
+    console.warn('generateMove fallback', error);
+    state.error =
+      'Gemini could not produce a clean move. Using the fallback pose.';
     state.generatedMove = { ...FALLBACK_MOVE };
   } finally {
     state.busy = false;
@@ -418,14 +437,14 @@ async function requestGenerateMove() {
 async function reshuffleMove() {
   if (state.busy) return;
   state.busy = true;
-  state.error = "";
+  state.error = '';
   state.generatedMove = null;
   updateModal();
   try {
     state.generatedMove = await generateMove();
   } catch (error) {
-    console.warn("reshuffle fallback", error);
-    state.error = "Gemini sent back a wonky payload. Showing fallback instead.";
+    console.warn('reshuffle fallback', error);
+    state.error = 'Gemini sent back a wonky payload. Showing fallback instead.';
     state.generatedMove = { ...FALLBACK_MOVE };
   } finally {
     state.busy = false;
@@ -454,8 +473,8 @@ async function requestItemDescription(item) {
   try {
     result = await describeItem(item.name, item.emoji);
   } catch (error) {
-    console.warn("describeItem unexpected error", error);
-    result = { description: "Fresh from the vault." };
+    console.warn('describeItem unexpected error', error);
+    result = { description: 'Fresh from the vault.' };
   } finally {
     state.descLoadingId = null;
   }
@@ -470,27 +489,27 @@ function closeModal() {
 }
 
 function setupEventListeners() {
-  generateMoveBtn?.addEventListener("click", () => {
+  generateMoveBtn?.addEventListener('click', () => {
     requestGenerateMove();
   });
 
-  addMoveBtn?.addEventListener("click", addGeneratedMoveToRoutine);
-  shuffleBtn?.addEventListener("click", reshuffleMove);
-  closeBtn?.addEventListener("click", closeModal);
+  addMoveBtn?.addEventListener('click', addGeneratedMoveToRoutine);
+  shuffleBtn?.addEventListener('click', reshuffleMove);
+  closeBtn?.addEventListener('click', closeModal);
 
-  modalRoot?.addEventListener("click", (event) => {
+  modalRoot?.addEventListener('click', (event) => {
     if (event.target === modalRoot) {
       closeModal();
     }
   });
 
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && state.modalOpen && !state.busy) {
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && state.modalOpen && !state.busy) {
       closeModal();
     }
   });
 
-  timeline?.addEventListener("input", (event) => {
+  timeline?.addEventListener('input', (event) => {
     const value = Number(event.target.value);
     updateActiveCue(value);
   });
