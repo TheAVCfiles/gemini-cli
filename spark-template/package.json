@@ -1,0 +1,8 @@
+{
+  "name": "__SPARK_NAME__",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "mkdir -p public && cp -R src/* public/"
+  },
+  "dependencies": {}
+}
