@@ -1,0 +1,2 @@
+id,date,subject,preheader,bullet_1,bullet_2,bullet_3,cta_label,cta_url
+2025-12-19-weekly,2025-12-19,"This week’s build: from chaos to a working system","One ritual, three bullets, all signal.","The Friday engine is live — artifacts now ship as one-click zips.","The chaos is being containerized — we’re locking the spine and naming the seams.","Next step: attach numbers (pricing + proof) so the show sells itself.","Read more","https://your-site.com/demo-log"

@@ -1,0 +1,13 @@
+Subject: {subject}
+
+Hi you,
+
+• {bullet_1}
+
+• {bullet_2}
+
+• {bullet_3}
+
+{cta_block}
+
+— AVC
