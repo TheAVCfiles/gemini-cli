@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SYVAQ // LIVING VISION</title>
+  <style>
+    :root{
+      --bg:#030305;
+      --cyan:#00F0FF; 
+      --magenta:#FF003C; 
+      --gold:#FFD700;
+      --void:#000000;
+      --mono:'SF Mono','Courier New',monospace;
+      --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    body{
+      margin:0;padding:0;background:var(--bg);color:#fff;
+      font-family:var(--sans);overflow:hidden;height:100vh;width:100vw;
+      touch-action:none;
+    }
+    
+    /* Background Ambience */
+    .vignette {
+      position:absolute; inset:0; z-index:0;
+      background: radial-gradient(circle at 50% 50%, rgba(20, 20, 30, 0) 40%, var(--bg) 100%);
+      pointer-events: none;
+    }
+
+    /* HUD Elements */
+    #hud{
+      position:absolute;inset:0;pointer-events:none;z-index:10;
+      display:flex;flex-direction:column;justify-content:space-between;
+      padding:24px;
+    }
+    
+    .top-bar { display:flex; justify-content:space-between; width: 100%; opacity: 0; animation: fadeIn 2s forwards 1s; }
+    .brand {
+      font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--cyan);
+      border: 1px solid rgba(0, 240, 255, 0.3); padding: 4px 8px; border-radius: 4px;
+      background: rgba(0, 240, 255, 0.05);
+    }
+    .sys-stat {
+      font-family:var(--mono); font-size:10px; color:rgba(255,255,255,0.4);
+    }
+
+    /* Center Message */
+    .center-stage{
+      position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);
+      text-align:center;width:100%;pointer-events:none; z-index: 5;
+    }
+    .hero-text{
+      font-size:3rem; font-weight:800; letter-spacing:-2px; line-height: 1;
+      opacity:0; transform:scale(0.9); transition:all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+      background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .sub-text{
+      font-family:var(--mono); font-size:0.75rem; color:var(--cyan);
+      margin-top:16px; opacity:0; letter-spacing:1px; text-transform: uppercase;
+      transition:all 1s ease 0.2s;
+    }
+    .visible{opacity:1;transform:scale(1)}
+
+    /* Interaction Hint */
+    .instruction{
+      position: absolute; bottom: 40px; width: 100%;
+      font-family:var(--mono); font-size:10px; color:rgba(255,255,255,0.5);
+      text-align:center; letter-spacing:2px; text-transform:uppercase;
+      animation:pulse 3s infinite; pointer-events: none;
+    }
+    @keyframes pulse{0%,100%{opacity:0.3} 50%{opacity:0.8}}
+    @keyframes fadeIn{to{opacity:1}}
+
+    /* Holographic Gift Container */
+    #holo-gift {
+      position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%) scale(0.8);
+      width: 300px; height: 180px;
+      background: rgba(10, 10, 15, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: all 1s ease;
+      box-shadow: 0 0 50px rgba(0, 240, 255, 0.1);
+      z-index: 20;
+    }
+    #holo-gift.active { opacity: 1; transform: translateX(-50%) scale(1); pointer-events: auto; }
+    
+    .gift-title { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+    .gift-desc { font-size: 11px; color: #888; text-align: center; padding: 0 20px; line-height: 1.5; }
+    
+    .btn {
+      margin-top: 20px;
+      background: var(--cyan); color: #000;
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      padding: 10px 20px; border-radius: 20px; border: none;
+      cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+      transition: transform 0.2s;
+    }
+    .btn:active { transform: scale(0.95); }
+
+    canvas#world{position:absolute;inset:0;z-index:1}
+  </style>
+</head>
+<body>
+  <div class="vignette"></div>
+  <canvas id="world"></canvas>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="top-bar">
+      <div class="brand">SYVAQ PROTOCOLS</div>
+      <div class="sys-stat">ENTROPY: STABLE</div>
+    </div>
+
+    <div class="center-stage">
+      <div class="hero-text" id="msg-1">VISION<br>ONLINE</div>
+      <div class="sub-text" id="msg-2">Constructing Possibilities...</div>
+    </div>
+
+    <div class="instruction" id="hint">TOUCH TO FEED THE LIGHT</div>
+
+    <!-- The Result -->
+    <div id="holo-gift">
+      <div class="gift-title">Merry Christmas, Lilly</div>
+      <div class="gift-desc">
+        The system works because you breathe life into it.<br>
+        This is a reminder that the magic is in the motion,<br>
+        not the machine.
+      </div>
+      <button class="btn" onclick="resetSim()">RE-IGNITE</button>
+    </div>
+  </div>
+
+  <script>
+    /* =========================
+       LIVING LIGHT ENGINE
+    ========================== */
+    const canvas = document.getElementById("world");
+    const ctx = canvas.getContext("2d");
+    
+    // UI Refs
+    const msg1 = document.getElementById("msg-1");
+    const msg2 = document.getElementById("msg-2");
+    const hint = document.getElementById("hint");
+    const gift = document.getElementById("holo-gift");
+
+    let width, height;
+    let particles = [];
+    let charge = 0;
+    let revealed = false;
+
+    // Configuration
+    const CONFIG = {
+      count: 100,
+      colors: ["#00F0FF", "#FF003C", "#FFD700", "#FFFFFF"], // Cyan, Magenta, Gold, White
+      drag: 0.95,
+      wander: 0.2,
+      interactDist: 250,
+      connectDist: 80
+    };
+
+    // Resize Handling
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    // Input Handling
+    let input = { x: -1000, y: -1000, down: false };
+    
+    const onStart = (e) => {
+      input.down = true;
+      hint.style.opacity = 0;
+      updateInput(e);
+    };
+    const onMove = (e) => {
+      if(input.down) updateInput(e);
+    };
+    const onEnd = () => {
+      input.down = false;
+      input.x = -1000;
+    };
+
+    function updateInput(e) {
+      const x = e.touches ? e.touches[0].clientX : e.clientX;
+      const y = e.touches ? e.touches[0].clientY : e.clientY;
+      input.x = x; input.y = y;
+      
+      // Spawn fresh "possibilities" on touch
+      if (Math.random() > 0.5) {
+        particles.push(new Particle(x, y, true));
+        if (particles.length > 180) particles.shift();
+      }
+    }
+
+    window.addEventListener("mousedown", onStart);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onEnd);
+    window.addEventListener("touchstart", (e) => { e.preventDefault(); onStart(e); }, {passive:false});
+    window.addEventListener("touchmove", (e) => { e.preventDefault(); onMove(e); }, {passive:false});
+    window.addEventListener("touchend", onEnd);
+
+    // --- PARTICLE CLASS ---
+    class Particle {
+      constructor(x, y, fresh = false) {
+        this.x = x || Math.random() * width;
+        this.y = y || Math.random() * height;
+        
+        // "Lil Life" Physics
+        const ang = Math.random() * Math.PI * 2;
+        const speed = fresh ? Math.random() * 5 + 2 : Math.random() * 2;
+        this.vx = Math.cos(ang) * speed;
+        this.vy = Math.sin(ang) * speed;
+        
+        this.color = CONFIG.colors[Math.floor(Math.random() * CONFIG.colors.length)];
+        this.size = Math.random() * 2 + 1;
+        this.life = 1.0;
+        this.decay = fresh ? 0.02 : 0; // Fresh particles die out, background ones persist
+      }
+
+      update() {
+        // Wandering behavior (The "Life" part)
+        this.vx += (Math.random() - 0.5) * CONFIG.wander;
+        this.vy += (Math.random() - 0.5) * CONFIG.wander;
+        
+        // Friction
+        this.vx *= CONFIG.drag;
+        this.vy *= CONFIG.drag;
+
+        // Interactive Magnetism
+        if (input.down) {
+          const dx = input.x - this.x;
+          const dy = input.y - this.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          
+          if (dist < CONFIG.interactDist) {
+            this.vx += dx * 0.001;
+            this.vy += dy * 0.001;
+          }
+        } else if (revealed) {
+          // Orbit center if revealed
+          const dx = (width/2) - this.x;
+          const dy = (height/2) - this.y;
+          this.vx += dx * 0.0005;
+          this.vy += dy * 0.0005;
+        }
+
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Screen Wrap
+        if (this.x < 0) this.x = width; else if (this.x > width) this.x = 0;
+        if (this.y < 0) this.y = height; else if (this.y > height) this.y = 0;
+
+        // Life decay for spawned particles
+        if (this.decay > 0) this.life -= this.decay;
+      }
+
+      draw(ctx) {
+        if (this.life <= 0) return;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * this.life, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    // Initialize System
+    function init() {
+      particles = [];
+      for(let i=0; i<CONFIG.count; i++) particles.push(new Particle());
+      animate();
+    }
+
+    window.resetSim = () => {
+      charge = 0;
+      revealed = false;
+      msg1.classList.remove("visible");
+      msg2.classList.remove("visible");
+      gift.classList.remove("active");
+      hint.style.opacity = 1;
+      particles.forEach(p => {
+        p.vx = (Math.random()-0.5)*10;
+        p.vy = (Math.random()-0.5)*10;
+      });
+    };
+
+    // --- ANIMATION LOOP ---
+    function animate() {
+      // Create trails (The "Tech" aesthetic)
+      ctx.fillStyle = "rgba(3, 3, 5, 0.2)"; // Low opacity for trails
+      ctx.fillRect(0, 0, width, height);
+
+      // Tech Glow Mode
+      ctx.globalCompositeOperation = 'lighter';
+
+      let activeCount = 0;
+
+      // Update & Draw Particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.update();
+        if (p.life <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        // Draw Connections (The "Network")
+        // Only connect if close to input or center (optimization)
+        let nearInput = false;
+        if (input.down) {
+          const dInput = Math.hypot(input.x - p.x, input.y - p.y);
+          if (dInput < 200) nearInput = true;
+        }
+
+        if (nearInput || revealed) {
+          particles.forEach(p2 => {
+            const dx = p.x - p2.x;
+            const dy = p.y - p2.y;
+            const dist = Math.hypot(dx, dy);
+            
+            if (dist < CONFIG.connectDist) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              // Color mixing logic
+              ctx.strokeStyle = `rgba(0, 240, 255, ${0.2 * p.life})`; 
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          });
+        }
+
+        p.draw(ctx);
+        if (nearInput) activeCount++;
+      }
+      
+      ctx.globalCompositeOperation = 'source-over';
+
+      // Win State Logic
+      if (input.down && !revealed) {
+        charge += activeCount * 0.05;
+        
+        // Visual Feedback for Charging
+        const rad = 50 + (charge/2);
+        ctx.beginPath();
+        ctx.arc(input.x, input.y, rad, 0, Math.PI*2);
+        ctx.strokeStyle = `rgba(0, 240, 255, ${Math.min(charge/100, 1)})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        if (charge > 300) {
+          revealed = true;
+          triggerReveal();
+        }
+      } else if (!revealed) {
+        charge = Math.max(0, charge - 2); // Decay if let go
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function triggerReveal() {
+      hint.style.display = 'none';
+      
+      // Explosion effect
+      particles.forEach(p => {
+        p.vx = (Math.random() - 0.5) * 15;
+        p.vy = (Math.random() - 0.5) * 15;
+      });
+
+      setTimeout(() => {
+        msg1.classList.add("visible");
+        msg2.classList.add("visible");
+        gift.classList.add("active");
+      }, 500);
+    }
+
+    init();
+
+  </script>
+</body>
+</html>

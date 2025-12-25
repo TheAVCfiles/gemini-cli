@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SYVAQ // HOLIDAY MODE</title>
+  <style>
+    :root{
+      --bg:#050208;
+      --grid:rgba(138,43,226,.05);
+      --primary:#D4AF37;
+      --accent:#9D00FF;
+      --glass:rgba(20,10,30,.86);
+      --border:rgba(212,175,55,.32);
+      --text:#F0F0F0;
+      --muted:rgba(255,255,255,.58);
+      --mono:'SF Mono','Courier New',monospace;
+      --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    body{
+      margin:0;padding:0;background:var(--bg);color:var(--text);
+      font-family:var(--sans);overflow:hidden;height:100vh;width:100vw;
+      touch-action:none;
+    }
+    .grid-layer{
+      position:absolute;inset:0;
+      background-image:radial-gradient(var(--grid) 1px, transparent 1px);
+      background-size:30px 30px;z-index:0;
+    }
+    #hud{
+      position:absolute;inset:0;pointer-events:none;z-index:10;
+      display:flex;flex-direction:column;justify-content:space-between;
+      padding:22px;transition:opacity 1s ease;
+    }
+    .header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+    .brand{
+      font-family:var(--mono);font-size:.75rem;letter-spacing:2px;
+      color:var(--primary);font-weight:800;
+    }
+    .status{
+      font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.55);
+      text-align:right;line-height:1.45;
+    }
+    #terminal{
+      position:absolute;inset:0;background:var(--bg);z-index:100;
+      display:flex;flex-direction:column;justify-content:center;align-items:center;
+      font-family:var(--mono);padding:2rem;transition:opacity 1s ease-out;
+    }
+    .log-line{
+      color:#777;font-size:.85rem;margin-bottom:10px;width:100%;
+      max-width:380px;border-left:3px solid transparent;padding-left:12px;
+      opacity:0;animation:fadeIn .45s forwards;
+    }
+    .log-active{
+      border-left:3px solid var(--primary);color:var(--primary);
+      text-shadow:0 0 10px rgba(212,175,55,.28);font-weight:800;
+    }
+    @keyframes fadeIn{to{opacity:1}}
+
+    .center-stage{
+      position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);
+      text-align:center;width:100%;pointer-events:none;
+    }
+    .hero-text{
+      font-size:2rem;font-weight:320;letter-spacing:-.5px;
+      opacity:0;transform:scale(.96);transition:all 1.4s ease;
+      color:#fff;text-shadow:0 0 32px var(--accent);
+    }
+    .sub-text{
+      font-size:.95rem;color:#d6d6d6;margin-top:12px;
+      opacity:0;letter-spacing:.3px;line-height:1.45;
+      transition:all 1.4s ease;transition-delay:.25s;
+    }
+    .visible{opacity:1;transform:scale(1)}
+
+    .instruction{
+      font-family:var(--sans);font-size:.78rem;color:rgba(255,255,255,.82);
+      text-align:center;margin-bottom:28px;letter-spacing:1px;text-transform:uppercase;
+      font-weight:700;animation:pulse 3s infinite;
+    }
+    @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+    /* Proof Card */
+    #proof-card{
+      position:absolute;bottom:88px;left:50%;
+      transform:translateX(-50%) translateY(40px);
+      width:92%;max-width:390px;background:var(--glass);
+      border:1px solid var(--border);backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      padding:22px;border-radius:6px;font-family:var(--mono);
+      opacity:0;pointer-events:none;
+      transition:all 1.05s cubic-bezier(.19,1,.22,1);
+      box-shadow:0 20px 55px rgba(0,0,0,.6);
+    }
+    #proof-card.visible{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+    .proof-header{
+      border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:14px;
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+    }
+    .proof-title{font-size:.8rem;color:var(--primary);letter-spacing:1px;font-weight:900}
+    .pill{
+      font-size:.65rem;padding:6px 10px;border:1px solid rgba(157,0,255,.35);
+      color:rgba(255,255,255,.9);border-radius:999px;background:rgba(157,0,255,.10);
+      white-space:nowrap;
+    }
+    .proof-row{
+      display:flex;justify-content:space-between;gap:14px;
+      font-size:.73rem;margin-bottom:10px;color:#bdbdbd;
+    }
+    .proof-val{color:var(--text);text-align:right;font-weight:750}
+    .proof-val.gold{color:var(--primary)}
+    .signature-block{
+      margin-top:18px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.18);
+      display:flex;justify-content:space-between;align-items:flex-end;gap:12px;
+    }
+    .sig-label{font-size:.6rem;color:#8a8a8a;display:block;margin-bottom:4px}
+    .sig-img{font-family:'Snell Roundhand',cursive;font-size:1.55rem;color:var(--accent);line-height:1}
+    .mini{
+      font-size:.62rem;color:rgba(255,255,255,.62);line-height:1.4;
+    }
+
+    /* Actions */
+    #actions{
+      display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;
+    }
+    .btn{
+      pointer-events:auto;
+      font-family:var(--mono);
+      font-size:.72rem;
+      letter-spacing:.6px;
+      padding:10px 12px;
+      border-radius:6px;
+      border:1px solid rgba(212,175,55,.35);
+      background:rgba(212,175,55,.06);
+      color:rgba(255,255,255,.92);
+      cursor:pointer;
+      user-select:none;
+      transition:transform .12s ease, background .12s ease;
+    }
+    .btn:active{transform:scale(.98)}
+    .btn.alt{
+      border:1px solid rgba(157,0,255,.35);
+      background:rgba(157,0,255,.10);
+    }
+    .btn.ghost{
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.05);
+    }
+    .toast{
+      position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+      background:rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 12px;border-radius:8px;
+      font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.9);
+      opacity:0;pointer-events:none;transition:opacity .25s ease;
+      z-index:30;
+    }
+    .toast.show{opacity:1}
+    canvas#world{position:absolute;inset:0;z-index:1}
+  </style>
+</head>
+<body>
+  <div class="grid-layer"></div>
+  <canvas id="world"></canvas>
+
+  <!-- Terminal Boot -->
+  <div id="terminal">
+    <div id="logs"></div>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="header">
+      <div class="brand">AVC // SYVAQ</div>
+      <div class="status">
+        SYSTEM: ONLINE<br />
+        <span id="net-stat" style="color:#888">CHAOS DETECTED</span>
+      </div>
+    </div>
+
+    <div class="center-stage">
+      <div class="hero-text" id="msg-1">Merry Christmas, Lilly.</div>
+      <div class="sub-text" id="msg-2">
+        Not everything needs you right now.<br />
+        The signal can sleep. The system will hold.
+      </div>
+    </div>
+
+    <!-- Proof Card -->
+    <div id="proof-card">
+      <div class="proof-header">
+        <span class="proof-title">FOUNDER HOLIDAY RECEIPT</span>
+        <span class="pill" id="receipt-pill">UNSEALED</span>
+      </div>
+
+      <div class="proof-row">
+        <span>ISSUED TO</span>
+        <span class="proof-val">LILLY SIMPSON</span>
+      </div>
+      <div class="proof-row">
+        <span>COMPANY</span>
+        <span class="proof-val">SYVAQ</span>
+      </div>
+      <div class="proof-row">
+        <span>GRANT</span>
+        <span class="proof-val gold">PERMISSION TO DISCONNECT</span>
+      </div>
+      <div class="proof-row">
+        <span>COVERAGE</span>
+        <span class="proof-val">HER + HER FAMILY</span>
+      </div>
+      <div class="proof-row">
+        <span>STATUS</span>
+        <span class="proof-val gold" id="status-val">PENDING STABILIZATION</span>
+      </div>
+      <div class="proof-row">
+        <span>RECEIPT ID</span>
+        <span class="proof-val" id="receipt-id">—</span>
+      </div>
+      <div class="proof-row">
+        <span>TIMESTAMP</span>
+        <span class="proof-val" id="receipt-time">—</span>
+      </div>
+
+      <div class="signature-block">
+        <div>
+          <span class="sig-label">SYSTEM AUTHORITY</span>
+          <div class="mini">AVC SYSTEMS STUDIO<br />HUMAN CARE // MACHINE CALM</div>
+        </div>
+        <div style="text-align:right">
+          <span class="sig-label">AUTHORIZED BY</span>
+          <span class="sig-img">Allison</span>
+        </div>
+      </div>
+
+      <div id="actions">
+        <button class="btn alt" id="seal-btn">SEAL RECEIPT</button>
+        <button class="btn" id="download-btn">DOWNLOAD PNG</button>
+        <button class="btn ghost" id="reset-btn">RESET NOISE</button>
+      </div>
+    </div>
+
+    <div class="instruction" id="hint">TOUCH & HOLD TO CLEAR THE NOISE</div>
+  </div>
+
+  <div class="toast" id="toast">Saved.</div>
+
+  <script>
+    /* =========================
+       1) CONFIG
+    ========================== */
+    const CONFIG = {
+      count: 150,
+      touchDist: 230,
+      connectDist: 115,
+      colors: {
+        noise: "80, 80, 90",
+        gold: "212, 175, 55",
+        purple: "157, 0, 255",
+        bg: "5, 2, 8"
+      }
+    };
+
+    /* =========================
+       2) BOOT SEQUENCE
+    ========================== */
+    const logs = [
+      "CHECKING SYSTEM HEALTH...",
+      "LOCKING IN FOUNDER CONTEXT...",
+      "HELLO, LILLY.",
+      "SYNCING: SYVAQ HEARTBEAT...",
+      "ACTIVATING HOLIDAY MODE...",
+      "READY."
+    ];
+
+    const terminal = document.getElementById("terminal");
+    const logContainer = document.getElementById("logs");
+    let logIdx = 0;
+
+    function runBoot() {
+      if (logIdx < logs.length) {
+        Array.from(logContainer.children).forEach((c) => c.classList.remove("log-active"));
+
+        const div = document.createElement("div");
+        div.className = "log-line log-active";
+        div.innerText = logs[logIdx];
+        logContainer.appendChild(div);
+
+        logIdx++;
+        setTimeout(runBoot, 540);
+      } else {
+        setTimeout(() => {
+          terminal.style.opacity = "0";
+          setTimeout(() => {
+            terminal.remove();
+            initGift();
+            initSim();
+          }, 900);
+        }, 650);
+      }
+    }
+    window.onload = runBoot;
+
+    /* =========================
+       3) GIFT / RECEIPT LOGIC
+    ========================== */
+    const toast = document.getElementById("toast");
+    const proofCard = document.getElementById("proof-card");
+    const receiptIdEl = document.getElementById("receipt-id");
+    const receiptTimeEl = document.getElementById("receipt-time");
+    const statusValEl = document.getElementById("status-val");
+    const receiptPill = document.getElementById("receipt-pill");
+    const sealBtn = document.getElementById("seal-btn");
+    const dlBtn = document.getElementById("download-btn");
+    const resetBtn = document.getElementById("reset-btn");
+
+    const STORAGE_KEY = "syvaq_holiday_receipt_v1";
+
+    function showToast(msg = "Saved.") {
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1200);
+    }
+
+    function nowStamp() {
+      const d = new Date();
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    function hashish(input) {
+      // Not real crypto, but feels like a “receipt hash” and is stable.
+      let h = 2166136261;
+      for (let i = 0; i < input.length; i++) {
+        h ^= input.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      return ("0000000" + (h >>> 0).toString(16)).slice(-8).toUpperCase();
+    }
+
+    function makeReceipt() {
+      const stamp = nowStamp();
+      const base = `LILLY|SYVAQ|HOLIDAY|${stamp}|AVC`;
+      const id = `SYV-${hashish(base)}-${hashish(base.split("").reverse().join(""))}`;
+      return { id, stamp, sealed: false };
+    }
+
+    function loadReceipt() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch { return null; }
+    }
+
+    function saveReceipt(r) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(r));
+    }
+
+    let RECEIPT = null;
+
+    function renderReceipt() {
+      if (!RECEIPT) return;
+      receiptIdEl.textContent = RECEIPT.id;
+      receiptTimeEl.textContent = RECEIPT.stamp;
+
+      if (RECEIPT.sealed) {
+        receiptPill.textContent = "SEALED";
+        receiptPill.style.borderColor = "rgba(212,175,55,.45)";
+        receiptPill.style.background = "rgba(212,175,55,.10)";
+      } else {
+        receiptPill.textContent = "UNSEALED";
+        receiptPill.style.borderColor = "rgba(157,0,255,.35)";
+        receiptPill.style.background = "rgba(157,0,255,.10)";
+      }
+    }
+
+    function initGift() {
+      RECEIPT = loadReceipt() || makeReceipt();
+      saveReceipt(RECEIPT);
+      renderReceipt();
+
+      sealBtn.addEventListener("click", () => {
+        RECEIPT.sealed = true;
+        saveReceipt(RECEIPT);
+        renderReceipt();
+        showToast("Receipt sealed.");
+      });
+
+      dlBtn.addEventListener("click", () => downloadReceiptPNG());
+
+      resetBtn.addEventListener("click", () => {
+        // resets only the “noise clearing” experience, not the receipt
+        window.__RESET_PARTICLES__?.();
+        showToast("Noise restored.");
+      });
+    }
+
+    function downloadReceiptPNG() {
+      // Render a clean “gift card” to an offscreen canvas and download.
+      const w = 1080, h = 1350;
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      const ctx = c.getContext("2d");
+
+      // Background
+      ctx.fillStyle = "#050208";
+      ctx.fillRect(0, 0, w, h);
+
+      // Subtle grid
+      ctx.fillStyle = "rgba(138,43,226,0.06)";
+      for (let y = 0; y < h; y += 36) {
+        for (let x = 0; x < w; x += 36) {
+          ctx.beginPath(); ctx.arc(x, y, 1, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+
+      // Card
+      const pad = 92;
+      const cx = pad, cy = 170, cw = w - pad*2, ch = h - 330;
+      roundRect(ctx, cx, cy, cw, ch, 18);
+      ctx.fillStyle = "rgba(20,10,30,0.88)";
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "rgba(212,175,55,0.35)";
+      ctx.stroke();
+
+      // Header
+      ctx.font = "700 38px SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace";
+      ctx.fillStyle = "#D4AF37";
+      ctx.fillText("FOUNDER HOLIDAY RECEIPT", cx + 44, cy + 86);
+
+      ctx.font = "600 24px SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace";
+      ctx.fillStyle = "rgba(255,255,255,0.72)";
+      ctx.fillText(RECEIPT.sealed ? "SEALED" : "UNSEALED", cx + cw - 170, cy + 86);
+
+      // Title message (show, don’t tell)
+      ctx.font = "300 56px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+      ctx.fillStyle = "#FFFFFF";
+      ctx.shadowColor = "#9D00FF";
+      ctx.shadowBlur = 22;
+      ctx.fillText("Merry Christmas, Lilly.", cx + 44, cy + 170);
+      ctx.shadowBlur = 0;
+
+      ctx.font = "400 34px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+      ctx.fillStyle = "rgba(255,255,255,0.82)";
+      wrapText(ctx,
+        "This receipt proves the system can hold while you rest.\nFamily protected. Founder protected. Signal preserved.",
+        cx + 44, cy + 238, cw - 88, 46
+      );
+
+      // Rows
+      const rows = [
+        ["ISSUED TO", "LILLY SIMPSON"],
+        ["COMPANY", "SYVAQ"],
+        ["GRANT", "PERMISSION TO DISCONNECT"],
+        ["COVERAGE", "HER + HER FAMILY"],
+        ["RECEIPT ID", RECEIPT.id],
+        ["TIMESTAMP", RECEIPT.stamp]
+      ];
+
+      let ry = cy + 420;
+      ctx.font = "600 26px SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace";
+      rows.forEach(([k, v]) => {
+        ctx.fillStyle = "rgba(255,255,255,0.58)";
+        ctx.fillText(k, cx + 44, ry);
+        ctx.fillStyle = (k === "GRANT") ? "#D4AF37" : "rgba(255,255,255,0.92)";
+        const tw = ctx.measureText(v).width;
+        ctx.fillText(v, cx + cw - 44 - tw, ry);
+        ry += 62;
+      });
+
+      // Signature
+      ctx.setLineDash([10, 10]);
+      ctx.strokeStyle = "rgba(255,255,255,0.18)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(cx + 44, cy + ch - 180);
+      ctx.lineTo(cx + cw - 44, cy + ch - 180);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.font = "600 22px SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace";
+      ctx.fillStyle = "rgba(255,255,255,0.60)";
+      ctx.fillText("SYSTEM AUTHORITY", cx + 44, cy + ch - 132);
+      ctx.fillText("AUTHORIZED BY", cx + cw - 310, cy + ch - 132);
+
+      ctx.font = "500 22px SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace";
+      ctx.fillStyle = "rgba(255,255,255,0.55)";
+      ctx.fillText("AVC SYSTEMS STUDIO // HUMAN CARE", cx + 44, cy + ch - 96);
+
+      ctx.font = "64px 'Snell Roundhand', cursive";
+      ctx.fillStyle = "#9D00FF";
+      ctx.fillText("Allison", cx + cw - 290, cy + ch - 78);
+
+      // Download
+      const a = document.createElement("a");
+      a.download = `SYVAQ_Holiday_Receipt_${RECEIPT.id}.png`;
+      a.href = c.toDataURL("image/png");
+      a.click();
+      showToast("Downloaded PNG.");
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      const rr = Math.min(r, w/2, h/2);
+      ctx.beginPath();
+      ctx.moveTo(x + rr, y);
+      ctx.arcTo(x + w, y, x + w, y + h, rr);
+      ctx.arcTo(x + w, y + h, x, y + h, rr);
+      ctx.arcTo(x, y + h, x, y, rr);
+      ctx.arcTo(x, y, x + w, y, rr);
+      ctx.closePath();
+    }
+
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+      const paragraphs = text.split("\n");
+      let yy = y;
+      paragraphs.forEach(p => {
+        const words = p.split(" ");
+        let line = "";
+        for (let n = 0; n < words.length; n++) {
+          const testLine = line + words[n] + " ";
+          const metrics = ctx.measureText(testLine);
+          if (metrics.width > maxWidth && n > 0) {
+            ctx.fillText(line, x, yy);
+            line = words[n] + " ";
+            yy += lineHeight;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line, x, yy);
+        yy += lineHeight;
+      });
+    }
+
+    /* =========================
+       4) SIMULATION ENGINE
+    ========================== */
+    function initSim() {
+      const canvas = document.getElementById("world");
+      const ctx = canvas.getContext("2d");
+      let width, height;
+
+      const msg1 = document.getElementById("msg-1");
+      const msg2 = document.getElementById("msg-2");
+      const hint = document.getElementById("hint");
+      const stat = document.getElementById("net-stat");
+
+      let proofGenerated = false;
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      // Input
+      let input = { x: -1000, y: -1000, active: false };
+      ["touchstart","mousedown"].forEach(e =>
+        window.addEventListener(e, () => { input.active = true; hint.style.opacity = 0; })
+      );
+      ["touchend","mouseup"].forEach(e =>
+        window.addEventListener(e, () => { input.active = false; input.x = -1000; })
+      );
+      ["touchmove","mousemove"].forEach(e =>
+        window.addEventListener(e, (ev) => {
+          ev.preventDefault();
+          input.x = ev.touches ? ev.touches[0].clientX : ev.clientX;
+          input.y = ev.touches ? ev.touches[0].clientY : ev.clientY;
+        }, { passive:false })
+      );
+
+      class Particle {
+        constructor() { this.reset(true); }
+        reset(hard=false){
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.vx = (Math.random() - 0.5) * (hard ? 4.4 : 3.2);
+          this.vy = (Math.random() - 0.5) * (hard ? 4.4 : 3.2);
+          this.size = Math.random() * 2.1 + 0.55;
+          this.state = "noise";
+        }
+        update() {
+          this.x += this.vx; this.y += this.vy;
+          if (this.x < 0) this.x = width;
+          if (this.x > width) this.x = 0;
+          if (this.y < 0) this.y = height;
+          if (this.y > height) this.y = 0;
+
+          if (input.active) {
+            const dx = input.x - this.x;
+            const dy = input.y - this.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < CONFIG.touchDist) {
+              if (this.state === "noise") {
+                this.state = "harmony";
+                this.vx *= 0.06;
+                this.vy *= 0.06;
+              }
+              this.vx += dx * 0.00055;
+              this.vy += dy * 0.00055;
+            }
+          }
+
+          if (this.state === "harmony") {
+            this.vy += 0.0021;
+            this.vx *= 0.989;
+          }
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+
+          if (this.state === "noise") {
+            ctx.fillStyle = `rgba(${CONFIG.colors.noise}, 0.52)`;
+            ctx.shadowBlur = 0;
+          } else {
+            const isGold = Math.random() > 0.42;
+            if (isGold) {
+              ctx.fillStyle = `rgb(${CONFIG.colors.gold})`;
+              ctx.shadowColor = `rgb(${CONFIG.colors.gold})`;
+            } else {
+              ctx.fillStyle = `rgb(${CONFIG.colors.purple})`;
+              ctx.shadowColor = `rgb(${CONFIG.colors.purple})`;
+            }
+            ctx.shadowBlur = 11;
+          }
+          ctx.fill();
+        }
+      }
+
+      let particles = Array.from({ length: CONFIG.count }, () => new Particle());
+
+      window.__RESET_PARTICLES__ = () => {
+        particles.forEach(p => p.reset(false));
+        proofGenerated = false;
+        msg1.classList.remove("visible");
+        msg2.classList.remove("visible");
+        proofCard.classList.remove("visible");
+        hint.style.display = "";
+        hint.style.opacity = 1;
+        stat.innerHTML = "SYSTEM STATUS:<br><span style='color:#888'>CHAOS DETECTED</span>";
+        statusValEl.textContent = "PENDING STABILIZATION";
+      };
+
+      function animate() {
+        ctx.fillStyle = "rgba(5, 2, 8, 0.24)";
+        ctx.fillRect(0, 0, width, height);
+
+        let safeCount = 0;
+
+        particles.forEach((p, i) => {
+          p.update();
+          p.draw();
+          if (p.state === "harmony") safeCount++;
+
+          if (p.state === "harmony") {
+            for (let j = i + 1; j < particles.length; j++) {
+              const p2 = particles[j];
+              if (p2.state !== "harmony") continue;
+              const dx = p.x - p2.x;
+              const dy = p.y - p2.y;
+              const dist = Math.sqrt(dx*dx + dy*dy);
+              if (dist < CONFIG.connectDist) {
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.strokeStyle = `rgba(${CONFIG.colors.gold}, 0.20)`;
+                ctx.lineWidth = 0.55;
+                ctx.stroke();
+              }
+            }
+          }
+        });
+
+        const harmonizedPercent = Math.floor((safeCount / CONFIG.count) * 100);
+
+        if (harmonizedPercent > 90) {
+          msg1.classList.add("visible");
+          msg2.classList.add("visible");
+          hint.style.display = "none";
+          stat.innerHTML = "SYSTEM STATUS:<br><span style='color:var(--primary)'>ALL CLEAR</span>";
+          statusValEl.textContent = "ALL CLEAR";
+
+          if (!proofGenerated) {
+            proofGenerated = true;
+            setTimeout(() => proofCard.classList.add("visible"), 900);
+          }
+        }
+
+        if (input.active && input.x > -1) {
+          const grad = ctx.createRadialGradient(input.x, input.y, 0, input.x, input.y, CONFIG.touchDist);
+          grad.addColorStop(0, `rgba(${CONFIG.colors.purple}, 0.11)`);
+          grad.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(input.x, input.y, CONFIG.touchDist, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+  </script>
+</body>
+</html>
