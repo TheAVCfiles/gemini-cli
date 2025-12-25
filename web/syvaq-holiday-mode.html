@@ -237,6 +237,7 @@
       <div id="actions">
         <button class="btn alt" id="seal-btn">SEAL RECEIPT</button>
         <button class="btn" id="download-btn">DOWNLOAD PNG</button>
+        <button class="btn" id="share-btn">SHARE DEMO</button>
         <button class="btn ghost" id="reset-btn">RESET NOISE</button>
       </div>
     </div>
@@ -313,6 +314,7 @@
     const receiptPill = document.getElementById("receipt-pill");
     const sealBtn = document.getElementById("seal-btn");
     const dlBtn = document.getElementById("download-btn");
+    const shareBtn = document.getElementById("share-btn");
     const resetBtn = document.getElementById("reset-btn");
 
     const STORAGE_KEY = "syvaq_holiday_receipt_v1";
@@ -389,6 +391,22 @@
       });
 
       dlBtn.addEventListener("click", () => downloadReceiptPNG());
+
+      shareBtn.addEventListener("click", async () => {
+        const url = location.href;
+        try {
+          if (!navigator.share) throw new Error("share unsupported");
+          await navigator.share({ title: document.title, text: "SYVAQ demo", url });
+          showToast("Shared.");
+        } catch (e) {
+          try {
+            await navigator.clipboard?.writeText(url);
+            showToast("Link copied.");
+          } catch {
+            showToast("Copy failed. Use address bar.");
+          }
+        }
+      });
 
       resetBtn.addEventListener("click", () => {
         // resets only the “noise clearing” experience, not the receipt
