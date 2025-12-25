@@ -237,6 +237,7 @@
       <div id="actions">
         <button class="btn alt" id="seal-btn">SEAL RECEIPT</button>
         <button class="btn" id="download-btn">DOWNLOAD PNG</button>
+        <button class="btn" id="share-btn">SHARE DEMO</button>
         <button class="btn ghost" id="reset-btn">RESET NOISE</button>
       </div>
     </div>
@@ -313,14 +314,18 @@
     const receiptPill = document.getElementById("receipt-pill");
     const sealBtn = document.getElementById("seal-btn");
     const dlBtn = document.getElementById("download-btn");
+    const shareBtn = document.getElementById("share-btn");
     const resetBtn = document.getElementById("reset-btn");
 
     const STORAGE_KEY = "syvaq_holiday_receipt_v1";
 
     function showToast(msg = "Saved.") {
       toast.textContent = msg;
+      toast.setAttribute("role", "status");
+      toast.setAttribute("aria-live", "polite");
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 1200);
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove("show"), 1200);
     }
 
     function nowStamp() {
@@ -337,6 +342,29 @@
         h = Math.imul(h, 16777619);
       }
       return ("0000000" + (h >>> 0).toString(16)).slice(-8).toUpperCase();
+    }
+
+    async function shareOrCopy({ title, text, url }) {
+      const canNativeShare =
+        typeof navigator.share === "function" &&
+        (typeof navigator.canShare !== "function" || navigator.canShare({ url }));
+
+      if (canNativeShare) {
+        try {
+          await navigator.share({ title, text, url });
+          showToast("Shared.");
+          return;
+        } catch (err) {
+          // fall back to clipboard
+        }
+      }
+
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast("Link copied.");
+      } catch (err) {
+        window.prompt("Copy this link:", url);
+      }
     }
 
     function makeReceipt() {
@@ -389,6 +417,14 @@
       });
 
       dlBtn.addEventListener("click", () => downloadReceiptPNG());
+
+      shareBtn?.addEventListener("click", async () => {
+        await shareOrCopy({
+          title: document.title,
+          text: "SYVAQ demo",
+          url: location.href
+        });
+      });
 
       resetBtn.addEventListener("click", () => {
         // resets only the “noise clearing” experience, not the receipt
