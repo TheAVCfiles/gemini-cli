@@ -237,6 +237,7 @@
       <div id="actions">
         <button class="btn alt" id="seal-btn">SEAL RECEIPT</button>
         <button class="btn" id="download-btn">DOWNLOAD PNG</button>
+        <button class="btn ghost" id="share-btn">SHARE DEMO</button>
         <button class="btn ghost" id="reset-btn">RESET NOISE</button>
       </div>
     </div>
@@ -313,6 +314,7 @@
     const receiptPill = document.getElementById("receipt-pill");
     const sealBtn = document.getElementById("seal-btn");
     const dlBtn = document.getElementById("download-btn");
+    const shareBtn = document.getElementById("share-btn");
     const resetBtn = document.getElementById("reset-btn");
 
     const STORAGE_KEY = "syvaq_holiday_receipt_v1";
@@ -321,6 +323,41 @@
       toast.textContent = msg;
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 1200);
+    }
+
+    function isPublicWebUrl(url) {
+      return url.protocol === "https:" || url.protocol === "http:";
+    }
+
+    async function shareDemo() {
+      const urlObj = new URL(location.href);
+
+      if (!isPublicWebUrl(urlObj)) {
+        showToast("Host this page to share.");
+        try {
+          await navigator.clipboard.writeText(
+            "Deploy this page to Netlify/Vercel, then share the https:// link."
+          );
+        } catch (_) {}
+        return;
+      }
+
+      const url = urlObj.toString();
+
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: document.title, text: "SYVAQ demo", url });
+          showToast("Shared.");
+          return;
+        }
+      } catch (_) {}
+
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast("Link copied.");
+      } catch (_) {
+        window.prompt("Copy this link:", url);
+      }
     }
 
     function nowStamp() {
@@ -389,6 +426,8 @@
       });
 
       dlBtn.addEventListener("click", () => downloadReceiptPNG());
+
+      shareBtn?.addEventListener("click", shareDemo);
 
       resetBtn.addEventListener("click", () => {
         // resets only the “noise clearing” experience, not the receipt
