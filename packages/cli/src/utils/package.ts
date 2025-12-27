@@ -29,8 +29,7 @@ export async function getPackageJson(): Promise<PackageJson | undefined> {
 
   const result = await readPackageUp({ cwd: __dirname });
   if (!result) {
-    // TODO: Maybe bubble this up as an error.
-    return;
+    throw new Error('Failed to locate package.json for Gemini CLI.');
   }
 
   packageJson = result.packageJson;
