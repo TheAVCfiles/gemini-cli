@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Narrative Phase Dashboard v0.1</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #111722;
+      --ring: #2b384e;
+      --nucleus: #f5f7fb;
+      --text: #d7e3ff;
+      --accent: #7bdff6;
+      --secondary: #8ce99a;
+      --muted: #9aa7bd;
+      --shadow: rgba(0, 0, 0, 0.45);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 20% 20%, #182134 0%, #0f1115 45%);
+      color: var(--text);
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      letter-spacing: 0.02em;
+    }
+
+    .frame {
+      width: min(820px, 94vw);
+      padding: 32px;
+      border-radius: 16px;
+      background: linear-gradient(145deg, #0f141f, #0d0f17);
+      box-shadow: 0 30px 90px var(--shadow), inset 0 1px 0 #1b2434;
+      border: 1px solid #1e2739;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 18px;
+    }
+
+    .title {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .subtext {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .dashboard {
+      position: relative;
+      height: 420px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 50% 40%, #141a28 0%, #0f121b 65%);
+      border: 1px solid #1c2535;
+      overflow: hidden;
+    }
+
+    .orbit {
+      position: absolute;
+      inset: 40px;
+      border-radius: 50%;
+      border: 1px dashed #243149;
+      display: grid;
+      place-items: center;
+    }
+
+    .nodes {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      animation: slow-drift 24s linear infinite;
+    }
+
+    .node {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #172134, #0d1018);
+      border: 1px solid #1f2c43;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 14px;
+      color: var(--text);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .node:nth-child(1) { top: -16px; left: calc(50% - 60px); }
+    .node:nth-child(2) { right: -14px; top: calc(50% - 60px); }
+    .node:nth-child(3) { bottom: -16px; left: calc(50% - 60px); }
+    .node:nth-child(4) { left: -14px; top: calc(50% - 60px); }
+
+    .nucleus {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 25%, #ffffff 0%, #f5f7fb 45%, #dfe4ef 70%, #c8d1e0 100%);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 14px #192133, 0 0 0 18px #1e2a3f;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: #1a2231;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .nucleus:hover {
+      transform: scale(1.04);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45), 0 0 0 16px #1c2740, 0 0 0 22px #23314a;
+    }
+
+    .pulse {
+      position: absolute;
+      inset: 18px;
+      border-radius: 50%;
+      border: 1px solid rgba(139, 204, 234, 0.25);
+      animation: pulse 2.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .status {
+      position: absolute;
+      width: 240px;
+      text-align: center;
+      bottom: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .stamp {
+      margin-top: 22px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px dashed #2a3954;
+      background: #0e131d;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .stamp strong { color: var(--secondary); }
+
+    .checksum {
+      font-family: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      color: var(--text);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.96); opacity: 0.45; }
+      50% { transform: scale(1); opacity: 0.15; }
+      100% { transform: scale(1.06); opacity: 0.05; }
+    }
+
+    @keyframes slow-drift {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="header">
+      <div>
+        <div class="title">Narrative Phase Dashboard</div>
+        <div class="subtext">pivot / faces · v0.1</div>
+      </div>
+      <div class="subtext">Tap the nucleus to rotate →</div>
+    </div>
+
+    <div class="dashboard">
+      <div class="orbit">
+        <div class="nodes">
+          <div class="node" data-face="SIGNAL">Signal</div>
+          <div class="node" data-face="FORM">Form</div>
+          <div class="node" data-face="MISLEADING">Misleading</div>
+          <div class="node" data-face="EXIT">Exit</div>
+        </div>
+      </div>
+
+      <div class="pulse"></div>
+      <div class="nucleus" id="nucleus">Signal</div>
+      <div class="status" id="status">Current face: SIGNAL</div>
+    </div>
+
+    <div class="stamp">
+      <div>ProofID · <strong>NPD-0.1-AZ</strong></div>
+      <div class="checksum">Checksum: c4e7:9b1a:fa02:77d9</div>
+    </div>
+  </div>
+
+  <script>
+    const faces = ["SIGNAL", "FORM", "MISLEADING", "EXIT"];
+    const nucleus = document.getElementById("nucleus");
+    const status = document.getElementById("status");
+
+    let index = 0;
+
+    const updateFace = () => {
+      nucleus.textContent = faces[index];
+      status.textContent = `Current face: ${faces[index]}`;
+      nucleus.style.transform = `rotate(${index * 90}deg)`;
+    };
+
+    nucleus.addEventListener("click", () => {
+      index = (index + 1) % faces.length;
+      updateFace();
+    });
+  </script>
+</body>
+</html>
