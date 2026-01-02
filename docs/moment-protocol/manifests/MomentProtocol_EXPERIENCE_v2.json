@@ -1,0 +1,34 @@
+{
+  "name": "MomentProtocol_EXPERIENCE_v2",
+  "prima_profile": {
+    "line": 0.4,
+    "power": 0.5,
+    "revelation": 0.9
+  },
+  "elements": [
+    {
+      "id": "journeys",
+      "type": "maps",
+      "files": [
+        "../experience/README.md"
+      ],
+      "description": "Journey framing for studio owners, tweens, parents, and survivors."
+    },
+    {
+      "id": "blueprint_boxes",
+      "type": "playbook",
+      "files": [
+        "../experience/README.md"
+      ],
+      "description": "Launch, tween leadership, and sentinel ethics boxes that act as staircases to a show-ready deployment."
+    },
+    {
+      "id": "communications",
+      "type": "scripts",
+      "files": [
+        "../experience/README.md"
+      ],
+      "description": "Email, SMS, and in-class scripts aligned with the Moment Protocol tone."
+    }
+  ]
+}

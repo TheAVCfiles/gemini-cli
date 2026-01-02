@@ -1,0 +1,42 @@
+{
+  "name": "MomentProtocol_LABEL_v2",
+  "prima_profile": {
+    "line": 0.3,
+    "power": 0.9,
+    "revelation": 0.6
+  },
+  "elements": [
+    {
+      "id": "brand_story",
+      "type": "narrative",
+      "files": [
+        "../label/README.md"
+      ],
+      "description": "Founder lineage, Velvet Interface positioning, and the core rule that every serious student gets a moment."
+    },
+    {
+      "id": "case_study_avc",
+      "type": "case_study",
+      "files": [
+        "../label/README.md"
+      ],
+      "metrics": {
+        "start_monthly_rev": -4000,
+        "end_monthly_rev": 30000,
+        "period_months": 48
+      }
+    },
+    {
+      "id": "offers",
+      "type": "pricing",
+      "files": [
+        "../label/README.md"
+      ],
+      "tiers": [
+        "DIY Kit",
+        "Implementation Coaching",
+        "White-label / Enterprise"
+      ]
+    }
+  ]
+}
