@@ -119,8 +119,10 @@ export default function StageportFacultyPage() {
   const [aiTitle, setAiTitle] = useState('');
   const [aiContent, setAiContent] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
   const modalTitleRef = useRef(null);
   const lastFocusRef = useRef(null);
+  const toastTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -144,6 +146,8 @@ export default function StageportFacultyPage() {
     if (typeof window === 'undefined') return;
     localStorage.setItem('stageport.tasks', JSON.stringify(taskState));
   }, [taskState]);
+
+  useEffect(() => () => clearTimeout(toastTimeoutRef.current), []);
 
   useEffect(() => {
     const handler = (e) => {
@@ -240,21 +244,62 @@ export default function StageportFacultyPage() {
   };
 
   const copyToClipboard = async () => {
-    const plainText = aiContent.replace(/<[^>]+>/g, ' ');
+    const plainText = aiContent.replace(/<[^>]+>/g, ' ').trim();
     try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(plainText);
-      } else {
-        const ta = document.createElement('textarea');
-        ta.value = plainText;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
-      }
-      alert('Copied to clipboard');
+      await copyPlainText(plainText);
+      showToast('Copied to clipboard');
     } catch (err) {
-      alert('Copy failed — please select & copy manually');
+      showToast('Copy failed — please select & copy manually');
+    }
+  };
+
+  const copyPlainText = async (plainText) => {
+    if (!plainText) throw new Error('Nothing to copy');
+
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(plainText);
+      return;
+    }
+
+    const ta = document.createElement('textarea');
+    ta.value = plainText;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'absolute';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+  };
+
+  const showToast = (message) => {
+    setToastMessage(message);
+    clearTimeout(toastTimeoutRef.current);
+    toastTimeoutRef.current = setTimeout(() => setToastMessage(''), 1600);
+  };
+
+  const shareAiResult = async () => {
+    const plainText = aiContent.replace(/<[^>]+>/g, ' ').trim();
+    const shareData = {
+      title: aiTitle || 'StagePort AI Report',
+      text: plainText,
+      url: typeof window !== 'undefined' ? window.location.href : undefined
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        showToast('Share sheet opened');
+        return;
+      }
+      throw new Error('Web Share API unavailable');
+    } catch (err) {
+      try {
+        await copyPlainText(plainText);
+        showToast('Link copied for sharing');
+      } catch (copyErr) {
+        showToast('Unable to share right now');
+      }
     }
   };
 
@@ -858,6 +903,21 @@ export default function StageportFacultyPage() {
           gap: 0.5rem;
           padding: 0.6rem 1.2rem 1rem;
         }
+        .toast {
+          position: fixed;
+          bottom: 16px;
+          right: 16px;
+          background: #0f172a;
+          color: #e2e8f0;
+          padding: 10px 14px;
+          border-radius: 12px;
+          box-shadow: 0 12px 30px rgba(15, 23, 42, 0.4);
+          border: 1px solid #1f2937;
+          font-size: 0.95rem;
+          opacity: 0.95;
+          transition: opacity 0.2s ease-in-out;
+          z-index: 60;
+        }
         .ai-support-btn {
           border-radius: 10px;
           padding: 0.55rem 0.9rem;
@@ -1317,8 +1377,16 @@ export default function StageportFacultyPage() {
               <button className="ai-support-btn" onClick={() => downloadAiReport()} disabled={aiLoading}>
                 Download
               </button>
+              <button className="ai-support-btn" onClick={shareAiResult} disabled={aiLoading}>
+                Share
+              </button>
             </div>
           </div>
+        </div>
+      )}
+      {toastMessage && (
+        <div className="toast" role="status" aria-live="polite">
+          {toastMessage}
         </div>
       )}
     </div>
