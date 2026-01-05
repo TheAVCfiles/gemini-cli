@@ -28,6 +28,13 @@ export interface Settings {
   showMemoryUsage?: boolean;
   checkpointing?: CheckpointingSettings;
 
+  security?: {
+    folderTrust?: {
+      featureEnabled?: boolean;
+      enabled?: boolean;
+    };
+  };
+
   // Git-aware file filtering settings
   fileFiltering?: {
     respectGitIgnore?: boolean;

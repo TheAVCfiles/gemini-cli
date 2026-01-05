@@ -26,6 +26,7 @@ import { logger } from './logger.js';
 import type { Settings } from './settings.js';
 import type { Extension } from './extension.js';
 import { type AgentSettings, CoderAgentEvent } from './types.js';
+import { isWorkspaceTrusted } from './folderTrust.js';
 
 export async function loadConfig(
   settings: Settings,
@@ -35,6 +36,8 @@ export async function loadConfig(
   const mcpServers = mergeMcpServers(settings, extensions);
   const workspaceDir = process.cwd();
   const adcFilePath = process.env['GOOGLE_APPLICATION_CREDENTIALS'];
+
+  const trustedFolder = isWorkspaceTrusted(settings) ?? true;
 
   const configParams: ConfigParameters = {
     sessionId: taskId,
@@ -79,7 +82,7 @@ export async function loadConfig(
     false,
     fileService,
     extensionContextFilePaths,
-    true, /// TODO: Wire up folder trust logic here.
+    trustedFolder,
   );
   configParams.userMemory = memoryContent;
   configParams.geminiMdFileCount = fileCount;
