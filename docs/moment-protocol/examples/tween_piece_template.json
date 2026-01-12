@@ -1,0 +1,54 @@
+{
+  "piece_id": "SPRING_SHOW_2026_TWEEN_01",
+  "title": "Working Title",
+  "level": "Tween / Level 2-3",
+  "dancers": [
+    { "name": "Emma", "role": "line_1", "moment_id": "M-EMMA-TURN_SEQ" },
+    { "name": "Layla", "role": "line_2", "moment_id": "M-LAYLA-JUMP_BREAK" },
+    { "name": "Rory", "role": "center_kid", "moment_id": "M-RORY-FEATURED_PHRASE" }
+  ],
+  "moments": [
+    {
+      "moment_id": "M-EMMA-TURN_SEQ",
+      "type": "technical",
+      "music_timestamp": "01:12-01:18",
+      "staging": "downstage right, slight diagonal in",
+      "requirements": [
+        "consistent attendance",
+        "spotting secure",
+        "no drama in class"
+      ],
+      "notes": "Emma earns applause here if she keeps her contract."
+    },
+    {
+      "moment_id": "M-LAYLA-JUMP_BREAK",
+      "type": "technical",
+      "music_timestamp": "01:45-01:50",
+      "staging": "upstage left break leading a ripple",
+      "requirements": [
+        "focus during floor work",
+        "clean counts",
+        "communicates travel conflicts early"
+      ],
+      "notes": "Jump break rewards Layla’s clarity and shows the class the stakes of communication."
+    },
+    {
+      "moment_id": "M-RORY-FEATURED_PHRASE",
+      "type": "performance",
+      "music_timestamp": "02:05-02:15",
+      "staging": "centerline solo with soft canon behind",
+      "requirements": [
+        "emotional commitment",
+        "class focus",
+        "can handle eyes on her"
+      ],
+      "notes": "Tween translation moment: visibility delivered when she meets the barre contract."
+    }
+  ],
+  "tags": ["showcase", "moment_protocol", "tween"],
+  "metadata": {
+    "version": "0.1.0",
+    "created_by": "Allison Van Cura",
+    "last_updated": "2024-05-01T00:00:00Z"
+  }
+}
