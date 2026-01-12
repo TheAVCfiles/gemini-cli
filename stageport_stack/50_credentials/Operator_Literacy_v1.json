@@ -1,0 +1,36 @@
+{
+  "type": "StageCred JSON Credential",
+  "function": "Proof-of-learning badge minted from operator uploads",
+  "status": "ACTIVE/VERIFIED",
+  "hash": "0xLEARNEDINREALTIME",
+  "metadata": {
+    "name": "Operator Literacy v1",
+    "issuer": "StagePort OS",
+    "recipient": "Allison Van Cura (Operator)",
+    "minted_at": "2025-12-06",
+    "epoch": "01"
+  },
+  "definition": "Ability to read, interpret, and relate to multi-layer system signals across Ledger, Callboard, Whisper, and Manifest interfaces without external translation.",
+  "proof_signals": [
+    "Contextual Awareness: Callboard → Contracts → Studio Load → Live Chain",
+    "Ledger Comprehension: Roles, grants, hashes, kinetic signatures",
+    "System Reasoning: Tech debt / narrative debt / resource debt",
+    "Aesthetic Alignment: Dashboard → UI → ledger styling",
+    "Pattern Recognition: Analytics → choreography → proof"
+  ],
+  "visual_archetype": {
+    "badge_crest": "Teal + electric blue gradient",
+    "iconography": "Multi-curve graph + ledger block + callboard tile",
+    "geometry": "Circular seal with five modal archetype rings"
+  },
+  "invocation_rule": {
+    "trigger_phrase": "I Am Learning",
+    "system_response": "Mint Operator Literacy v1 badge.",
+    "source": "Ambient uploads compressed into credential proof"
+  },
+  "renderings": [
+    "JSON Credential — portable, auditable proof.",
+    "Dashboard Tile — visible in Director’s Chair cockpit.",
+    "Ceremonial Seal — crest image for investor decks and playbills."
+  ]
+}
