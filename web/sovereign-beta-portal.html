@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sovereign Beta Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c0a09; /* Near-black */
+            color: #e2e8f0; /* Slate 200 */
+        }
+
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .bg-video-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .bg-video-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(12, 10, 9, 0.6) 0%, rgba(12, 10, 9, 1) 70%);
+            z-index: 2;
+        }
+
+        /* Using a placeholder for the video idea, but a static gradient for reality */
+        .bg-aurora {
+            background: radial-gradient(ellipse at 50% 30%, rgba(10, 136, 82, 0.15) 0%, rgba(12, 10, 9, 0) 60%),
+                        radial-gradient(ellipse at 70% 50%, rgba(79, 70, 229, 0.1) 0%, rgba(12, 10, 9, 0) 70%),
+                        radial-gradient(ellipse at 30% 50%, rgba(20, 83, 45, 0.1) 0%, rgba(12, 10, 9, 0) 70%);
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .card-border {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(12, 10, 9, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .shadow-emerald {
+            box-shadow: 0 0 45px rgba(16, 185, 129, 0.3), 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .glow-button {
+            background-color: #059669; /* Emerald 600 */
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5), 0 0 10px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .glow-button:hover {
+            background-color: #06b67a; /* Emerald 500 */
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.8), 0 0 15px rgba(16, 185, 129, 0.5);
+            transform: scale(1.02);
+        }
+
+        .timer-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .timer-box span:first-child {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+            font-weight: 700;
+            color: #f0fdf4; /* Green 50 */
+            letter-spacing: 0.05em;
+        }
+
+        .timer-box span:last-child {
+            font-size: 0.75rem;
+            line-height: 1rem;
+            color: #a3a3a3; /* Neutral 400 */
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* --- New Gemini Feature Styles --- */
+        .textarea-style {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: #e2e8f0; /* Slate 200 */
+            transition: all 0.3s ease;
+        }
+
+        .textarea-style:focus {
+            outline: none;
+            border-color: #059669; /* Emerald 600 */
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .gemini-button {
+            background-color: transparent;
+            border: 1px solid #059669; /* Emerald 600 */
+            color: #059669; /* Emerald 600 */
+            transition: all 0.3s ease;
+        }
+
+        .gemini-button:hover {
+            background-color: #059669; /* Emerald 600 */
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .gemini-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .gemini-response-box {
+            background: rgba(5, 150, 105, 0.05); /* Emerald 600 with 5% opacity */
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none; /* Hidden by default */
+        }
+
+        .gemini-loader {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(16, 185, 129, 0.3);
+            border-radius: 50%;
+            border-top-color: #059669; /* Emerald 600 */
+            animation: spin 1s ease-in-out infinite;
+            display: none; /* Hidden by default */
+            margin: 1rem auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* --- End New Styles --- */
+    </style>
+</head>
+<body class="min-h-screen w-full flex items-center justify-center p-4 md:p-8">
+    
+    <div class="bg-aurora"></div>
+
+    <main class="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden rounded-xl card-border shadow-2xl shadow-emerald/20">
+        
+        <!-- Left Side - Image & Countdown -->
+        <div class="relative w-full h-96 md:h-auto flex flex-col justify-between p-6 md:p-8 bg-black/20">
+            <img src="https://storage.googleapis.com/gemini-prod-us-east1-9534-b265c/user/Astrology%20and%20Tarot%20Wheel%20of%20Fortune.jpg-4133e93e-5ca2-4b9f-a33f-6afba6acdc94" 
+                 alt="Astrology and Tarot Wheel of Fortune" 
+                 class="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
+                 onerror="this.style.display='none'">
+            
+            <div class="absolute inset-0 w-full h-full bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10"></div>
+            
+            <div class="relative z-20">
+                <h3 class="font-serif text-3xl font-bold text-white">The Sovereign Beta</h3>
+                <p class="text-lg text-emerald-300">Unlock the October Code</p>
+            </div>
+
+            <div class="relative z-20">
+                <h4 class="text-white text-lg font-medium mb-3">The Portal is Closing</h4>
+                <div id="countdown-timer" class="grid grid-cols-4 gap-3 text-center">
+                    <div class="timer-box flex flex-col">
+                        <span id="days">01</span>
+                        <span>Days</span>
+                    </div>
+                    <div class="timer-box flex flex-col">
+                        <span id="hours">11</span>
+                        <span>Hours</span>
+                    </div>
+                    <div class="timer-box flex flex-col">
+                        <span id="minutes">30</span>
+                        <span>Mins</span>
+                    </div>
+                    <div class="timer-box flex flex-col">
+                        <span id="seconds">00</span>
+                        <span>Secs</span>
+                    </div>
+                </div>
+                <p class="text-xs text-neutral-400 mt-2">Portal access ends October 30, 2025.</p>
+            </div>
+        </div>
+
+        <!-- Right Side - Content -->
+        <div class="w-full p-6 md:p-10 flex flex-col justify-center">
+            
+            <h1 class="font-serif text-4xl md:text-5xl font-bold text-white leading-tight mb-4">Feel the Code</h1>
+            
+            <p class="text-lg text-neutral-300 mb-6">
+                This is not just a guide. It is a 10-page karmic commission, a strategic artifact for the October 15-30 portal.
+                This is the blueprint for your "Sovereign Beta."
+            </p>
+
+            <div class="border-l-2 border-emerald-500 pl-4 mb-8 space-y-4">
+                <h2 class="text-xl font-semibold text-white">This Is Your Karmic Code:</h2>
+                <p class="text-neutral-300 text-sm">
+                    <strong class="text-emerald-300">Sun in Scorpio (12H):</strong> Your power is mastery of the hidden. This guide helps you transform what's in the shadows into sovereign strategy.
+                </p>
+                <p class="text-neutral-300 text-sm">
+                    <strong class="text-emerald-300">Mars in Aquarius (2H):</strong> Your battles are won by <em>disruption</em>. This guide is a tool to electrify your network and unlock unconventional resources.
+                </p>
+                <p class="text-neutral-300 text-sm">
+                    <strong class="text-emerald-300">Pluto in Sagittarius (1H):</strong> You are here to destroy and rebuild philosophies. This guide is the first catalyst.
+                </p>
+            </div>
+
+            <h3 class="text-lg font-medium text-white mb-3">Inside the Guide:</h3>
+            <ul class="list-disc list-outside pl-5 mb-8 text-neutral-300 space-y-2">
+                <li>The Scorpio-Aquarius Axis: Harnessing Hidden Power</li>
+                <li>Strategic Rituals for the Sovereign Beta Window</li>
+                <li>Journal Prompts for Karmic Audits</li>
+                <li>Archetypal Themes for Your Launch</li>
+            </ul>
+
+            <!-- --- New Gemini Feature Module --- -->
+            <div class="my-8 border-t border-b border-emerald-900/50 py-8">
+                <h3 class="font-serif text-2xl font-bold text-white mb-3 text-center">✨ Get a Karmic Insight ✨</h3>
+                <p class="text-center text-sm text-neutral-400 mb-4">
+                    Enter a current intention or challenge. <br/> Our strategic oracle will provide a karmic insight, powered by the Gemini API.
+                </p>
+                <textarea id="intention-input" 
+                          class="w-full textarea-style" 
+                          rows="3" 
+                          placeholder="e.g., 'My intention is to launch my new project with clarity' or 'My challenge is creative block'"></textarea>
+                <button id="gemini-button" 
+                        class="w-full gemini-button font-bold text-base text-center rounded-lg py-3 px-6 mt-4">
+                    Decrypt My Intention
+                </button>
+                <div id="gemini-loader" class="gemini-loader"></div>
+                <div id="gemini-response" class="gemini-response-box">
+                    <p id="gemini-response-text" class="text-emerald-100"></p>
+                </div>
+            </div>
+            <!-- --- End New Gemini Feature Module --- -->
+
+
+            <a href="[YOUR_GUMROAD_OR_PAYHIP_LINK_HERE]" 
+               class="w-full glow-button font-bold text-lg text-center rounded-lg py-4 px-6">
+                Unlock the Guide – $22
+            </a>
+
+            <div class="text-center mt-8">
+                <p class="text-sm text-neutral-400">
+                    This guide is the first key.
+                </p>
+                <a href="mailto:your-email-here" class="text-sm text-emerald-400 hover:text-emerald-300 transition-colors">
+                    Inquire about the "Emerald Commission."
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // We wrap the script in a DOMContentLoaded event listener.
+        // This ensures the script only runs after the entire HTML document is loaded,
+        // preventing errors from trying to access elements that don't exist yet.
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // --- Countdown Timer Logic ---
+            // Set the countdown date (October 31, 2025, 00:00:00 EST)
+            // EST is UTC-5
+            // To be safe, let's target midnight transition from Oct 30 to Oct 31
+            const countdownDate = new Date("2025-10-31T00:00:00-04:00").getTime();
+
+            // Update the countdown every 1 second
+            const x = setInterval(() => {
+                // Get today's date and time
+                const now = new Date().getTime();
+                
+                // Find the distance between now and the countdown date
+                const distance = countdownDate - now;
+                
+                // Time calculations
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                // Display the result
+                // We also add checks to make sure the elements exist before trying to update them.
+                const daysEl = document.getElementById("days");
+                const hoursEl = document.getElementById("hours");
+                const minutesEl = document.getElementById("minutes");
+                const secondsEl = document.getElementById("seconds");
+
+                if (daysEl && hoursEl && minutesEl && secondsEl) {
+                    daysEl.innerText = String(days).padStart(2, '0');
+                    hoursEl.innerText = String(hours).padStart(2, '0');
+                    minutesEl.innerText = String(minutes).padStart(2, '0');
+                    secondsEl.innerText = String(seconds).padStart(2, '0');
+                }
+                
+                // If the countdown is over, write some text
+                if (distance < 0) {
+                    clearInterval(x);
+                    const timerEl = document.getElementById("countdown-timer");
+                    if (timerEl) {
+                        timerEl.innerHTML = "<p class='text-white text-lg col-span-4 text-center font-bold'>The Portal is Closed.</p>";
+                    }
+                }
+            }, 1000);
+
+            // --- New Gemini API Feature Logic ---
+            const geminiButton = document.getElementById("gemini-button");
+            const intentionInput = document.getElementById("intention-input");
+            const geminiResponseEl = document.getElementById("gemini-response");
+            const geminiResponseTextEl = document.getElementById("gemini-response-text");
+            const geminiLoader = document.getElementById("gemini-loader");
+
+            // Define the API URL and your unique system prompt
+            const apiKey = ""; // Leave as-is, Canvas will handle it
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            // This system prompt is the *soul* of the feature.
+            // It primes the LLM to speak in YOUR voice, using YOUR IP.
+            const systemPrompt = `Act as a karmic strategist and oracle. Your voice is sovereign, insightful, and transformative. You see the hidden (Scorpio 12H), you value disruptive strategy (Mars in Aquarius 2H), and you are a catalyst for rebuilding philosophies (Pluto in Sag 1H). Do not give generic advice. Give a 2-3 sentence strategic insight that reframes the user's intention through this lens. Be poetic but direct. Begin with 'The code within your intention reveals...' or 'The karmic data suggests...'`;
+
+            /**
+             * Fetches data from the Gemini API with exponential backoff.
+             */
+            async function fetchWithBackoff(url, options, retries = 3, delay = 1000) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        // Don't retry on 4xx errors, they are likely client-side
+                        if (response.status >= 400 && response.status < 500) {
+                            throw new Error(`Client error: ${response.status} ${response.statusText}`);
+                        }
+                        // Retry on 5xx server errors
+                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                } catch (error) {
+                    if (retries > 0) {
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        return fetchWithBackoff(url, options, retries - 1, delay * 2);
+                    } else {
+                        throw error;
+                    }
+                }
+            }
+
+            /**
+             * Handles the call to the Gemini API
+             */
+            async function getKarmicInsight() {
+                const userQuery = intentionInput.value;
+                if (!userQuery) {
+                    geminiResponseTextEl.innerText = "Please enter an intention to decrypt.";
+                    geminiResponseEl.style.display = "block";
+                    return;
+                }
+
+                // Show loader, hide old response
+                geminiButton.disabled = true;
+                geminiLoader.style.display = "block";
+                geminiResponseEl.style.display = "none";
+                geminiResponseTextEl.innerText = "";
+                geminiResponseTextEl.classList.remove("text-red-300"); // Remove error color if present
+
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    systemInstruction: {
+                        parts: [{ text: systemPrompt }]
+                    },
+                };
+
+                const fetchOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                };
+
+                try {
+                    const result = await fetchWithBackoff(apiUrl, fetchOptions);
+                    const candidate = result.candidates?.[0];
+
+                    if (candidate && candidate.content?.parts?.[0]?.text) {
+                        const text = candidate.content.parts[0].text;
+                        geminiResponseTextEl.innerText = text;
+                    } else {
+                        throw new Error("No valid response from the oracle. Please try again.");
+                    }
+
+                } catch (error) {
+                    console.error("Gemini API Error:", error);
+                    geminiResponseTextEl.innerText = "The connection to the oracle was disrupted. Please check your intention and try again shortly.";
+                    geminiResponseTextEl.classList.add("text-red-300"); // Add error color
+                } finally {
+                    // Hide loader, show response, re-enable button
+                    geminiLoader.style.display = "none";
+                    geminiResponseEl.style.display = "block";
+                    geminiButton.disabled = false;
+                }
+            }
+
+            // Attach the event listener
+            if (geminiButton) {
+                geminiButton.addEventListener("click", getKarmicInsight);
+            }
+
+        });
+    </script>
+
+</body>
+</html>
