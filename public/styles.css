@@ -200,6 +200,144 @@ body {
   text-align: center;
 }
 
+.trainer-root {
+  margin-top: 2.5rem;
+}
+
+.trainer-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  display: grid;
+  gap: 1.75rem;
+}
+
+.trainer-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.trainer-stat {
+  background: var(--bg-color);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.trainer-stat span {
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--secondary-color);
+  margin-bottom: 0.35rem;
+}
+
+.trainer-stat strong {
+  font-size: 2rem;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.trainer-feedback {
+  min-height: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.trainer-feedback.hit {
+  color: var(--accent-color);
+}
+
+.trainer-feedback.miss {
+  color: #ef4444;
+}
+
+.trainer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.trainer-controls button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.trainer-controls button.secondary {
+  background: var(--secondary-color);
+}
+
+.trainer-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.trainer-controls button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
+}
+
+.trainer-move {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
+.trainer-move h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.trainer-move p {
+  color: var(--secondary-color);
+  margin-bottom: 0.75rem;
+}
+
+.trainer-move .move-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-weight: 600;
+}
+
+.trainer-move .move-meta span {
+  background: var(--bg-color);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+}
+
+.trainer-timer {
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .trainer-card {
+    padding: 1.5rem;
+  }
+
+  .trainer-controls {
+    flex-direction: column;
+  }
+
+  .trainer-controls button {
+    width: 100%;
+  }
+}
+
 .feature-box h4 {
   font-size: 1.5rem;
   color: var(--primary-color);
