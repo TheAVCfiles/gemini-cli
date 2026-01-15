@@ -30,6 +30,7 @@ dist
 .docker
 
 bundle
+builds/
 
 # Test report files
 junit.xml
