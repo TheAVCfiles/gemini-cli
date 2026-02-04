@@ -188,7 +188,7 @@ backups/
 ## How It Works
 
 1. **Detection**: The script uses `git diff --name-status` to identify changed files
-2. **Retrieval**: 
+2. **Retrieval**:
    - For deleted files: Retrieves content from previous commit using `git show`
    - For modified files: Copies current file content
 3. **Local Backup**: Saves files to timestamped directory maintaining original structure
@@ -255,8 +255,8 @@ name: Automated Backup
 
 on:
   schedule:
-    - cron: '0 2 * * *'  # Daily at 2 AM
-  workflow_dispatch:  # Manual trigger
+    - cron: '0 2 * * *' # Daily at 2 AM
+  workflow_dispatch: # Manual trigger
 
 jobs:
   backup:
@@ -264,8 +264,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Full history
-          
+          fetch-depth: 0 # Full history
+
       - name: Run backup script
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
