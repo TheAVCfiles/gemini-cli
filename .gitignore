@@ -47,5 +47,10 @@ packages/vscode-ide-companion/*.vsix
 # GHA credentials
 gha-creds-*.json
 
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
 # Local backup directory (for backup_files.py script)
 backup/
