@@ -102,3 +102,12 @@ README.md
 - Re-run an ingest check with the Conflict Agent before publishing.
 - Redeploy on Netlify after updating the dataset or UI.
 - Rotate API keys and store them only in Netlify/GCF environment variables.
+
+
+---
+
+## 📜 License
+
+This repository is proprietary and all rights are reserved. See `LICENSE` and
+`LICENSE-PROPRIETARY.md` for terms, and `NOTICE.md` for any third-party
+obligations that may apply to specific components.
