@@ -43,3 +43,15 @@ packages/vscode-ide-companion/*.vsix
 
 # GHA credentials
 gha-creds-*.json
+
+# Large/generated artifacts
+build/
+.next/
+coverage/
+*.zip
+*.mp4
+*.mov
+*.psd
+*.wav
+vault_assets/
+private_exports/
