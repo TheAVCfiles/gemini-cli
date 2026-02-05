@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ivy Station – Preview</title>
+<style>
+html,body{
+  margin:0;height:100%;
+  background:#07080b;color:#f6f7fb;
+  font-family:Georgia,serif;
+  overflow:hidden;
+}
+.stage{
+  display:grid;
+  grid-template-columns:70px 1fr 70px;
+  height:100%;
+}
+.margin{
+  position:relative;
+  overflow:hidden;
+}
+.ivy{
+  position:absolute;inset:-40%;
+  background:
+   radial-gradient(circle at 30% 10%,rgba(120,255,200,.25),transparent 60%),
+   radial-gradient(circle at 70% 80%,rgba(180,120,160,.25),transparent 60%);
+  animation:drift 18s ease-in-out infinite;
+}
+.vein{
+  position:absolute;inset:0;
+  background:linear-gradient(
+    180deg,
+    transparent,
+    rgba(140,255,210,.5),
+    transparent
+  );
+  animation:pulse 4s ease-in-out infinite;
+  mix-blend-mode:screen;
+}
+.paper{
+  margin:auto;
+  max-width:720px;
+  padding:60px;
+  background:rgba(15,16,22,.85);
+  border-radius:18px;
+  box-shadow:0 0 90px rgba(0,0,0,.7);
+}
+h1{font-weight:400;letter-spacing:.04em;}
+p{line-height:1.6;font-size:20px;}
+@keyframes drift{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-30px)}
+}
+@keyframes pulse{
+  0%,100%{opacity:.4}
+  50%{opacity:1}
+}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="margin"><div class="ivy"></div><div class="vein"></div></div>
+
+  <main class="paper">
+    <h1>Pills of Salt</h1>
+    <p>
+    she looked behind her and preserved oceanic hours<br><br>
+    salt over where atlas held the ache of powers<br><br>
+    shrugging the chip off — kintsugi towers<br><br>
+    when it rains the pores leak ultrasonic showers<br><br>
+    in a cvs once i met a man who said his name was moses<br><br>
+    i laughed — g-d expects us to know this
+    </p>
+  </main>
+
+  <div class="margin"><div class="ivy"></div><div class="vein"></div></div>
+</div>
+</body>
+</html>
