@@ -1,104 +1,57 @@
-# MWRA Interactive Glossary
+# StagePort
 
-A lightweight, AI-assisted glossary UI for MWRA terminology. The site ships with a
-canonical `glossary.json`, offers CSV/JSON ingest, flags conflicts, and exposes an
-optional `/ask` endpoint for AI-assisted explanations.
+**StagePort: memory with governance.**
 
----
+StagePort is a provenance-first writing and verification system designed to make authored work
+recognizable, auditable, and hard to counterfeit. It combines content hashing, cadence-derived
+signatures, cryptographic verification, and refusal states when provenance is weak.
 
-## 🚀 Features
+## Why this repo exists
 
-- Canonical glossary preloaded from `web/glossary.json`
-- Zero-build Netlify deployment with `/netlify/functions/ask`
-- CSV/JSON ingest with conflict detection against the bundled dataset
-- Alphabet navigation (A–Z / #) and instant search
-- Export currently visible entries as CSV
-- Optional OpenAI-backed assistant (falls back to offline stub)
+Most verification pipelines only validate *files*. StagePort is built to validate *authorship
+signals plus files* while preserving privacy.
 
----
+This repository is organized to keep:
+- public-facing positioning concise,
+- implementation details executable,
+- long-form research readable,
+- repeatable operational templates reusable.
 
-## 🔧 Quickstart (Netlify)
+## Non-negotiables
 
-1. Fork or clone this repository and push it to your Git provider.
-2. In Netlify, choose **New site from Git** and connect the repository.
-3. Use these build settings:
-   - **Build command:** leave empty (static site)
-   - **Publish directory:** `web`
-   - **Functions directory:** `netlify/functions`
-4. (Optional) Add `OPENAI_API_KEY` under **Site settings → Environment variables**.
-5. Deploy. The site will load `web/glossary.json` and the UI will call
-   `/.netlify/functions/ask` when the assistant dialog is used.
+1. **Refuse weak provenance.** If there is no reliable cadence signal, verification must return a
+   refusal state instead of a false certainty.
+2. **No silent rewrites.** Schema and protocol changes require explicit version bumps.
+3. **Privacy by default.** Store derived feature vectors, not raw keystroke logs, unless audit mode
+   is explicitly enabled.
+4. **Deterministic verification.** Given the same text, cadence features, and session metadata,
+   outputs must be reproducible.
 
-✅ Without an API key the function returns a stub response so the UI remains usable.
+## Current status
 
----
+- Spec: ✅ `specs/CADENCE_SIGNATURE_SPEC_v0.1.md`
+- v0 capture/sign/verify: ⏳ in progress
+- Next ship: **Issue #1** (`.github/ISSUES/issue-0001-v0-cadence-signature.md`)
 
-## 🛠 Local development
+## Repo map
+
+- `docs/FOUNDER_COPY.md` — founder voice, pinned copy, narrative framing.
+- `docs/BIOMETRIC_SIGNATURES_OVERVIEW.md` — trimmed research overview.
+- `specs/CADENCE_SIGNATURE_SPEC_v0.1.md` — implementable protocol contract.
+- `templates/SESSION_CLOSEOUT_PACK.md` — closeout template for large chat conversion.
+- `templates/README_HEADER_KIT.md` — reusable header/status block kit.
+- `tools/verify_signature.py` — minimal verifier for v0 bundles.
+- `examples/` — placeholder structure for sample bundles.
+
+## Quickstart (verifier)
 
 ```bash
-npm install
-npm install -g netlify-cli
-netlify dev
+python tools/verify_signature.py \
+  --text examples/text.txt \
+  --sig examples/signature.json \
+  --pub examples/public_key.pem
 ```
 
-This serves the static site at `http://localhost:8888` and proxies `/.netlify/functions/ask`.
-If you prefer not to use Netlify CLI, you can run any static server from the `web`
-directory and point API calls to a deployed instance.
+## Notes
 
----
-
-## 📘 Glossary data
-
-- `web/glossary.json` contains the canonical MWRA terminology (sample of 30 entries).
-- `web/boot_glossary.js` fetches the JSON, renders the UI, and handles ingest/export.
-- Uploading a CSV/JSON file overlays an external dataset so the conflict agent can
-  highlight new, changed, or missing terms.
-
-**CSV format** (extra columns are ignored):
-
-```text
-term,definition,sources
-Abutment,Part of a structure supporting an arch or span,MWRA SpecBook
-```
-
-**JSON format**: array of objects with `term`, `definition`, and optional `sources`.
-
----
-
-## 🤖 Ask endpoint
-
-`netlify/functions/ask.js` wraps OpenAI's Responses API. Provide an `OPENAI_API_KEY`
-to enable live answers. Without the key, the function echoes a stub message so the
-frontend experience stays consistent.
-
-Environment variables:
-
-| Variable         | Description                                              |
-| ---------------- | -------------------------------------------------------- |
-| `OPENAI_API_KEY` | (Optional) API key for OpenAI Responses API              |
-| `OPENAI_MODEL`   | (Optional) Override the model. Default: `gpt-4o-mini`    |
-
----
-
-## 📂 File map
-
-```
-web/
-  index.html            # UI shell and Pico.css theme
-  boot_glossary.js      # Glossary bootstrapper + conflict agent
-  glossary.json         # Canonical glossary dataset
-netlify/
-  functions/
-    ask.js              # Serverless function for AI explanations
-netlify.toml            # Netlify configuration (publish dir + redirects)
-README.md
-```
-
----
-
-## ✅ Maintenance checklist
-
-- Update `web/glossary.json` as terminology evolves.
-- Re-run an ingest check with the Conflict Agent before publishing.
-- Redeploy on Netlify after updating the dataset or UI.
-- Rotate API keys and store them only in Netlify/GCF environment variables.
+This README is intentionally tight. Long-form framing and research live under `docs/`.
