@@ -157,6 +157,23 @@ ${testRootDir}${path.sep}
     expect(structure.trim()).toBe(expected);
   });
 
+  it('should allow overriding the rendered root label', async () => {
+    await createTestFile('ledger.txt');
+
+    const structure = await getFolderStructure(testRootDir, {
+      rootLabel: 'Casa Savoia → Rovagnasca → Van Cura → AVC',
+    });
+
+    const expected = `
+Showing up to 200 items (files + folders).
+
+Casa Savoia → Rovagnasca → Van Cura → AVC${path.sep}
+└───ledger.txt
+`.trim();
+
+    expect(structure.trim()).toBe(expected);
+  });
+
   it('should handle maxItems truncation for subfolders', async () => {
     for (let i = 0; i < 5; i++) {
       await createTestFile(`folder-${i}`, 'child.txt');
