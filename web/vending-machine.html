@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Codex Vending Machine</title>
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #050816;
+        --panel: rgba(15, 23, 42, 0.72);
+        --panel-strong: rgba(15, 23, 42, 0.88);
+        --accent: #60a5fa;
+        --accent-strong: #38bdf8;
+        --accent-soft: rgba(96, 165, 250, 0.18);
+        --stage-idea: linear-gradient(135deg, #f87171, #fb923c);
+        --stage-prototype: linear-gradient(135deg, #facc15, #a855f7);
+        --stage-beta: linear-gradient(135deg, #34d399, #38bdf8);
+        --stage-launched: linear-gradient(135deg, #22d3ee, #60a5fa);
+        --text: #f8fafc;
+        --muted: #cbd5f5;
+        --outline: rgba(148, 163, 184, 0.5);
+        --glass: rgba(148, 163, 184, 0.08);
+        --card-border: rgba(100, 116, 139, 0.2);
+        --shadow: 0 25px 70px rgba(15, 23, 42, 0.55);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.18), transparent 45%),
+          radial-gradient(circle at 85% 10%, rgba(96, 165, 250, 0.22), transparent 40%),
+          radial-gradient(circle at 50% 75%, rgba(129, 140, 248, 0.22), transparent 45%),
+          var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 16px 80px;
+      }
+
+      header {
+        width: min(1100px, 100%);
+        background: linear-gradient(135deg, rgba(14, 21, 36, 0.88), rgba(29, 40, 63, 0.92));
+        backdrop-filter: blur(22px);
+        border-radius: 32px;
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        box-shadow: var(--shadow);
+        padding: 40px clamp(24px, 5vw, 48px);
+        position: relative;
+        overflow: hidden;
+      }
+
+      header::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 18% 12%, rgba(96, 165, 250, 0.2), transparent 42%),
+          radial-gradient(circle at 78% 38%, rgba(129, 140, 248, 0.18), transparent 45%);
+        z-index: 0;
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      h1 {
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: clamp(2.6rem, 5vw, 3.6rem);
+        margin: 0 0 12px;
+        letter-spacing: -0.02em;
+      }
+
+      .tagline {
+        font-size: clamp(1.1rem, 3vw, 1.25rem);
+        max-width: 680px;
+        line-height: 1.6;
+        color: rgba(226, 232, 240, 0.86);
+        margin-bottom: 28px;
+      }
+
+      .status-bar {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 20px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(148, 163, 184, 0.28);
+        font-weight: 500;
+      }
+
+      .status-bar span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .status-pip {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent-strong);
+        box-shadow: 0 0 18px rgba(96, 165, 250, 0.7);
+      }
+
+      main {
+        width: min(1100px, 100%);
+        margin-top: 32px;
+        display: grid;
+        gap: 22px;
+      }
+
+      .vending-shell {
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.92), rgba(9, 12, 23, 0.92));
+        border-radius: 32px;
+        border: 1px solid rgba(100, 116, 139, 0.22);
+        box-shadow: var(--shadow);
+        padding: clamp(24px, 4vw, 48px);
+        display: grid;
+        gap: 32px;
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .filters button {
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        background: rgba(15, 23, 42, 0.7);
+        color: var(--muted);
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: transform 0.2s ease, border 0.2s ease, color 0.2s ease, background 0.2s ease;
+        cursor: pointer;
+      }
+
+      .filters button.active {
+        color: var(--text);
+        border: 1px solid rgba(96, 165, 250, 0.8);
+        background: rgba(37, 99, 235, 0.18);
+        box-shadow: 0 8px 22px rgba(37, 99, 235, 0.28);
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        color: rgba(226, 232, 240, 0.7);
+        font-size: 0.9rem;
+      }
+
+      .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .legend .chip {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      @media (min-width: 680px) {
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .slot {
+        position: relative;
+        border-radius: 24px;
+        padding: 24px;
+        background: rgba(10, 15, 29, 0.88);
+        border: 1px solid var(--card-border);
+        box-shadow: 0 24px 50px rgba(7, 11, 25, 0.55);
+        overflow: hidden;
+        transition: transform 0.25s ease, border 0.25s ease, box-shadow 0.25s ease;
+        cursor: pointer;
+      }
+
+      .slot::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 20% 20%, rgba(96, 165, 250, 0.12), transparent 55%),
+          radial-gradient(circle at 80% 30%, rgba(56, 189, 248, 0.12), transparent 50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .slot:hover {
+        transform: translateY(-6px);
+        border-color: rgba(96, 165, 250, 0.7);
+        box-shadow: 0 28px 80px rgba(37, 99, 235, 0.35);
+      }
+
+      .slot:hover::after {
+        opacity: 1;
+      }
+
+      .slot-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+      }
+
+      .slot-title {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.35rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin: 0;
+      }
+
+      .category-chip {
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        background: rgba(96, 165, 250, 0.16);
+        border: 1px solid rgba(96, 165, 250, 0.45);
+        color: rgba(226, 232, 240, 0.8);
+      }
+
+      .slot-tagline {
+        color: rgba(226, 232, 240, 0.76);
+        font-size: 0.98rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .stage-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        color: #0f172a;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        background: var(--accent-soft);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        color: var(--text);
+      }
+
+      .stage-badge {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        box-shadow: 0 0 18px rgba(255, 255, 255, 0.45);
+      }
+
+      .meter {
+        margin-top: 18px;
+        padding: 14px;
+        border-radius: 18px;
+        border: 1px dashed rgba(148, 163, 184, 0.25);
+        background: rgba(15, 23, 42, 0.5);
+      }
+
+      .meter-bar {
+        width: 100%;
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.8);
+        overflow: hidden;
+      }
+
+      .meter-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: var(--accent);
+        transition: width 0.4s ease;
+      }
+
+      .meter-label {
+        margin-top: 12px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        color: rgba(226, 232, 240, 0.65);
+      }
+
+      .meter-label strong {
+        color: rgba(255, 255, 255, 0.92);
+      }
+
+      .detail-drawer {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: rgba(4, 7, 16, 0.82);
+        backdrop-filter: blur(16px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease;
+        z-index: 20;
+        padding: 24px;
+      }
+
+      .detail-drawer.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .drawer-panel {
+        width: min(860px, 100%);
+        max-height: 90vh;
+        overflow: hidden;
+        background: rgba(10, 14, 26, 0.95);
+        border-radius: 28px;
+        border: 1px solid rgba(96, 165, 250, 0.25);
+        box-shadow: 0 35px 120px rgba(15, 23, 42, 0.65);
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      @media (min-width: 900px) {
+        .drawer-panel {
+          grid-template-columns: 320px 1fr;
+        }
+      }
+
+      .drawer-aside {
+        padding: 32px;
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(37, 99, 235, 0.15));
+        border-right: 1px solid rgba(96, 165, 250, 0.18);
+      }
+
+      .drawer-main {
+        padding: clamp(24px, 4vw, 40px);
+        overflow-y: auto;
+      }
+
+      .drawer-close {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        color: var(--text);
+        border-radius: 999px;
+        padding: 10px 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, border 0.2s ease;
+      }
+
+      .drawer-close:hover {
+        transform: translateY(-2px);
+        border-color: rgba(96, 165, 250, 0.6);
+      }
+
+      .drawer-meta {
+        display: grid;
+        gap: 18px;
+        margin-top: 32px;
+        font-size: 0.95rem;
+      }
+
+      .drawer-meta h3 {
+        font-size: 0.95rem;
+        color: rgba(226, 232, 240, 0.7);
+        margin: 0 0 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      .drawer-meta ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 10px;
+      }
+
+      .drawer-meta li {
+        padding: 10px 14px;
+        border-radius: 14px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .drawer-main h2 {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(1.8rem, 3vw, 2.4rem);
+        margin: 0 0 10px;
+      }
+
+      .drawer-main p {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: rgba(226, 232, 240, 0.78);
+        margin-bottom: 18px;
+      }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .pill {
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        background: rgba(37, 99, 235, 0.18);
+        border: 1px solid rgba(96, 165, 250, 0.4);
+        color: rgba(226, 232, 240, 0.85);
+      }
+
+      .progress-steps {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+
+      .step {
+        padding: 12px 16px;
+        border-radius: 16px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        background: rgba(15, 23, 42, 0.6);
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+      }
+
+      .step-marker {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        margin-top: 4px;
+        flex-shrink: 0;
+        background: rgba(96, 165, 250, 0.35);
+        border: 2px solid rgba(96, 165, 250, 0.6);
+        box-shadow: 0 0 12px rgba(96, 165, 250, 0.3);
+      }
+
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 22px;
+        border-radius: 999px;
+        font-weight: 600;
+        text-decoration: none;
+        color: var(--text);
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.92), rgba(56, 189, 248, 0.92));
+        border: 1px solid rgba(125, 211, 252, 0.4);
+        box-shadow: 0 15px 40px rgba(37, 99, 235, 0.35);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 22px 55px rgba(56, 189, 248, 0.4);
+      }
+
+      footer {
+        width: min(1100px, 100%);
+        margin-top: 32px;
+        color: rgba(148, 163, 184, 0.8);
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
+      footer strong {
+        color: rgba(226, 232, 240, 0.92);
+      }
+
+      .empty-state {
+        padding: 48px;
+        border-radius: 24px;
+        text-align: center;
+        background: rgba(15, 23, 42, 0.65);
+        border: 1px dashed rgba(148, 163, 184, 0.28);
+        color: rgba(226, 232, 240, 0.7);
+        font-size: 1rem;
+      }
+
+      .empty-state strong {
+        display: block;
+        font-size: 1.3rem;
+        color: rgba(226, 232, 240, 0.9);
+        margin-bottom: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <div class="status-bar">
+          <span><span class="status-pip"></span>Live roadmap inventory</span>
+          <span>Updated: Q2 Launch Window</span>
+        </div>
+        <h1>Codex Vending Machine</h1>
+        <p class="tagline">
+          A cinematic storefront of every ship-ready MVP, service, and IP from the Codex.
+          Spin the dial, pick a lane, and preview the experiences clients can activate today or
+          co-create tomorrow.
+        </p>
+      </div>
+    </header>
+
+    <main>
+      <section class="vending-shell">
+        <div class="controls">
+          <div class="filters" id="categoryFilters"></div>
+          <div class="filters" id="stageFilters"></div>
+        </div>
+        <div class="legend">
+          <span><span class="chip" style="background: var(--stage-idea);"></span>Concept ignition</span>
+          <span><span class="chip" style="background: var(--stage-prototype);"></span>Prototype in lab</span>
+          <span><span class="chip" style="background: var(--stage-beta);"></span>Beta in market</span>
+          <span><span class="chip" style="background: var(--stage-launched);"></span>Launched & scaling</span>
+        </div>
+        <div class="grid" id="offeringsGrid"></div>
+        <div class="empty-state" id="emptyState" hidden>
+          <strong>No matches just yet.</strong>
+          Try mixing stages or categories to load new offerings into the machine.
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Visual inventory of Codex ventures, labs, and services. Toggle filters to choreograph a custom
+        go-to-market showreel. <strong>Contact for demos, pilots, or investment decks.</strong>
+      </p>
+    </footer>
+
+    <aside class="detail-drawer" id="detailDrawer" aria-hidden="true">
+      <div class="drawer-panel">
+        <div class="drawer-aside" id="drawerAside"></div>
+        <div class="drawer-main" id="drawerMain"></div>
+        <button class="drawer-close" id="drawerClose" type="button">Return to machine</button>
+      </div>
+    </aside>
+
+    <template id="slotTemplate">
+      <article class="slot" data-offering>
+        <div class="slot-header">
+          <h2 class="slot-title" data-title></h2>
+          <span class="category-chip" data-category></span>
+        </div>
+        <p class="slot-tagline" data-tagline></p>
+        <span class="stage-pill">
+          <span class="stage-badge" data-stage-badge></span>
+          <span data-stage></span>
+        </span>
+        <div class="meter">
+          <div class="meter-bar">
+            <div class="meter-fill" data-progress></div>
+          </div>
+          <div class="meter-label">
+            <span>Build momentum</span>
+            <strong data-progress-label></strong>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script>
+      const offerings = [
+        {
+          id: "aurora",
+          name: "Aurora Signal OS",
+          tagline: "Autonomous trend intelligence and go-to-market decisioning co-pilot.",
+          category: "SaaS Platform",
+          stage: "Beta",
+          stageColor: "var(--stage-beta)",
+          progress: 74,
+          description:
+            "Aurora ingests proprietary research, social signals, and partner data to surface weekly launch plays. Clients receive prioritized sprints, creative inspiration, and risk dashboards powered by explainable AI.",
+          highlights: [
+            "Live pilots with three consumer brands",
+            "Persona-aware insight rooms & ideation prompts",
+            "Notion, Linear, and Slack integrations"
+          ],
+          momentum: [
+            "Pilot retros feeding v2 data visual layer",
+            "Expanding to include paid media mix modeling",
+            "Packaging revenue share accelerator with agencies"
+          ],
+          callToAction: "Book a beta strategy session",
+          bookingLink: "mailto:hello@example.com?subject=Aurora%20Signal%20OS%20Beta"
+        },
+        {
+          id: "loom",
+          name: "Myth Loom Studio",
+          tagline: "Interactive narrative engine for brand mythmaking & community quests.",
+          category: "IP & Storyworlds",
+          stage: "Prototype",
+          stageColor: "var(--stage-prototype)",
+          progress: 52,
+          description:
+            "A modular storytelling stack blending AI storyweavers, gameplay economies, and transmedia drops. Designed to help brands launch episodic worlds and member-only quests with live analytics.",
+          highlights: [
+            "Playable portal with hero archetype builder",
+            "Dynamic lore codex synced to CMS",
+            "Token-gated experience hooks"
+          ],
+          momentum: [
+            "Packaging cinematic mood boards for prospective clients",
+            "Co-creation lab forming with two entertainment partners",
+            "Scoping marketplace for creator-crafted side quests"
+          ],
+          callToAction: "Preview the prototype portal",
+          bookingLink: "https://example.com/myth-loom-demo"
+        },
+        {
+          id: "forge",
+          name: "Founder Forge",
+          tagline: "Fractional product studio activating VC-backable MVPs in 30 days.",
+          category: "Services",
+          stage: "Launched",
+          stageColor: "var(--stage-launched)",
+          progress: 92,
+          description:
+            "Sprint-based build program delivering investor-grade prototypes, brand systems, and pitch assets. Backed by venture advisory council and a distributed maker guild.",
+          highlights: [
+            "Delivered 14 MVPs in the last 12 months",
+            "Dedicated GTM war room & growth experiments",
+            "Convertible services + capital model"
+          ],
+          momentum: [
+            "Building founder residency with operator network",
+            "Expanding investor matching engine",
+            "Launching quarterly portfolio showcase"
+          ],
+          callToAction: "Schedule a scoping call",
+          bookingLink: "https://example.com/founder-forge"
+        },
+        {
+          id: "atlas",
+          name: "Atlas Insight Decks",
+          tagline: "Immersive research artifacts translating frontier signals into strategy.",
+          category: "Consulting",
+          stage: "Launched",
+          stageColor: "var(--stage-launched)",
+          progress: 88,
+          description:
+            "Commissioned research journeys combining futures frameworks, design fiction, and data storytelling. Delivered as cinematic decks, interactive dashboards, or briefing salons.",
+          highlights: [
+            "Trusted by innovation labs & C-suite teams",
+            "Time travel scenario planning with bespoke artifacts",
+            "Workshop facilitation kits included"
+          ],
+          momentum: [
+            "Expanding data partnerships for cultural radar",
+            "Introducing executive-only masterclasses",
+            "Codifying best-of insights into annual report"
+          ],
+          callToAction: "Commission a briefing",
+          bookingLink: "mailto:hello@example.com?subject=Atlas%20Insight%20Decks"
+        },
+        {
+          id: "drift",
+          name: "Drift Chorus",
+          tagline: "Audio-reactive brand experiences and AI-composed sound identities.",
+          category: "Creative Lab",
+          stage: "Prototype",
+          stageColor: "var(--stage-prototype)",
+          progress: 47,
+          description:
+            "Generative audio engine shaping adaptive sonic branding for events, retail, and digital products. Includes sensory strategy, licensing, and a companion visualization toolkit.",
+          highlights: [
+            "Realtime music trained on brand DNA",
+            "Immersive installation concepts",
+            "Partnership-ready with experiential studios"
+          ],
+          momentum: [
+            "Beta testing the resonance analytics dashboard",
+            "Designing portable pop-up kit",
+            "Packaging licensing model for agencies"
+          ],
+          callToAction: "Hear the soundboard demo",
+          bookingLink: "https://example.com/drift-chorus"
+        },
+        {
+          id: "signal",
+          name: "Signal Salon",
+          tagline: "Invite-only briefing salon synthesizing culture, capital, and code.",
+          category: "Community",
+          stage: "Idea",
+          stageColor: "var(--stage-idea)",
+          progress: 28,
+          description:
+            "Quarterly micro-fellowship bringing founders, creatives, and investors into a curated signal exchange. Includes themed rituals, partner showcases, and rapid prototyping squads.",
+          highlights: [
+            "Private briefing portal with archives",
+            "Guest provocateur program",
+            "Membership tied to portfolio sprints"
+          ],
+          momentum: [
+            "Scouting founding cohort and patron circle",
+            "Designing onboarding ritual and artifact kit",
+            "Mapping sponsor tiers with impact metrics"
+          ],
+          callToAction: "Request an invitation",
+          bookingLink: "https://example.com/signal-salon"
+        },
+        {
+          id: "oracle",
+          name: "Oracle Workshop Series",
+          tagline: "Immersive facilitation formats to unblock strategy, product, and brand vision.",
+          category: "Consulting",
+          stage: "Launched",
+          stageColor: "var(--stage-launched)",
+          progress: 95,
+          description:
+            "Modular workshops spanning AI transformation, venture positioning, community design, and storytelling. Delivered on-site or virtually with custom workbooks and recording suite.",
+          highlights: [
+            "Workshop stack licensed to enterprise teams",
+            "Operator network for ongoing support",
+            "Post-session activation blueprints"
+          ],
+          momentum: [
+            "Filming companion micro-learning series",
+            "Launching alumni network",
+            "Adding async-first facilitation kit"
+          ],
+          callToAction: "Design a workshop journey",
+          bookingLink: "mailto:hello@example.com?subject=Oracle%20Workshop%20Series"
+        },
+        {
+          id: "vault",
+          name: "IP Vault Licenses",
+          tagline: "Shelf of original formats, characters, and interaction systems ready to deploy.",
+          category: "IP & Storyworlds",
+          stage: "Idea",
+          stageColor: "var(--stage-idea)",
+          progress: 33,
+          description:
+            "Curated library of codex-owned IP spanning interactive theatre, ARG frameworks, and branded entertainment. Available for licensing, co-production, or investor-backed acceleration.",
+          highlights: [
+            "Includes lore bibles and production guides",
+            "Cross-platform activation hooks",
+            "Revenue-share friendly structures"
+          ],
+          momentum: [
+            "Packaging teaser decks for top five concepts",
+            "Exploring joint ventures with studios",
+            "Architecting digital twin collectibles"
+          ],
+          callToAction: "Explore the vault",
+          bookingLink: "https://example.com/ip-vault"
+        },
+        {
+          id: "pulse",
+          name: "Pulse Metrics Kit",
+          tagline: "Unified analytics rituals to measure storytelling, growth, and community health.",
+          category: "SaaS Platform",
+          stage: "Prototype",
+          stageColor: "var(--stage-prototype)",
+          progress: 58,
+          description:
+            "Modular dashboards and automations aligning marketing, product, and community KPIs. Comes with ritual scripts, reporting templates, and AI-assisted commentary generator.",
+          highlights: [
+            "Integrates with Segment, HubSpot, and Airtable",
+            "Executive-ready weekly briefings",
+            "Community pulse scoring"
+          ],
+          momentum: [
+            "Designing investor metrics mode",
+            "Recruiting lighthouse customers",
+            "Shipping mobile companion app concept"
+          ],
+          callToAction: "Join the prototype circle",
+          bookingLink: "https://example.com/pulse-metrics"
+        },
+        {
+          id: "nebula",
+          name: "Nebula Residency",
+          tagline: "A venture-backed creative residency pairing founders with Codex operators.",
+          category: "Community",
+          stage: "Idea",
+          stageColor: "var(--stage-idea)",
+          progress: 21,
+          description:
+            "Six-week immersive residency delivering co-creation labs, strategic advisory, and capital matchmaking. Tailored for frontier founders seeking narrative and product acceleration.",
+          highlights: [
+            "Studio access with dedicated production pod",
+            "Investor roundtables and showcase night",
+            "Follow-on advisory retainers"
+          ],
+          momentum: [
+            "Sourcing venue partners in NYC & LA",
+            "Designing residencies for climate & AI verticals",
+            "Recruiting investor catalysts"
+          ],
+          callToAction: "Register interest",
+          bookingLink: "https://example.com/nebula-residency"
+        }
+      ];
+
+      const categoryFilters = document.getElementById("categoryFilters");
+      const stageFilters = document.getElementById("stageFilters");
+      const grid = document.getElementById("offeringsGrid");
+      const emptyState = document.getElementById("emptyState");
+      const slotTemplate = document.getElementById("slotTemplate");
+      const detailDrawer = document.getElementById("detailDrawer");
+      const drawerAside = document.getElementById("drawerAside");
+      const drawerMain = document.getElementById("drawerMain");
+      const drawerClose = document.getElementById("drawerClose");
+
+      const categories = ["All", ...new Set(offerings.map((item) => item.category))];
+      const stages = ["All stages", "Idea", "Prototype", "Beta", "Launched"];
+
+      const state = {
+        category: "All",
+        stage: "All stages"
+      };
+
+      function renderFilters(container, items, key) {
+        container.innerHTML = "";
+        items.forEach((label) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = label;
+          if (state[key] === label) button.classList.add("active");
+          button.addEventListener("click", () => {
+            state[key] = label;
+            renderFilters(container, items, key);
+            renderGrid();
+          });
+          container.appendChild(button);
+        });
+      }
+
+      function renderGrid() {
+        grid.innerHTML = "";
+        const filtered = offerings.filter((item) => {
+          const matchCategory = state.category === "All" || item.category === state.category;
+          const matchStage = state.stage === "All stages" || item.stage === state.stage;
+          return matchCategory && matchStage;
+        });
+
+        if (!filtered.length) {
+          emptyState.hidden = false;
+          return;
+        }
+
+        emptyState.hidden = true;
+
+        filtered.forEach((item) => {
+          const slot = slotTemplate.content.firstElementChild.cloneNode(true);
+          slot.dataset.id = item.id;
+          slot.querySelector("[data-title]").textContent = item.name;
+          slot.querySelector("[data-category]").textContent = item.category;
+          slot.querySelector("[data-tagline]").textContent = item.tagline;
+          slot.querySelector("[data-stage]").textContent = item.stage;
+          const badge = slot.querySelector("[data-stage-badge]");
+          badge.style.background = item.stageColor;
+          slot.querySelector("[data-progress]").style.width = `${item.progress}%`;
+          slot.querySelector("[data-progress-label]").textContent = `${item.progress}% ready`;
+          slot.addEventListener("click", () => openDrawer(item));
+          grid.appendChild(slot);
+        });
+      }
+
+      function openDrawer(item) {
+        detailDrawer.classList.add("active");
+        detailDrawer.setAttribute("aria-hidden", "false");
+        detailDrawer.focus?.();
+
+        drawerAside.innerHTML = `
+          <span class="stage-pill">
+            <span class="stage-badge" style="background: ${item.stageColor};"></span>
+            ${item.stage}
+          </span>
+          <div class="drawer-meta">
+            <div>
+              <h3>Category</h3>
+              <div class="pill">${item.category}</div>
+            </div>
+            <div>
+              <h3>Highlights</h3>
+              <ul>
+                ${item.highlights.map((h) => `<li>${h}</li>`).join("")}
+              </ul>
+            </div>
+            <div>
+              <h3>Momentum</h3>
+              <ul>
+                ${item.momentum.map((step) => `<li>${step}</li>`).join("")}
+              </ul>
+            </div>
+          </div>
+        `;
+
+        drawerMain.innerHTML = `
+          <h2>${item.name}</h2>
+          <p>${item.description}</p>
+          <div class="pill-row">
+            <span class="pill">${item.stage} Stage</span>
+            <span class="pill">${item.progress}% Activation Ready</span>
+            <span class="pill">${item.category}</span>
+          </div>
+          <div class="progress-steps">
+            ${item.momentum
+              .map(
+                (step) => `
+                  <div class="step">
+                    <span class="step-marker"></span>
+                    <span>${step}</span>
+                  </div>
+                `
+              )
+              .join("")}
+          </div>
+          <a class="cta" href="${item.bookingLink}" target="_blank" rel="noopener">
+            ${item.callToAction}
+          </a>
+        `;
+      }
+
+      function closeDrawer() {
+        detailDrawer.classList.remove("active");
+        detailDrawer.setAttribute("aria-hidden", "true");
+      }
+
+      detailDrawer.addEventListener("click", (event) => {
+        if (event.target === detailDrawer) closeDrawer();
+      });
+
+      drawerClose.addEventListener("click", closeDrawer);
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && detailDrawer.classList.contains("active")) {
+          closeDrawer();
+        }
+      });
+
+      renderFilters(categoryFilters, categories, "category");
+      renderFilters(stageFilters, stages, "stage");
+      renderGrid();
+    </script>
+  </body>
+</html>
