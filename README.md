@@ -104,6 +104,52 @@ server pointed at `web/`.
 
 ---
 
+## 🛡️ Adaptive Ethics Rebuttal Explorer
+
+- `web/rebuttal-interactive.html` presents the three-pillar rebuttal with live Gemini
+  summaries, TTS narration, and a CSV-powered mercy gate simulation.
+- Gemini calls are proxied via the new Netlify functions
+  `/api/rebuttal/summary` and `/api/rebuttal/tts`, which require `GEMINI_API_KEY`.
+- Upload a CSV containing `date,signal,return` columns to drive Spearman's rho and the
+  mercy gate directly in the browser.
+
+### Proof runner utility
+
+The `scripts/liminal_market_engine/proof_runner.py` script generates a CSV template,
+emits a synthetic demo dataset, and computes Spearman correlation statistics for any
+CSV that follows the `signal`/`return` schema. Run it from the repository root:
+
+```bash
+python scripts/liminal_market_engine/proof_runner.py [--csv path/to/your.csv]
+```
+
+Artifacts (template, demo dataset, receipt JSON, markdown report) are written to
+`scripts/liminal_market_engine/proof_artifacts/`.
+
+### Visual snapshot workflow
+
+Need shareable renders of the interactive rebuttal (or any page in `web/`)? Use the
+Playwright-based helper in `scripts/visual-snapshots/capture.mjs`:
+
+```bash
+npm install
+npx playwright install chromium
+npm run snapshots
+```
+
+The command launches a headless Chromium session, serves `web/` locally, and writes a
+timestamped folder under `snapshots/` that contains PNG captures plus a manifest with
+viewport metadata. Pass custom options to cover additional pages or device sizes:
+
+```bash
+npm run snapshots -- --pages=index.html,rebuttal-interactive.html --width=1280 --height=720 --delay=800
+```
+
+Each entry can also specify a friendly label (`page.html|hero`) to control the output
+file name. The manifest is suitable for embedding in docs or review tools.
+
+---
+
 ## 📂 File map
 
 ```
