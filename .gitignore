@@ -43,6 +43,8 @@ packages/cli/src/generated/
 packages/core/src/generated/
 .integration-tests/
 packages/vscode-ide-companion/*.vsix
+scripts/liminal_market_engine/proof_artifacts/
+snapshots/
 
 # GHA credentials
 gha-creds-*.json
