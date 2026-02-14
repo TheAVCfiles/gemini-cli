@@ -10,7 +10,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['scripts/tests/**/*.test.js'],
+    include: ['scripts/tests/**/*.test.js', 'scripts/tests/**/*.test.ts'],
     setupFiles: ['scripts/tests/test-setup.ts'],
     coverage: {
       provider: 'v8',

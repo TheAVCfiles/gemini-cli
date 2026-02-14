@@ -1,3 +1,17 @@
+/**
+ * Netlify Serverless Function: /ask
+ *
+ * QUOTA IMPACT: This function makes external API calls to OpenAI.
+ * Each invocation consumes serverless function execution time.
+ *
+ * OPTIMIZATION NOTES:
+ * - Consider caching common responses in static JSON files
+ * - Use client-side caching (localStorage) for repeated queries
+ * - The /data/report-latest.json provides static data as an alternative
+ *
+ * @see https://docs.netlify.com/functions/overview/
+ */
+
 const DEFAULT_MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
 
 function buildContext(glossary = []) {

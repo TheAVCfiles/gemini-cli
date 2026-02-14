@@ -1,3 +1,17 @@
+/**
+ * Netlify Serverless Function: /api/gemini
+ *
+ * QUOTA IMPACT: This function makes external API calls to Google Gemini.
+ * Each invocation consumes serverless function execution time.
+ *
+ * OPTIMIZATION NOTES:
+ * - Consider caching common responses in static JSON files
+ * - Use client-side caching for repeated queries
+ * - For read-only data, prefer static JSON from /data/ directory
+ *
+ * @see https://docs.netlify.com/functions/overview/
+ */
+
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-preview-09-2025";
 
 const SAFETY_SETTINGS = [
