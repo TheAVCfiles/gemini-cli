@@ -1,0 +1,42 @@
+name: Sunday Rinse
+
+on:
+  schedule:
+    - cron: '0 15 * * 0' # 10 AM ET Sunday (UTC 15)
+  workflow_dispatch:
+
+jobs:
+  rinse:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Sunday Rinse
+        env:
+          AIRTABLE_PAT: ${{ secrets.AIRTABLE_PAT }}
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+          AIRTABLE_TABLE_NAME: Todo
+          AIRTABLE_VIEW: Grid view
+          AIRTABLE_DONE_FIELD: Status
+          AIRTABLE_DONE_VALUE: Done
+          AIRTABLE_TITLE_FIELD: Task
+          AIRTABLE_DETAIL_FIELDS: Notes,Description
+        run: python sunday_rinse.py
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gossip-rag
+          path: |
+            *.md
+            *.pdf
