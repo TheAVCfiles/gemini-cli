@@ -14,5 +14,5 @@ This Mutual Non-Disclosure Agreement ("Agreement") is entered into as of [Date] 
 7. Misc. Governing law: [State/Province/Country]. Entire agreement; amendments in writing.
 
 Signatures:
-[Party A] ********\_\_\_\_******** Date: \_**\_
-[Party B] ********\_\_********** Date: \_\_\_\_
+[Party A] **\*\*\*\***\_\_\_\_**\*\*\*\*** Date: \_**\_
+[Party B] **\*\*\***\*\_\_\*\***\*\*\*\*\*\* Date: \_\_\_\_

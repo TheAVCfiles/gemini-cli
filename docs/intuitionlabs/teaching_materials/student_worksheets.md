@@ -26,7 +26,7 @@ These printable resources pair with each session’s goals. Facilitators can dup
 
 ## Worksheet C – Sensor Story Planner (Session 3)
 
-1. **Emotion cue:** When the sensor detects ****\_****, our robot should express **\_\_\_\_**.
+1. **Emotion cue:** When the sensor detects \***\*\_\*\***, our robot should express **\_\_\_\_**.
 2. **Movement sequence:** Draw or list 4–6 moves the robot performs in response.
 3. **Sound design:** Circle the audio mood that fits best: _Calm_ / _Curious_ / _Excited_ / _Mysterious_ / _Triumphant_.
 4. **Testing log:**

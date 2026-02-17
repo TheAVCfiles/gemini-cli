@@ -12,9 +12,9 @@ This template captures barter- and credential-friendly collaboration agreements 
 **Role:** Systems Architect & Creative Automation Provider
 
 **Partner / Recipient**  
-**Name:** ******************\_\_******************  
-**Email:** ******************\_\_******************  
-**Role:** ******************\_\_******************
+**Name:** **\*\*\*\***\*\***\*\*\*\***\_\_**\*\*\*\***\*\***\*\*\*\***  
+**Email:** **\*\*\*\***\*\***\*\*\*\***\_\_**\*\*\*\***\*\***\*\*\*\***  
+**Role:** **\*\*\*\***\*\***\*\*\*\***\_\_**\*\*\*\***\*\***\*\*\*\***
 
 ---
 
@@ -35,7 +35,7 @@ This MOU defines the scope of systems shared, reciprocal value offered, terms of
 | **Value Estimate**            | _$**\_\_\_\_** (for record / equity equivalence)_          |
 | **Partner Contribution**      | _(e.g., studio hours / access / service / 1% equity)_      |
 | **Duration**                  | **\_\_\_** months\_                                        |
-| **Delivery Date**             | **********\_\_**********                                   |
+| **Delivery Date**             | \***\*\*\*\*\***\_\_\***\*\*\*\*\***                       |
 | **Proof Credential ID**       | _(auto-issued by Credential Engine, JSON file)_            |
 
 ---
@@ -77,10 +77,10 @@ Changes to this agreement must be recorded as a new version and logged as a **cr
 
 ## 8️⃣ Signatures
 
-| Party                             | Signature                | Date         |
-| --------------------------------- | ------------------------ | ------------ |
-| Provider: Allison Van Cura        | ********\_\_\_\_******** | ****\_\_**** |
-| Partner: ********\_\_\_\_******** | ********\_\_\_\_******** | ****\_\_**** |
+| Party                                     | Signature                        | Date             |
+| ----------------------------------------- | -------------------------------- | ---------------- |
+| Provider: Allison Van Cura                | **\*\*\*\***\_\_\_\_**\*\*\*\*** | \***\*\_\_\*\*** |
+| Partner: **\*\*\*\***\_\_\_\_**\*\*\*\*** | **\*\*\*\***\_\_\_\_**\*\*\*\*** | \***\*\_\_\*\*** |
 
 ---
 

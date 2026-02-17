@@ -40,5 +40,5 @@ Both parties agree to keep confidential all private user data and legal document
 
 ## 9. Signatures
 
-- Allison Van Cura — Date: ****\_\_\_\_****
-- Lilly Simpson — Date: ****\_\_\_\_****
+- Allison Van Cura — Date: \***\*\_\_\_\_\*\***
+- Lilly Simpson — Date: \***\*\_\_\_\_\*\***

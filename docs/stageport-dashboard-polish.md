@@ -64,7 +64,7 @@ Here are a few light polish notes — nothing is “broken,” these are just wa
 </button>
 ```
 
-_(Swap `animate-[ping_...]` for a custom keyframe if you want something more balletic than “ping.”)_
+_(Swap `animate-[ping_...]` for a custom keyframe if you want something more balletic than “ping.”)\_
 
 ---
 
