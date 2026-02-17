@@ -1,48 +1,59 @@
-# GCP Mirror – Cloud Run Deployment Guide
+# Institutional Confidence Filter (Fail-Closed)
 
-This folder provides a minimal FastAPI application and deployment script that mirrors Folio metadata into Google Cloud Platform using your available credits. Deploying it ensures the choreography codex survives even if third-party services lapse.
+This package implements the protocol as an auditable artifact pipeline:
 
-## Prerequisites
+1. `bootstrap_tau.py` computes block-bootstrap tau statistics and writes `out/tau_star_summary.csv`.
+2. `regime_writer.py` reads overlay + tau + permutation outputs and writes atomic `out/daily_overlay_regime.json`.
+3. `day_sheet_writer.py` verifies regime integrity and writes atomic `out/day_sheet_YYYYMMDD.json`.
+4. `live_gate.py` is the runtime fail-closed guard for stale/corrupt regime payloads.
 
-- Google Cloud project with billing enabled and available credits.
-- `gcloud` CLI authenticated with your account.
-- Docker (local) or Cloud Build enabled for your project.
-- [`yq`](https://github.com/mikefarah/yq) available in your shell for parsing `config.yaml` inside `deploy.sh`.
+## Institutional controls
 
-## Configuration
+- Atomic write (`.tmp` then `replace`) for regime and day sheet.
+- Explicit expiry/TTL (`regime_expiry_utc`, `expiry_utc`).
+- SHA-256 signing (`hash_sha256`) and verification.
+- Strict CI sign logic: CI must be entirely above or below zero.
+- Fail-closed defaults: `tap_p_value=1.0`, `regime_status=CLOSED_DEFENSIVE` on missing/bad inputs.
 
-1. Copy `sample-config.yaml` to `config.yaml` and adjust values:
-   ```yaml
-   project_id: your-gcp-project
-   region: us-central1
-   service_name: lilith-loop-mirror
-   folios:
-     - id: folio-001
-       title: "Lilith Loop (6/8)"
-       glyph_map: "Folios/Folio_001_LilithLoop/glyph_map.json"
-       meta_rule: "Folios/Folio_001_LilithLoop/witness_window.meta"
-       script: "Folios/Folio_001_LilithLoop/LilithLoop.rouette"
-       flowchart: "Folios/Folio_001_LilithLoop/flowchart_access_logic.svg"
-   ```
-2. Place the Folios directory somewhere accessible to the deployment workflow (same repo is recommended).
+## Input files
 
-## Deployment
+Regime writer expects:
 
-Run the helper script:
+- `out/backtest_overlay_results.csv`
+- `out/tau_star_summary.csv`
+- `out/event_study_permutation_summary.csv`
+
+Day sheet writer expects:
+
+- `out/daily_overlay_regime.json`
+- `out/levels_latest.csv` with:
+  - `symbol,pivot,s1,s2,r1,r2,atr_band_low,atr_band_high,invalidation`
+
+## Run sequence
 
 ```bash
-./deploy.sh
+python bootstrap_tau.py          # Optional: creates tau summary from returns
+python regime_writer.py          # Contract gate
+python day_sheet_writer.py       # Deliverable artifact
 ```
 
-The script reads `config.yaml`, builds the container, and deploys it to Cloud Run using the specified project, region, and service name.
+## API
 
-## API Endpoints
+- `GET /health`
+- `GET /regime`
+- `GET /day-sheet/latest`
 
-- `GET /health` – Basic readiness probe.
-- `GET /folios` – Lists available folios from the configuration file.
-- `GET /folios/{folio_id}` – Returns the script, meta rule, glyph map, and flowchart path for a specific folio.
+## Test
 
-## Next Steps
+```bash
+PYTHONPATH=. python -m unittest tests.test_institutional_confidence
+```
 
-- Add IAM rules or API keys at the Cloud Run layer if you need to restrict access.
-- Connect the service to Firebase Hosting or a small web front-end to display the glitch/clear visibility states in real time.
+
+## Preview Dashboard
+
+A standalone visual preview is available at:
+
+- `docs/previews/presidents-day-fortress-dashboard.html`
+
+It mirrors the regime-open/closed decision logic (`W >= 80`, `p < 0.05`) for fast operator review.

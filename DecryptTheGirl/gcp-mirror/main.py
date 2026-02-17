@@ -1,76 +1,51 @@
-"""FastAPI application that serves Lilith Loop folio data.
+"""FastAPI endpoints for Institutional Confidence Filter artifacts."""
 
-The service reads a YAML configuration file to locate folio assets.
-Use this to mirror the choreography repository into Google Cloud Run.
-"""
 from __future__ import annotations
 
+import json
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
-import yaml
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 
-CONFIG_PATH = Path(__file__).resolve().parent / "config.yaml"
+from live_gate import read_regime_gate
 
-app = FastAPI(title="DecryptTheGirl Folio Mirror", version="1.0.0")
+OUT_DIR = Path("out")
 
-
-def _load_config() -> Dict[str, Any]:
-    if not CONFIG_PATH.exists():
-        raise FileNotFoundError(
-            "config.yaml not found. Copy sample-config.yaml and update project settings before deploying."
-        )
-    with CONFIG_PATH.open("r", encoding="utf-8") as stream:
-        return yaml.safe_load(stream)
+app = FastAPI(title="Institutional Confidence Filter API", version="1.1.0")
 
 
 @app.get("/health")
-def health() -> Dict[str, str]:
-    return {"status": "ok"}
+def health() -> dict[str, bool]:
+    return {"ok": True}
 
 
-@app.get("/folios")
-def list_folios() -> JSONResponse:
-    config = _load_config()
-    folios: List[Dict[str, Any]] = config.get("folios", [])
-    summary = [
+@app.get("/regime")
+def regime() -> JSONResponse:
+    regime_open, tap_weight, payload = read_regime_gate()
+    return JSONResponse(
         {
-            "id": folio["id"],
-            "title": folio.get("title", folio["id"]),
-            "meta_rule": folio.get("meta_rule"),
+            "regime_open": regime_open,
+            "tap_weight_max": tap_weight,
+            "payload": payload,
         }
-        for folio in folios
-    ]
-    return JSONResponse(content={"folios": summary})
+    )
 
 
-@app.get("/folios/{folio_id}")
-def get_folio(folio_id: str) -> JSONResponse:
-    config = _load_config()
-    folios: List[Dict[str, Any]] = config.get("folios", [])
-    for folio in folios:
-        if folio["id"] == folio_id:
-            payload = {
-                "id": folio["id"],
-                "title": folio.get("title", folio_id),
-                "glyph_map": _read_text(folio.get("glyph_map")),
-                "meta_rule": _read_text(folio.get("meta_rule")),
-                "script": _read_text(folio.get("script")),
-                "flowchart": folio.get("flowchart"),
-            }
-            return JSONResponse(content=payload)
-    raise HTTPException(status_code=404, detail=f"Folio '{folio_id}' not found")
-
-
-def _read_text(path_str: str | None) -> str | None:
-    if not path_str:
-        return None
-    path = (CONFIG_PATH.parent / path_str).resolve()
+@app.get("/day-sheet/latest")
+def day_sheet_latest() -> JSONResponse:
+    path = OUT_DIR / f"day_sheet_{datetime.now(timezone.utc).strftime('%Y%m%d')}.json"
     if not path.exists():
-        raise HTTPException(status_code=500, detail=f"Configured file not found: {path_str}")
-    return path.read_text(encoding="utf-8")
+        raise HTTPException(status_code=404, detail="Day sheet not found for today")
+
+    payload: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
+    expiry = datetime.fromisoformat(payload["expiry_utc"].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) >= expiry:
+        raise HTTPException(status_code=410, detail="Day sheet expired")
+
+    return JSONResponse(payload)
 
 
 if __name__ == "__main__":
