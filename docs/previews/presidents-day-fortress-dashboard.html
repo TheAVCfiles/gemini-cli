@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presidents Day Fortress Dashboard</title>
+  <style>
+    body { margin:0; font-family: Inter, Arial, sans-serif; background:#020617; color:#e2e8f0; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    .header { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e293b; padding-bottom:16px; margin-bottom:16px; }
+    .pill { padding:8px 12px; border-radius:10px; font-weight:700; border:1px solid; }
+    .open { color:#34d399; border-color:#34d39966; background:#10b9811a; }
+    .closed { color:#fb7185; border-color:#fb718566; background:#f43f5e1a; }
+    .grid { display:grid; grid-template-columns: 1fr 2fr; gap:16px; }
+    .card { background:#0f172a; border:1px solid #1e293b; border-radius:12px; padding:16px; }
+    label { display:block; font-size:12px; color:#94a3b8; margin-bottom:6px; }
+    input[type="range"], input[type="number"] { width:100%; }
+    table { width:100%; border-collapse: collapse; font-size:14px; }
+    th, td { border-bottom:1px solid #1e293b; padding:10px; text-align:left; }
+    th { color:#94a3b8; font-size:12px; text-transform:uppercase; letter-spacing:.06em; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    pre { background:#020617; border:1px solid #1e293b; border-radius:10px; padding:12px; overflow:auto; color:#93c5fd; }
+    @media (max-width:900px){ .grid{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div>
+        <h1 style="margin:0">Presidents Day Fortress <span style="opacity:.6; font-weight:400">v2.1</span></h1>
+        <div class="mono" style="font-size:12px; color:#94a3b8; margin-top:6px;">Institutional Confidence Filter Preview</div>
+      </div>
+      <div id="regimePill" class="pill closed">REGIME: CLOSED_DEFENSIVE</div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3 style="margin-top:0">Filter Controls</h3>
+        <label class="mono">Permutation p-value (min)</label>
+        <input id="pVal" type="range" min="0" max="1" step="0.01" value="0.33" />
+        <div class="mono" id="pValText" style="margin:8px 0 16px">0.330 (gate 0.05)</div>
+
+        <label class="mono">Structural Weight (W)</label>
+        <input id="weight" type="number" value="92" min="0" />
+        <div class="mono" id="weightText" style="margin-top:8px">Target ≥ 80</div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0">Institutional Day Sheet</h3>
+        <table class="mono">
+          <thead><tr><th>Asset</th><th>Pivot</th><th>S1/S2</th><th>R1/R2</th><th>Action</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <h4>Regime Payload Preview</h4>
+        <pre id="payload"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const data = [
+      { asset:'LIT', pivot:72.15, s1:71.39, s2:70.83, r1:73.47, r2:74.57 },
+      { asset:'ETH', pivot:1981.96, s1:1944.13, s2:1902.62, r1:2023.47, r2:2061.30 },
+      { asset:'QQQ', pivot:601.61, s1:596.75, s2:591.59, r1:606.77, r2:611.63 }
+    ];
+
+    const pVal = document.getElementById('pVal');
+    const weight = document.getElementById('weight');
+    const pValText = document.getElementById('pValText');
+    const weightText = document.getElementById('weightText');
+    const pill = document.getElementById('regimePill');
+    const rows = document.getElementById('rows');
+    const payload = document.getElementById('payload');
+
+    function render() {
+      const p = Number(pVal.value);
+      const w = Number(weight.value);
+      const open = p < 0.05 && w >= 80;
+
+      pValText.textContent = `${p.toFixed(3)} (gate 0.05)`;
+      weightText.textContent = `Target ≥ 80 | ${w >= 80 ? 'PASSED' : 'FAIL'}`;
+      pill.className = `pill ${open ? 'open' : 'closed'}`;
+      pill.textContent = `REGIME: ${open ? 'OPEN' : 'CLOSED_DEFENSIVE'}`;
+
+      rows.innerHTML = data.map((r) => `
+        <tr>
+          <td>${r.asset}</td>
+          <td>${r.pivot.toFixed(2)}</td>
+          <td>${r.s1.toFixed(2)} / ${r.s2.toFixed(2)}</td>
+          <td>${r.r1.toFixed(2)} / ${r.r2.toFixed(2)}</td>
+          <td>${open ? 'SCALED ENTRY' : 'OBSERVE ONLY'}</td>
+        </tr>`).join('');
+
+      payload.textContent = JSON.stringify({
+        timestamp: new Date().toISOString(),
+        regime_status: open ? 'OPEN' : 'CLOSED_DEFENSIVE',
+        struct_confirmed: w >= 80,
+        tau_ci_excludes_zero: true,
+        tap_p_value: Number(p.toFixed(3)),
+        tap_weight_max: w
+      }, null, 2);
+    }
+
+    pVal.addEventListener('input', render);
+    weight.addEventListener('input', render);
+    render();
+  </script>
+</body>
+</html>
