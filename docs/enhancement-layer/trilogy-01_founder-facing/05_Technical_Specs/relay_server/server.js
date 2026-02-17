@@ -1,18 +1,18 @@
 /**
-* AVC Relay Server (stateless-by-default)
-* - Accepts encrypted "snapshot" uploads (JSON with base64 payload)
-* - Broadcasts to WebSocket clients subscribed to "room"
-* - Optionally persists WAL (RELAYS_PERSIST=true)
-*
-* Security model:
-* - Relay does NOT decrypt or inspect payload
-* - A simple API key is used for authorized uploads & websocket connects (optional)
-*
-* Usage:
-* - POST /snapshots { room, payload, meta } (x-api-key header or ?api_key=)
-* - GET /snapshots/:id
-* - WS /ws?room=ROOM&api_key=... (subscribe to room)
-*/
+ * AVC Relay Server (stateless-by-default)
+ * - Accepts encrypted "snapshot" uploads (JSON with base64 payload)
+ * - Broadcasts to WebSocket clients subscribed to "room"
+ * - Optionally persists WAL (RELAYS_PERSIST=true)
+ *
+ * Security model:
+ * - Relay does NOT decrypt or inspect payload
+ * - A simple API key is used for authorized uploads & websocket connects (optional)
+ *
+ * Usage:
+ * - POST /snapshots { room, payload, meta } (x-api-key header or ?api_key=)
+ * - GET /snapshots/:id
+ * - WS /ws?room=ROOM&api_key=... (subscribe to room)
+ */
 
 require('dotenv').config();
 const express = require('express');
@@ -26,7 +26,7 @@ const morgan = require('morgan');
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 const API_KEY = process.env.RELAY_API_KEY || null; // set in .env for simple auth
-const PERSIST = (process.env.RELAY_PERSIST === 'true'); // write WAL file if true
+const PERSIST = process.env.RELAY_PERSIST === 'true'; // write WAL file if true
 const WAL_FILE = process.env.WAL_FILE || path.resolve('./relay_wal.log');
 
 const app = express();
@@ -111,7 +111,11 @@ wss.on('connection', (ws, req) => {
 
 // health
 app.get('/health', (req, res) => {
-  res.json({ ok: true, snapshots: snapshots.size, rooms: Array.from(rooms.keys()) });
+  res.json({
+    ok: true,
+    snapshots: snapshots.size,
+    rooms: Array.from(rooms.keys()),
+  });
 });
 
 // Post an encrypted snapshot
@@ -119,10 +123,12 @@ app.get('/health', (req, res) => {
 // Authentication: x-api-key header or ?api_key= if RELAY API key is defined
 app.post('/snapshots', (req, res) => {
   const headerKey = req.headers['x-api-key'] || req.query.api_key;
-  if (API_KEY && headerKey !== API_KEY) return res.status(401).json({ error: 'unauthorized' });
+  if (API_KEY && headerKey !== API_KEY)
+    return res.status(401).json({ error: 'unauthorized' });
 
   const { room = 'global', payload, meta = {} } = req.body;
-  if (!payload) return res.status(400).json({ error: 'payload required (base64)' });
+  if (!payload)
+    return res.status(400).json({ error: 'payload required (base64)' });
 
   const id = crypto.randomBytes(12).toString('hex');
   const record = { id, room, payload, meta, ts: Date.now() };
@@ -137,7 +143,15 @@ app.post('/snapshots', (req, res) => {
   }
 
   // broadcast to room subscribers, but only with metadata + id (not decrypt)
-  broadcastToRoom(room, { type: 'snapshot', record: { id: record.id, room: record.room, meta: record.meta, ts: record.ts } });
+  broadcastToRoom(room, {
+    type: 'snapshot',
+    record: {
+      id: record.id,
+      room: record.room,
+      meta: record.meta,
+      ts: record.ts,
+    },
+  });
 
   return res.json({ id });
 });
@@ -158,7 +172,8 @@ app.get('/rooms', (req, res) => {
 // Optionally clear memory (admin)
 app.post('/admin/clear', (req, res) => {
   const headerKey = req.headers['x-api-key'] || req.query.api_key;
-  if (API_KEY && headerKey !== API_KEY) return res.status(401).json({ error: 'unauthorized' });
+  if (API_KEY && headerKey !== API_KEY)
+    return res.status(401).json({ error: 'unauthorized' });
   snapshots.clear();
   // remove WAL file
   if (PERSIST && fs.existsSync(WAL_FILE)) fs.unlinkSync(WAL_FILE);
@@ -168,5 +183,7 @@ app.post('/admin/clear', (req, res) => {
 // start
 server.listen(PORT, () => {
   console.log(`AVC Relay server listening at http://0.0.0.0:${PORT}`);
-  console.log(`PERSIST=${PERSIST} WAL_FILE=${WAL_FILE} API_KEY_SET=${!!API_KEY}`);
+  console.log(
+    `PERSIST=${PERSIST} WAL_FILE=${WAL_FILE} API_KEY_SET=${!!API_KEY}`,
+  );
 });

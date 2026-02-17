@@ -1,6 +1,7 @@
 # Product Spec — MVP
 
 Core features:
+
 - Local-first editor (Automerge) with encrypted IndexedDB storage.
 - Kanban pipeline for Projects/Tasks.
 - Templates for SOWs, grants, invoices.
@@ -10,6 +11,7 @@ Core features:
 - LLM assistant (opt-in) with provenance capture.
 
 Acceptance criteria:
+
 - Editor can store & retrieve encrypted docs with passphrase.
 - Enqueue draft and worker produces stamped PDF and a ledger entry.
 - Client can export signed snapshot and verify signature locally.

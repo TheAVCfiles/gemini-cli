@@ -73,10 +73,10 @@ frontend experience stays consistent.
 
 Environment variables:
 
-| Variable         | Description                                              |
-| ---------------- | -------------------------------------------------------- |
-| `OPENAI_API_KEY` | (Optional) API key for OpenAI Responses API              |
-| `OPENAI_MODEL`   | (Optional) Override the model. Default: `gpt-4o-mini`    |
+| Variable         | Description                                           |
+| ---------------- | ----------------------------------------------------- |
+| `OPENAI_API_KEY` | (Optional) API key for OpenAI Responses API           |
+| `OPENAI_MODEL`   | (Optional) Override the model. Default: `gpt-4o-mini` |
 
 ---
 
@@ -93,10 +93,10 @@ workflow:
 All Gemini traffic is proxied through `netlify/functions/gemini.js`, which expects
 the following environment variables:
 
-| Variable          | Description                                                      |
-| ----------------- | ---------------------------------------------------------------- |
-| `GEMINI_API_KEY`  | (Required) API key for the Google Generative Language API        |
-| `GEMINI_MODEL`    | (Optional) Override the model. Default: `gemini-2.5-flash-preview-09-2025` |
+| Variable         | Description                                                                |
+| ---------------- | -------------------------------------------------------------------------- |
+| `GEMINI_API_KEY` | (Required) API key for the Google Generative Language API                  |
+| `GEMINI_MODEL`   | (Optional) Override the model. Default: `gemini-2.5-flash-preview-09-2025` |
 
 During development the page calls `/api/gemini`, which Netlify redirects to the
 serverless function. You can serve the static files with `netlify dev` or any HTTP

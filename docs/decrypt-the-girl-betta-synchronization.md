@@ -2,8 +2,8 @@
 
 ## Memory Capsule Highlights
 
-- **Species:** *Betta splendens* (Siamese fighting fish) with characteristic labyrinth organ for air-breathing in low-oxygen habitats.
-- **Study:** "Behavioral and brain-transcriptomic synchronization between the two opponents of a fighting pair of the fish *Betta splendens*" (PLoS Genetics, 2020).
+- **Species:** _Betta splendens_ (Siamese fighting fish) with characteristic labyrinth organ for air-breathing in low-oxygen habitats.
+- **Study:** "Behavioral and brain-transcriptomic synchronization between the two opponents of a fighting pair of the fish _Betta splendens_" (PLoS Genetics, 2020).
 - **Experimental Setup:** Male betta pairs fought for either 20 minutes (D20) or 60 minutes (D60).
 - **Behavioral Synchronization:** As bouts progressed, opponents mirrored actions—biting/striking, surface breathing, and mouth-locking became tightly correlated within each pair.
 - **Transcriptomic Synchronization:** D60 pairs exhibited strong correlations across 23,306 transcripts, revealing deeper internal alignment after prolonged interaction.
@@ -47,4 +47,4 @@
 - Invest early in data quality and machine learning support to ensure credible behavior inference.
 - Use scientific grounding to reinforce brand authority for "Decrypt The Girl" offerings.
 
-*Source materials: PLoS Genetics 2020 study on betta behavioral and transcriptomic synchronization; Knowledge@UChicago feature; ScienceDaily coverage.*
+_Source materials: PLoS Genetics 2020 study on betta behavioral and transcriptomic synchronization; Knowledge@UChicago feature; ScienceDaily coverage._

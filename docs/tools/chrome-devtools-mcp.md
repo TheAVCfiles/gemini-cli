@@ -28,10 +28,10 @@ Add the MCP server to your Gemini CLI `settings.json` (requires Node 20+ and Chr
         "-y",
         "chrome-devtools-mcp@latest",
         "--headless=true",
-        "--isolated=true"
-      ]
-    }
-  }
+        "--isolated=true",
+      ],
+    },
+  },
 }
 ```
 

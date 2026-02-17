@@ -2,7 +2,7 @@ name: Deploy Decrypt The Girl Host
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   deploy:

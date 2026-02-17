@@ -28,11 +28,21 @@ const riskBands = [
 const metricPools = [
   {
     label: 'Signal Clarity',
-    values: ['Pristine (92%)', 'Crisp with minor static (81%)', 'Diffuse (67%)', 'Fragmented (54%)'],
+    values: [
+      'Pristine (92%)',
+      'Crisp with minor static (81%)',
+      'Diffuse (67%)',
+      'Fragmented (54%)',
+    ],
   },
   {
     label: 'Feedback Bloom',
-    values: ['Dormant', 'Occasional surges', 'Active loops', 'Constant cycling'],
+    values: [
+      'Dormant',
+      'Occasional surges',
+      'Active loops',
+      'Constant cycling',
+    ],
   },
   {
     label: 'Harmonic Drift',
@@ -86,11 +96,13 @@ const formatHandle = (raw) => {
   return `@${stripped || 'handle'}`;
 };
 
-const randomBetween = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const randomBetween = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
 
 const choice = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-const getRiskBand = (score) => riskBands.find((band) => score <= band.max) ?? riskBands.at(-1);
+const getRiskBand = (score) =>
+  riskBands.find((band) => score <= band.max) ?? riskBands.at(-1);
 
 const buildMetric = (label, value) => {
   const metric = document.createElement('div');
@@ -126,7 +138,14 @@ const buildRecommendations = (items) => {
   return wrapper;
 };
 
-const renderResult = ({ handle, score, band, metrics, recommendations, observation }) => {
+const renderResult = ({
+  handle,
+  score,
+  band,
+  metrics,
+  recommendations,
+  observation,
+}) => {
   result.innerHTML = '';
 
   const scoreBlock = document.createElement('div');

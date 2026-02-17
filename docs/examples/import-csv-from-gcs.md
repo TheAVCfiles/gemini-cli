@@ -67,7 +67,8 @@ function writeCsvToSheet(csv, sheetName) {
   }
 
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = spreadsheet.getSheetByName(sheetName) ?? spreadsheet.insertSheet(sheetName);
+  const sheet =
+    spreadsheet.getSheetByName(sheetName) ?? spreadsheet.insertSheet(sheetName);
   sheet.clearContents();
   sheet.getRange(1, 1, rows.length, rows[0].length).setValues(rows);
 }
@@ -90,4 +91,3 @@ function previewGcsCsv() {
 - Add a time-driven trigger in Apps Script to call `importCsvFromGcs` every morning after the export job runs.
 - If you need to keep historical snapshots, copy the sheet to a dated tab before overwriting it.
 - For large CSVs you can swap `sheet.clearContents()` for `sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns()).clearContent()` to preserve formatting while removing only the values.
-

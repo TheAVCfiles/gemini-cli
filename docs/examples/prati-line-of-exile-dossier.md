@@ -1,7 +1,7 @@
 # Prati “Line of Exile” Dossier PDF
 
 This example shows how to mirror the historical dossier that has circulated with
-internal MWRA glossary discussions.  The Python script lives alongside this
+internal MWRA glossary discussions. The Python script lives alongside this
 file and produces a styled PDF using the [ReportLab](https://www.reportlab.com/)
 engine.
 

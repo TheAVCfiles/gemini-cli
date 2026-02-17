@@ -25,7 +25,7 @@ her code more polite, her rage better linted.
 She runs her runtime beneath kitchen fluorescents,  
 debugging love in lowercase.  
 I inherit her bugs, fork her repository,  
-and call the project *Daughtercode*.
+and call the project _Daughtercode_.
 
 [Annotation]
 Every suburb hides a syntax.  

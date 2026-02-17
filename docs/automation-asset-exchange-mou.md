@@ -12,9 +12,9 @@ This template captures barter- and credential-friendly collaboration agreements 
 **Role:** Systems Architect & Creative Automation Provider
 
 **Partner / Recipient**  
-**Name:** ______________________________________  
-**Email:** ______________________________________  
-**Role:** ______________________________________
+**Name:** ******************\_\_******************  
+**Email:** ******************\_\_******************  
+**Role:** ******************\_\_******************
 
 ---
 
@@ -28,15 +28,15 @@ This MOU defines the scope of systems shared, reciprocal value offered, terms of
 
 ## 3️⃣ Exchange Summary
 
-| Field | Description |
-| --- | --- |
+| Field                         | Description                                                |
+| ----------------------------- | ---------------------------------------------------------- |
 | **Product / Engine Provided** | _(e.g., Cycle Engine / Credential Engine / Glissé Engine)_ |
-| **Version / Build ID** | _(e.g., v1.2-beta / JSON manifest attached)_ |
-| **Value Estimate** | _$________ (for record / equity equivalence)_ |
-| **Partner Contribution** | _(e.g., studio hours / access / service / 1% equity)_ |
-| **Duration** | _______ months_ |
-| **Delivery Date** | ______________________ |
-| **Proof Credential ID** | _(auto-issued by Credential Engine, JSON file)_ |
+| **Version / Build ID**        | _(e.g., v1.2-beta / JSON manifest attached)_               |
+| **Value Estimate**            | _$**\_\_\_\_** (for record / equity equivalence)_          |
+| **Partner Contribution**      | _(e.g., studio hours / access / service / 1% equity)_      |
+| **Duration**                  | **\_\_\_** months\_                                        |
+| **Delivery Date**             | **********\_\_**********                                   |
+| **Proof Credential ID**       | _(auto-issued by Credential Engine, JSON file)_            |
 
 ---
 
@@ -77,10 +77,10 @@ Changes to this agreement must be recorded as a new version and logged as a **cr
 
 ## 8️⃣ Signatures
 
-| Party | Signature | Date |
-| --- | --- | --- |
-| Provider: Allison Van Cura | ____________________ | __________ |
-| Partner: ____________________ | ____________________ | __________ |
+| Party                             | Signature                | Date         |
+| --------------------------------- | ------------------------ | ------------ |
+| Provider: Allison Van Cura        | ********\_\_\_\_******** | ****\_\_**** |
+| Partner: ********\_\_\_\_******** | ********\_\_\_\_******** | ****\_\_**** |
 
 ---
 
@@ -110,4 +110,3 @@ Changes to this agreement must be recorded as a new version and logged as a **cr
 2. Attach the credential JSON example as an appendix or embed it as a code block for partner reference.
 3. When the agreement is finalized, generate the credential payload and append the resulting file to the shared proof ledger.
 4. Capture the signature hash from the chosen e-signature platform and record it in the credential payload to complete the proof chain.
-

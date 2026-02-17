@@ -10,7 +10,10 @@
     { "name": "8 Ritter Drive", "type": "domestic.node", "latlong": null },
     { "name": "Mt. Alvernia", "type": "sacred.node", "latlong": null }
   ],
-  "timeline_hint": { "era": "Suburban 90s–2000s", "reentry": "Scroll: Mother Systems" },
+  "timeline_hint": {
+    "era": "Suburban 90s–2000s",
+    "reentry": "Scroll: Mother Systems"
+  },
   "modes": {
     "Surface": {
       "id": "SURFACE_TACOBELL_ORBIT",
@@ -56,8 +59,14 @@
         "I fork the repository and name it Daughtercode."
       ],
       "call_response": [
-        { "prompt": "What mask did you inherit?", "response_type": "text.glyph" },
-        { "prompt": "What loop do you refuse to run again?", "response_type": "text.break" }
+        {
+          "prompt": "What mask did you inherit?",
+          "response_type": "text.glyph"
+        },
+        {
+          "prompt": "What loop do you refuse to run again?",
+          "response_type": "text.break"
+        }
       ],
       "ui": {
         "palette": "warm_kitchen_fluorescent",
@@ -86,7 +95,10 @@
     "Martyr recursion (user confuses care with self-erasure)."
   ],
   "exits": [
-    { "to": "ROOM_001_SIGNAL_AND_STATIC", "on": "needle_pop && user_submits_mask" },
+    {
+      "to": "ROOM_001_SIGNAL_AND_STATIC",
+      "on": "needle_pop && user_submits_mask"
+    },
     { "to": "ROOM_008_MOTHERNET", "on": "ledger_lines>=3" },
     { "to": "ROOM_004_TRANSMISSION_CORRUPT", "on": "oracle_subtitles_decoded" }
   ],
@@ -98,7 +110,10 @@
   "legal_sensitivity": ["family_names", "street_address"],
   "redaction_rules": [
     { "pattern": "([0-9]+\\s+Ritter\\s+Drive)", "action": "hash" },
-    { "pattern": "([A-Z][a-z]+\\s+Alvernia)", "action": "generalize: 'local convent'" }
+    {
+      "pattern": "([A-Z][a-z]+\\s+Alvernia)",
+      "action": "generalize: 'local convent'"
+    }
   ],
   "provenance": {
     "source": "AVC memory sequence",

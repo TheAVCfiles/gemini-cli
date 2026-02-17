@@ -37,8 +37,16 @@
         margin: 0;
         background: var(--bg-800);
         color: var(--text-300);
-        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
-          "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          'Helvetica Neue',
+          Arial,
+          'Apple Color Emoji',
+          'Segoe UI Emoji';
         line-height: 1.5;
       }
       .container {
@@ -100,10 +108,10 @@
         padding-bottom: 10px;
       }
       ul li::marker {
-        content: "";
+        content: '';
       }
       ul li::before {
-        content: "✧";
+        content: '✧';
         position: absolute;
         left: 0;
         top: 0.15rem;
@@ -116,8 +124,9 @@
         margin-top: 15px;
       }
       .mono {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-          "Liberation Mono", "Courier New", monospace;
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          'Liberation Mono', 'Courier New', monospace;
       }
       .tip {
         border-left: 3px solid var(--accent);
@@ -192,7 +201,7 @@
         }
       }
       @media (prefers-reduced-motion: reduce) {
-        .countdown [aria-hidden="true"] {
+        .countdown [aria-hidden='true'] {
           display: none;
         }
       }
@@ -251,9 +260,9 @@
       <section class="card" aria-labelledby="plan" style="margin-top: 25px">
         <h3 id="plan">Your 12-Month Action Plan</h3>
         <p class="muted">
-          This is your interactive “Natal-Transit Chart”, visualizing the ebb and
-          flow of your life’s energy. Green candles represent harmonious days;
-          red represent challenging days.
+          This is your interactive “Natal-Transit Chart”, visualizing the ebb
+          and flow of your life’s energy. Green candles represent harmonious
+          days; red represent challenging days.
         </p>
 
         <div
@@ -263,7 +272,12 @@
         >
           <p
             class="mono"
-            style="font-size: 12px; color: var(--accent); text-align: center; margin: 0"
+            style="
+              font-size: 12px;
+              color: var(--accent);
+              text-align: center;
+              margin: 0;
+            "
           >
             [ Interactive candlestick chart placeholder. Window Oct 15–30, 2025
             highlighted in green. ]
@@ -294,13 +308,14 @@
         </p>
 
         <div
-          style="background: var(--bg-800); border-radius: var(--radius-sm); margin-top: 15px; padding: 15px"
+          style="
+            background: var(--bg-800);
+            border-radius: var(--radius-sm);
+            margin-top: 15px;
+            padding: 15px;
+          "
         >
-          <p
-            class="mono muted"
-            style="margin: 0 0 6px"
-            aria-live="off"
-          >
+          <p class="mono muted" style="margin: 0 0 6px" aria-live="off">
             [ ROUTER AGENT: Query routed to “Chronos Scribe” ]
           </p>
 
@@ -314,9 +329,9 @@
           <div style="margin-top: 12px">
             <p class="chat-reply" aria-label="AI reply">
               An excellent question. Your blueprint identifies this as a
-              critical area for conscious development. The primary recommendation
-              is to consciously compensate for this by seeking out structures and
-              partnerships that provide grounding.
+              critical area for conscious development. The primary
+              recommendation is to consciously compensate for this by seeking
+              out structures and partnerships that provide grounding.
               <br /><br />
               Your chart’s path to fulfillment lies in collaboration. You should
               actively seek partners, particularly those with strong Earth
@@ -329,7 +344,9 @@
 
       <section aria-labelledby="artifacts" style="margin-top: 25px">
         <h3 id="artifacts" style="color: #fff">Your Full Artifacts</h3>
-        <p class="muted">Download your assets or review your support options.</p>
+        <p class="muted">
+          Download your assets or review your support options.
+        </p>
 
         <div class="grid" role="list">
           <a class="tile" href="#" role="listitem">
@@ -354,7 +371,12 @@
             class="tile"
             href="#"
             role="listitem"
-            style="display: flex; flex-direction: column; align-items: center; justify-content: center"
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            "
           >
             <img
               src="https://image.api.playstation.com/vulcan/ap/rnd/202011/1009/H0yv19o1m8g48Gf3B6s4p4M.png"
@@ -371,7 +393,11 @@
             </div>
           </a>
 
-          <a class="tile" href="mailto:support@intuition-labs.io" role="listitem">
+          <a
+            class="tile"
+            href="mailto:support@intuition-labs.io"
+            role="listitem"
+          >
             <span style="font-size: 24px" aria-hidden="true">✉️</span>
             <div class="tile-title">30-Day Support</div>
             <div class="tile-sub">Contact for follow-up questions.</div>
@@ -383,20 +409,20 @@
     <script>
       // Live countdown for Portal Access badge
       (function () {
-        const expiry = new Date("2025-11-28T23:59:59-05:00"); // America/New_York
-        const out = document.getElementById("time-remaining");
-        const dateEl = document.getElementById("expiry-date");
+        const expiry = new Date('2025-11-28T23:59:59-05:00'); // America/New_York
+        const out = document.getElementById('time-remaining');
+        const dateEl = document.getElementById('expiry-date');
 
         function fmt(n, w) {
-          return String(n).padStart(w || 2, "0");
+          return String(n).padStart(w || 2, '0');
         }
 
         function tick() {
           const now = new Date();
           let ms = expiry - now;
           if (ms <= 0) {
-            out.textContent = "expired";
-            dateEl.setAttribute("aria-live", "polite");
+            out.textContent = 'expired';
+            dateEl.setAttribute('aria-live', 'polite');
             clearInterval(t);
             return;
           }
@@ -410,7 +436,7 @@
 
           out.textContent =
             days >= 1
-              ? `${days} day${days === 1 ? "" : "s"} remaining`
+              ? `${days} day${days === 1 ? '' : 's'} remaining`
               : `${fmt(hrs)}:${fmt(mins)}:${fmt(secs)} remaining`;
         }
         const t = setInterval(tick, 1000);

@@ -23,27 +23,27 @@ Realtime sessions require an ephemeral key that is safe to share with the browse
 Create `server.mjs`:
 
 ```javascript
-import express from "express";
-import fetch from "node-fetch";
+import express from 'express';
+import fetch from 'node-fetch';
 
 const app = express();
 
-app.get("/token", async (_req, res) => {
+app.get('/token', async (_req, res) => {
   const body = {
     session: {
-      type: "realtime",
-      model: "gpt-realtime",
-      audio: { output: { voice: "marin" } },
+      type: 'realtime',
+      model: 'gpt-realtime',
+      audio: { output: { voice: 'marin' } },
     },
   };
 
   const response = await fetch(
-    "https://api.openai.com/v1/realtime/client_secrets",
+    'https://api.openai.com/v1/realtime/client_secrets',
     {
-      method: "POST",
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     },
@@ -52,7 +52,7 @@ app.get("/token", async (_req, res) => {
   res.json(await response.json());
 });
 
-app.listen(8787, () => console.log("Token server on :8787"));
+app.listen(8787, () => console.log('Token server on :8787'));
 ```
 
 Install the dependencies and run the server:
@@ -78,24 +78,26 @@ Create `index.html` alongside the server file:
       import {
         RealtimeAgent,
         RealtimeSession,
-      } from "https://cdn.jsdelivr.net/npm/@openai/agents@latest/+esm";
+      } from 'https://cdn.jsdelivr.net/npm/@openai/agents@latest/+esm';
 
-      document.getElementById("start").onclick = async () => {
+      document.getElementById('start').onclick = async () => {
         try {
-          const response = await fetch("/token");
+          const response = await fetch('/token');
           if (!response.ok) {
             const errorText = await response.text();
-            throw new Error('Failed to get token: ' + response.status + ' ' + errorText);
+            throw new Error(
+              'Failed to get token: ' + response.status + ' ' + errorText,
+            );
           }
           const { value: ephemeralKey } = await response.json();
           const agent = new RealtimeAgent({
-            name: "Assistant",
-            instructions: "Be clear, kind, fast.",
+            name: 'Assistant',
+            instructions: 'Be clear, kind, fast.',
           });
           const session = new RealtimeSession(agent);
           await session.connect({ apiKey: ephemeralKey });
         } catch (error) {
-          console.error("Failed to start voice agent:", error);
+          console.error('Failed to start voice agent:', error);
           alert('Failed to start voice agent: ' + error.message);
         }
       };
@@ -113,28 +115,28 @@ If you want to validate the Realtime API before touching the browser stack, use 
 Create `ws.mjs`:
 
 ```javascript
-import WebSocket from "ws";
+import WebSocket from 'ws';
 
 const ws = new WebSocket(
-  "wss://api.openai.com/v1/realtime?model=gpt-realtime",
+  'wss://api.openai.com/v1/realtime?model=gpt-realtime',
   {
-    headers: { Authorization: "Bearer " + process.env.OPENAI_API_KEY },
+    headers: { Authorization: 'Bearer ' + process.env.OPENAI_API_KEY },
   },
 );
 
-ws.on("open", () => {
+ws.on('open', () => {
   ws.send(
-    JSON.stringify({ type: "session.update", session: { type: "realtime" } }),
+    JSON.stringify({ type: 'session.update', session: { type: 'realtime' } }),
   );
   ws.send(
     JSON.stringify({
-      type: "response.create",
-      input: "Say one sentence of encouragement.",
+      type: 'response.create',
+      input: 'Say one sentence of encouragement.',
     }),
   );
 });
 
-ws.on("message", (data) => console.log(data.toString()));
+ws.on('message', (data) => console.log(data.toString()));
 ```
 
 Run it with:
@@ -160,10 +162,10 @@ gcloud storage buckets create gs://realtime-artifacts --location=us-central1
 Then extend `server.mjs` to write logs:
 
 ```javascript
-import { Storage } from "@google-cloud/storage";
+import { Storage } from '@google-cloud/storage';
 
 const storage = new Storage();
-const BUCKET = "realtime-artifacts";
+const BUCKET = 'realtime-artifacts';
 
 async function logSession(payload) {
   await storage

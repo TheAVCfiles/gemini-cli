@@ -74,8 +74,7 @@ describe('initCommand', () => {
     expect(mockContext.ui.addItem).toHaveBeenCalledWith(
       {
         type: 'info',
-        text:
-          'Starter GEMINI.md template created. Now analyzing the project to populate it.',
+        text: 'Starter GEMINI.md template created. Now analyzing the project to populate it.',
       },
       expect.any(Number),
     );

@@ -14,43 +14,56 @@ const LEDGER_LIMIT = 100;
 
 app.use(cors({ origin: true }));
 
-app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), (req, res) => {
-  const signature = req.headers['stripe-signature'];
-  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+app.post(
+  '/api/stripe/webhook',
+  express.raw({ type: 'application/json' }),
+  (req, res) => {
+    const signature = req.headers['stripe-signature'];
+    const secret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  if (!secret) {
-    console.error('Missing STRIPE_WEBHOOK_SECRET');
-    return res.status(500).send('Webhook configuration error');
-  }
-
-  try {
-    const event = stripe.webhooks.constructEvent(req.body, signature, secret);
-
-    if (event.type === 'checkout.session.completed' || event.type === 'payment_intent.succeeded') {
-      const payload = event.data.object;
-      const amount = payload.amount_total ?? payload.amount ?? 0;
-      const email = payload.customer_details?.email || payload.receipt_email || 'unknown';
-      const tierName =
-        payload.metadata?.tierName || payload.display_items?.[0]?.custom?.name || 'Bet';
-
-      appendLedger({
-        action: 'stripe_event',
-        amount,
-        meta: { event: event.type, email, tierName }
-      });
-      // Hook for social integrations lives in src/socials.js
+    if (!secret) {
+      console.error('Missing STRIPE_WEBHOOK_SECRET');
+      return res.status(500).send('Webhook configuration error');
     }
 
-    res.json({ received: true });
-  } catch (error) {
-    console.error('Webhook error', error.message);
-    res.status(400).send(`Webhook Error: ${error.message}`);
-  }
-});
+    try {
+      const event = stripe.webhooks.constructEvent(req.body, signature, secret);
+
+      if (
+        event.type === 'checkout.session.completed' ||
+        event.type === 'payment_intent.succeeded'
+      ) {
+        const payload = event.data.object;
+        const amount = payload.amount_total ?? payload.amount ?? 0;
+        const email =
+          payload.customer_details?.email || payload.receipt_email || 'unknown';
+        const tierName =
+          payload.metadata?.tierName ||
+          payload.display_items?.[0]?.custom?.name ||
+          'Bet';
+
+        appendLedger({
+          action: 'stripe_event',
+          amount,
+          meta: { event: event.type, email, tierName },
+        });
+        // Hook for social integrations lives in src/socials.js
+      }
+
+      res.json({ received: true });
+    } catch (error) {
+      console.error('Webhook error', error.message);
+      res.status(400).send(`Webhook Error: ${error.message}`);
+    }
+  },
+);
 
 app.use('/api', express.json());
 
-const LEDGER_PATH = path.join(path.dirname(fileURLToPath(import.meta.url)), 'ledger.json');
+const LEDGER_PATH = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  'ledger.json',
+);
 
 function readLedgerFile() {
   try {
@@ -92,7 +105,7 @@ function appendLedger(entry) {
     id: crypto.randomUUID(),
     ts: Date.now(),
     ...entry,
-    meta: sanitizeMeta(entry.meta)
+    meta: sanitizeMeta(entry.meta),
   };
 
   ledgerStore = [sanitized, ...ledgerStore].slice(0, LEDGER_LIMIT);
@@ -102,7 +115,11 @@ function appendLedger(entry) {
 
 app.post('/api/stripe/create_link', async (req, res) => {
   try {
-    const { tierName = 'Seed $22', unitAmount = 2200, description = 'Bet on AVC' } = req.body || {};
+    const {
+      tierName = 'Seed $22',
+      unitAmount = 2200,
+      description = 'Bet on AVC',
+    } = req.body || {};
 
     if (!Number.isInteger(unitAmount) || unitAmount <= 0) {
       return res.status(400).json({ ok: false, error: 'invalid_amount' });
@@ -122,14 +139,14 @@ app.post('/api/stripe/create_link', async (req, res) => {
       product = await stripe.products.create({
         name: `Bet: ${tierName}`,
         description,
-        metadata: { avc_pid: pid, avc_tag: '$Allison-Van-Cura' }
+        metadata: { avc_pid: pid, avc_tag: '$Allison-Van-Cura' },
       });
     }
 
     const price = await stripe.prices.create({
       unit_amount: unitAmount,
       currency: 'usd',
-      product: product.id
+      product: product.id,
     });
 
     const site = process.env.SITE_URL || 'http://localhost:3000';
@@ -137,12 +154,12 @@ app.post('/api/stripe/create_link', async (req, res) => {
       line_items: [{ price: price.id, quantity: 1 }],
       after_completion: {
         type: 'redirect',
-        redirect: { url: `${site}/?bet=success` }
+        redirect: { url: `${site}/?bet=success` },
       },
       metadata: { avc_pid: pid, tierName },
       payment_intent_data: {
-        metadata: { tierName, avc: '$Allison-Van-Cura' }
-      }
+        metadata: { tierName, avc: '$Allison-Van-Cura' },
+      },
     });
 
     res.json({ ok: true, url: link.url });
@@ -178,11 +195,18 @@ app.post('/api/ledger', (req, res) => {
     return res.status(400).json({ success: false, error: 'invalid_action' });
   }
 
-  if (amount !== undefined && (typeof amount !== 'number' || Number.isNaN(amount))) {
+  if (
+    amount !== undefined &&
+    (typeof amount !== 'number' || Number.isNaN(amount))
+  ) {
     return res.status(400).json({ success: false, error: 'invalid_amount' });
   }
 
-  const entry = appendLedger({ action: action.trim(), amount: Number(amount) || 0, meta });
+  const entry = appendLedger({
+    action: action.trim(),
+    amount: Number(amount) || 0,
+    meta,
+  });
   res.json({ success: true, entry });
 });
 

@@ -23,6 +23,7 @@ Here are a few light polish notes — nothing is “broken,” these are just wa
 ---
 
 ## 2) Accessibility & Performance
+
 - Add `aria-label` to the sidebar buttons (e.g. "Open Study", "Open Operations", etc.) for screen readers.
 - As Ledger / Vaults grow heavier, consider lazy-loading sections with `React.lazy` + `Suspense` so the initial shell loads instantly.
 
@@ -52,18 +53,23 @@ Here are a few light polish notes — nothing is “broken,” these are just wa
   className="relative inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/60 backdrop-blur-sm overflow-hidden"
 >
   {/* icon */}
-  {musicPlaying ? <PauseIcon className="h-4 w-4" /> : <PlayIcon className="h-4 w-4" />}
+  {musicPlaying ? (
+    <PauseIcon className="h-4 w-4" />
+  ) : (
+    <PlayIcon className="h-4 w-4" />
+  )}
 
   {/* simple ripple */}
   <span className="pointer-events-none absolute inset-0 scale-0 rounded-full bg-white/10 animate-[ping_400ms_ease-out]" />
 </button>
 ```
 
-*(Swap `animate-[ping_...]` for a custom keyframe if you want something more balletic than “ping.”)*
+_(Swap `animate-[ping_...]` for a custom keyframe if you want something more balletic than “ping.”)_
 
 ---
 
 ## 4) Future-Proofing / Sci-Fi Upgrades
+
 - Add subtle particle or shader backgrounds behind main sections (`@react-three/fiber`, `three-stdlib`, or `tsparticles`).
 - Give the Whisper Engine a typewriter / streaming-text effect.
 - Micro-interactions on sidebar icons (tiny orbit/halo when active).
@@ -72,6 +78,7 @@ Here are a few light polish notes — nothing is “broken,” these are just wa
 ---
 
 ## 5) Potential Next Sections
+
 - **Ledger** → blockchain-style transaction explorer with copyable hashes, filters, and “open in explorer” links.
 - **Vaults** → encrypted video reels + credential wallet view (StageCred history, provenance, revocation state).
 - **Callboard** → swipeable opportunity cards (almost Tinder-style) with quick “bookmark / audition / decline.”
@@ -81,4 +88,4 @@ Here are a few light polish notes — nothing is “broken,” these are just wa
 
 Overall: this is one of the most gorgeous dashboards I’ve seen in pure React + Tailwind. It reads like a love letter to dance, data, and decentralized identity. Keep going — this absolutely deserves to ship. 🖤🩰
 
-*(Tone words can be swapped to match the room — more PR-formal, more DM-casual, etc.)*
+_(Tone words can be swapped to match the room — more PR-formal, more DM-casual, etc.)_

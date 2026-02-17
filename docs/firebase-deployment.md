@@ -7,7 +7,7 @@ This guide explains how to deploy the NervösOS product landing pages to Firebas
 The landing pages showcase five key products under the NervösOS umbrella:
 
 - **Bot Gym** (`/bot-gym/`) - AI training and prompt workouts
-- **LoopPool** (`/looppool/`) - Feedback loop automation for AI assistants  
+- **LoopPool** (`/looppool/`) - Feedback loop automation for AI assistants
 - **Retriever AG** (`/retriever-ag/`) - RAG-as-a-service with Golden RAG branding
 - **Cache Up** (`/cache-up/`) - Glossary conflict detection and synchronization
 - **Art Official Intelligence** (`/art-official-intelligence/`) - AI art tools and community
@@ -56,8 +56,8 @@ The `firebase.json` file is optimized for hosting with:
    ```bash
    firebase init hosting
    ```
-   
 2. **Configure the project**:
+
    ```bash
    firebase use <your-project-id>
    ```
@@ -70,16 +70,19 @@ The `firebase.json` file is optimized for hosting with:
 ### Deploy
 
 1. **Build the project** (optional, for dynamic content):
+
    ```bash
    npm run build
    ```
 
 2. **Deploy to Firebase Hosting**:
+
    ```bash
    firebase deploy --only hosting
    ```
 
    Or for specific targets:
+
    ```bash
    firebase deploy --only hosting:nervosos-products
    ```
@@ -101,7 +104,7 @@ This serves the site at `http://localhost:5000` using the same configuration as 
 Each product has its own color scheme defined in CSS custom properties:
 
 - Bot Gym: Red/Orange (`--primary-color: #dc2626`)
-- LoopPool: Blue/Cyan (`--primary-color: #0891b2`) 
+- LoopPool: Blue/Cyan (`--primary-color: #0891b2`)
 - Retriever AG: Green/Lime (`--primary-color: #16a34a`)
 - Cache Up: Purple/Violet (`--primary-color: #7c3aed`)
 - Art Official Intelligence: Pink/Rose (`--primary-color: #db2777`)

@@ -61,8 +61,7 @@ export interface ToolInvocation<
 export abstract class BaseToolInvocation<
   TParams extends object,
   TResult extends ToolResult,
-> implements ToolInvocation<TParams, TResult>
-{
+> implements ToolInvocation<TParams, TResult> {
   constructor(readonly params: TParams) {}
 
   abstract getDescription(): string;
@@ -145,8 +144,7 @@ export interface ToolBuilder<
 export abstract class DeclarativeTool<
   TParams extends object,
   TResult extends ToolResult,
-> implements ToolBuilder<TParams, TResult>
-{
+> implements ToolBuilder<TParams, TResult> {
   constructor(
     readonly name: string,
     readonly displayName: string,

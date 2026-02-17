@@ -18,6 +18,7 @@ The field that enters the room before the body does.
 AURA is a human-facing metaphysical metallic substrate: gold, ore, boundary, resonance, narrative charge.
 
 It determines:
+
 - who you attract
 - what you repel
 - how an audience receives your signal
@@ -39,6 +40,7 @@ The electronic magnetosphere around a nervous system.
 If AURA is conductivity of myth, AURE is conductivity of capacity.
 
 AURE measures:
+
 - overload
 - executive function mode
 - threat load
@@ -49,6 +51,7 @@ AURE measures:
 It is the OS membrane that prevents collapse from turning into consequence.
 
 AURE enforces:
+
 - “no irreversible decisions in overwhelm”
 - “reduce fork-choice under stress”
 - “micro-steps count”
@@ -80,22 +83,27 @@ This is what keeps MythOS humane, legal, ethical, and alive.
 ## 4. Integration into All Existing Systems
 
 **StagePort**
+
 - AURA determines casting readability.
 - AURE determines how many options the UI shows today.
 - Maestra Console switches modes based on AURE drift.
 
 **StudioOS**
+
 - AURA shapes parent messaging styles.
 - AURE disables irreversible scheduling actions during dysregulation.
 
 **StageCred**
+
 - AURA determines contextual weight of a credential.
 - AURE determines whether the mint flow uses “expanded” or “minimal” mode.
 
 **Sovereign Ledger**
+
 - AURE tags events as “maintenance,” “overwhelm,” “restore”—preserving dignity and context.
 
 **Py.rouette**
+
 - AURA influences interpretation of “performance aura.”
 - AURE throttles the scoring engine when the user cannot parse dense math.
 

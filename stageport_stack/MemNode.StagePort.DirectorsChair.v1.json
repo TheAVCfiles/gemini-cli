@@ -7,8 +7,21 @@
     "stageport_stack/30_facility/StagePort_Facility_OS_v4.pdf",
     "stageport_stack/40_ledger/StageCred_Ledger_Spec.md"
   ],
-  "dimensions": ["Surface", "Movement", "Safety", "Economy", "Narrative", "Enterprise"],
-  "engines": ["PyRouette", "SafetyEngine", "DestinyEngine", "DescentEngine", "LedgerShield"],
+  "dimensions": [
+    "Surface",
+    "Movement",
+    "Safety",
+    "Economy",
+    "Narrative",
+    "Enterprise"
+  ],
+  "engines": [
+    "PyRouette",
+    "SafetyEngine",
+    "DestinyEngine",
+    "DescentEngine",
+    "LedgerShield"
+  ],
   "primary_user": "Studio Owner / Director / Parent-Founder",
   "ui_nav": ["HOME", "CALLBOARD", "STUDY", "SALON", "SOVEREIGN"],
   "status": "authoring",

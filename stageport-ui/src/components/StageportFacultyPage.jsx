@@ -9,26 +9,28 @@ const layerData = {
     specs: {
       input: 'Classes, rehearsals, rosters, incident logs',
       function: 'One console with 28-day mutation clock and receipts',
-      status: 'Built & Sellable'
-    }
+      status: 'Built & Sellable',
+    },
   },
   layer2: {
     title: 'Py.rouette TES/PCS Engine',
     desc: 'Transparent scoring with parent-safe language and JSON exports.',
     specs: {
       input: 'Videos, judge notes, rubric weights',
-      function: 'Side-by-side comparisons, TES/PCS/GOE scoring, clean translations',
-      status: 'Built for Pilots'
-    }
+      function:
+        'Side-by-side comparisons, TES/PCS/GOE scoring, clean translations',
+      status: 'Built for Pilots',
+    },
   },
   layer3: {
     title: 'StageCred Marketplace',
     desc: 'Weekly receipts, badges, and portfolios to fund student travel.',
     specs: {
       input: 'Ledger events, token rules, parental preferences',
-      function: 'Exports StageCred PDFs/JSON, auto emails, college-ready evidence',
-      status: 'Asset · Ready to Sell'
-    }
+      function:
+        'Exports StageCred PDFs/JSON, auto emails, college-ready evidence',
+      status: 'Asset · Ready to Sell',
+    },
   },
   layer4: {
     title: 'StageCoin Bank',
@@ -36,16 +38,19 @@ const layerData = {
     specs: {
       input: 'Attendance, leadership points, safety compliance',
       function: 'Mints Stage/Screen/Street tokens with clear redemption rules',
-      status: 'Pilot-ready'
-    }
-  }
+      status: 'Pilot-ready',
+    },
+  },
 };
 
 const taskItems = [
   { id: 'stagecred', label: 'Wire weekly StageCred email automation' },
   { id: 'titleix', label: 'Validate Title IX incident export and audit trail' },
-  { id: 'tokens', label: 'Finalize StageCoin weighting for leadership vs. effort' },
-  { id: 'update', label: 'Ship founder weekly update for investors' }
+  {
+    id: 'tokens',
+    label: 'Finalize StageCoin weighting for leadership vs. effort',
+  },
+  { id: 'update', label: 'Ship founder weekly update for investors' },
 ];
 
 const defaultTaskState = taskItems.reduce((acc, item) => {
@@ -77,7 +82,7 @@ async function callGemini(prompt, systemInstruction = '') {
     const resp = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, system: systemInstruction })
+      body: JSON.stringify({ prompt, system: systemInstruction }),
     });
 
     if (!resp.ok) {
@@ -92,7 +97,9 @@ async function callGemini(prompt, systemInstruction = '') {
     }
 
     const j = await resp.json();
-    return (j.text || '').trim() || offlineAiFallback(prompt, systemInstruction);
+    return (
+      (j.text || '').trim() || offlineAiFallback(prompt, systemInstruction)
+    );
   } catch (err) {
     console.warn('Proxy error:', err);
     return offlineAiFallback(prompt, systemInstruction);
@@ -162,7 +169,7 @@ export default function StageportFacultyPage() {
     return {
       completed,
       total,
-      percent: total ? Math.round((completed / total) * 100) : 0
+      percent: total ? Math.round((completed / total) * 100) : 0,
     };
   }, [taskState]);
 
@@ -188,7 +195,7 @@ export default function StageportFacultyPage() {
       setAiContent(formatAiHtml(text));
     } catch (err) {
       setAiContent(
-        `<p style="color:#fca5a5">AI unavailable — showing fallback.</p><div>${formatAiHtml(offlineAiFallback(prompt, system))}</div>`
+        `<p style="color:#fca5a5">AI unavailable — showing fallback.</p><div>${formatAiHtml(offlineAiFallback(prompt, system))}</div>`,
       );
     } finally {
       setAiLoading(false);
@@ -200,28 +207,32 @@ export default function StageportFacultyPage() {
 
   const analyzeLayer = () => {
     const data = layerData[selectedLayer];
-    const system = 'You are a seasoned CTO and Product Strategist. Analyze software architecture components for risk and scalability.';
+    const system =
+      'You are a seasoned CTO and Product Strategist. Analyze software architecture components for risk and scalability.';
     const prompt = `Analyze this component of the StagePort platform:\n\nComponent: ${data.title}\nDescription: ${data.desc}\nSpecs: ${JSON.stringify(data.specs)}\n\nIdentify:\n1. One critical technical risk.\n2. One scalability opportunity.\nKeep it concise (max 3 bullets).`;
     runAiAction(`Analysis: ${data.title}`, prompt, system);
   };
 
   const generatePitch = () => {
     const data = layerData[selectedLayer];
-    const system = 'You are an expert sales strategist for a B2B SaaS in the performing arts space.';
+    const system =
+      'You are an expert sales strategist for a B2B SaaS in the performing arts space.';
     const prompt = `Write a short, effective cold email pitch to a dance studio owner selling "${data.title}".\n\nKey Context: ${data.desc}\nKeep it under 150 words.`;
     runAiAction(`Drafting Pitch: ${data.title}`, prompt, system);
   };
 
   const handleObjection = () => {
     const data = layerData[selectedLayer];
-    const system = 'You are a master negotiator and sales coach. Provide a calm 3-sentence rebuttal.';
+    const system =
+      'You are a master negotiator and sales coach. Provide a calm 3-sentence rebuttal.';
     const prompt = `I am selling ${data.title}. They said: "We already have a portal for parents."\nGive a concise, persuasive 3-sentence response.`;
     runAiAction(`Handling Objection: ${data.title}`, prompt, system);
   };
 
   const generatePricingModel = () => {
     const data = layerData[selectedLayer];
-    const system = 'You are a SaaS Pricing Expert. Suggest a 3-tier pricing model.';
+    const system =
+      'You are a SaaS Pricing Expert. Suggest a 3-tier pricing model.';
     const prompt = `Suggest Starter/Pro/Scale pricing for ${data.title} (StagePort module). Output format: - Tier: Price - rationale.`;
     runAiAction(`Pricing Strategy: ${data.title}`, prompt, system);
   };
@@ -274,20 +285,22 @@ export default function StageportFacultyPage() {
   const activeLayer = layerData[selectedLayer];
 
   const credentialPreview = useMemo(() => {
-    const svgPreview = operatorLiteracyCredential.credential.visual_archetype.visual_asset.svg
-      .replace(/\s+/g, ' ')
-      .trim()
-      .slice(0, 140);
+    const svgPreview =
+      operatorLiteracyCredential.credential.visual_archetype.visual_asset.svg
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 140);
 
     return {
       ...operatorLiteracyCredential.credential,
       visual_archetype: {
         ...operatorLiteracyCredential.credential.visual_archetype,
         visual_asset: {
-          ...operatorLiteracyCredential.credential.visual_archetype.visual_asset,
-          svg: `${svgPreview}…`
-        }
-      }
+          ...operatorLiteracyCredential.credential.visual_archetype
+            .visual_asset,
+          svg: `${svgPreview}…`,
+        },
+      },
     };
   }, []);
 
@@ -940,20 +953,24 @@ export default function StageportFacultyPage() {
 
         <section className="hero">
           <div>
-            <div className="hero-kicker">Transparent math • 28-day evolution clock</div>
+            <div className="hero-kicker">
+              Transparent math • 28-day evolution clock
+            </div>
             <h1 className="hero-title">
-              Turn rehearsals into <span className="hero-highlight">credentials</span>,
-              tokens and Title&nbsp;IX-ready reports.
+              Turn rehearsals into{' '}
+              <span className="hero-highlight">credentials</span>, tokens and
+              Title&nbsp;IX-ready reports.
             </h1>
             <p className="hero-body">
-              StagePort is the operating system for movement-based studios.
-              We run every routine through transparent scoring, generate cryptographic
-              StageCred reports, and mint tokens that fund scholarships, travel, and leadership.
+              StagePort is the operating system for movement-based studios. We
+              run every routine through transparent scoring, generate
+              cryptographic StageCred reports, and mint tokens that fund
+              scholarships, travel, and leadership.
             </p>
             <p className="hero-sub">
               Under the hood, your studio runs on a 28-day mutation engine:
-              every cycle we ship a new module, patch, or reporting upgrade so your
-              ledger stays alive, accurate, and impossible to ignore.
+              every cycle we ship a new module, patch, or reporting upgrade so
+              your ledger stays alive, accurate, and impossible to ignore.
             </p>
             <div className="hero-actions">
               <a href="stagecred_demo_url_here" target="_blank" rel="noopener">
@@ -987,31 +1004,39 @@ export default function StageportFacultyPage() {
               <div className="hero-panel-tag">Studio OS</div>
             </div>
             <div className="hero-panel-main">
-              One console for <strong>students, offers, scores, tokens</strong> and
-              safety incidents. Built so a studio owner can see
-              <strong> who’s thriving and who needs support</strong> at a glance,
-              then evolve the system on a predictable 28-day rhythm.
+              One console for <strong>students, offers, scores, tokens</strong>{' '}
+              and safety incidents. Built so a studio owner can see
+              <strong> who’s thriving and who needs support</strong> at a
+              glance, then evolve the system on a predictable 28-day rhythm.
             </div>
             <div className="hero-panel-metrics">
               <div className="hero-panel-metric">
                 <div className="metric-label">This Week</div>
                 <div className="metric-value">37 StageCred Reports</div>
-                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Auto-emailed to parents</div>
+                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+                  Auto-emailed to parents
+                </div>
               </div>
               <div className="hero-panel-metric">
                 <div className="metric-label">Tokens Minted</div>
                 <div className="metric-value">612 Stage / 184 Screen</div>
-                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Scholarships · Travel · Gear</div>
+                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+                  Scholarships · Travel · Gear
+                </div>
               </div>
               <div className="hero-panel-metric">
                 <div className="metric-label">Safety</div>
                 <div className="metric-value">0 Open Incidents</div>
-                <div style={{ fontSize: '0.75rem', color: '#22c55e' }}>Title IX view up to date</div>
+                <div style={{ fontSize: '0.75rem', color: '#22c55e' }}>
+                  Title IX view up to date
+                </div>
               </div>
               <div className="hero-panel-metric">
                 <div className="metric-label">Pipeline</div>
                 <div className="metric-value">6 College-Track Dancers</div>
-                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Portfolios exporting as PDFs</div>
+                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+                  Portfolios exporting as PDFs
+                </div>
               </div>
             </div>
           </aside>
@@ -1021,8 +1046,10 @@ export default function StageportFacultyPage() {
           <div className="section-kicker">Operator Literacy crest</div>
           <div className="section-title">Ceremonial seal + notarized halo</div>
           <p className="section-body crest-note">
-            The crest packages the Operator Literacy v1 credential into a reusable badge. Inline SVG keeps the notarized halo
-            animation, and the JSON credential below includes the full SVG so you can mint it directly into the memnode stack.
+            The crest packages the Operator Literacy v1 credential into a
+            reusable badge. Inline SVG keeps the notarized halo animation, and
+            the JSON credential below includes the full SVG so you can mint it
+            directly into the memnode stack.
           </p>
           <div className="crest-grid">
             <div className="crest-card">
@@ -1030,36 +1057,60 @@ export default function StageportFacultyPage() {
                 <p className="crest-card-title">Badge states</p>
                 <span className="crest-chip">Halo notarizes on mint</span>
               </div>
-              <div className="crest-row" role="group" aria-label="Crest badge states">
-                <StageCrest state="inactive" ariaLabel="Operator crest inactive" />
+              <div
+                className="crest-row"
+                role="group"
+                aria-label="Crest badge states"
+              >
+                <StageCrest
+                  state="inactive"
+                  ariaLabel="Operator crest inactive"
+                />
                 <StageCrest state="active" ariaLabel="Operator crest active" />
-                <StageCrest state="notarized" ariaLabel="Operator crest notarized" />
+                <StageCrest
+                  state="notarized"
+                  ariaLabel="Operator crest notarized"
+                />
               </div>
               <div className="crest-legend">
                 <div className="crest-pill">
                   Inactive
-                  <small>Muted ring and glyph; no motion for low-priority lists.</small>
+                  <small>
+                    Muted ring and glyph; no motion for low-priority lists.
+                  </small>
                 </div>
                 <div className="crest-pill">
                   Active
-                  <small>Full palette + Motherboard Green glyph. Hover/press micro-motion lives in CSS.</small>
+                  <small>
+                    Full palette + Motherboard Green glyph. Hover/press
+                    micro-motion lives in CSS.
+                  </small>
                 </div>
                 <div className="crest-pill">
                   Notarized
-                  <small>Glow + rotating halo + star pulse. Best for minted/verified badges.</small>
+                  <small>
+                    Glow + rotating halo + star pulse. Best for minted/verified
+                    badges.
+                  </small>
                 </div>
               </div>
             </div>
             <div className="crest-card">
               <div className="crest-card-head">
-                <p className="crest-card-title">Operator Literacy v1 credential</p>
+                <p className="crest-card-title">
+                  Operator Literacy v1 credential
+                </p>
                 <span className="crest-chip">Inline SVG attached</span>
               </div>
-              <pre className="crest-json" aria-label="Operator Literacy credential JSON">
+              <pre
+                className="crest-json"
+                aria-label="Operator Literacy credential JSON"
+              >
                 {JSON.stringify(credentialPreview, null, 2)}
               </pre>
               <div className="crest-note">
-                Full payload retains the notarized halo animation. Swap state via class name (state--inactive | state--active |
+                Full payload retains the notarized halo animation. Swap state
+                via class name (state--inactive | state--active |
                 state--notarized) on the crest root.
               </div>
             </div>
@@ -1071,10 +1122,13 @@ export default function StageportFacultyPage() {
             <div>
               <h3>Director’s Chair Workbench</h3>
               <p className="workbench-sub">
-                Persisted selections, local task tracking, and AI assistance backed by the secure /api/generate proxy.
+                Persisted selections, local task tracking, and AI assistance
+                backed by the secure /api/generate proxy.
               </p>
             </div>
-            <div className="progress-label">{progress.completed} / {progress.total} tasks</div>
+            <div className="progress-label">
+              {progress.completed} / {progress.total} tasks
+            </div>
           </div>
           <div className="stack-grid">
             <div>
@@ -1130,7 +1184,10 @@ export default function StageportFacultyPage() {
                 <div className="progress-label">{progress.percent}%</div>
               </div>
               <div className="progress-track" aria-hidden="true">
-                <div className="progress-fill" style={{ width: `${progress.percent}%` }} />
+                <div
+                  className="progress-fill"
+                  style={{ width: `${progress.percent}%` }}
+                />
               </div>
               <ul className="task-list">
                 {taskItems.map((task) => (
@@ -1141,7 +1198,10 @@ export default function StageportFacultyPage() {
                       data-task={task.id}
                       checked={taskState[task.id]}
                       onChange={(e) =>
-                        setTaskState({ ...taskState, [task.id]: e.target.checked })
+                        setTaskState({
+                          ...taskState,
+                          [task.id]: e.target.checked,
+                        })
                       }
                     />
                     <span>{task.label}</span>
@@ -1149,23 +1209,43 @@ export default function StageportFacultyPage() {
                 ))}
               </ul>
               <div className="ai-actions">
-                <button className="ai-action-btn" onClick={analyzeLayer} aria-label="Analyze current layer">
+                <button
+                  className="ai-action-btn"
+                  onClick={analyzeLayer}
+                  aria-label="Analyze current layer"
+                >
                   <span className="icon">🧭</span>
                   Analyze risk & scale
                 </button>
-                <button className="ai-action-btn" onClick={generatePitch} aria-label="Generate pitch copy">
+                <button
+                  className="ai-action-btn"
+                  onClick={generatePitch}
+                  aria-label="Generate pitch copy"
+                >
                   <span className="icon">✉️</span>
                   Draft pitch email
                 </button>
-                <button className="ai-action-btn" onClick={handleObjection} aria-label="Handle objection">
+                <button
+                  className="ai-action-btn"
+                  onClick={handleObjection}
+                  aria-label="Handle objection"
+                >
                   <span className="icon">🛡️</span>
                   Handle objection
                 </button>
-                <button className="ai-action-btn" onClick={generatePricingModel} aria-label="Generate pricing">
+                <button
+                  className="ai-action-btn"
+                  onClick={generatePricingModel}
+                  aria-label="Generate pricing"
+                >
                   <span className="icon">💸</span>
                   3-tier pricing
                 </button>
-                <button className="ai-action-btn" onClick={generateInvestorUpdate} aria-label="Generate investor update">
+                <button
+                  className="ai-action-btn"
+                  onClick={generateInvestorUpdate}
+                  aria-label="Generate investor update"
+                >
                   <span className="icon">📜</span>
                   Weekly investor update
                 </button>
@@ -1176,22 +1256,27 @@ export default function StageportFacultyPage() {
 
         <section className="section">
           <div className="section-kicker">Evolution beats</div>
-          <div className="section-title">Your studio runs on a 28-day mutation engine.</div>
+          <div className="section-title">
+            Your studio runs on a 28-day mutation engine.
+          </div>
           <p className="section-body">
-            Your body already knows the pattern: attention, build, peak, reset. StagePort
-            hooks your studio into the same biological schedule. Not quarterly. Not
-            “when things slow down.” Every 28 days, the system pushes a new module,
-            patch, or release across your ledger.
+            Your body already knows the pattern: attention, build, peak, reset.
+            StagePort hooks your studio into the same biological schedule. Not
+            quarterly. Not “when things slow down.” Every 28 days, the system
+            pushes a new module, patch, or release across your ledger.
           </p>
           <p className="section-body" style={{ marginTop: '-0.75rem' }}>
-            That rhythm drives pattern-recognition and endurance instead of burnout.
-            Dancers see fresh upgrades. Parents see steady receipts. You see a studio
-            that never stagnates, because the clock won’t let it.
+            That rhythm drives pattern-recognition and endurance instead of
+            burnout. Dancers see fresh upgrades. Parents see steady receipts.
+            You see a studio that never stagnates, because the clock won’t let
+            it.
           </p>
           <div className="offers-grid" style={{ gap: '0.9rem' }}>
             <div className="offer-card">
               <div className="offer-name">Week 1 – Scan &amp; Score</div>
-              <div className="offer-tagline">Baseline the work onstage and in class.</div>
+              <div className="offer-tagline">
+                Baseline the work onstage and in class.
+              </div>
               <ul className="offer-list">
                 <li>Upload routines and rehearsals</li>
                 <li>Py.rouette engine scores TES/PCS/GOE</li>
@@ -1200,7 +1285,9 @@ export default function StageportFacultyPage() {
             </div>
             <div className="offer-card">
               <div className="offer-name">Week 2 – Ledger &amp; Tokens</div>
-              <div className="offer-tagline">Turn effort into something bankable.</div>
+              <div className="offer-tagline">
+                Turn effort into something bankable.
+              </div>
               <ul className="offer-list">
                 <li>StageCoin rules set for your studio</li>
                 <li>Leadership, consistency and artistry earn extra weight</li>
@@ -1221,28 +1308,36 @@ export default function StageportFacultyPage() {
 
         <section className="section">
           <div className="section-kicker">The gap</div>
-          <div className="section-title">Robotics kids get ecosystems. Dancers get ribbons.</div>
+          <div className="section-title">
+            Robotics kids get ecosystems. Dancers get ribbons.
+          </div>
           <p className="section-body">
-            In tech and STEM, students collect badges, scores, and credentials that feed real
-            pipelines into scholarships, internships, and careers. In dance, cheer, gymnastics
-            and performance, most girls get subjective scores, one-night trophies and no ledger.
-            StagePort fixes that with transparent scoring, cryptographic StageCred reports and
-            a token economy that reinvests back into the students who carry your studio.
+            In tech and STEM, students collect badges, scores, and credentials
+            that feed real pipelines into scholarships, internships, and
+            careers. In dance, cheer, gymnastics and performance, most girls get
+            subjective scores, one-night trophies and no ledger. StagePort fixes
+            that with transparent scoring, cryptographic StageCred reports and a
+            token economy that reinvests back into the students who carry your
+            studio.
           </p>
         </section>
 
         <section className="section" id="pricing">
           <div className="section-kicker">Pricing</div>
-          <div className="section-title">Start small. Scale with your studio.</div>
+          <div className="section-title">
+            Start small. Scale with your studio.
+          </div>
           <div className="section-body">
-            Three offers. No contracts. We start with your existing classes and performances
-            and layer StagePort on top.
+            Three offers. No contracts. We start with your existing classes and
+            performances and layer StagePort on top.
           </div>
           <div className="offers-grid">
             <div className="offer-card">
               <div className="offer-name">StageCred Personal Ledger</div>
               <div className="offer-price">$19 / month per dancer</div>
-              <div className="offer-tagline">For serious students and their parents.</div>
+              <div className="offer-tagline">
+                For serious students and their parents.
+              </div>
               <ul className="offer-list">
                 <li>Weekly StageCred report (TES/PCS/GOE)</li>
                 <li>Badges for technique, leadership, effort</li>
@@ -1250,13 +1345,17 @@ export default function StageportFacultyPage() {
                 <li>Downloadable JSON + PDF portfolio pages</li>
               </ul>
               <div className="offer-cta">
-                <button className="btn-secondary"><span className="icon">📝</span>Enroll a dancer</button>
+                <button className="btn-secondary">
+                  <span className="icon">📝</span>Enroll a dancer
+                </button>
               </div>
             </div>
             <div className="offer-card">
               <div className="offer-name">Py.rouette Judging Package</div>
               <div className="offer-price">$249 intro · from $900 / event</div>
-              <div className="offer-tagline">Transparent scoring for auditions &amp; shows.</div>
+              <div className="offer-tagline">
+                Transparent scoring for auditions &amp; shows.
+              </div>
               <ul className="offer-list">
                 <li>Custom scoring rubric built on Py.rouette</li>
                 <li>Side-by-side routine comparison reports</li>
@@ -1264,57 +1363,87 @@ export default function StageportFacultyPage() {
                 <li>JSON archive for future portfolios and appeals</li>
               </ul>
               <div className="offer-cta">
-                <button className="btn-secondary"><span className="icon">📆</span>Book a judging consult</button>
+                <button className="btn-secondary">
+                  <span className="icon">📆</span>Book a judging consult
+                </button>
               </div>
             </div>
             <div className="offer-card">
               <div className="offer-name">StagePort Starter OS</div>
               <div className="offer-price">$297 one-time</div>
-              <div className="offer-tagline">Your studio’s Director’s Chair in a week.</div>
+              <div className="offer-tagline">
+                Your studio’s Director’s Chair in a week.
+              </div>
               <ul className="offer-list">
-                <li>People, offers, scores, tokens &amp; safety in one console</li>
+                <li>
+                  People, offers, scores, tokens &amp; safety in one console
+                </li>
                 <li>Templates for StageCred, tokens and Title IX log</li>
                 <li>Owner training: how to read the ledger in 15 minutes</li>
                 <li>Roadmap to expand into franchise or competition mode</li>
               </ul>
               <div className="offer-cta">
-                <button className="btn-primary"><span className="icon">🚀</span>Set up my studio OS</button>
+                <button className="btn-primary">
+                  <span className="icon">🚀</span>Set up my studio OS
+                </button>
               </div>
             </div>
           </div>
         </section>
 
         <div className="footer-note">
-          StagePort Systems™ — designed by a choreographer who got tired of vibes-only scoring.
-          Movement deserves math, ledgers and exits too.
+          StagePort Systems™ — designed by a choreographer who got tired of
+          vibes-only scoring. Movement deserves math, ledgers and exits too.
         </div>
       </div>
 
       {aiModalOpen && (
         <div className="ai-modal-backdrop" role="presentation">
-          <div className="ai-modal" role="dialog" aria-modal="true" aria-labelledby="ai-modal-title">
+          <div
+            className="ai-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="ai-modal-title"
+          >
             <header>
               <h3 id="ai-modal-title" ref={modalTitleRef} tabIndex={-1}>
                 {aiTitle}
               </h3>
-              <button className="ai-support-btn" onClick={closeAiModal} aria-label="Close modal">
+              <button
+                className="ai-support-btn"
+                onClick={closeAiModal}
+                aria-label="Close modal"
+              >
                 Close
               </button>
             </header>
             <div className="ai-modal-body">
               {aiLoading ? (
                 <div className="ai-loading">
-                  <span className="spinner" aria-hidden="true" /> Loading secure proxy…
+                  <span className="spinner" aria-hidden="true" /> Loading secure
+                  proxy…
                 </div>
               ) : (
-                <div className="ai-content" id="ai-content" dangerouslySetInnerHTML={{ __html: aiContent }} />
+                <div
+                  className="ai-content"
+                  id="ai-content"
+                  dangerouslySetInnerHTML={{ __html: aiContent }}
+                />
               )}
             </div>
             <div className="ai-modal-footer">
-              <button className="ai-support-btn" onClick={copyToClipboard} disabled={aiLoading}>
+              <button
+                className="ai-support-btn"
+                onClick={copyToClipboard}
+                disabled={aiLoading}
+              >
                 Copy
               </button>
-              <button className="ai-support-btn" onClick={() => downloadAiReport()} disabled={aiLoading}>
+              <button
+                className="ai-support-btn"
+                onClick={() => downloadAiReport()}
+                disabled={aiLoading}
+              >
                 Download
               </button>
             </div>

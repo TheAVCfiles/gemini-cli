@@ -61,7 +61,10 @@ Style the document with Merriweather headings, Inter body text, and optionally a
 ```html
 <p>Dear {{name}},</p>
 
-<p>Thank you — your Persephone / Samhain reading is ready. Download your ritual PDF here:</p>
+<p>
+  Thank you — your Persephone / Samhain reading is ready. Download your ritual
+  PDF here:
+</p>
 <p><a href="{{pdf_link}}">Download Persephone Reading (PDF)</a></p>
 
 {{#if mp3_link}}
@@ -93,7 +96,7 @@ Create a `Settings` sheet with:
 
 Use these formulas starting at row 2 of the ledger:
 
-- StripeFee (F2): `=ROUND(E2*0.029 + 0.30, 2)` *(use Gumroad fees if applicable)*
+- StripeFee (F2): `=ROUND(E2*0.029 + 0.30, 2)` _(use Gumroad fees if applicable)_
 - VariableCost (G2): `=Settings!C2`
 - FixedAlloc (H2): `=ROUND(Settings!A2/Settings!B1,2)`
 - TotalCost (I2): `=F2 + G2 + H2`
@@ -113,36 +116,50 @@ Create a Zap named **Persephone Reading Fulfillment** with the following steps:
    ```javascript
    const dob = inputData.dob; // YYYY-MM-DD
    const parts = dob.split('-');
-   const m = parseInt(parts[1],10);
-   const d = parseInt(parts[2],10);
+   const m = parseInt(parts[1], 10);
+   const d = parseInt(parts[2], 10);
 
-   function getSunSign(month, day){
+   function getSunSign(month, day) {
      const signs = [
-       {name:"Capricorn", start:[12,22], end:[1,19]},
-       {name:"Aquarius", start:[1,20], end:[2,18]},
-       {name:"Pisces", start:[2,19], end:[3,20]},
-       {name:"Aries", start:[3,21], end:[4,19]},
-       {name:"Taurus", start:[4,20], end:[5,20]},
-       {name:"Gemini", start:[5,21], end:[6,20]},
-       {name:"Cancer", start:[6,21], end:[7,22]},
-       {name:"Leo", start:[7,23], end:[8,22]},
-       {name:"Virgo", start:[8,23], end:[9,22]},
-       {name:"Libra", start:[9,23], end:[10,22]},
-       {name:"Scorpio", start:[10,23], end:[11,21]},
-       {name:"Sagittarius", start:[11,22], end:[12,21]}
+       { name: 'Capricorn', start: [12, 22], end: [1, 19] },
+       { name: 'Aquarius', start: [1, 20], end: [2, 18] },
+       { name: 'Pisces', start: [2, 19], end: [3, 20] },
+       { name: 'Aries', start: [3, 21], end: [4, 19] },
+       { name: 'Taurus', start: [4, 20], end: [5, 20] },
+       { name: 'Gemini', start: [5, 21], end: [6, 20] },
+       { name: 'Cancer', start: [6, 21], end: [7, 22] },
+       { name: 'Leo', start: [7, 23], end: [8, 22] },
+       { name: 'Virgo', start: [8, 23], end: [9, 22] },
+       { name: 'Libra', start: [9, 23], end: [10, 22] },
+       { name: 'Scorpio', start: [10, 23], end: [11, 21] },
+       { name: 'Sagittarius', start: [11, 22], end: [12, 21] },
      ];
-     for(let s of signs){
-       const sm = s.start[0], sd = s.start[1], em = s.end[0], ed = s.end[1];
+     for (let s of signs) {
+       const sm = s.start[0],
+         sd = s.start[1],
+         em = s.end[0],
+         ed = s.end[1];
        if (sm <= em) {
-         if ((month === sm && day >= sd) || (month === em && day <= ed) || (month > sm && month < em)) return s.name;
+         if (
+           (month === sm && day >= sd) ||
+           (month === em && day <= ed) ||
+           (month > sm && month < em)
+         )
+           return s.name;
        } else {
-         if ((month === sm && day >= sd) || (month === em && day <= ed) || (month > sm || month < em)) return s.name;
+         if (
+           (month === sm && day >= sd) ||
+           (month === em && day <= ed) ||
+           month > sm ||
+           month < em
+         )
+           return s.name;
        }
      }
-     return "Capricorn";
+     return 'Capricorn';
    }
 
-   output = { sun_sign: getSunSign(m,d) };
+   output = { sun_sign: getSunSign(m, d) };
    ```
 
 3. **Formatter (Text → Template):** Build `chart_summary` string with sun sign, birthplace, birth time, and intention.
@@ -211,4 +228,3 @@ Example data to validate formulas:
 ## F. Additional Support
 
 On request, provide the fully mapped Zap configuration, completed Google Sheet with formulas prefilled, Notion database template, and a worked example JSON output for Zapier testing.
-

@@ -15,7 +15,7 @@ export async function callLLM(systemInstruction, userPrompt) {
     const r = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     });
     if (!r.ok) {
       const t = await r.text();
@@ -29,18 +29,18 @@ export async function callLLM(systemInstruction, userPrompt) {
   const r = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       model: 'gpt-4o-mini',
       temperature: 0.1,
       messages: [
         { role: 'system', content: systemInstruction },
-        { role: 'user', content: userPrompt }
+        { role: 'user', content: userPrompt },
       ],
-      max_tokens: 800
-    })
+      max_tokens: 800,
+    }),
   });
   if (!r.ok) {
     const t = await r.text();
@@ -54,10 +54,10 @@ export async function embedText(text) {
   const r = await fetch('https://api.openai.com/v1/embeddings', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ model: 'text-embedding-3-large', input: text })
+    body: JSON.stringify({ model: 'text-embedding-3-large', input: text }),
   });
   if (!r.ok) {
     const t = await r.text();

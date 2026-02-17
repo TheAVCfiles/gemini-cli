@@ -17,14 +17,14 @@ The Ballet Bots curriculum blends creative dance, robotics, and introductory cod
 
 ## Curriculum arc
 
-| Module | Theme | Core Activities | Competencies |
-| --- | --- | --- | --- |
-| 1. Welcome to Ballet Bots | Story primer, movement warmups | Icebreaker choreography, robotics story world introduction, robotics safety walkthrough | Storytelling, body awareness |
-| 2. Coding Motions | Mapping moves to instructions | Blockly-style sequencer challenges, tempo experiments, debugging relay | Sequencing, loops, conditional thinking |
-| 3. Sensors & Expression | Responsive performance | Investigate distance/light sensors, design call-and-response routines, emotion cue mapping | Inputs/outputs, empathetic design |
-| 4. Collaborative Composition | Team choreography | Group storyboards, role-based planning, rehearsal rotations, constructive critique | Collaboration, iteration |
-| 5. Showcase Build | Production and polish | Lighting/audio integration, costume prototyping, timed run-throughs | Project management, performance readiness |
-| 6. Community Performance | Share with audience | Final performance, reflection circle, badge minting | Reflection, celebration |
+| Module                       | Theme                          | Core Activities                                                                            | Competencies                              |
+| ---------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------ | ----------------------------------------- |
+| 1. Welcome to Ballet Bots    | Story primer, movement warmups | Icebreaker choreography, robotics story world introduction, robotics safety walkthrough    | Storytelling, body awareness              |
+| 2. Coding Motions            | Mapping moves to instructions  | Blockly-style sequencer challenges, tempo experiments, debugging relay                     | Sequencing, loops, conditional thinking   |
+| 3. Sensors & Expression      | Responsive performance         | Investigate distance/light sensors, design call-and-response routines, emotion cue mapping | Inputs/outputs, empathetic design         |
+| 4. Collaborative Composition | Team choreography              | Group storyboards, role-based planning, rehearsal rotations, constructive critique         | Collaboration, iteration                  |
+| 5. Showcase Build            | Production and polish          | Lighting/audio integration, costume prototyping, timed run-throughs                        | Project management, performance readiness |
+| 6. Community Performance     | Share with audience            | Final performance, reflection circle, badge minting                                        | Reflection, celebration                   |
 
 ## Assessment strategy
 

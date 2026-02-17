@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -99,7 +99,9 @@
         border-radius: 12px;
         border: 1px solid #e2e8f0;
         padding: 1rem 1.25rem;
-        transition: border 0.2s ease, box-shadow 0.2s ease;
+        transition:
+          border 0.2s ease,
+          box-shadow 0.2s ease;
         background: #fff;
       }
       .glossary-entry:hover {
@@ -180,9 +182,9 @@
     <header>
       <h1>MWRA Interactive Glossary</h1>
       <p>
-        A maintained reference of MWRA terminology backed by AI-assisted conflict
-        checks. Upload external glossaries, spot conflicts instantly, and export
-        the combined view.
+        A maintained reference of MWRA terminology backed by AI-assisted
+        conflict checks. Upload external glossaries, spot conflicts instantly,
+        and export the combined view.
       </p>
     </header>
     <main class="layout">
@@ -201,16 +203,33 @@
           <div>
             <label for="externalUpload">Upload CSV/JSON</label>
             <div class="upload-zone">
-              <input id="externalUpload" name="externalUpload" type="file" accept=".csv,.json" />
-              <small>Drop a CSV/JSON file to compare with the canonical glossary.</small>
+              <input
+                id="externalUpload"
+                name="externalUpload"
+                type="file"
+                accept=".csv,.json"
+              />
+              <small
+                >Drop a CSV/JSON file to compare with the canonical
+                glossary.</small
+              >
             </div>
           </div>
         </div>
-        <div class="alphabet-nav" role="tablist" aria-label="Glossary navigation"></div>
+        <div
+          class="alphabet-nav"
+          role="tablist"
+          aria-label="Glossary navigation"
+        ></div>
         <div class="results-meta" id="resultsMeta" aria-live="polite"></div>
-        <div class="actions" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <div
+          class="actions"
+          style="display: flex; gap: 0.75rem; flex-wrap: wrap"
+        >
           <button id="resetFilters" class="secondary">Reset filters</button>
-          <button id="exportCsv" class="contrast">Export visible entries</button>
+          <button id="exportCsv" class="contrast">
+            Export visible entries
+          </button>
           <button id="triggerAsk" class="outline">Ask the glossary bot</button>
         </div>
       </section>
@@ -230,13 +249,20 @@
           or missing entries compared to the canonical dataset bundled with this
           site.
         </p>
-        <div id="conflictSummary" class="results-meta" style="margin-top: 0.5rem;"></div>
+        <div
+          id="conflictSummary"
+          class="results-meta"
+          style="margin-top: 0.5rem"
+        ></div>
         <div id="conflictList" class="conflict-list" role="list"></div>
       </section>
     </main>
 
     <footer>
-      Maintained by the MWRA docs team · <a href="https://netlify.com" target="_blank" rel="noreferrer">Deploy on Netlify</a>
+      Maintained by the MWRA docs team ·
+      <a href="https://netlify.com" target="_blank" rel="noreferrer"
+        >Deploy on Netlify</a
+      >
     </footer>
 
     <dialog id="askDialog">
@@ -247,13 +273,25 @@
         </header>
         <form>
           <label for="askPrompt">Prompt</label>
-          <textarea id="askPrompt" name="askPrompt" rows="4" placeholder="Summarize the difference between slurry and grout"></textarea>
-          <footer style="display: flex; justify-content: space-between; gap: 0.75rem;">
-            <button id="cancelAsk" type="button" class="secondary">Cancel</button>
+          <textarea
+            id="askPrompt"
+            name="askPrompt"
+            rows="4"
+            placeholder="Summarize the difference between slurry and grout"
+          ></textarea>
+          <footer
+            style="display: flex; justify-content: space-between; gap: 0.75rem"
+          >
+            <button id="cancelAsk" type="button" class="secondary">
+              Cancel
+            </button>
             <button id="submitAsk" type="submit">Send</button>
           </footer>
         </form>
-        <div id="askResponse" style="margin-top: 1rem; white-space: pre-wrap;"></div>
+        <div
+          id="askResponse"
+          style="margin-top: 1rem; white-space: pre-wrap"
+        ></div>
       </article>
     </dialog>
 

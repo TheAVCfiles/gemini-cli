@@ -47,7 +47,10 @@ export default function App() {
       {view === 'facility' && <FacilityOSCathedral />}
       {view === 'faculty' && <StageportFacultyPage />}
       {view === 'director' && (
-        <DirectorConsole snapshot={snapshot} onOverrideMode={handleOverrideMode} />
+        <DirectorConsole
+          snapshot={snapshot}
+          onOverrideMode={handleOverrideMode}
+        />
       )}
     </div>
   );

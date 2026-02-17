@@ -226,14 +226,14 @@ The capsule’s design leverages principles from onboarding psychology and ritua
 
 ### 7.1. Vendors and Minimums
 
-| Component                | Typical Vendors                | Minimum Order | Unit Cost (USD) | Lead Time      |
-|--------------------------|-------------------------------|---------------|-----------------|---------------|
-| Letterhead Logis Sheet   | Premium printers, specialty   | 100–500       | $2–$5           | 1–2 weeks     |
-| Quokka Stamp Token       | Sticker printers, kinetic     | 250–500       | $0.50–$2        | 1 week        |
-| Rehearsal Note Scrolls   | Holographic overlay vendors   | 100–250       | $1–$3           | 2 weeks       |
-| Ledger Orb Card          | LED badge fabricators         | 50–100        | $4–$10          | 2–3 weeks     |
-| Visual Perception Sheet  | Digital/offset printers       | 100–500       | $1–$2           | 1 week        |
-| Velvet Envelope          | Boutique box manufacturers    | 50–100        | $10–$30         | 2–4 weeks     |
+| Component               | Typical Vendors             | Minimum Order | Unit Cost (USD) | Lead Time |
+| ----------------------- | --------------------------- | ------------- | --------------- | --------- |
+| Letterhead Logis Sheet  | Premium printers, specialty | 100–500       | $2–$5           | 1–2 weeks |
+| Quokka Stamp Token      | Sticker printers, kinetic   | 250–500       | $0.50–$2        | 1 week    |
+| Rehearsal Note Scrolls  | Holographic overlay vendors | 100–250       | $1–$3           | 2 weeks   |
+| Ledger Orb Card         | LED badge fabricators       | 50–100        | $4–$10          | 2–3 weeks |
+| Visual Perception Sheet | Digital/offset printers     | 100–500       | $1–$2           | 1 week    |
+| Velvet Envelope         | Boutique box manufacturers  | 50–100        | $10–$30         | 2–4 weeks |
 
 Production costs decrease with higher volumes. For boutique runs (e.g., 100–250 kits), expect total per-kit costs of $20–$50, depending on material choices and finishing.
 
@@ -315,17 +315,17 @@ Production costs decrease with higher volumes. For boutique runs (e.g., 100–25
 
 ## 11. Comparative Analysis: Boutique Onboarding Kits vs. Corporate Swag
 
-| Feature/Aspect           | StudioOS Capsule Kit         | Corporate Swag Kits             | Boutique School Welcome Kits      |
-|--------------------------|-----------------------------|----------------------------------|-----------------------------------|
-| Narrative/Ritual         | High (staged, serialized)   | Low (functional, generic)        | Medium (personalized, but less ritualized) |
-| Material Quality         | Archival, couture, tactile  | Standard, mass-produced          | Mixed (varies by budget)          |
-| Customization            | Serialized, signed, role-based | Logo and name only             | Student name, grade, basic info   |
-| Digital Integration      | QR/NFC, credential backend  | QR for resources (rare)          | Portal logins, basic QR links     |
-| Accessibility            | Tactile, high-contrast, ADA | Variable, often overlooked       | Variable, some tactile elements   |
-| Sustainability           | FSC, recycled, archival     | Some eco options, not standard   | Increasing focus on eco materials |
-| Security                 | Tamper-evident, hash, logs  | Minimal (if any)                 | Basic (passwords, not physical)   |
-| Cost per Kit             | $20–$50 (boutique)          | $50–$125 (bulk, less custom)     | $15–$25 (budget-focused)          |
-| Strategic Value          | High (brand, retention, audit) | Moderate (morale, visibility)  | Moderate (retention, satisfaction)|
+| Feature/Aspect      | StudioOS Capsule Kit           | Corporate Swag Kits            | Boutique School Welcome Kits               |
+| ------------------- | ------------------------------ | ------------------------------ | ------------------------------------------ |
+| Narrative/Ritual    | High (staged, serialized)      | Low (functional, generic)      | Medium (personalized, but less ritualized) |
+| Material Quality    | Archival, couture, tactile     | Standard, mass-produced        | Mixed (varies by budget)                   |
+| Customization       | Serialized, signed, role-based | Logo and name only             | Student name, grade, basic info            |
+| Digital Integration | QR/NFC, credential backend     | QR for resources (rare)        | Portal logins, basic QR links              |
+| Accessibility       | Tactile, high-contrast, ADA    | Variable, often overlooked     | Variable, some tactile elements            |
+| Sustainability      | FSC, recycled, archival        | Some eco options, not standard | Increasing focus on eco materials          |
+| Security            | Tamper-evident, hash, logs     | Minimal (if any)               | Basic (passwords, not physical)            |
+| Cost per Kit        | $20–$50 (boutique)             | $50–$125 (bulk, less custom)   | $15–$25 (budget-focused)                   |
+| Strategic Value     | High (brand, retention, audit) | Moderate (morale, visibility)  | Moderate (retention, satisfaction)         |
 
 **Analysis**: The StudioOS capsule kit stands apart for its narrative depth, material quality, and integration with digital credentialing. While corporate swag kits focus on utility and brand visibility, and school welcome kits on personalization and information, the StudioOS capsule transforms onboarding into a credentialed, archival, and participatory ritual.
 
@@ -357,7 +357,8 @@ The StudioOS print-ready capsule drop kit reimagines onboarding as a boutique, c
 
 ---
 
-**Key Takeaways**:  
+**Key Takeaways**:
+
 - The StudioOS capsule kit transforms onboarding into a staged, credentialed ritual, leveraging couture materials, kinetic design, and digital integration.
 - Each component—Letterhead Logis Sheet, Quokka Stamp Token, Rehearsal Note Scrolls, Ledger Orb Card, Visual Perception Diagram—serves a narrative and functional purpose.
 - The tri-panel velvet envelope with archival slate lining stages the unboxing as a layered reveal, enhancing anticipation and memory.
@@ -368,16 +369,18 @@ The StudioOS print-ready capsule drop kit reimagines onboarding as a boutique, c
 
 ---
 
-**Visual Layout Suggestion**:  
-- [Front: Embossed, foil-stamped velvet envelope with serialized number]  
-- [Panel 1: Letterhead Logis Sheet in die-cut pocket]  
-- [Panel 2: Quokka Stamp Token and Rehearsal Note Scrolls in translucent sleeve]  
+**Visual Layout Suggestion**:
+
+- [Front: Embossed, foil-stamped velvet envelope with serialized number]
+- [Panel 1: Letterhead Logis Sheet in die-cut pocket]
+- [Panel 2: Quokka Stamp Token and Rehearsal Note Scrolls in translucent sleeve]
 - [Panel 3: Ledger Orb Card in velvet slot, Visual Perception Diagram folded beneath, QR code visible]
 
-**Printable Templates**:  
-- Envelope die-cut vector (tri-panel, velvet wrap, slate lining)  
-- Letterhead Logis Sheet (editable PDF/Word/Indesign)  
-- Quokka Stamp Token (vector mascot, die-cut outline)  
+**Printable Templates**:
+
+- Envelope die-cut vector (tri-panel, velvet wrap, slate lining)
+- Letterhead Logis Sheet (editable PDF/Word/Indesign)
+- Quokka Stamp Token (vector mascot, die-cut outline)
 - Visual Perception Diagram (modular, IKEA-style icons)
 
 ---

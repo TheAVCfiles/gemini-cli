@@ -37,7 +37,9 @@ export default function DirectorConsole({ snapshot, onOverrideMode }) {
               The Studio Core.
             </h1>
           </div>
-          <div className={`px-3 py-1 rounded-full border text-xs font-medium ${MODE_BADGE[aureMode]}`}>
+          <div
+            className={`px-3 py-1 rounded-full border text-xs font-medium ${MODE_BADGE[aureMode]}`}
+          >
             AURE · {aureMode}
           </div>
         </header>
@@ -51,7 +53,9 @@ export default function DirectorConsole({ snapshot, onOverrideMode }) {
             </p>
             <div className="flex items-baseline justify-between">
               <span className="text-4xl font-semibold">{auraPercent}</span>
-              <span className="text-sm text-slate-400">/ 100 · resonance index</span>
+              <span className="text-sm text-slate-400">
+                / 100 · resonance index
+              </span>
             </div>
             <div className="h-2.5 rounded-full bg-slate-800 overflow-hidden">
               <div
@@ -59,14 +63,15 @@ export default function DirectorConsole({ snapshot, onOverrideMode }) {
                   auraPercent < 60
                     ? 'bg-emerald-400'
                     : auraPercent < 80
-                    ? 'bg-amber-400'
-                    : 'bg-red-500'
+                      ? 'bg-amber-400'
+                      : 'bg-red-500'
                 }`}
                 style={{ width: `${Math.min(auraPercent, 100)}%` }}
               />
             </div>
             <p className="text-xs text-slate-400">
-              High AURA = high narrative voltage. AURE will narrow fork-choice automatically.
+              High AURA = high narrative voltage. AURE will narrow fork-choice
+              automatically.
             </p>
           </section>
 
@@ -85,14 +90,15 @@ export default function DirectorConsole({ snapshot, onOverrideMode }) {
                   gapPercent > 70
                     ? 'bg-emerald-400'
                     : gapPercent > 40
-                    ? 'bg-amber-400'
-                    : 'bg-red-500'
+                      ? 'bg-amber-400'
+                      : 'bg-red-500'
                 }`}
                 style={{ width: `${Math.min(gapPercent, 100)}%` }}
               />
             </div>
             <p className="text-xs text-slate-400">
-              When the gap narrows, irreversible actions (deletes, cashouts, casting locks) are blocked.
+              When the gap narrows, irreversible actions (deletes, cashouts,
+              casting locks) are blocked.
             </p>
           </section>
         </div>
@@ -104,7 +110,8 @@ export default function DirectorConsole({ snapshot, onOverrideMode }) {
               Operator Note
             </p>
             <p className="text-sm text-slate-200 min-h-[3rem]">
-              {notes || 'No note logged. Director may annotate this snapshot in the Vault.'}
+              {notes ||
+                'No note logged. Director may annotate this snapshot in the Vault.'}
             </p>
           </section>
 
@@ -114,23 +121,26 @@ export default function DirectorConsole({ snapshot, onOverrideMode }) {
                 Human Override
               </p>
               <p className="text-xs text-slate-400">
-                Director may <strong>only</strong> step mode <em>downward</em> (from OVERWHELM → RESTORE → MAINTENANCE → BASELINE).
+                Director may <strong>only</strong> step mode <em>downward</em>{' '}
+                (from OVERWHELM → RESTORE → MAINTENANCE → BASELINE).
               </p>
               <div className="flex flex-wrap gap-2 mt-2">
-                {MODE_ORDER.slice().reverse().map((mode) => (
-                  <button
-                    key={mode}
-                    disabled={mode === aureMode}
-                    onClick={() => handleOverride(mode)}
-                    className={`text-xs px-2.5 py-1 rounded-full border transition ${
-                      mode === aureMode
-                        ? 'opacity-50 cursor-default border-slate-600 text-slate-400'
-                        : 'hover:border-sky-400/80 hover:text-sky-200 border-slate-700 text-slate-300'
-                    }`}
-                  >
-                    {mode}
-                  </button>
-                ))}
+                {MODE_ORDER.slice()
+                  .reverse()
+                  .map((mode) => (
+                    <button
+                      key={mode}
+                      disabled={mode === aureMode}
+                      onClick={() => handleOverride(mode)}
+                      className={`text-xs px-2.5 py-1 rounded-full border transition ${
+                        mode === aureMode
+                          ? 'opacity-50 cursor-default border-slate-600 text-slate-400'
+                          : 'hover:border-sky-400/80 hover:text-sky-200 border-slate-700 text-slate-300'
+                      }`}
+                    >
+                      {mode}
+                    </button>
+                  ))}
               </div>
             </section>
           )}

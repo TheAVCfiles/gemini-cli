@@ -22,9 +22,9 @@ Engines may process; **humans decide**. Survivorship is not raw material – it 
 
 ## 3. Non-Negotiables
 
-1. **Engines help, never decide.**  
-2. **Glitch = Data, not defect.** Collapses, freezes, and “mistakes” are high-value signal, not shame.  
-3. **Survivor First Rendering.** Any interface that touches real humans must render them as authors, not objects.  
+1. **Engines help, never decide.**
+2. **Glitch = Data, not defect.** Collapses, freezes, and “mistakes” are high-value signal, not shame.
+3. **Survivor First Rendering.** Any interface that touches real humans must render them as authors, not objects.
 4. **Transparent Math.** Any score, risk flag, or credential must be traceable back to:
    - Input → Processing → Output
    - Versioned model + threshold.
@@ -51,6 +51,7 @@ If any of 1–3 fail, system output is discarded, not debated.
 ## 6. Canon Statement
 
 This Constitution is the **Unified Authority Layer** for:
+
 - MythOS
 - StagePort / StudioOS
 - StageCred / Sovereign Ledger

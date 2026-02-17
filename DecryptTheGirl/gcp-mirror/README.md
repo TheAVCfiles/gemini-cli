@@ -18,11 +18,11 @@ This folder provides a minimal FastAPI application and deployment script that mi
    service_name: lilith-loop-mirror
    folios:
      - id: folio-001
-       title: "Lilith Loop (6/8)"
-       glyph_map: "Folios/Folio_001_LilithLoop/glyph_map.json"
-       meta_rule: "Folios/Folio_001_LilithLoop/witness_window.meta"
-       script: "Folios/Folio_001_LilithLoop/LilithLoop.rouette"
-       flowchart: "Folios/Folio_001_LilithLoop/flowchart_access_logic.svg"
+       title: 'Lilith Loop (6/8)'
+       glyph_map: 'Folios/Folio_001_LilithLoop/glyph_map.json'
+       meta_rule: 'Folios/Folio_001_LilithLoop/witness_window.meta'
+       script: 'Folios/Folio_001_LilithLoop/LilithLoop.rouette'
+       flowchart: 'Folios/Folio_001_LilithLoop/flowchart_access_logic.svg'
    ```
 2. Place the Folios directory somewhere accessible to the deployment workflow (same repo is recommended).
 

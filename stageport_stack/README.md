@@ -3,11 +3,13 @@
 This stack captures the Director's Chair experience as a single, compressed layout anchored on the StagePort brand tone.
 
 ## Root Frame
+
 - Left vertical navigation: HOME / CALLBOARD / STUDY / SALON / SOVEREIGN
 - Main panel cards: stats, whispers, contracts, alerts
 - Palette anchors: StagePort black, sovereign gold, magenta whispers, teal utility
 
 ## Directory Map
+
 - `00_founder/`
 - `10_brand/`
 - `20_product/`

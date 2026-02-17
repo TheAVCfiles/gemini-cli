@@ -1,1 +1,11 @@
-{ "name": "StudioOS Gemini-CLI Workspace", "image": "mcr.microsoft.com/devcontainers/javascript-node:18", "postCreateCommand": "chmod +x studioos_pipeline.sh && ./studioos_pipeline.sh 347", "features": {}, "customizations": { "vscode": { "settings": { "terminal.integrated.defaultProfile.linux": "bash" } } } }
+{
+  "name": "StudioOS Gemini-CLI Workspace",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+  "postCreateCommand": "chmod +x studioos_pipeline.sh && ./studioos_pipeline.sh 347",
+  "features": {},
+  "customizations": {
+    "vscode": {
+      "settings": { "terminal.integrated.defaultProfile.linux": "bash" }
+    }
+  }
+}

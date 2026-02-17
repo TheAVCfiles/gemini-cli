@@ -18,12 +18,12 @@ Affluent towns with high parental labor-force participation face a severe shorta
 **Model:**
 
 - Revenue: tuition, enrichment classes, studio rentals, CSA/retail, corporate employer slots, events.
-- Social engine: *Sentient Cents* credits volunteer/in-kind contributions into tuition credits and audited scholarships (run via nonprofit).
+- Social engine: _Sentient Cents_ credits volunteer/in-kind contributions into tuition credits and audited scholarships (run via nonprofit).
 - Legal: Nonprofit owns property; operator leases & licenses IP (recurring license fee). This preserves mission and attracts grants/low-cost capital.
 
 **Traction:**
 
-- Founding-family waitlist: *[insert number]* (pilot conversion demonstrated).
+- Founding-family waitlist: _[insert number]_ (pilot conversion demonstrated).
 - Pilot (studio/aftercare): occupancy, NPS, and revenue metrics (available on request).
 - IP: Notarization protocol, intake UX, Sentient Cents ledger prototype.
 
@@ -54,6 +54,7 @@ Affluent towns with high parental labor-force participation face a severe shorta
 Each slide includes suggested copy, visual cues, and speaker notes.
 
 ### Slide 1 — Problem (Title: “Affluent families. No infant seats. No peace.”)
+
 - **Visual:** Split photo — harried parent + empty infant classroom sign “Waitlist.”
 - **Copy bullets:**
   - Fairfield County: long childcare waitlists; acute infant/toddler shortages.
@@ -62,6 +63,7 @@ Each slide includes suggested copy, visual cues, and speaker notes.
 - **Speaker note:** 30–45s story — a Westport parent missing meetings, unable to find an infant slot.
 
 ### Slide 2 — Solution (Title: “Childcare + Enrichment Village”)
+
 - **Visual:** Site diagram mockup — studio, farm, labs, classrooms.
 - **Copy bullets:**
   - Licensed childcare village (infant → preschool) + dance studio + STEAM labs + farm.
@@ -70,6 +72,7 @@ Each slide includes suggested copy, visual cues, and speaker notes.
 - **Speaker note:** Describe “concierge intelligence” + co-op procurement to lower costs.
 
 ### Slide 3 — Traction & Proof (Title: “Pilot + Pilgrims”)
+
 - **Visual:** Three counters showing Founding Families, Pilot occupancy, Testimonials / NPS.
 - **Copy bullets:**
   - Founding family waitlist: X (referrals from PTOs, studios).
@@ -78,6 +81,7 @@ Each slide includes suggested copy, visual cues, and speaker notes.
 - **Speaker note:** Read two short testimonials, cite pilot conversion.
 
 ### Slide 4 — Model & Financials (Title: “Sustainable, replicable, mission-first”)
+
 - **Visual:** Simplified sources & uses chart + three-year revenue curve.
 - **Copy bullets:**
   - Revenue mix: 60% tuition, 20% studio & events, 10% retail/CSA, 10% grants & corporate slots.
@@ -86,6 +90,7 @@ Each slide includes suggested copy, visual cues, and speaker notes.
 - **Speaker note:** Walk through the capital uses and expected margins; highlight nonprofit property reduces operating pressure.
 
 ### Slide 5 — Ask & Call to Action (Title: “Join founding village”)
+
 - **Visual:** Founding Family photo, LOI badge, CTA.
 - **Copy bullets:**
   - Current ask: $[insert] for site LOI + buildout.
@@ -98,26 +103,31 @@ Each slide includes suggested copy, visual cues, and speaker notes.
 ## Founding Family Landing Page & Deposit Flow Copy
 
 ### Hero Section
+
 - **Headline:** “Founding Families — Build a Village, Shape a Childhood”
 - **Subhead:** “Priority enrollment, discounted tuition, and a vote on early programming. Help us secure a Westport-area site for our licensed Childcare + Enrichment Village.”
 - **Primary CTA:** **Join the Founders List — $500 Deposit**
 
 ### Why Join (Three Bullets)
+
 - Priority enrollment & Founders pricing for life.
 - Influence programming: dance, STEAM labs, farm learning.
 - Your deposit helps secure a site — refundable if project does not proceed.
 
 ### Deposit Usage
+
 - Funds cover site option fees, community pre-apps, and survey costs.
 - Held in escrow and refundable if the project doesn’t reach the LOI threshold.
 - Deposits convert to tuition credit or refund at family’s choice.
 
 ### Founders Benefits (Tiered)
+
 - **Founding Family (standard) — $500:** Priority enrollment, name on Founders Wall, 5% discount first year.
 - **Patron Family — $2,500:** All of the above plus two guest passes to performances and early voting on curricula.
 - **Partner Family — $10,000:** All Patron benefits plus lifetime referral benefits and VIP community table.
 
 ### Deposit Flow Copy
+
 1. Complete the short form (name, email, phone, child age, preferred services).
 2. Pay via Stripe: $500 (PCI secured) — option for $2,500 / $10,000 tiers.
 3. Receive a receipt and Founders Welcome Kit; invitations follow for Founders Circle meetings and site pre-app outreach.
@@ -125,11 +135,13 @@ Each slide includes suggested copy, visual cues, and speaker notes.
 **Refund Policy Snippet:** “Your deposit is refundable if we do not finalize a site LOI within 9 months; you may request a refund anytime prior to LOI.”
 
 ### FAQ Snippets
+
 - **Is my deposit refundable?** Yes — refundable before LOI or if the project doesn’t proceed.
 - **When can I enroll?** Founders receive priority in the first six months after opening.
 - **Is this a nonprofit?** The property will be owned by a nonprofit; the operating company will run programming and provide audited scholarships.
 
 ### Footer CTA
+
 - “Questions? Book a 15-minute chat” (link to Calendly or similar).
 - Include brief legal copy: “We protect your data; deposits held in escrow.”
 
@@ -208,24 +220,24 @@ Use personalization tokens such as [Name], [Org], [Property], and [Town]. Subjec
 
 ### Structure & Timing
 
-- **0:00–0:30 — Founder & Mission (on camera)**  
-  - Shot: Allison in studio/garden, calm, direct eye contact. Soft soundtrack.  
+- **0:00–0:30 — Founder & Mission (on camera)**
+  - Shot: Allison in studio/garden, calm, direct eye contact. Soft soundtrack.
   - Script: “I’m Allison Van Cura. I teach, choreograph and design systems. Families in Fairfield County are brilliant and strapped — they need a village, not more anxiety. We’re building a licensed Childcare + Enrichment Village that is beautiful, honest, and sustainable.”
 
-- **0:30–1:15 — Place & Programs (montage)**  
-  - Shots: dance class, toddler garden digging, STEAM lab with a betta experiment, farm chickens, naptime sunlight. Clips 4–6 seconds each.  
+- **0:30–1:15 — Place & Programs (montage)**
+  - Shots: dance class, toddler garden digging, STEAM lab with a betta experiment, farm chickens, naptime sunlight. Clips 4–6 seconds each.
   - Voiceover: “Imagine infants in safe sunlight rooms, toddlers in labs doing gentle experiments, dance training that supports development morning and night — all under one roof.”
 
-- **1:15–1:45 — Trust & Tech (screen capture)**  
-  - Shots: screen recording of contract upload → hash → notarization badge; Sentient Cents ledger entry turning volunteer hours into scholarships. Overlay copy: “Notarized • Transparent • Auditable.”  
+- **1:15–1:45 — Trust & Tech (screen capture)**
+  - Shots: screen recording of contract upload → hash → notarization badge; Sentient Cents ledger entry turning volunteer hours into scholarships. Overlay copy: “Notarized • Transparent • Auditable.”
   - Voiceover: “Every contract, every license, every community donation is visible. Our digital notary and Sentient Cents make subsidies real.”
 
-- **1:45–2:30 — Impact & Stories (testimonials)**  
-  - Shots: parent testimonial (15–20s), lead teacher (10s). Include natural sound bites.  
+- **1:45–2:30 — Impact & Stories (testimonials)**
+  - Shots: parent testimonial (15–20s), lead teacher (10s). Include natural sound bites.
   - Voiceover: “We started a pilot in a dance studio and these families are thriving — attendance up, stress down.” Overlay metrics: “Pilot retention X%, Founding families Y.”
 
-- **2:30–3:00 — Call to Action**  
-  - Shot: Allison walking through the garden toward camera. Contact overlay.  
+- **2:30–3:00 — Call to Action**
+  - Shot: Allison walking through the garden toward camera. Contact overlay.
   - Script: “We’ve proven the model. We need a site and a partner who believes a community can own its future. Join us with an LOI, a grant, or founding deposit. Contact me: [acfwrites@gmail.com](mailto:acfwrites@gmail.com).”
 
 **Edit Notes:** Warm color grade, gentle music, 16:9 aspect ratio, captions, two to three lower thirds with KPIs and contact info. Export 1080p for social distribution and 4K for investor screening.
@@ -237,6 +249,7 @@ Use personalization tokens such as [Name], [Org], [Property], and [Town]. Subjec
 Automate this workflow with a virtual assistant or no-code tools (Zapier, Make) to surface property and funding matches within 30–60 minutes per day.
 
 ### Core Tools
+
 - Google Alerts or Talkwalker Alerts
 - LoopNet saved searches / CoStar
 - MLS and local broker feeds (via partner broker)
@@ -248,6 +261,7 @@ Automate this workflow with a virtual assistant or no-code tools (Zapier, Make) 
 - Zapier / Make.com to route alerts into Slack or email digests
 
 ### Saved Queries & Alerts
+
 - **Google Alerts:**
   - "estate sale" Westport OR Wilton OR Easton OR "Pound Ridge" -buy -concert
   - "probate" "Fairfield County" "estate" Westport
@@ -271,17 +285,20 @@ Automate this workflow with a virtual assistant or no-code tools (Zapier, Make) 
   - Review Facebook Marketplace / community bulletins in target towns.
 
 ### Automation Flow
+
 1. **Zapier triggers** collect Google Alert emails and create Airtable records with snippets and source links.
 2. **LoopNet alerts** flow through an email parser into Airtable.
 3. **Town agendas** feed via webhook scrapes, populating Airtable with meeting links and notes.
 4. **Daily digest** view filters “New” entries; a VA triages each lead by priority and initiates outreach via templates.
 
 ### Triage Rules
+
 - **High:** Probate LOI, church considering sale, tax auction imminent, owner-represented mission-aligned property — immediate broker outreach.
 - **Medium:** Town special meeting or zoning notice indicating potential availability — schedule pre-app.
 - **Low:** General listings or social posts — log for nurture.
 
 ### Outreach Automation Tips
+
 - Configure Zapier or Airtable automations to send templated introductory emails for “High” leads and schedule follow-up calls.
 - Maintain a pipeline view for property status, outreach owner, and next steps.
 
@@ -290,6 +307,7 @@ Automate this workflow with a virtual assistant or no-code tools (Zapier, Make) 
 ## Lowest-Cost Startup Path & Budget Ranges
 
 ### Minimal Lean Pilot — Afterschool + Enrichment / Shared Studio Model
+
 - Launch within an existing dance studio or rented school classroom.
 - Offer 8–6 afterschool plus morning infant pod; consider licensed family child care home for infant slots.
 - **Budget:** $25k–$75k, covering:
@@ -300,14 +318,17 @@ Automate this workflow with a virtual assistant or no-code tools (Zapier, Make) 
   - Tech stack (Airtable, Stripe, Notarize prototype): $1k–$5k
 
 ### Medium Path — Small Center Conversion
+
 - Retrofit a storefront or modular building for 30–60 children with three to four classrooms and fenced outdoor play.
 - **Budget:** $350k–$900k for buildout plus initial operating cushion.
 
 ### Full Village — Farm + Studio + Labs
+
 - Secure 1–3 acres with barn conversion and extensive site work.
 - **Budget:** $1.25M–$5M+ depending on property and scope.
 
 ### Cost-Saving Tactics
+
 - Pursue ground leases or church partnerships to avoid land purchase.
 - Start with enrichment and afterschool services to validate demand and secure deposits.
 - Deploy modular classrooms or retrofit existing studios.
@@ -321,35 +342,41 @@ Automate this workflow with a virtual assistant or no-code tools (Zapier, Make) 
 Detailed steps, timelines, and rough costs to move from concept to launch.
 
 ### Phase 0 — Decision & Seed (0–30 days)
-1. Finalize core team & governance: incorporate operating entity (LLC) and nonprofit (if applicable), obtain EIN. *(1–7 days; $0–$1,500 legal)*
-2. Prepare founder materials: one-pager, five-slide deck, landing page, pro-forma. *(1–7 days; $0–$2k)*
-3. Launch Founding Family campaign to collect deposits. *(30 days; revenue-generating)*
-4. Book pre-application meetings with CT OEC and town planners. *(two weeks; free)*
+
+1. Finalize core team & governance: incorporate operating entity (LLC) and nonprofit (if applicable), obtain EIN. _(1–7 days; $0–$1,500 legal)_
+2. Prepare founder materials: one-pager, five-slide deck, landing page, pro-forma. _(1–7 days; $0–$2k)_
+3. Launch Founding Family campaign to collect deposits. _(30 days; revenue-generating)_
+4. Book pre-application meetings with CT OEC and town planners. _(two weeks; free)_
 
 ### Phase 1 — Pilot & Property Sourcing (1–3 months)
-5. Launch pilot program via leased studio or school partnership. *(30–90 days; $25k–$75k)*
-6. Conduct property outreach across brokers, probate attorneys, churches, and platforms like LoopNet. *(ongoing)*
-7. Secure option/LOI with refundable deposit and due diligence contingencies. *(2–4 weeks; $5k–$25k option fee)*
+
+5. Launch pilot program via leased studio or school partnership. _(30–90 days; $25k–$75k)_
+6. Conduct property outreach across brokers, probate attorneys, churches, and platforms like LoopNet. _(ongoing)_
+7. Secure option/LOI with refundable deposit and due diligence contingencies. _(2–4 weeks; $5k–$25k option fee)_
 
 ### Phase 2 — Due Diligence & Permits (2–6 months)
-8. Commission surveys and reports: Phase I environmental, topographic, soil, hazardous materials. *(2–4 weeks; $3k–$25k)*
-9. Engage architect and engineer for concepts and cost estimates. *(4–8 weeks; $10k–$60k)*
-10. Navigate zoning and site plan approvals: pre-apps, neighborhood outreach, special permits. *(8–20 weeks; $2k–$20k)*
-11. Close on funding stack: finalize bank, grant, CDFI, and investor commitments. *(4–12 weeks; legal fees $5k–$20k)*
+
+8. Commission surveys and reports: Phase I environmental, topographic, soil, hazardous materials. _(2–4 weeks; $3k–$25k)_
+9. Engage architect and engineer for concepts and cost estimates. _(4–8 weeks; $10k–$60k)_
+10. Navigate zoning and site plan approvals: pre-apps, neighborhood outreach, special permits. _(8–20 weeks; $2k–$20k)_
+11. Close on funding stack: finalize bank, grant, CDFI, and investor commitments. _(4–12 weeks; legal fees $5k–$20k)_
 
 ### Phase 3 — Construction & Licensing (3–9 months)
-12. Select general contractor and execute build (playground, classrooms, kitchen, ADA updates). *(3–9 months; per budget)*
-13. Prepare for CT OEC licensing: staff hiring, manuals, background checks. *(parallel; $5k–$30k)*
-14. Complete inspections: building, fire marshal, health department. *(scheduled; permit fees $1k–$10k)*
+
+12. Select general contractor and execute build (playground, classrooms, kitchen, ADA updates). _(3–9 months; per budget)_
+13. Prepare for CT OEC licensing: staff hiring, manuals, background checks. _(parallel; $5k–$30k)_
+14. Complete inspections: building, fire marshal, health department. _(scheduled; permit fees $1k–$10k)_
 
 ### Phase 4 — Operations & Opening (1–3 months pre-launch)
-15. Hire and train staff: director, leads, floaters, admin. *(begin 2–3 months prior; payroll costs vary)*
-16. Enroll families: convert Founding Families and manage waitlist. *(ongoing)*
-17. Install tech and trust stack: Notarize, Sentient Cents, Stripe, Airtable, booking tools. *(3–6 weeks; $5k–$20k)*
-18. Conduct soft open and quality assurance days with community previews. *(2–4 weeks)*
-19. Host ribbon cutting and launch event. *(event budget flexible)*
+
+15. Hire and train staff: director, leads, floaters, admin. _(begin 2–3 months prior; payroll costs vary)_
+16. Enroll families: convert Founding Families and manage waitlist. _(ongoing)_
+17. Install tech and trust stack: Notarize, Sentient Cents, Stripe, Airtable, booking tools. _(3–6 weeks; $5k–$20k)_
+18. Conduct soft open and quality assurance days with community previews. _(2–4 weeks)_
+19. Host ribbon cutting and launch event. _(event budget flexible)_
 
 ### Ongoing Operations
+
 - Maintain governance cadence, distribute scholarships, track program outcomes, and plan for replication.
 
 ---

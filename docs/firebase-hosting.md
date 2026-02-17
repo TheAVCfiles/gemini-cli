@@ -6,9 +6,9 @@ contains everything required to serve the static glossary UI and proxy `/ask` re
 
 > **At a glance**
 >
-> * Works with the Firebase Spark (free) plan — no paid resources are required for the default configuration.
-> * One download, one install command, one `firebase deploy` to launch.
-> * Cloud Functions are only invoked for `/ask` so static page views stay on the free Hosting tier.
+> - Works with the Firebase Spark (free) plan — no paid resources are required for the default configuration.
+> - One download, one install command, one `firebase deploy` to launch.
+> - Cloud Functions are only invoked for `/ask` so static page views stay on the free Hosting tier.
 >
 > The archive layout is:
 >
@@ -24,13 +24,13 @@ contains everything required to serve the static glossary UI and proxy `/ask` re
 
 ## 1. Prerequisites
 
-| Requirement | Notes |
-| --- | --- |
-| Node.js 18+ | Matches the Firebase Functions runtime used by the package. |
-| [Firebase CLI](https://firebase.google.com/docs/cli) | Install with `npm install -g firebase-tools` if needed. |
-| Firebase project | Re-use the personal `codex` project or create one in the Firebase console. |
-| Hosting site target | Each app in the project should have its own Hosting target (for example `codex-mwra`). |
-| Shared secret | A short passphrase that every authorized user will supply before the Function forwards the request. |
+| Requirement                                          | Notes                                                                                               |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Node.js 18+                                          | Matches the Firebase Functions runtime used by the package.                                         |
+| [Firebase CLI](https://firebase.google.com/docs/cli) | Install with `npm install -g firebase-tools` if needed.                                             |
+| Firebase project                                     | Re-use the personal `codex` project or create one in the Firebase console.                          |
+| Hosting site target                                  | Each app in the project should have its own Hosting target (for example `codex-mwra`).              |
+| Shared secret                                        | A short passphrase that every authorized user will supply before the Function forwards the request. |
 
 ## 2. Download and unpack the starter kit
 
@@ -63,8 +63,8 @@ firebase use <codex-project-id>          # Alias to your existing project
 firebase target:apply hosting codex-mwra <site-id>
 ```
 
-* `<codex-project-id>` is the Firebase project you want to reuse.
-* `<site-id>` is the Hosting site inside that project (create it once in the console). Each app you ship (glossary, lab, etc.)
+- `<codex-project-id>` is the Firebase project you want to reuse.
+- `<site-id>` is the Hosting site inside that project (create it once in the console). Each app you ship (glossary, lab, etc.)
   can map to a different target while still sharing the same billing/quota pool.
 
 The downloaded `firebase.json` already declares a Hosting configuration named `codex-mwra`, so applying the target is a one-time

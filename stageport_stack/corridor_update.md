@@ -11,6 +11,7 @@ All StagePort assets—decks, ledgers, safety protocols, dashboards, and Open Bo
 - Safety, Sentient Cents, and Sovereign governance should reference this memnode ID.
 
 From this point forward:
+
 - No new deck ships without a referenced MemNode.
 - No new feature ships without a route + event schema.
 - No new studio is onboarded without the Director’s Chair dashboard in scope.

@@ -5,8 +5,8 @@ services:
     image: caddy:2
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     environment:
       - ACME_AGREE=true
       - CADDY_ADMIN=0.0.0.0:2019
@@ -22,7 +22,7 @@ services:
     build:
       context: ./app/next
       args:
-        NEXT_PUBLIC_API_BASE: "https://yourdomain.com/api"
+        NEXT_PUBLIC_API_BASE: 'https://yourdomain.com/api'
     environment:
       - NODE_ENV=production
       - PORT=3000

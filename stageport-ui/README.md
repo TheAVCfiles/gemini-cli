@@ -7,6 +7,7 @@ A lightweight React + Vite playground for the Stageport faculty vault experience
 - License modal that posts to `/api/license-create-session`.
 
 ## Getting started
+
 1. `npm install`
 2. Run `npm run dev` and open the provided localhost URL.
 3. Optional: set `VITE_STRIPE_PUBLISHABLE_KEY` to enable live Stripe Checkout redirects. Otherwise the demo uses a client-side success simulation.

@@ -25,10 +25,12 @@ prompt = "Write a 3-bullet summary about {{args}}."
 ## Adding arguments
 
 ### Raw argument injection with `{{args}}`
+
 - Use `{{args}}` anywhere in the prompt to splice in what the user typed after the slash command.
 - Outside of shell blocks the text is inserted verbatim (no escaping) so the model sees exactly what the user wrote.
 
 ### Default argument handling
+
 - If `{{args}}` is **absent**, the CLI appends the full invocation (e.g., `/brief Kafka streams`) to the end of the prompt so the model still sees the user’s parameters.
 
 ## Running shell commands from a template

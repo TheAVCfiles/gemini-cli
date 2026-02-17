@@ -1,5 +1,9 @@
 import 'dotenv/config';
-import express, { type Request, type Response, type NextFunction } from 'express';
+import express, {
+  type Request,
+  type Response,
+  type NextFunction,
+} from 'express';
 import cors from 'cors';
 import { Pool } from 'pg';
 import { z } from 'zod';
@@ -45,7 +49,8 @@ function bad(res: Response, code: number, msg: string) {
 // In production, verify a real JWT and map to user/project ACLs.
 // For now, accept `x-project-id` header.
 app.use((req: Request, _res: Response, next: NextFunction) => {
-  (req as Request & { projectId?: string }).projectId = req.header('x-project-id') ?? undefined;
+  (req as Request & { projectId?: string }).projectId =
+    req.header('x-project-id') ?? undefined;
   next();
 });
 
@@ -79,7 +84,12 @@ const SearchSchema = z.object({
   q: z.string().optional(),
   kinds: z
     .string()
-    .transform((value) => value.split(',').map((item) => item.trim()).filter(Boolean))
+    .transform((value) =>
+      value
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean),
+    )
     .optional(),
   limit: z.coerce.number().min(1).max(50).default(20),
   cursor: z.string().uuid().optional(),
@@ -122,7 +132,9 @@ app.get('/v1/assets/search', async (req: Request, res: Response) => {
     rows.map(async (row) => {
       if (!row.path) return row;
       const command: GetObjectCommandInput = { Bucket: BUCKET, Key: row.path };
-      const url = await getSignedUrl(s3, new GetObjectCommand(command), { expiresIn: 60 });
+      const url = await getSignedUrl(s3, new GetObjectCommand(command), {
+        expiresIn: 60,
+      });
       return { ...row, url };
     }),
   );
@@ -138,7 +150,11 @@ const CreateArtifactSchema = z.object({
   type: z.enum(['pdf', 'audio', 'video', 'link']),
   title: z.string().min(1),
   assetId: z.string().uuid(),
-  ttlHours: z.coerce.number().int().min(1).max(24 * 30),
+  ttlHours: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(24 * 30),
 });
 
 app.post('/v1/artifacts', async (req: Request, res: Response) => {
@@ -183,7 +199,9 @@ app.post('/v1/insights', async (req: Request, res: Response) => {
     Key: key,
     ContentType: 'text/plain',
   };
-  const uploadUrl = await getSignedUrl(s3, new PutObjectCommand(putCommand), { expiresIn: 60 });
+  const uploadUrl = await getSignedUrl(s3, new PutObjectCommand(putCommand), {
+    expiresIn: 60,
+  });
 
   await q(
     `
@@ -211,14 +229,15 @@ app.get('/share/:token', async (req: Request, res: Response) => {
   );
 
   if (!row) return res.status(404).send('Not found');
-  if (new Date(row.expires_at).getTime() < Date.now()) return res.status(410).send('Link expired');
+  if (new Date(row.expires_at).getTime() < Date.now())
+    return res.status(410).send('Link expired');
   if (!row.path) return res.status(404).send('Asset missing');
 
   const command: GetObjectCommandInput = { Bucket: BUCKET, Key: row.path };
-  const url = await getSignedUrl(s3, new GetObjectCommand(command), { expiresIn: 60 });
-  res
-    .type('html')
-    .send(`
+  const url = await getSignedUrl(s3, new GetObjectCommand(command), {
+    expiresIn: 60,
+  });
+  res.type('html').send(`
     <html><body style="font-family:Inter; background:#0b1020; color:#d1d5db; padding:24px">
       <h1 style="color:#fff">${row.title}</h1>
       <p>Type: ${row.type} • Expires: ${new Date(row.expires_at).toLocaleString()}</p>

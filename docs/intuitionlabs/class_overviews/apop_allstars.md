@@ -18,14 +18,14 @@ APop Allstars immerses movers ages 6–12 in KPop-inspired choreography while bu
 
 ## Program arc
 
-| Session | Focus | Signature Activities | Primary Competencies |
-| --- | --- | --- | --- |
-| 1. Rhythm Sync Lab | Tempo awareness & beat mapping | Beat call-outs, tempo slider challenges, LED wristband metronome drills | Timing precision, listening skills |
-| 2. Idol Energy Training | Presence & group unity | Confidence walks, mirror formations, mantra shout-outs, cheer circle | Stage presence, self-belief, peer affirmation |
-| 3. Choreo Cipher | Movement as syntax | Decode emoji-based movement ciphers, annotate routines with iconography, choreo debugging relays | Pattern recognition, symbol fluency |
-| 4. Emotion in Motion | Expressive storytelling | Emotion prompt cards, mirror empathy exercises, movement remix sprints | Emotional literacy, adaptive creativity |
-| 5. Mini-Producer Project | Learner-directed performance | Storyboarding with Kinetic Cipher logs, blocking and lighting cues, rehearsal retros | Project planning, collaborative leadership |
-| 6. Bloom Mode Showcase | Culminating performance | Group tech run, personal emotion glyph explanations, audience Q&A | Reflection, public speaking, celebration |
+| Session                  | Focus                          | Signature Activities                                                                             | Primary Competencies                          |
+| ------------------------ | ------------------------------ | ------------------------------------------------------------------------------------------------ | --------------------------------------------- |
+| 1. Rhythm Sync Lab       | Tempo awareness & beat mapping | Beat call-outs, tempo slider challenges, LED wristband metronome drills                          | Timing precision, listening skills            |
+| 2. Idol Energy Training  | Presence & group unity         | Confidence walks, mirror formations, mantra shout-outs, cheer circle                             | Stage presence, self-belief, peer affirmation |
+| 3. Choreo Cipher         | Movement as syntax             | Decode emoji-based movement ciphers, annotate routines with iconography, choreo debugging relays | Pattern recognition, symbol fluency           |
+| 4. Emotion in Motion     | Expressive storytelling        | Emotion prompt cards, mirror empathy exercises, movement remix sprints                           | Emotional literacy, adaptive creativity       |
+| 5. Mini-Producer Project | Learner-directed performance   | Storyboarding with Kinetic Cipher logs, blocking and lighting cues, rehearsal retros             | Project planning, collaborative leadership    |
+| 6. Bloom Mode Showcase   | Culminating performance        | Group tech run, personal emotion glyph explanations, audience Q&A                                | Reflection, public speaking, celebration      |
 
 ## Cultural & emotional literacy weave
 
