@@ -46,3 +46,11 @@ packages/vscode-ide-companion/*.vsix
 
 # GHA credentials
 gha-creds-*.json
+
+# Institutional confidence filter runtime artifacts
+daily_outputs/
+daily_overlay_regime.json
+
+# Python cache
+__pycache__/
+*.pyc
