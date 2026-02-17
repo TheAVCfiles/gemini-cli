@@ -63,8 +63,7 @@ architecture decisions.
     context.ui.addItem(
       {
         type: 'info',
-        text:
-          'Starter GEMINI.md template created. Now analyzing the project to populate it.',
+        text: 'Starter GEMINI.md template created. Now analyzing the project to populate it.',
       },
       Date.now(),
     );

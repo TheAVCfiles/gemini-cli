@@ -29,12 +29,12 @@ Collect and magnetize the following intel (embed directly in Calendly or Typefor
 
 ## Social Media Resonance Map
 
-| Platform | Viral Hook | CTA Spell | Proof Point |
-| --- | --- | --- | --- |
-| Instagram Reels | "Forecast your 6-week quantum content calendar in 60 minutes" | "Comment FUTURE for the portal invite" | Overlay client aura scans & KPI glow-ups |
-| TikTok Live | Eclipse countdown ritual with binaural beats | "Tap the prism link" overlay pointing to Calendly | Live chart sketching + audience Q&A |
-| LinkedIn Pulse | Case study: "From chaos launch to celestial sell-out" | "DM for a chart-synced GTM blueprint" | 3-slide carousel quoting metrics & testimonials |
-| Newsletter | Subject: "Venus Rx Offer Detox" | Button copy: "Decode My Revenue Rituals" | Embed mini-audio capsule + upcoming transits |
+| Platform        | Viral Hook                                                    | CTA Spell                                         | Proof Point                                     |
+| --------------- | ------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| Instagram Reels | "Forecast your 6-week quantum content calendar in 60 minutes" | "Comment FUTURE for the portal invite"            | Overlay client aura scans & KPI glow-ups        |
+| TikTok Live     | Eclipse countdown ritual with binaural beats                  | "Tap the prism link" overlay pointing to Calendly | Live chart sketching + audience Q&A             |
+| LinkedIn Pulse  | Case study: "From chaos launch to celestial sell-out"         | "DM for a chart-synced GTM blueprint"             | 3-slide carousel quoting metrics & testimonials |
+| Newsletter      | Subject: "Venus Rx Offer Detox"                               | Button copy: "Decode My Revenue Rituals"          | Embed mini-audio capsule + upcoming transits    |
 
 ## Session Arc (60-minute Liquid Light Sequence)
 
@@ -69,7 +69,7 @@ Whisper these phrases across DM follow-ups, webinar scripts, and checkout pages 
 - "Your future-self funnel is already broadcasting — we simply sync your current launch to her signal."
 - "Every dollar you invest returns as ritual-ready revenue because your calendar now obeys cosmic liquidity."
 - "This consultation is the dampener that turns chaotic hustle into a smooth, ever-expanding cash tide."
-- "We engineer beauty so your audience sees proof, feels prophecy, and presses pay now." 
+- "We engineer beauty so your audience sees proof, feels prophecy, and presses pay now."
 
 ## Follow-up Workflow
 

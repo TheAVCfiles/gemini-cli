@@ -43,11 +43,14 @@ function getErrorMessage(error: unknown): string {
 
 function isWithinRoot(location: string, root: string): boolean {
   const relative = path.relative(path.resolve(root), path.resolve(location));
-  return relative !== '' && !relative.startsWith('..') && !path.isAbsolute(relative);
+  return (
+    relative !== '' && !relative.startsWith('..') && !path.isAbsolute(relative)
+  );
 }
 
 export function isFolderTrustEnabled(settings: Settings): boolean {
-  const featureEnabled = settings.security?.folderTrust?.featureEnabled ?? false;
+  const featureEnabled =
+    settings.security?.folderTrust?.featureEnabled ?? false;
   const settingEnabled = settings.security?.folderTrust?.enabled ?? false;
   return featureEnabled && settingEnabled;
 }

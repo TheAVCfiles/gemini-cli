@@ -8,20 +8,20 @@ The minting system rewards Ballet Bots learners with on-chain badges that track 
 - **Token standard:** ERC-1155 contract supporting batch minting for class cohorts while keeping metadata unique per badge.
 - **Metadata hosting:** JSON descriptors stored via IPFS with fallback caching on the program server for reliable access in low-connectivity settings.
 - **Access roles:**
-  - *Program Director* can update metadata templates, revoke badges in rare cases, and manage cohort configuration.
-  - *Facilitators* mint badges through a dashboard authenticated by OAuth and wallet delegation.
-  - *Learners* receive custodial wallets managed through guardian email approval; families can later export badges to a personal wallet.
+  - _Program Director_ can update metadata templates, revoke badges in rare cases, and manage cohort configuration.
+  - _Facilitators_ mint badges through a dashboard authenticated by OAuth and wallet delegation.
+  - _Learners_ receive custodial wallets managed through guardian email approval; families can later export badges to a personal wallet.
 
 ## Badge types
 
-| Badge | Trigger | Metadata Highlights |
-| --- | --- | --- |
-| `Warmup Voyager` | Completes Module 1 collaborative warmup and sets personal learning goal. | Animated gradient background, goal statement text field. |
-| `Choreo Debugger` | Demonstrates three iterative improvements during Module 2 coding labs. | Step-by-step code screenshots, facilitator annotations. |
-| `Sensor Storyteller` | Designs responsive routine using at least one sensor input in Module 3. | Sensor data capture snippet, audio mood selection. |
-| `Collaborative Composer` | Leads feedback session and documents action items in Module 4. | Team roster, peer shout-outs. |
-| `Stagecraft Specialist` | Integrates lighting or costume prototype during Module 5 build week. | Media gallery attachments, lighting preset tags. |
-| `Community Showcase` | Performs at Module 6 showcase and completes reflection journal. | Performance clip link, audience feedback quotes. |
+| Badge                    | Trigger                                                                  | Metadata Highlights                                      |
+| ------------------------ | ------------------------------------------------------------------------ | -------------------------------------------------------- |
+| `Warmup Voyager`         | Completes Module 1 collaborative warmup and sets personal learning goal. | Animated gradient background, goal statement text field. |
+| `Choreo Debugger`        | Demonstrates three iterative improvements during Module 2 coding labs.   | Step-by-step code screenshots, facilitator annotations.  |
+| `Sensor Storyteller`     | Designs responsive routine using at least one sensor input in Module 3.  | Sensor data capture snippet, audio mood selection.       |
+| `Collaborative Composer` | Leads feedback session and documents action items in Module 4.           | Team roster, peer shout-outs.                            |
+| `Stagecraft Specialist`  | Integrates lighting or costume prototype during Module 5 build week.     | Media gallery attachments, lighting preset tags.         |
+| `Community Showcase`     | Performs at Module 6 showcase and completes reflection journal.          | Performance clip link, audience feedback quotes.         |
 
 ## Minting workflow
 

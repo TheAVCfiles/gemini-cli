@@ -10,7 +10,12 @@ Use this schema for Director's Chair surfaces and supporting routes. Swap identi
   "dimension": ["Movement", "Economy", "Safety"],
   "route": "/home",
   "inputs": ["HumanIndexSnapshot", "MoveMintEvent", "LedgerSummary"],
-  "outputs": ["DashboardCard:Students", "DashboardCard:Attendance", "DashboardCard:Revenue", "Whisper:ContextCue"],
+  "outputs": [
+    "DashboardCard:Students",
+    "DashboardCard:Attendance",
+    "DashboardCard:Revenue",
+    "Whisper:ContextCue"
+  ],
   "safety_grade": "A",
   "owner": "AVC",
   "status": "active"

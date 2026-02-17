@@ -1,7 +1,9 @@
 # SYVAQ — DeCrypt the Future Workspace
 
 ## Client Intake (Page)
+
 **Fields**
+
 - Client Name
 - Founder Birthdate & Time (Timezone)
 - Founder Birthplace (City, Country)
@@ -13,7 +15,9 @@
 - Notes
 
 ## Delivery Project (Database)
+
 **Columns**
+
 - Week (Number)
 - Dates (Date Range)
 - Objective (Text)
@@ -26,7 +30,9 @@
 - Completed (Checkbox)
 
 ## Astro Engine (Database)
+
 **Columns**
+
 - Date
 - Founder Score
 - Entity Score
@@ -37,7 +43,9 @@
 - Event (Relation → Delivery Project)
 
 ## Guardian Protocol (Page)
+
 **Sections**
+
 - Guardian Role & Script
 - Aura Mode Flow (low-visibility signal)
 - Escalation Matrix
@@ -45,7 +53,9 @@
 - Debrief Template
 
 ## Case Studies (Page)
+
 **Template**
+
 - Date
 - Short Summary (three sentences)
 - Signals Leading Up to Event (list)

@@ -114,19 +114,32 @@ function applyTradeToPositions(symbol, quantity, price) {
   let quantityAfter = existing.quantity;
   let avgPriceAfter = existing.avgPrice;
 
-  if (existing.quantity === 0 || Math.sign(existing.quantity) === Math.sign(quantity)) {
+  if (
+    existing.quantity === 0 ||
+    Math.sign(existing.quantity) === Math.sign(quantity)
+  ) {
     quantityAfter = existing.quantity + quantity;
-    const totalNotional = existing.avgPrice * existing.quantity + price * quantity;
+    const totalNotional =
+      existing.avgPrice * existing.quantity + price * quantity;
     avgPriceAfter = quantityAfter === 0 ? 0 : totalNotional / quantityAfter;
-    state.positions.set(symbol, { quantity: quantityAfter, avgPrice: avgPriceAfter });
+    state.positions.set(symbol, {
+      quantity: quantityAfter,
+      avgPrice: avgPriceAfter,
+    });
     return realized;
   }
 
   let remainingPosition = existing.quantity;
   let avgPrice = existing.avgPrice;
 
-  while (remainingQty !== 0 && Math.sign(remainingPosition) === -Math.sign(remainingQty)) {
-    const closable = Math.min(Math.abs(remainingPosition), Math.abs(remainingQty));
+  while (
+    remainingQty !== 0 &&
+    Math.sign(remainingPosition) === -Math.sign(remainingQty)
+  ) {
+    const closable = Math.min(
+      Math.abs(remainingPosition),
+      Math.abs(remainingQty),
+    );
     if (remainingPosition > 0) {
       realized += closable * (price - avgPrice);
       remainingPosition -= closable;
@@ -279,10 +292,14 @@ function handleOpps(response) {
 function handleKillswitch(response, searchParams) {
   const nextState = searchParams.get('state');
   if (!nextState) {
-    return respondJson(response, 200, { state: state.killswitch ? 'on' : 'off' });
+    return respondJson(response, 200, {
+      state: state.killswitch ? 'on' : 'off',
+    });
   }
   if (nextState !== 'on' && nextState !== 'off') {
-    return respondJson(response, 400, { error: 'Killswitch state must be "on" or "off"' });
+    return respondJson(response, 400, {
+      error: 'Killswitch state must be "on" or "off"',
+    });
   }
   state.killswitch = nextState === 'on';
   return respondJson(response, 200, { state: nextState });

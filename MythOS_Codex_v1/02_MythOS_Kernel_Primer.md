@@ -3,6 +3,7 @@
 ## Section 1 – Origin: The Girl and the Gate
 
 Before engines and ledgers, there was the **body**:
+
 - The ballet body.
 - The survivor body.
 - The archetypal body.
@@ -43,6 +44,7 @@ Duality becomes doctrine. Doctrine becomes dynasty.
 **Signal → Structure → Sovereignty**
 
 This kernel drives:
+
 - The Physics Engine (DeepScorer / Py.rouette)
 - StagePort Execution Stack
 - Sovereign Ledger

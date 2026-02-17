@@ -1,5 +1,9 @@
 /* @jsxImportSource https://esm.sh/react@18.3.1?dev */
-import React, { useState, useEffect, useCallback } from 'https://esm.sh/react@18.3.1?dev';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+} from 'https://esm.sh/react@18.3.1?dev';
 import { createRoot } from 'https://esm.sh/react-dom@18.3.1/client?dev';
 import {
   Play,
@@ -14,32 +18,152 @@ import {
 
 // --- GAME CONFIGURATION ---
 const ACTIONS = {
-  SPIN: { name: 'Spin', emoji: '🔄', color: 'bg-fuchsia-600', ring: 'ring-fuchsia-400/50', icon: '🌀' },
-  STRIKE: { name: 'Strike', emoji: '👊', color: 'bg-red-600', ring: 'ring-red-400/50', icon: '⚔️' },
-  JUMP: { name: 'Jump', emoji: '⬆️', color: 'bg-cyan-600', ring: 'ring-cyan-400/50', icon: '⚡' },
-  POSE: { name: 'Pose', emoji: '💅', color: 'bg-indigo-600', ring: 'ring-indigo-400/50', icon: '⭐' },
+  SPIN: {
+    name: 'Spin',
+    emoji: '🔄',
+    color: 'bg-fuchsia-600',
+    ring: 'ring-fuchsia-400/50',
+    icon: '🌀',
+  },
+  STRIKE: {
+    name: 'Strike',
+    emoji: '👊',
+    color: 'bg-red-600',
+    ring: 'ring-red-400/50',
+    icon: '⚔️',
+  },
+  JUMP: {
+    name: 'Jump',
+    emoji: '⬆️',
+    color: 'bg-cyan-600',
+    ring: 'ring-cyan-400/50',
+    icon: '⚡',
+  },
+  POSE: {
+    name: 'Pose',
+    emoji: '💅',
+    color: 'bg-indigo-600',
+    ring: 'ring-indigo-400/50',
+    icon: '⭐',
+  },
 };
 
 const DANCE_MOVES = [
-  { name: 'Demon Portal Spin', action: ACTIONS.SPIN, description: 'A fluid, gravity-defying swirl.', power: 'SPEED' },
-  { name: 'Spirit Sword Strike', action: ACTIONS.STRIKE, description: 'A sharp slice to banish shadows.', power: 'POWER' },
-  { name: 'Shadow Step Slide', action: ACTIONS.POSE, description: 'A stylish, quick transition.', power: 'STEALTH' },
-  { name: 'Energy Wave Jump', action: ACTIONS.JUMP, description: 'Leap high to launch energy.', power: 'ENERGY' },
-  { name: 'Heart Shield Pop', action: ACTIONS.POSE, description: 'Pop and lock with attitude.', power: 'SHIELD' },
-  { name: 'Thunder Kick Combo', action: ACTIONS.STRIKE, description: 'Powerful triple-kick sequence.', power: 'STRIKE' },
-  { name: 'Mystic Hip Roll', action: ACTIONS.SPIN, description: 'Roll those hips in a magic circle.', power: 'MAGIC' },
-  { name: 'Victory Star Pose', action: ACTIONS.JUMP, description: 'End with a dazzling, high stance.', power: 'CHARM' },
+  {
+    name: 'Demon Portal Spin',
+    action: ACTIONS.SPIN,
+    description: 'A fluid, gravity-defying swirl.',
+    power: 'SPEED',
+  },
+  {
+    name: 'Spirit Sword Strike',
+    action: ACTIONS.STRIKE,
+    description: 'A sharp slice to banish shadows.',
+    power: 'POWER',
+  },
+  {
+    name: 'Shadow Step Slide',
+    action: ACTIONS.POSE,
+    description: 'A stylish, quick transition.',
+    power: 'STEALTH',
+  },
+  {
+    name: 'Energy Wave Jump',
+    action: ACTIONS.JUMP,
+    description: 'Leap high to launch energy.',
+    power: 'ENERGY',
+  },
+  {
+    name: 'Heart Shield Pop',
+    action: ACTIONS.POSE,
+    description: 'Pop and lock with attitude.',
+    power: 'SHIELD',
+  },
+  {
+    name: 'Thunder Kick Combo',
+    action: ACTIONS.STRIKE,
+    description: 'Powerful triple-kick sequence.',
+    power: 'STRIKE',
+  },
+  {
+    name: 'Mystic Hip Roll',
+    action: ACTIONS.SPIN,
+    description: 'Roll those hips in a magic circle.',
+    power: 'MAGIC',
+  },
+  {
+    name: 'Victory Star Pose',
+    action: ACTIONS.JUMP,
+    description: 'End with a dazzling, high stance.',
+    power: 'CHARM',
+  },
 ];
 
 const SHOP_ITEMS = [
-  { id: 1, name: 'Neon Cybersuit', emoji: '👚', cost: 150, type: 'outfit', color: 'text-cyan-400' },
-  { id: 2, name: 'Celestial Wings', emoji: '🕊️', cost: 220, type: 'accessory', color: 'text-purple-300' },
-  { id: 3, name: 'Rave Cat Headphones', emoji: '🎧', cost: 120, type: 'accessory', color: 'text-lime-400' },
-  { id: 4, name: 'Vampire Sneakers', emoji: '👟', cost: 180, type: 'shoes', color: 'text-red-400' },
-  { id: 5, name: 'Glitter Bomb Lipstick', emoji: '💄', cost: 90, type: 'accessory', color: 'text-pink-400' },
-  { id: 6, name: 'Holographic Skirt', emoji: '👗', cost: 160, type: 'outfit', color: 'text-yellow-400' },
-  { id: 7, name: 'K-Pop Ring Light', emoji: '💡', cost: 80, type: 'accessory', color: 'text-white' },
-  { id: 8, name: 'Aura Booster Drink', emoji: '🍹', cost: 50, type: 'food', color: 'text-orange-400' },
+  {
+    id: 1,
+    name: 'Neon Cybersuit',
+    emoji: '👚',
+    cost: 150,
+    type: 'outfit',
+    color: 'text-cyan-400',
+  },
+  {
+    id: 2,
+    name: 'Celestial Wings',
+    emoji: '🕊️',
+    cost: 220,
+    type: 'accessory',
+    color: 'text-purple-300',
+  },
+  {
+    id: 3,
+    name: 'Rave Cat Headphones',
+    emoji: '🎧',
+    cost: 120,
+    type: 'accessory',
+    color: 'text-lime-400',
+  },
+  {
+    id: 4,
+    name: 'Vampire Sneakers',
+    emoji: '👟',
+    cost: 180,
+    type: 'shoes',
+    color: 'text-red-400',
+  },
+  {
+    id: 5,
+    name: 'Glitter Bomb Lipstick',
+    emoji: '💄',
+    cost: 90,
+    type: 'accessory',
+    color: 'text-pink-400',
+  },
+  {
+    id: 6,
+    name: 'Holographic Skirt',
+    emoji: '👗',
+    cost: 160,
+    type: 'outfit',
+    color: 'text-yellow-400',
+  },
+  {
+    id: 7,
+    name: 'K-Pop Ring Light',
+    emoji: '💡',
+    cost: 80,
+    type: 'accessory',
+    color: 'text-white',
+  },
+  {
+    id: 8,
+    name: 'Aura Booster Drink',
+    emoji: '🍹',
+    cost: 50,
+    type: 'food',
+    color: 'text-orange-400',
+  },
 ];
 
 const MOVE_TIME_MS = 2500;
@@ -117,7 +241,7 @@ const App = () => {
         }
       }, 500);
     },
-    [isPlaying, startNextMove]
+    [isPlaying, startNextMove],
   );
 
   // Smooth progress ticker
@@ -200,7 +324,7 @@ const App = () => {
       setFeedback(feedbackText);
       handleMoveResult(true, scoreIncrease, 1);
     },
-    [isPlaying, moveStartTime, feedback, currentMoveIndex, handleMoveResult]
+    [isPlaying, moveStartTime, feedback, currentMoveIndex, handleMoveResult],
   );
 
   const buyItem = useCallback(
@@ -211,7 +335,7 @@ const App = () => {
         setEquippedItem(item);
       }
     },
-    [coins, inventory]
+    [coins, inventory],
   );
 
   const equipItem = useCallback((item) => {
@@ -248,11 +372,19 @@ const App = () => {
 
     window.addEventListener('keydown', keyToAction);
     return () => window.removeEventListener('keydown', keyToAction);
-  }, [isPlaying, moveStartTime, feedback, handleUserAction, handleStartStopClick]);
+  }, [
+    isPlaying,
+    moveStartTime,
+    feedback,
+    handleUserAction,
+    handleStartStopClick,
+  ]);
 
   const currentMove = DANCE_MOVES[currentMoveIndex];
   const timeRemaining =
-    moveStartTime > 0 ? Math.max(0, MOVE_TIME_MS - (now - moveStartTime)) : MOVE_TIME_MS;
+    moveStartTime > 0
+      ? Math.max(0, MOVE_TIME_MS - (now - moveStartTime))
+      : MOVE_TIME_MS;
   const progressPercent = (timeRemaining / MOVE_TIME_MS) * 100;
 
   const feedbackStyle = (fb) => {
@@ -281,7 +413,9 @@ const App = () => {
           : 'opacity-50 cursor-not-allowed'
       }`}
     >
-      <div className="text-3xl sm:text-4xl mb-1 drop-shadow-md">{action.emoji}</div>
+      <div className="text-3xl sm:text-4xl mb-1 drop-shadow-md">
+        {action.emoji}
+      </div>
       {action.name.toUpperCase()}
     </button>
   );
@@ -292,12 +426,20 @@ const App = () => {
     return (
       <div
         className={`bg-black/40 rounded-xl p-4 text-center backdrop-blur flex flex-col items-center justify-between h-full transition hover:bg-black/60 border-2 border-transparent ${
-          isEquipped ? 'border-cyan-400 shadow-[0_0_15px_rgba(52,211,235,0.7)]' : 'border-gray-700'
+          isEquipped
+            ? 'border-cyan-400 shadow-[0_0_15px_rgba(52,211,235,0.7)]'
+            : 'border-gray-700'
         }`}
       >
         <div>
-          <div className={`text-4xl sm:text-5xl mb-2 ${item.color} drop-shadow-lg`}>{item.emoji}</div>
-          <h3 className="font-extrabold mb-2 text-sm sm:text-base text-gray-100">{item.name}</h3>
+          <div
+            className={`text-4xl sm:text-5xl mb-2 ${item.color} drop-shadow-lg`}
+          >
+            {item.emoji}
+          </div>
+          <h3 className="font-extrabold mb-2 text-sm sm:text-base text-gray-100">
+            {item.name}
+          </h3>
         </div>
 
         <div className="w-full mt-3">
@@ -328,7 +470,9 @@ const App = () => {
                   : 'bg-gray-700 cursor-not-allowed opacity-70 text-gray-400'
               }`}
             >
-              {coins >= item.cost ? `Buy 💰 ${item.cost}` : `💰 ${item.cost} (LOCKED)`}
+              {coins >= item.cost
+                ? `Buy 💰 ${item.cost}`
+                : `💰 ${item.cost} (LOCKED)`}
             </button>
           )}
         </div>
@@ -339,7 +483,10 @@ const App = () => {
   return (
     <div
       className="min-h-screen bg-black text-white p-4 sm:p-6 font-['Inter']"
-      style={{ backgroundImage: 'radial-gradient(at 50% 100%, #150030 0%, #000000 70%)' }}
+      style={{
+        backgroundImage:
+          'radial-gradient(at 50% 100%, #150030 0%, #000000 70%)',
+      }}
     >
       {/* Header Stats */}
       <div className="max-w-4xl mx-auto mb-6">
@@ -355,9 +502,12 @@ const App = () => {
             </div>
             <div className="flex items-center gap-1 sm:gap-2">
               <Award className="text-red-400 w-5 h-5 drop-shadow-[0_0_5px_red]" />
-              <span className={`font-black tracking-widest ${
-                combo > 0 ? 'text-red-500 drop-shadow-[0_0_8px_red]' : 'text-gray-400'
-              }`}
+              <span
+                className={`font-black tracking-widest ${
+                  combo > 0
+                    ? 'text-red-500 drop-shadow-[0_0_8px_red]'
+                    : 'text-gray-400'
+                }`}
               >
                 COMBO: {combo}x
               </span>
@@ -382,8 +532,13 @@ const App = () => {
             <div className="text-center mb-4 min-h-[40px]">
               {equippedItem && (
                 <div className="inline-flex items-center bg-black/60 p-2 rounded-full border border-cyan-400 shadow-lg shadow-cyan-900/50">
-                  <Sparkles className="w-4 h-4 text-cyan-300 mr-1 animate-spin" style={{ animationDuration: '2s' }} />
-                  <span className="text-xs font-semibold text-gray-300 mr-2">STATUS EFFECT:</span>
+                  <Sparkles
+                    className="w-4 h-4 text-cyan-300 mr-1 animate-spin"
+                    style={{ animationDuration: '2s' }}
+                  />
+                  <span className="text-xs font-semibold text-gray-300 mr-2">
+                    STATUS EFFECT:
+                  </span>
                   <span
                     className={`text-xl font-bold tracking-wider ${equippedItem.color}`}
                     title={equippedItem.name}
@@ -399,7 +554,10 @@ const App = () => {
               {isPlaying && moveStartTime > 0 && (
                 <div
                   className="absolute top-0 left-0 h-2 bg-gradient-to-r from-red-600 to-yellow-400"
-                  style={{ width: `${progressPercent}%`, transition: 'width 0.1s linear' }}
+                  style={{
+                    width: `${progressPercent}%`,
+                    transition: 'width 0.1s linear',
+                  }}
                 />
               )}
 
@@ -407,7 +565,7 @@ const App = () => {
               {feedback && (
                 <div
                   className={`absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-10 font-black transition-opacity duration-300 ${feedbackStyle(
-                    feedback
+                    feedback,
                   )}`}
                 >
                   {feedback}
@@ -459,7 +617,9 @@ const App = () => {
                       UNSTOPPABLE! PUSH THE LIMITS!
                     </span>
                   ) : combo > 5 ? (
-                    <span className="text-red-400 font-bold">RISING HEAT! MAINTAIN THE CHAIN!</span>
+                    <span className="text-red-400 font-bold">
+                      RISING HEAT! MAINTAIN THE CHAIN!
+                    </span>
                   ) : (
                     'FIGHT! Match the move action before the bar runs out.'
                   )
@@ -479,7 +639,10 @@ const App = () => {
               onClick={() => setShowShop(true)}
               className="bg-black/80 hover:bg-black/90 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-black text-lg sm:text-xl flex items-center gap-3 shadow-fuchsia-500/50 shadow-[0_0_20px_rgba(217,70,239,0.7)] transform hover:scale-[1.02] active:scale-95 transition mx-auto border-2 border-fuchsia-500 text-fuchsia-300"
             >
-              <ShoppingBag size={24} className="drop-shadow-[0_0_5px_rgba(217,70,239,1)]" />
+              <ShoppingBag
+                size={24}
+                className="drop-shadow-[0_0_5px_rgba(217,70,239,1)]"
+              />
               VISIT THE GLAM SHOP
             </button>
           </div>
@@ -492,7 +655,8 @@ const App = () => {
             </h1>
 
             <p className="text-center text-gray-400 mb-6">
-              Acquire covetable, high-status gear to enhance your aesthetic and show your dedication.
+              Acquire covetable, high-status gear to enhance your aesthetic and
+              show your dedication.
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">

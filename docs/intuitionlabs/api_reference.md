@@ -14,19 +14,19 @@ Used when a learner earns or spends ClassCoin inside Ballet Bots or partner prog
 
 ```jsonc
 {
-  "type": "earn",              // "earn" | "spend"
-  "amount": 7.80,               // Decimal value, precision to two places
-  "currency": "ClassCoin",     // Enum matching curriculum tokens
+  "type": "earn", // "earn" | "spend"
+  "amount": 7.8, // Decimal value, precision to two places
+  "currency": "ClassCoin", // Enum matching curriculum tokens
   "reason": "TES: pivot_720_hold2 (GOE +2)",
-  "episodeId": "S1E02",        // Links to curriculum episode or module
+  "episodeId": "S1E02", // Links to curriculum episode or module
   "evidence": {
     "scorecardUrl": "https://ops.intuitionlabs/episodes/S1E02/tes.json",
-    "frameHashes": ["b9f…", "35a…"]
+    "frameHashes": ["b9f…", "35a…"],
   },
   "meta": {
     "judgePanel": "AI_Judges_v0.9",
-    "consistency": 0.98
-  }
+    "consistency": 0.98,
+  },
 }
 ```
 
@@ -47,19 +47,19 @@ Mints collectible stickers that mirror on-chain badge achievements but live insi
 
 ```jsonc
 {
-  "stickerId": "stagecred-gold-s1e02",  // Unique slug
-  "rarity": "Sigil",                    // Rarity tier enum
+  "stickerId": "stagecred-gold-s1e02", // Unique slug
+  "rarity": "Sigil", // Rarity tier enum
   "title": "Stage Cred • Gold",
   "ownerWalletId": "wallet_7YF3",
   "criteria": {
     "threshold": "STAGE_CRED_GOLD",
     "source": "rubrics://stage_cred/v1",
-    "evidenceUri": "ipfs://Qm…"
+    "evidenceUri": "ipfs://Qm…",
   },
   "art": {
     "theme": "lavender-foil",
-    "preview": "https://ops.intuitionlabs/assets/stagecred-gold.png"
-  }
+    "preview": "https://ops.intuitionlabs/assets/stagecred-gold.png",
+  },
 }
 ```
 
@@ -87,8 +87,8 @@ Captures facilitator or learner votes on live programming decisions.
   "weight": 1,
   "meta": {
     "role": "Associate Empathy Consultant",
-    "episode": "S1E04"
-  }
+    "episode": "S1E04",
+  },
 }
 ```
 
@@ -110,10 +110,10 @@ Coordinates wellness and mentorship support via the GLUE (Guided Learner Uplift 
 {
   "walletId": "wallet_7YF3",
   "reason": "Caption fatigue after livestream sprint",
-  "priority": "medium",                // low | medium | high
+  "priority": "medium", // low | medium | high
   "supportType": ["mentor", "caption-polish"],
   "episodeContext": "S1E03",
-  "notes": "Need neuro-friendly workflow & caption tone pass."
+  "notes": "Need neuro-friendly workflow & caption tone pass.",
 }
 ```
 
@@ -130,4 +130,3 @@ Coordinates wellness and mentorship support via the GLUE (Guided Learner Uplift 
 - Store service credentials with your Gemini CLI configuration to generate signed HTTP requests during class facilitation.
 - Use the vector store snapshot for prompt templates that transform evidence into JSON payloads shown above.
 - Schedule nightly audits that call each endpoint with dry-run flags to ensure schema drift is detected before live sessions.
-

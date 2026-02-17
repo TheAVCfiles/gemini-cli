@@ -9,10 +9,17 @@
   <body>
     <main class="clinic">
       <h1>Digital Harmony Check</h1>
-      <p class="sub">Scan a public handle. Receive a fictional Echo-Risk score.</p>
+      <p class="sub">
+        Scan a public handle. Receive a fictional Echo-Risk score.
+      </p>
       <form id="scan">
         <input name="handle" placeholder="@handle or url" required />
-        <input name="email" type="email" placeholder="email (for report link)" required />
+        <input
+          name="email"
+          type="email"
+          placeholder="email (for report link)"
+          required
+        />
         <button type="submit">Scan</button>
       </form>
       <section id="result" class="card hidden"></section>

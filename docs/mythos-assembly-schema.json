@@ -52,5 +52,13 @@
       }
     }
   },
-  "required": ["model", "designer", "location", "modules", "logic", "flows", "vault"]
+  "required": [
+    "model",
+    "designer",
+    "location",
+    "modules",
+    "logic",
+    "flows",
+    "vault"
+  ]
 }

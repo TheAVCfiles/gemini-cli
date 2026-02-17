@@ -4,7 +4,7 @@ async function createTier({ tierName, unitAmount, description }) {
   const response = await fetch(`${baseUrl}/api/stripe/create_link`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ tierName, unitAmount, description })
+    body: JSON.stringify({ tierName, unitAmount, description }),
   });
   const payload = await response.json();
 
@@ -28,5 +28,5 @@ async function ledger() {
 export const tools = {
   'bet.createTier': createTier,
   'bet.listProducts': listProducts,
-  'bet.ledger': ledger
+  'bet.ledger': ledger,
 };

@@ -1,18 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Demon Huntrix Dance Lab</title>
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-    />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap"
       rel="stylesheet"
@@ -20,7 +13,13 @@
     <style>
       :root {
         color-scheme: dark;
-        font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family:
+          'Manrope',
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
         background: radial-gradient(circle at 20% 20%, #351f5d, #0b0b17 70%);
         color: #f8f5ff;
       }
@@ -82,7 +81,9 @@
         align-items: center;
         gap: 0.55rem;
         cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
       }
 
       .toolbar button:hover {
@@ -192,7 +193,7 @@
         margin-top: 2rem;
       }
 
-      .timeline input[type="range"] {
+      .timeline input[type='range'] {
         width: 100%;
         accent-color: #f472b6;
       }
@@ -346,17 +347,24 @@
     <header>
       <h1>Demon Huntrix Dance Lab</h1>
       <p>
-        Spin up fresh choreography, restock the shop with AI descriptions, and rehearse
-        the "Hit This Pose" cues pulled from your photo set. Everything runs locally with
-        Gemini requests proxied through the Netlify function.
+        Spin up fresh choreography, restock the shop with AI descriptions, and
+        rehearse the "Hit This Pose" cues pulled from your photo set. Everything
+        runs locally with Gemini requests proxied through the Netlify function.
       </p>
     </header>
-    <main class="grid" style="gap: 2rem;">
+    <main class="grid" style="gap: 2rem">
       <section class="toolbar">
         <div>
           <strong>Gemini choreographer</strong>
-          <p style="margin: 0; color: rgba(226, 219, 255, 0.65); font-size: 0.9rem;">
-            Generates a new move in under a second with guardrails and a safe fallback.
+          <p
+            style="
+              margin: 0;
+              color: rgba(226, 219, 255, 0.65);
+              font-size: 0.9rem;
+            "
+          >
+            Generates a new move in under a second with guardrails and a safe
+            fallback.
           </p>
         </div>
         <button id="generateMoveBtn" type="button">
@@ -368,26 +376,43 @@
       <section class="panel">
         <h2>Routine Builder</h2>
         <p class="lead">
-          Curate the base choreography, then drop AI-generated moves straight into the
-          rotation. Duration is shown in seconds.
+          Curate the base choreography, then drop AI-generated moves straight
+          into the rotation. Duration is shown in seconds.
         </p>
-        <div id="movesList" class="grid" style="gap: 1rem;"></div>
+        <div id="movesList" class="grid" style="gap: 1rem"></div>
       </section>
 
       <section class="panel">
         <h2>Shop Items</h2>
-        <p class="lead">Request an AI rewrite for any item. Output is capped at 80 characters.</p>
-        <div id="shopList" class="grid" style="gap: 1.1rem;"></div>
+        <p class="lead">
+          Request an AI rewrite for any item. Output is capped at 80 characters.
+        </p>
+        <div id="shopList" class="grid" style="gap: 1.1rem"></div>
       </section>
 
       <section class="panel timeline">
         <h2>Hit This Pose Cue Pack</h2>
         <p class="lead">
-          Slide through the practice timeline. When you're within 0.4 seconds of a cue,
-          the overlay pops so dancers know exactly which pose to snap into.
+          Slide through the practice timeline. When you're within 0.4 seconds of
+          a cue, the overlay pops so dancers know exactly which pose to snap
+          into.
         </p>
-        <input id="timeline" type="range" min="0" max="35" step="0.1" value="12.4" />
-        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: rgba(203, 213, 255, 0.7);">
+        <input
+          id="timeline"
+          type="range"
+          min="0"
+          max="35"
+          step="0.1"
+          value="12.4"
+        />
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: rgba(203, 213, 255, 0.7);
+          "
+        >
           <span>0s</span>
           <span>Hook</span>
           <span>35s</span>
@@ -396,7 +421,12 @@
       </section>
     </main>
 
-    <div id="modalRoot" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div
+      id="modalRoot"
+      class="modal-backdrop hidden"
+      role="dialog"
+      aria-modal="true"
+    >
       <div class="modal" role="document">
         <h3>
           <span aria-hidden="true">⚡</span>
@@ -405,14 +435,18 @@
         <div id="modalSpinner" class="spinner hidden" aria-hidden="true"></div>
         <div id="modalError" class="error hidden" role="alert"></div>
         <div id="modalDetails" class="hidden">
-          <div id="modalEmoji" style="font-size: 3rem; line-height: 1;">✨</div>
+          <div id="modalEmoji" style="font-size: 3rem; line-height: 1">✨</div>
           <div id="modalName" class="move-name"></div>
           <div id="modalDescription" class="move-description"></div>
           <div id="modalMeta" class="move-meta"></div>
         </div>
         <div class="buttons">
-          <button id="addMoveBtn" class="primary" type="button">Add to routine</button>
-          <button id="shuffleBtn" class="secondary" type="button">Shuffle</button>
+          <button id="addMoveBtn" class="primary" type="button">
+            Add to routine
+          </button>
+          <button id="shuffleBtn" class="secondary" type="button">
+            Shuffle
+          </button>
           <button id="closeBtn" class="ghost" type="button">Close</button>
         </div>
       </div>

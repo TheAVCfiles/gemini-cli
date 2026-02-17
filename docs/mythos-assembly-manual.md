@@ -8,16 +8,16 @@ This manual is structured as a recursive guide for developers, public operators,
 
 ### Core Modules & Assembly
 
-| Module | Part Code | Function | Assembly Notes |
-| --- | --- | --- | --- |
-| Recursive Semantic OS | CORE-∞ | Meaning recursion engine | Mount to the Semantic Spine before configuring IO layers. |
-| Glissé Engine FSM | GLI-FSM-127 | Movement-of-money choreography | Calibrate torque with VZ, AZ, and M readings. |
-| Rosetta Console | ROS-V3 | Director cockpit | Plug in SSI, `p̂`, and conviction tier sliders. |
-| Sentient Cents Ledger | SC-LEDGER | Ethical microcurrency | Mint via ritual; units decay after 14 days. |
-| Badge System | BADGE-OS | Soulbound reputation logic | Triggers publishing, minting, and access grants. |
-| Prima Trust Dashboard | TRUST-V1 | Fidelity metrics | Tracks hallucination rate, mismatch, and latency. |
-| ScrollOS | SCR-OS | Publishing runtime | Deploy scrolls as products with JSON receipts. |
-| Pearl Registry | PEARL-V3 | Nervous system of the OS | Echo layers: inbound, outbound, ancestral. |
+| Module                | Part Code   | Function                       | Assembly Notes                                            |
+| --------------------- | ----------- | ------------------------------ | --------------------------------------------------------- |
+| Recursive Semantic OS | CORE-∞      | Meaning recursion engine       | Mount to the Semantic Spine before configuring IO layers. |
+| Glissé Engine FSM     | GLI-FSM-127 | Movement-of-money choreography | Calibrate torque with VZ, AZ, and M readings.             |
+| Rosetta Console       | ROS-V3      | Director cockpit               | Plug in SSI, `p̂`, and conviction tier sliders.            |
+| Sentient Cents Ledger | SC-LEDGER   | Ethical microcurrency          | Mint via ritual; units decay after 14 days.               |
+| Badge System          | BADGE-OS    | Soulbound reputation logic     | Triggers publishing, minting, and access grants.          |
+| Prima Trust Dashboard | TRUST-V1    | Fidelity metrics               | Tracks hallucination rate, mismatch, and latency.         |
+| ScrollOS              | SCR-OS      | Publishing runtime             | Deploy scrolls as products with JSON receipts.            |
+| Pearl Registry        | PEARL-V3    | Nervous system of the OS       | Echo layers: inbound, outbound, ancestral.                |
 
 ### Math Logic & Ritual Scoring
 

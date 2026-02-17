@@ -21,6 +21,7 @@ Integrity   Timing       Casting
 - **Memory / Narrative Casting** – media events, transcripts, contracts, public perception.
 
 O:PEN Box turns chaotic lived input into structured proof objects:
+
 - Scores
 - Risk snapshots
 - Credentials

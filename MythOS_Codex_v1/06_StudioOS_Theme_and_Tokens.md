@@ -39,6 +39,7 @@ Guiding line: **Wealth is quiet, not shouty.**
 ```
 
 Typography:
+
 - Headlines: Playfair Display – “The House Voice.”
 - Body: Inter – UI + numbers.
 - Mono: IBM Plex Mono – ledgers, hashes, IDs.

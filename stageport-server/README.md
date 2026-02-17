@@ -7,9 +7,11 @@ Serverless endpoints to support the Stageport demo:
 - `/api/webhooks-stripe` — Stripe webhook to record license purchases and trigger contract generation.
 
 ## Deploy targets
+
 - Vercel serverless functions (recommended) or Cloud Run.
 
 ## Required env variables
+
 - `PINECONE_API_KEY`
 - `PINECONE_ENV`
 - `PINECONE_INDEX_NAME`
@@ -20,11 +22,13 @@ Serverless endpoints to support the Stageport demo:
 - `FIRESTORE_CREDENTIALS_JSON` (optional) or `FIRESTORE_PROJECT`
 
 ## Run locally
+
 1. `npm install`
 2. `npx vercel dev` (or `npx vercel dev --listen 3000`)
 3. Provide environment variables via Vercel env or local `.env` (dev only).
 
 ## Notes
+
 - Replace placeholder code for contract signing (DocuSign / HelloSign).
 - Replace Pinecone calls with your vector DB if desired.
 - This repo is a demo skeleton — secure secrets and harden before public production.

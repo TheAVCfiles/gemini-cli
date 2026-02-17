@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,12 +7,23 @@
     <style>
       :root {
         color-scheme: dark;
-        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family:
+          'Inter',
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
       }
       body {
         margin: 0;
         min-height: 100vh;
-        background: radial-gradient(circle at top, #111927 0%, #05070b 60%, #000 100%);
+        background: radial-gradient(
+          circle at top,
+          #111927 0%,
+          #05070b 60%,
+          #000 100%
+        );
         color: #eef7ff;
         display: flex;
         flex-direction: column;
@@ -46,7 +57,9 @@
         font-weight: 600;
         cursor: pointer;
         color: #05070b;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
       }
       .glow-button {
         background: linear-gradient(120deg, #7df9ff, #27ffc5);
@@ -79,13 +92,15 @@
   <body>
     <h1>Bet on $Allison-Van-Cura</h1>
     <p>
-      Back the builder in real time. Choose your tier, hear the bell, and join the ledger of
-      believers.
+      Back the builder in real time. Choose your tier, hear the bell, and join
+      the ledger of believers.
     </p>
 
     <div class="buttons">
       <button id="bet-seed" class="glow-button">Bet: Seed $22</button>
-      <button id="bet-a" class="glow-button-secondary">Bet: Series A $77</button>
+      <button id="bet-a" class="glow-button-secondary">
+        Bet: Series A $77
+      </button>
       <button id="bet-moonshot" class="glow-button">Bet: Moonshot $222</button>
     </div>
 
@@ -115,7 +130,7 @@
           const response = await fetch('/api/stripe/create_link', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ tierName, unitAmount: cents, description })
+            body: JSON.stringify({ tierName, unitAmount: cents, description }),
           });
           const { ok, url } = await response.json();
           if (ok && url) {
@@ -129,15 +144,21 @@
         }
       }
 
-      document.getElementById('bet-seed').addEventListener('click', () =>
-        createAndGo('Seed $22', 2200, 'Bet on $Allison-Van-Cura')
-      );
-      document.getElementById('bet-a').addEventListener('click', () =>
-        createAndGo('Series A $77', 7700, 'Bet on $Allison-Van-Cura')
-      );
-      document.getElementById('bet-moonshot').addEventListener('click', () =>
-        createAndGo('Moonshot $222', 22200, 'Bet on $Allison-Van-Cura')
-      );
+      document
+        .getElementById('bet-seed')
+        .addEventListener('click', () =>
+          createAndGo('Seed $22', 2200, 'Bet on $Allison-Van-Cura'),
+        );
+      document
+        .getElementById('bet-a')
+        .addEventListener('click', () =>
+          createAndGo('Series A $77', 7700, 'Bet on $Allison-Van-Cura'),
+        );
+      document
+        .getElementById('bet-moonshot')
+        .addEventListener('click', () =>
+          createAndGo('Moonshot $222', 22200, 'Bet on $Allison-Van-Cura'),
+        );
 
       async function refreshConfidence() {
         try {
@@ -148,14 +169,17 @@
           }
 
           const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
-          const total = entries
-            .filter((item) => item?.ts >= dayAgo)
-            .reduce((sum, item) => sum + (Number(item.amount) || 0), 0) / 100;
+          const total =
+            entries
+              .filter((item) => item?.ts >= dayAgo)
+              .reduce((sum, item) => sum + (Number(item.amount) || 0), 0) / 100;
 
-          document.getElementById('confidence').textContent = `24h Confidence Index: $${total.toFixed(2)}`;
+          document.getElementById('confidence').textContent =
+            `24h Confidence Index: $${total.toFixed(2)}`;
         } catch (error) {
           console.error('Ledger fetch failed', error);
-          document.getElementById('confidence').textContent = 'Confidence index unavailable';
+          document.getElementById('confidence').textContent =
+            'Confidence index unavailable';
         }
       }
 

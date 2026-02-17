@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -25,7 +25,8 @@
               glowfuchsia: '0 0 40px rgba(217,70,239,0.5)',
             },
             backgroundImage: {
-              'stage-gradient': 'radial-gradient(at 50% 100%, #150030 0%, #000000 70%)',
+              'stage-gradient':
+                'radial-gradient(at 50% 100%, #150030 0%, #000000 70%)',
             },
           },
         },
@@ -257,7 +258,9 @@
             if (success) {
               setCombo((prevCombo) => {
                 const newCombo = prevCombo + 1;
-                setScore((prevScore) => prevScore + scoreIncrease + newCombo * 5);
+                setScore(
+                  (prevScore) => prevScore + scoreIncrease + newCombo * 5,
+                );
                 setCoins(
                   (prevCoins) =>
                     prevCoins + coinsGain + Math.floor(newCombo / 5) * 2 + 2,
@@ -358,7 +361,10 @@
 
         const buyItem = (item) => {
           setCoins((prevCoins) => {
-            if (prevCoins < item.cost || inventory.some((i) => i.id === item.id)) {
+            if (
+              prevCoins < item.cost ||
+              inventory.some((i) => i.id === item.id)
+            ) {
               return prevCoins;
             }
 
@@ -425,7 +431,9 @@
               }`}
             >
               <div>
-                <div className={`text-4xl sm:text-5xl mb-2 ${item.color} drop-shadow-lg`}>
+                <div
+                  className={`text-4xl sm:text-5xl mb-2 ${item.color} drop-shadow-lg`}
+                >
                   {item.emoji}
                 </div>
                 <h3 className="font-extrabold mb-2 text-sm sm:text-base text-gray-100">
@@ -472,19 +480,21 @@
         };
 
         return (
-          <div
-            className="min-h-screen bg-stage-gradient text-white p-4 sm:p-6 font-inter"
-          >
+          <div className="min-h-screen bg-stage-gradient text-white p-4 sm:p-6 font-inter">
             <div className="max-w-4xl mx-auto mb-6">
               <div className="bg-black/70 rounded-xl p-3 backdrop-blur border-2 border-gray-700 shadow-2xl shadow-fuchsia-900/30">
                 <div className="flex justify-around items-center flex-wrap text-sm sm:text-base gap-2 tracking-wide">
                   <div className="flex items-center gap-1 sm:gap-2">
                     <Zap className="text-cyan-400 w-5 h-5 drop-shadow-[0_0_5px_cyan]" />
-                    <span className="font-bold text-cyan-200">LEVEL {level}</span>
+                    <span className="font-bold text-cyan-200">
+                      LEVEL {level}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1 sm:gap-2">
                     <Star className="text-yellow-400 w-5 h-5 drop-shadow-[0_0_5px_yellow]" />
-                    <span className="font-bold text-yellow-300">SCORE: {score}</span>
+                    <span className="font-bold text-yellow-300">
+                      SCORE: {score}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1 sm:gap-2">
                     <Award className="text-red-400 w-5 h-5 drop-shadow-[0_0_5px_red]" />
@@ -499,8 +509,12 @@
                     </span>
                   </div>
                   <div className="flex items-center gap-1 sm:gap-2">
-                    <div className="text-xl sm:text-2xl text-yellow-500">💰</div>
-                    <span className="font-bold text-yellow-300">{coins} CREDITS</span>
+                    <div className="text-xl sm:text-2xl text-yellow-500">
+                      💰
+                    </div>
+                    <span className="font-bold text-yellow-300">
+                      {coins} CREDITS
+                    </span>
                   </div>
                 </div>
               </div>
@@ -534,7 +548,10 @@
                     {isPlaying && moveStartTime > 0 && (
                       <div
                         className="absolute top-0 left-0 h-2 bg-gradient-to-r from-red-600 to-yellow-400"
-                        style={{ width: `${progressPercent}%`, transition: 'width 0.1s linear' }}
+                        style={{
+                          width: `${progressPercent}%`,
+                          transition: 'width 0.1s linear',
+                        }}
                       ></div>
                     )}
 
@@ -607,7 +624,10 @@
                     onClick={() => setShowShop(true)}
                     className="bg-black/80 hover:bg-black/90 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-black text-lg sm:text-xl flex items-center gap-3 shadow-fuchsia-500/50 shadow-[0_0_20px_rgba(217,70,239,0.7)] transform hover:scale-[1.02] active:scale-95 transition mx-auto border-2 border-fuchsia-500 text-fuchsia-300"
                   >
-                    <ShoppingBag size={24} className="drop-shadow-[0_0_5px_rgba(217,70,239,1)]" />
+                    <ShoppingBag
+                      size={24}
+                      className="drop-shadow-[0_0_5px_rgba(217,70,239,1)]"
+                    />
                     VISIT THE GLAM SHOP
                   </button>
                 </div>
@@ -620,7 +640,8 @@
                   </h1>
 
                   <p className="text-center text-gray-400 mb-6">
-                    Acquire covetable, high-status gear to enhance your aesthetic and show your dedication.
+                    Acquire covetable, high-status gear to enhance your
+                    aesthetic and show your dedication.
                   </p>
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
