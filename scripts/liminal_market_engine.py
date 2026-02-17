@@ -90,8 +90,8 @@ class FeedEntry:
             published=str(data.get("published", "")),
             source=str(data.get("source", "")),
             sentiment_label=(data.get("sentiment_label") or None),
-            sentiment_score=float(data["sentiment_score"]) if data.get("sentiment_score") is not None else None,
-            cluster_id=int(data["cluster_id"]) if data.get("cluster_id") is not None else None,
+            sentiment_score=float(score) if (score := data.get("sentiment_score")) is not None else None,
+            cluster_id=int(cid) if (cid := data.get("cluster_id")) is not None else None,
         )
 
     def to_dict(self) -> Dict[str, object]:
