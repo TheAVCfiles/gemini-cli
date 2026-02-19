@@ -1,0 +1,74 @@
+# Example Cron Configuration for Git Backup Script
+#
+# This file provides example cron jobs for automating backups using backup_files.py
+# 
+# To install these cron jobs:
+# 1. Edit your crontab: crontab -e
+# 2. Copy and modify the examples below
+# 3. Update paths to match your repository location
+#
+# Cron format: minute hour day month day_of_week command
+# * * * * * command to execute
+# │ │ │ │ │
+# │ │ │ │ └─── Day of week (0-7, Sunday = 0 or 7)
+# │ │ │ └────── Month (1-12)
+# │ │ └───────── Day of month (1-31)
+# │ └──────────── Hour (0-23)
+# └─────────────── Minute (0-59)
+
+# ============================================================================
+# EXAMPLE 1: Daily Backup at 2 AM
+# ============================================================================
+# Backs up files from last commit daily at 2:00 AM and pushes to cloud
+# 0 2 * * * cd /home/user/gemini-cli && ./scripts/backup_files.py --cloud >> /var/log/git-backup.log 2>&1
+
+# ============================================================================
+# EXAMPLE 2: Every 6 Hours
+# ============================================================================
+# Backs up files every 6 hours (at 00:00, 06:00, 12:00, 18:00)
+# 0 */6 * * * cd /home/user/gemini-cli && ./scripts/backup_files.py --cloud
+
+# ============================================================================
+# EXAMPLE 3: Every 30 Minutes (Frequent Backup)
+# ============================================================================
+# Backs up files every 30 minutes during work hours (9 AM - 6 PM, weekdays)
+# */30 9-18 * * 1-5 cd /home/user/gemini-cli && ./scripts/backup_files.py --cloud
+
+# ============================================================================
+# EXAMPLE 4: Weekly Comprehensive Backup
+# ============================================================================
+# Backs up files from last 50 commits every Sunday at midnight
+# 0 0 * * 0 cd /home/user/gemini-cli && ./scripts/backup_files.py --commits 50 --cloud >> /var/log/git-weekly-backup.log 2>&1
+
+# ============================================================================
+# EXAMPLE 5: Local-Only Backup (No Cloud Push)
+# ============================================================================
+# Creates local backups every hour without pushing to cloud
+# 0 * * * * cd /home/user/gemini-cli && ./scripts/backup_files.py --local-only
+
+# ============================================================================
+# EXAMPLE 6: With Environment Variables
+# ============================================================================
+# Set environment variables in crontab using VARIABLE=value before jobs
+# GITHUB_TOKEN=ghp_yourTokenHere
+# BACKUP_DIR=/mnt/external/backups
+# 0 3 * * * cd /home/user/gemini-cli && ./scripts/backup_files.py --cloud --backup-dir $BACKUP_DIR
+
+# ============================================================================
+# EXAMPLE 7: Multiple Repositories
+# ============================================================================
+# Backup multiple repositories at different times
+# 0 2 * * * cd /home/user/project1 && ./scripts/backup_files.py --cloud
+# 15 2 * * * cd /home/user/project2 && ./scripts/backup_files.py --cloud
+# 30 2 * * * cd /home/user/project3 && ./scripts/backup_files.py --cloud
+
+# ============================================================================
+# NOTES:
+# ============================================================================
+# - Replace /home/user/gemini-cli with your actual repository path
+# - Ensure the script has execute permissions: chmod +x scripts/backup_files.py
+# - For GitHub authentication, set GITHUB_TOKEN environment variable
+# - Redirect output to log file for debugging: >> /var/log/backup.log 2>&1
+# - Test your cron job by running the command manually first
+# - Use 'crontab -l' to list current cron jobs
+# - Use 'crontab -r' to remove all cron jobs (use with caution!)
