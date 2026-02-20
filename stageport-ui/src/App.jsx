@@ -43,6 +43,18 @@ const App = () => {
   const isPValuePass = pVal < 0.05;
   const isRegimeOpen = isStructuralConfirmed && isCiValid && isPValuePass;
 
+  const actionFor = (asset) => {
+    if (asset === 'QQQ') {
+      return 'MONITOR';
+    }
+
+    if (asset === 'ETH') {
+      return isRegimeOpen ? 'SCALED ENTRY' : 'CONFIRM (NO ENTRY)';
+    }
+
+    return isRegimeOpen ? 'SCALED ENTRY' : 'OBSERVE ONLY';
+  };
+
   const assetData = useMemo(
     () => [
       {
@@ -52,7 +64,6 @@ const App = () => {
         s2: 70.83,
         r1: 73.47,
         r2: 74.57,
-        action: isRegimeOpen ? 'SCALED ENTRY' : 'OBSERVE ONLY',
       },
       {
         asset: 'ETH',
@@ -61,7 +72,6 @@ const App = () => {
         s2: 1902.62,
         r1: 2023.47,
         r2: 2061.3,
-        action: isRegimeOpen ? 'SCALED ENTRY' : 'CONFIRM (NO ENTRY)',
       },
       {
         asset: 'QQQ',
@@ -70,10 +80,9 @@ const App = () => {
         s2: 591.59,
         r1: 606.77,
         r2: 611.63,
-        action: 'MONITOR',
       },
     ],
-    [isRegimeOpen],
+    [],
   );
 
   useEffect(() => {
@@ -293,12 +302,12 @@ const App = () => {
                     <td className="px-4 py-4">
                       <span
                         className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold ${
-                          row.action.includes('ENTRY')
+                          actionFor(row.asset).includes('ENTRY')
                             ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                             : 'bg-slate-800 text-slate-500'
                         }`}
                       >
-                        {row.action}
+                        {actionFor(row.asset)}
                       </span>
                     </td>
                   </tr>
