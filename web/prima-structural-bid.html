@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PRIMA // Structural Bid Confirmation Engine</title>
+    <style>
+      :root {
+        --bg: #050505;
+        --panel: #0a0a0a;
+        --border: #1a1a1a;
+        --text: #a3a3a3;
+        --muted: #666;
+        --accent: #eacc71;
+        --warn: #ff2a2a;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Courier New", monospace;
+        background: var(--bg);
+        color: var(--text);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+      .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+      header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 32px; }
+      .brand { display: flex; gap: 16px; align-items: center; }
+      .brand h1 { margin: 0; color: var(--accent); }
+      .grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+      @media (min-width: 1024px) { .grid { grid-template-columns: 4fr 5fr 3fr; } }
+      .panel { background: var(--panel); border: 1px solid var(--border); padding: 16px; }
+      .ledger-row { border-left: 2px solid #222; padding-left: 12px; margin-bottom: 14px; }
+      .split { display: flex; justify-content: space-between; }
+      .curve-wrap { aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; position: relative; }
+      .audit { max-height: 380px; overflow: auto; }
+      .audit p { text-transform: none; letter-spacing: 0; margin: 6px 0; color: #8a8a8a; }
+      footer { text-align: center; color: #444; font-size: 10px; margin-top: 32px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="brand">
+          <img src="/assets/images/prima-mark.svg" alt="PRIMA mark" width="64" height="64" />
+          <div>
+            <h1>PRIMA</h1>
+            <div style="color:#666;font-size:12px">Structural Bid Confirmation Engine // 2026.02.17</div>
+          </div>
+        </div>
+        <div style="text-align:right;font-size:12px;color:#5abf71">● SYSTEM_CONFIRMED<br /><span style="color:#666">Anchor: Saturn/Uranus Conj.</span></div>
+      </header>
+
+      <main class="grid">
+        <section class="panel">
+          <h2 style="color:var(--accent);font-size:14px;margin-top:0">Structural Ledger</h2>
+          <div class="ledger-row"><div class="split"><span>2026-02-10</span><span style="color:var(--warn)">W:92</span></div><div style="color:#777;font-size:12px">DOE Equity Stake</div></div>
+          <div class="ledger-row"><div class="split"><span>2026-02-15</span><span style="color:var(--warn)">W:85</span></div><div style="color:#777;font-size:12px">OEM Offtake Agreement</div></div>
+        </section>
+
+        <section class="panel curve-wrap">
+          <svg viewBox="0 0 200 200" width="220" height="220">
+            <path d="M 20 20 C 20 180, 180 180, 180 20" stroke="#EACC71" stroke-width="4" fill="none"/>
+            <circle cx="100" cy="180" r="4" fill="#FF2A2A"/>
+          </svg>
+        </section>
+
+        <section class="panel">
+          <h2 style="font-size:14px;margin-top:0">Real-Time Audit</h2>
+          <div class="audit">
+            <p>DOE stake confirmed. Weight 92. Structural.</p>
+            <p>Narrative anchor established: Feb 12.</p>
+            <p>Lithium junior liquidity depth: Nominal.</p>
+            <p>BTC hedge active. Correlation metabolizing.</p>
+          </div>
+        </section>
+      </main>
+
+      <footer>PRIMA_PROTOCOL // UNFORECLOSEABLE LEDGER // NO HALLUCINATIONS DETECTED</footer>
+    </div>
+  </body>
+</html>
