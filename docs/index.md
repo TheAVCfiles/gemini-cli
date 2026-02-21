@@ -41,6 +41,7 @@ This documentation is organized into the following sections:
   - **[IntuitionLabs Ballet Bots curriculum assets](./intuitionlabs/README.md):** Reference materials for an arts-and-robotics learning program that leverages Gemini CLI for content generation.
   - **[IntuitionLabs SaaS product catalog](./intuitionlabs/saas_products.md):** Pricing, fulfillment, and publishing workflows for the Adaptive Ethics Framework, Glissé Engine, and MythOS Cloud Access.
   - **[StudioOS print-ready capsule drop kit](./studioos-print-ready-capsule-drop-kit.md):** Comprehensive research report on a tri-panel, couture onboarding ritual with digital credentialing integration.
+  - **[Backstage Manual — Graham Glitch Engine Preservation](./backstage-manual-graham-glitch-preservation.md):** Zero-loss structural extraction of the Skeleton + Glitch physics logic and forensic ChunkCard seal.
 - **[Contributing & Development Guide](../CONTRIBUTING.md):** Information for contributors and developers, including setup, building, testing, and coding conventions.
 - **[NPM](./npm.md):** Details on how the project's packages are structured
 - **[Troubleshooting Guide](./troubleshooting.md):** Find solutions to common problems and FAQs.
