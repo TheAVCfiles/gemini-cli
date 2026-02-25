@@ -102,3 +102,30 @@ README.md
 - Re-run an ingest check with the Conflict Agent before publishing.
 - Redeploy on Netlify after updating the dataset or UI.
 - Rotate API keys and store them only in Netlify/GCF environment variables.
+
+---
+
+## StagePort backend and executive one-pager
+
+This repository now also includes:
+
+- `server/index.js`: Express backend with SHA-256 hashing, HMAC envelope signing,
+  append-only JSONL ledger, and health/metrics/verify endpoints.
+- `server/package.json`: Minimal server dependency manifest.
+- `web/avc-shark-onepager.html`: Enterprise-style single-page executive summary.
+
+Run backend locally:
+
+```bash
+cd server
+npm install
+node index.js
+```
+
+Backend endpoints:
+
+- `GET /health`
+- `GET /metrics`
+- `GET /ingests/latest?n=10`
+- `POST /ingest`
+- `POST /verify`
