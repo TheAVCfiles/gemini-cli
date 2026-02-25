@@ -1,0 +1,22 @@
+{
+  "name": "stageport-portal-template",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "seed": "tsx lib/seed.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "next": "14.2.25",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}
