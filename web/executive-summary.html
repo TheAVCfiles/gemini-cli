@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Allison Van Cura — Shark Mode</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05070b;--ink:#e6edf7;--muted:#93a4bf;--border:rgba(148,163,184,.18);--accent:#49d8ff;--accent2:#8a5bff;--radius:16px}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,sans-serif;background:linear-gradient(180deg,var(--bg),#03040a 70%);color:var(--ink)}
+.container{max-width:1080px;margin:72px auto;padding:0 22px 60px}
+.hero,.section{border:1px solid var(--border);border-radius:var(--radius);padding:26px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02))}
+.section{margin-top:18px}
+h1{margin:0 0 8px;font-size:clamp(2rem,3.2vw,3rem)} h2{margin:0 0 12px;letter-spacing:.12em;text-transform:uppercase;font-size:.85rem;color:var(--accent)}
+p,li{color:var(--muted)} strong{color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}.card{padding:14px;border:1px solid var(--border);border-radius:12px}
+.kicker{display:inline-block;color:var(--accent2);font-weight:700;margin-bottom:12px}
+.footer{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="container">
+  <section class="hero">
+    <span class="kicker">Executive Summary</span>
+    <h1>Knowledge Infrastructure, Engineered.</h1>
+    <p>I design and implement structured knowledge systems that transform fragmented, inconsistent, or legacy content into <strong>scalable, audit-ready, deployment-ready frameworks</strong>. This is not document editing. This is infrastructure.</p>
+  </section>
+
+  <section class="section">
+    <h2>Scope of Work</h2>
+    <p><strong>Challenge:</strong> Multi-source glossary corpus with corruption, duplication, misaligned definitions, and missing entries, with no source of truth.</p>
+    <p><strong>Objective:</strong> Build a reconciled glossary system suitable for internal deployment, print/PDF distribution, live lookup integration, and ongoing maintenance.</p>
+  </section>
+
+  <section class="section">
+    <h2>Methodology</h2>
+    <ul>
+      <li><strong>System Ingestion & Mapping:</strong> Parse sources and identify structural failures.</li>
+      <li><strong>Structural Annotation:</strong> Flag non-terms, incomplete definitions, and formatting drift before mutation.</li>
+      <li><strong>Controlled Reconstruction:</strong> Normalize entries for alphabetical, categorical, and semantic integrity.</li>
+      <li><strong>Hybrid Validation:</strong> Use automation for patterns and manual review for contextual interpretation.</li>
+      <li><strong>Deployment Layer:</strong> Deliver PDF, spreadsheet/index, and maintenance method notes.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>Value Delivered</h2>
+    <div class="grid">
+      <article class="card"><strong>Reduced internal friction</strong><p>Clearer lookup paths and lower coordination load.</p></article>
+      <article class="card"><strong>Higher reliability</strong><p>Consistent term-definition pairing and governance rules.</p></article>
+      <article class="card"><strong>Auditability</strong><p>Decision trail and repeatable methodology instead of one-off cleanup.</p></article>
+      <article class="card"><strong>Operational clarity</strong><p>Legacy disorder converted into maintainable systems architecture.</p></article>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Positioning</h2>
+    <p>What I provide is not content polishing. It is structural coherence that protects time, money, and institutional credibility.</p>
+  </section>
+
+  <div class="footer">© Allison Van Cura — Systems Architect, Editorial Engineer</div>
+</div>
+</body>
+</html>
