@@ -11,8 +11,11 @@ const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const PORT = process.env.PORT || 3000;
 const LEDGER_LIMIT = 100;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const WEB_ROOT = path.resolve(__dirname, '../web');
 
 app.use(cors({ origin: true }));
+app.use(express.static(WEB_ROOT));
 
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), (req, res) => {
   const signature = req.headers['stripe-signature'];
@@ -50,7 +53,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), (req,
 
 app.use('/api', express.json());
 
-const LEDGER_PATH = path.join(path.dirname(fileURLToPath(import.meta.url)), 'ledger.json');
+const LEDGER_PATH = path.join(__dirname, 'ledger.json');
 
 function readLedgerFile() {
   try {
@@ -73,12 +76,32 @@ function writeLedgerFile(entries) {
   }
 }
 
+function hashText(text) {
+  return crypto.createHash('sha256').update(text).digest('hex');
+}
+
 function sanitizeMeta(meta) {
   if (meta == null) return {};
   if (typeof meta === 'string') return { note: meta };
   if (typeof meta === 'object' && !Array.isArray(meta)) return meta;
   return { note: 'invalid_meta' };
 }
+
+
+const documents = [
+  {
+    id: 'founder_reality_kit_v1',
+    title: 'AVC Welcome Founder Reality Kit',
+    type: 'ONBOARDING_KIT',
+    version: 'v1.0',
+    status: 'ISSUED',
+    sha256: hashText(
+      'AVC Founder Reality Kit v1.0 — Governing Principle: Responsibility must bear axis with equity. Speed without memory becomes liability. We build memory first.'
+    ),
+    createdAt: new Date().toISOString(),
+    createdAtISO: new Date().toISOString()
+  }
+];
 
 let ledgerStore = readLedgerFile().slice(0, LEDGER_LIMIT);
 
@@ -99,6 +122,36 @@ function appendLedger(entry) {
   writeLedgerFile(ledgerStore);
   return sanitized;
 }
+
+app.post('/api/ledger/notarize', (req, res) => {
+  const { documentId, hash, eventType } = req.body || {};
+
+  if (typeof documentId !== 'string' || !documentId.trim()) {
+    return res.status(400).json({ success: false, error: 'invalid_document_id' });
+  }
+  if (!/^[a-f0-9]{64}$/i.test(hash || '')) {
+    return res.status(400).json({ success: false, error: 'invalid_sha256_hash' });
+  }
+
+  if (eventType !== undefined && (typeof eventType !== 'string' || !eventType.trim())) {
+    return res.status(400).json({ success: false, error: 'invalid_event_type' });
+  }
+
+  const event = typeof eventType === 'string' && /^[A-Z0-9_:-]{2,64}$/.test(eventType.trim())
+    ? eventType.trim()
+    : 'NOTARIZE';
+
+  const entry = appendLedger({
+    action: 'notarize_document',
+    amount: 0,
+    documentId: documentId.trim(),
+    hash: hash.toLowerCase(),
+    eventType: event,
+    meta: { source: 'founder_studios' }
+  });
+
+  return res.json({ success: true, entry });
+});
 
 app.post('/api/stripe/create_link', async (req, res) => {
   try {
@@ -162,8 +215,19 @@ app.get('/api/stripe/list_products', async (req, res) => {
   }
 });
 
+app.get('/api/documents', (_req, res) => {
+  res.json(documents);
+});
+
 app.get('/api/ledger', (req, res) => {
   try {
+    const { documentId } = req.query || {};
+    if (typeof documentId === 'string' && documentId.trim()) {
+      const normalized = documentId.trim();
+      const filtered = ledgerStore.filter((entry) => entry.documentId === normalized);
+      return res.json(filtered);
+    }
+
     res.json(ledgerStore);
   } catch (error) {
     console.error('ledger_failed', error);
@@ -171,8 +235,33 @@ app.get('/api/ledger', (req, res) => {
   }
 });
 
+
+app.get('/api/ledger/:documentId', (req, res) => {
+  try {
+    const { documentId } = req.params || {};
+    if (typeof documentId !== 'string' || !documentId.trim()) {
+      return res.status(400).json({ success: false, error: 'invalid_document_id' });
+    }
+
+    const normalized = documentId.trim();
+    const filtered = ledgerStore.filter((entry) => entry.documentId === normalized);
+    res.json(filtered);
+  } catch (error) {
+    console.error('ledger_document_failed', error);
+    res.status(500).json({ success: false, error: 'ledger_read_failed' });
+  }
+});
+
+app.get('/founder-studios', (req, res) => {
+  res.sendFile(path.join(WEB_ROOT, 'founder-studios.html'));
+});
+
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(WEB_ROOT, 'dashboard.html'));
+});
+
 app.post('/api/ledger', (req, res) => {
-  const { action, amount, meta } = req.body || {};
+  const { action, amount, meta, documentId, eventType, hash } = req.body || {};
 
   if (typeof action !== 'string' || !action.trim()) {
     return res.status(400).json({ success: false, error: 'invalid_action' });
@@ -182,7 +271,14 @@ app.post('/api/ledger', (req, res) => {
     return res.status(400).json({ success: false, error: 'invalid_amount' });
   }
 
-  const entry = appendLedger({ action: action.trim(), amount: Number(amount) || 0, meta });
+  const entry = appendLedger({
+    action: action.trim(),
+    amount: Number(amount) || 0,
+    meta,
+    ...(typeof documentId === 'string' && documentId.trim() ? { documentId: documentId.trim() } : {}),
+    ...(typeof eventType === 'string' && eventType.trim() ? { eventType: eventType.trim() } : {}),
+    ...(typeof hash === 'string' && /^[a-f0-9]{64}$/i.test(hash) ? { hash: hash.toLowerCase() } : {})
+  });
   res.json({ success: true, entry });
 });
 

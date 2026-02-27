@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Founder Dashboard</title>
+    <style>
+      body { margin: 0; font-family: Inter, system-ui, sans-serif; background: #090f1d; color: #e6f0ff; }
+      main { max-width: 980px; margin: 0 auto; padding: 24px; }
+      .panel { border: 1px solid #243051; border-radius: 12px; background: #12192b; padding: 14px; margin-bottom: 16px; }
+      .row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+      button { border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-weight: 600; }
+      .chip { padding: 4px 10px; border-radius: 999px; background: #17213f; display: inline-block; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+      a { color: #93e8ff; }
+      ul { padding-left: 16px; }
+      li { margin: 8px 0; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Founder Dashboard</h1>
+
+      <div class="panel">
+        <div class="row">
+          <div>
+            <div style="opacity:0.8">Founder State</div>
+            <div id="state" style="font-size:1.2rem;font-weight:800">IDLE</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="start">START_BUILD</button>
+            <button id="throttle">THROTTLE</button>
+            <button id="overdrive">OVERDRIVE</button>
+            <button id="reset">RESET</button>
+            <button id="refresh">Refresh Ledger</button>
+          </div>
+        </div>
+        <p class="chip" id="regime">Regime signal: SAFE</p>
+      </div>
+
+      <div class="panel">
+        <div class="row">
+          <strong>Conservatory Runway</strong>
+          <a id="nextBarre" href="/founder-studios">Next Barre → Crisis</a>
+        </div>
+        <ol id="runway" class="mono">
+          <li data-step="CRISIS">Crisis</li>
+          <li data-step="LAB">Lab Activation</li>
+          <li data-step="RECEIPTS">Receipts</li>
+          <li data-step="STAGECRED">StageCred</li>
+          <li data-step="CAPITAL">Capital</li>
+        </ol>
+      </div>
+
+      <div class="panel">
+        <div class="row">
+          <strong>Recent Ledger Entries</strong>
+          <a href="/founder-studios">Open StudiOS Onboarding →</a>
+        </div>
+        <p id="ledgerError" style="color:#ff8b8b"></p>
+        <ul id="ledgerRows" class="mono"></ul>
+      </div>
+    </main>
+
+    <script>
+      const FounderStates = {
+        IDLE: 'IDLE',
+        BUILDING: 'BUILDING',
+        THROTTLED: 'THROTTLED',
+        ESCALATED: 'ESCALATED'
+      };
+
+      function transition(state, action) {
+        if (action === 'RESET') return FounderStates.IDLE;
+        if (state === FounderStates.IDLE && action === 'START_BUILD') return FounderStates.BUILDING;
+        if (state === FounderStates.BUILDING && action === 'THROTTLE') return FounderStates.THROTTLED;
+        if (state === FounderStates.THROTTLED && action === 'START_BUILD') return FounderStates.BUILDING;
+        if (state === FounderStates.BUILDING && action === 'OVERDRIVE') return FounderStates.ESCALATED;
+        return state;
+      }
+
+      function runRegime({ velocity }) {
+        if (velocity > 75) return { signal: 'OVERDRIVE' };
+        return { signal: 'SAFE' };
+      }
+
+      let founderState = FounderStates.IDLE;
+      const stateEl = document.getElementById('state');
+      const regimeEl = document.getElementById('regime');
+      const ledgerErrorEl = document.getElementById('ledgerError');
+      const ledgerRowsEl = document.getElementById('ledgerRows');
+      const nextBarreEl = document.getElementById('nextBarre');
+
+
+
+      async function sha256Hex(value) {
+        const data = new TextEncoder().encode(value);
+        const digest = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
+      }
+
+      async function logEvent(payload) {
+        try {
+          const transitionProof = `${payload.meta?.from || 'NA'}->${payload.meta?.to || 'NA'}:${Date.now()}`;
+          const hash = await sha256Hex(transitionProof);
+          await fetch('/api/ledger', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              action: payload.action,
+              amount: 0,
+              documentId: 'founder-machine',
+              eventType: payload.eventType || payload.action,
+              hash,
+              meta: payload.meta || {}
+            })
+          });
+        } catch (error) {
+          console.warn('logEvent failed', error);
+        }
+      }
+
+      function updateRunway() {
+        const steps = ['CRISIS', 'LAB', 'RECEIPTS', 'STAGECRED', 'CAPITAL'];
+        const unlocked = founderState === FounderStates.IDLE ? 0 : founderState === FounderStates.BUILDING ? 2 : founderState === FounderStates.THROTTLED ? 3 : 4;
+        document.querySelectorAll('#runway li').forEach((item, idx) => {
+          item.style.opacity = idx <= unlocked ? '1' : '0.45';
+        });
+        nextBarreEl.textContent = `Next Barre → ${steps[Math.min(unlocked + 1, steps.length - 1)]}`;
+      }
+
+      function setState(next, event) {
+        const prev = founderState;
+        founderState = next;
+        stateEl.textContent = founderState;
+        logEvent({ action: 'state_change', eventType: event || 'STATE_CHANGE', meta: { from: prev, to: founderState } });
+
+        const velocity = founderState === FounderStates.BUILDING ? 80 : 45;
+        const signal = runRegime({ velocity }).signal;
+        regimeEl.textContent = `Regime signal: ${signal}`;
+
+        if (signal === 'OVERDRIVE' && founderState === FounderStates.BUILDING) {
+          const beforeEscalation = founderState;
+          founderState = transition(founderState, 'OVERDRIVE');
+          stateEl.textContent = founderState;
+          logEvent({ action: 'overdrive_signal', eventType: 'OVERDRIVE', meta: { from: beforeEscalation, to: founderState, velocity } });
+        }
+
+        updateRunway();
+        loadLedger();
+      }
+
+      async function loadLedger() {
+        ledgerErrorEl.textContent = '';
+        ledgerRowsEl.innerHTML = '';
+        try {
+          const response = await fetch('/api/ledger/founder-machine');
+          if (!response.ok) throw new Error(`Ledger fetch failed (${response.status})`);
+          const data = await response.json();
+          const rows = Array.isArray(data) ? data.slice(0, 10) : [];
+          if (!rows.length) {
+            ledgerRowsEl.innerHTML = '<li style="opacity:0.7">No entries yet.</li>';
+            return;
+          }
+
+          rows.forEach((entry) => {
+            const li = document.createElement('li');
+            const ts = entry.ts ? new Date(entry.ts).toISOString() : '—';
+            li.textContent = `${entry.id || '—'} · ${entry.documentId || '—'} · ${entry.eventType || entry.action || 'EVENT'} · ${ts}`;
+            ledgerRowsEl.appendChild(li);
+          });
+        } catch (error) {
+          ledgerErrorEl.textContent = error.message || 'Failed to load ledger';
+        }
+      }
+
+      document.getElementById('start').onclick = () => setState(transition(founderState, 'START_BUILD'), 'START_BUILD');
+      document.getElementById('throttle').onclick = () => setState(transition(founderState, 'THROTTLE'), 'THROTTLE');
+      document.getElementById('overdrive').onclick = () => setState(transition(founderState, 'OVERDRIVE'), 'OVERDRIVE');
+      document.getElementById('reset').onclick = () => setState(transition(founderState, 'RESET'), 'RESET');
+      document.getElementById('refresh').onclick = loadLedger;
+
+      updateRunway();
+      loadLedger();
+    </script>
+  </body>
+</html>
