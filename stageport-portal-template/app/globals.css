@@ -1,0 +1,43 @@
+:root {
+  --background: 25 20% 6%;
+  --foreground: 0 0% 98%;
+  --card: 25 15% 8%;
+  --card-border: 25 12% 13%;
+  --muted: 25 12% 13%;
+  --muted-foreground: 25 15% 70%;
+  --border: 25 12% 15%;
+  --accent: 25 15% 14%;
+  --primary: 40 90% 55%;
+  --primary-foreground: 25 20% 6%;
+  --ease-plie: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dark {
+  --background: 25 20% 6%;
+  --foreground: 0 0% 98%;
+  --card: 25 15% 8%;
+  --card-border: 25 12% 13%;
+  --muted: 25 12% 13%;
+  --muted-foreground: 25 15% 70%;
+  --border: 25 12% 15%;
+  --accent: 25 15% 14%;
+  --primary: 40 90% 55%;
+  --primary-foreground: 25 20% 6%;
+  --ease-plie: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Inter, Arial, sans-serif;
+  background: radial-gradient(circle at top, hsl(30 18% 10%) 0, hsl(var(--background)) 56%);
+  color: hsl(var(--foreground));
+}
+
+a {
+  color: inherit;
+}
