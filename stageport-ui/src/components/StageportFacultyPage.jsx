@@ -113,6 +113,7 @@ function formatAiHtml(resultText) {
 }
 
 export default function StageportFacultyPage() {
+  const [audienceMode, setAudienceMode] = useState('dance');
   const [selectedLayer, setSelectedLayer] = useState('layer1');
   const [taskState, setTaskState] = useState(defaultTaskState);
   const [aiModalOpen, setAiModalOpen] = useState(false);
@@ -273,6 +274,101 @@ export default function StageportFacultyPage() {
 
   const activeLayer = layerData[selectedLayer];
 
+  const heroContent = audienceMode === 'dance'
+    ? {
+        kicker: 'BUILT FOR MOVERS · BY A MOVER',
+        title: 'Your movement is the product. We built the math to prove it.',
+        body:
+          'Every rehearsal, every class, every performance generates data that disappears the moment it ends. StagePort captures it — transparent scoring, cryptographic proof, and tokens that turn your artistry into credentials, scholarships, and leverage.',
+        sub:
+          'Designed by a career choreographer who got tired of vibes-only scoring. Built for the people who carry studios on their bodies.',
+        primaryCta: 'See What Your Studio Generates',
+        secondaryCta: 'View Pricing',
+        context: 'Designed by a career choreographer who got tired of vibes-only scoring. Built for the people who carry studios on their bodies.'
+      }
+    : {
+        kicker: 'KINETIC INTELLIGENCE · GOVERNANCE INFRASTRUCTURE',
+        title: "All the world's a stage. We built the operating system for what moves inside it.",
+        body:
+          "Kinetic intelligence — the embodied labor of dancers, salespeople, operators, and physical workers — generates value that traditional systems can't measure. StagePort translates movement into algorithms, governance into infrastructure, and contribution into proof.",
+        sub:
+          "Rockettes kicklines. Rockefeller's railways. Not so disconnected. The same kinetic principles that power elite performance power elite governance.",
+        primaryCta: 'Explore the Framework',
+        secondaryCta: 'See Governance Pricing',
+        context: "Rockettes kicklines. Rockefeller's railways. Not so disconnected. The same kinetic principles that power elite performance power elite governance."
+      };
+
+  const evolutionContent = audienceMode === 'dance'
+    ? {
+        title: 'Your studio runs on a 28-day mutation engine.',
+        body1:
+          'Your body already knows the pattern: attention, build, peak, reset. StagePort hooks your studio into the same biological schedule. Not quarterly. Not “when things slow down.” Every 28 days, the system pushes a new module, patch, or release across your ledger.',
+        body2:
+          'That rhythm drives pattern-recognition and endurance instead of burnout. Dancers see fresh upgrades. Parents see steady receipts. You see a studio that never stagnates, because the clock won’t let it.',
+        week1Title: 'Week 1 – Scan & Score',
+        week1Tagline: 'Baseline the work onstage and in class.',
+        week1Bullets: [
+          'Upload routines and rehearsals',
+          'Py.rouette engine scores TES/PCS/GOE',
+          'First StageCred reports land in inboxes'
+        ],
+        week2Title: 'Week 2 – Ledger & Tokens',
+        week2Tagline: 'Turn effort into something bankable.',
+        week2Bullets: [
+          'StageCoin rules set for your studio',
+          'Leadership, consistency and artistry earn extra weight',
+          'Parents see how tokens fund scholarships and travel'
+        ],
+        week34Title: 'Week 3–4 – Patch & Release',
+        week34Tagline: 'Ship the next evolution beat.',
+        week34Bullets: [
+          'Adjust rubrics based on what the data shows',
+          'Publish a new report view or parent dashboard tweak',
+          'Lock the cycle, then start the next 28-day pass'
+        ]
+      }
+    : {
+        title: 'Your operation runs on a 28-day evolution engine.',
+        body1:
+          'Every organization has a rhythm: attention, build, peak, reset. StagePort hooks your operation into the same predictable mutation cycle. Every 28 days, the system pushes a new module, patch, or governance upgrade across your ledger.',
+        body2: '',
+        week1Title: 'Week 1 – Baseline & Score',
+        week1Tagline: 'Map kinetic workflows, score contribution patterns, generate first-cycle reports.',
+        week1Bullets: [
+          'Map kinetic workflows across teams and territories',
+          'Score contribution patterns with transparent governance logic',
+          'Generate first-cycle reports for operator visibility'
+        ],
+        week2Title: 'Week 2 – Ledger & Tokens',
+        week2Tagline: 'Set governance rules, then translate effort into credentials.',
+        week2Bullets: [
+          'Set governance rules for consistency, leadership, and velocity',
+          'Weight leadership and consistency against measurable outcomes',
+          'Translate embodied effort into bankable credentials'
+        ],
+        week34Title: 'Week 3-4 – Patch & Release',
+        week34Tagline: 'Publish governance views and launch the next pass.',
+        week34Bullets: [
+          'Adjust scoring based on new cycle data',
+          'Publish governance views for teams and stakeholders',
+          'Lock the cycle and start the next 28-day pass'
+        ]
+      };
+
+  const gapContent = audienceMode === 'dance'
+    ? {
+        title: 'Robotics kids get ecosystems. Dancers get ribbons.',
+        body:
+          'In tech and STEM, students collect badges, scores, and credentials that feed real pipelines into scholarships, internships, and careers. In dance, cheer, gymnastics and performance, most girls get subjective scores, one-night trophies and no ledger. StagePort fixes that with transparent scoring, cryptographic StageCred reports and a token economy that reinvests back into the students who carry your studio.',
+        quote: 'Movement deserves math. Ledgers and exits too.'
+      }
+    : {
+        title: 'Every kinetic worker builds the stage. Almost none of them own the math.',
+        body:
+          'In tech, process is documented, scored, and credentialed. In movement-based industries — dance, sales, construction, logistics, performance — contribution stays verbal, subjective, and disposable. StagePort fixes that with transparent scoring, cryptographic records, and a token economy that reinvests back into the people who move.',
+        quote: 'Putting the business back into show business.'
+      };
+
   const credentialPreview = useMemo(() => {
     const svgPreview = operatorLiteracyCredential.credential.visual_archetype.visual_asset.svg
       .replace(/\s+/g, ' ')
@@ -296,12 +392,12 @@ export default function StageportFacultyPage() {
       <style>{`
         :root {
           font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-          color: #0b1120;
-          background: #020617;
+          color: #1b1613;
+          background: #13100d;
         }
         body {
           margin: 0;
-          background: radial-gradient(circle at top, #0f172a 0, #020617 55%);
+          background: radial-gradient(circle at top, #2a211b 0, #13100d 55%);
           color: #e5e7eb;
         }
         a {
@@ -354,11 +450,37 @@ export default function StageportFacultyPage() {
           align-items: center;
           margin-bottom: 3rem;
         }
+        .audience-toggle {
+          background: rgba(29, 23, 20, 0.7);
+          border: 1px solid rgba(96, 76, 64, 0.45);
+          border-radius: 999px;
+          display: inline-flex;
+          padding: 0.2rem;
+          margin-bottom: 0.8rem;
+          gap: 0.2rem;
+        }
+        .audience-segment {
+          border: none;
+          border-radius: 999px;
+          padding: 0.38rem 0.86rem;
+          background: transparent;
+          color: #b8a38f;
+          letter-spacing: 0.08em;
+          font-size: 0.72rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 180ms ease;
+        }
+        .audience-segment.active {
+          background: rgba(250, 204, 21, 0.15);
+          color: #facc15;
+          font-weight: 700;
+        }
         .hero-kicker {
           font-size: 0.78rem;
           letter-spacing: 0.16em;
           text-transform: uppercase;
-          color: #a5b4fc;
+          color: #facc15;
           margin-bottom: 0.75rem;
         }
         .hero-title {
@@ -409,9 +531,9 @@ export default function StageportFacultyPage() {
           padding: 0.65rem 1.3rem;
           font-size: 0.85rem;
           font-weight: 500;
-          border: 1px solid #4b5563;
+          border: 1px solid #4a3f37;
           cursor: pointer;
-          background: #111827;
+          background: #1a1512;
           color: #e5e7eb;
           display: inline-flex;
           align-items: center;
@@ -437,11 +559,11 @@ export default function StageportFacultyPage() {
         }
         .badge-chip {
           padding: 0.45rem 0.75rem;
-          background: #0b1224;
+          background: #1d1714;
           border-radius: 999px;
-          border: 1px solid #1f2937;
+          border: 1px solid #3b322c;
           font-size: 0.8rem;
-          color: #c4d3f6;
+          color: #e8ddcf;
         }
         .crest-grid {
           display: grid;
@@ -450,8 +572,8 @@ export default function StageportFacultyPage() {
           margin-top: 1rem;
         }
         .crest-card {
-          background: #0b1224;
-          border: 1px solid #1f2937;
+          background: #1d1714;
+          border: 1px solid #3b322c;
           border-radius: 16px;
           padding: 1rem 1.1rem;
           box-shadow: 0 10px 40px rgba(0,0,0,0.35);
@@ -472,9 +594,9 @@ export default function StageportFacultyPage() {
           font-size: 0.75rem;
           padding: 0.3rem 0.65rem;
           border-radius: 999px;
-          border: 1px solid #4338ca;
-          color: #c7d2fe;
-          background: rgba(79, 70, 229, 0.15);
+          border: 1px solid #7c5a2a;
+          color: #f6ddb3;
+          background: rgba(202, 138, 4, 0.18);
           white-space: nowrap;
         }
         .crest-row {
@@ -497,8 +619,8 @@ export default function StageportFacultyPage() {
         .crest-pill {
           padding: 0.6rem 0.7rem;
           border-radius: 12px;
-          border: 1px solid #1f2937;
-          background: #0f172a;
+          border: 1px solid #3b322c;
+          background: #241d18;
           font-size: 0.85rem;
           color: #d1d5db;
         }
@@ -509,8 +631,8 @@ export default function StageportFacultyPage() {
           font-size: 0.75rem;
         }
         .crest-json {
-          background: #0f172a;
-          border: 1px solid #1f2937;
+          background: #241d18;
+          border: 1px solid #3b322c;
           border-radius: 12px;
           padding: 0.8rem;
           overflow: auto;
@@ -525,8 +647,8 @@ export default function StageportFacultyPage() {
           margin-top: 0.5rem;
         }
         .hero-panel {
-          background: #0b1224;
-          border: 1px solid #1f2937;
+          background: #1d1714;
+          border: 1px solid #3b322c;
           padding: 1.25rem;
           border-radius: 16px;
           box-shadow: 0 10px 40px rgba(0,0,0,0.35);
@@ -545,8 +667,8 @@ export default function StageportFacultyPage() {
           font-size: 0.75rem;
           padding: 0.35rem 0.65rem;
           border-radius: 999px;
-          border: 1px solid #4338ca;
-          color: #c7d2fe;
+          border: 1px solid #7c5a2a;
+          color: #f6ddb3;
           background: rgba(79, 70, 229, 0.15);
         }
         .hero-panel-main {
@@ -562,9 +684,9 @@ export default function StageportFacultyPage() {
         }
         .hero-panel-metric {
           padding: 0.85rem;
-          background: #0f172a;
+          background: #241d18;
           border-radius: 12px;
-          border: 1px solid #1f2937;
+          border: 1px solid #3b322c;
         }
         .metric-label {
           color: #9ca3af;
@@ -582,7 +704,7 @@ export default function StageportFacultyPage() {
           font-size: 0.78rem;
           letter-spacing: 0.12em;
           text-transform: uppercase;
-          color: #a5b4fc;
+          color: #e4c18a;
           margin-bottom: 0.35rem;
         }
         .section-title {
@@ -604,8 +726,8 @@ export default function StageportFacultyPage() {
           margin-top: 1.1rem;
         }
         .offer-card {
-          background: #0b1224;
-          border: 1px solid #1f2937;
+          background: #1d1714;
+          border: 1px solid #3b322c;
           border-radius: 14px;
           padding: 1rem 1.15rem;
           display: flex;
@@ -644,8 +766,8 @@ export default function StageportFacultyPage() {
           justify-content: center;
         }
         .ai-workbench {
-          background: #0b1224;
-          border: 1px solid #1f2937;
+          background: #1d1714;
+          border: 1px solid #3b322c;
           padding: 1.5rem;
           border-radius: 18px;
           box-shadow: 0 15px 60px rgba(0,0,0,0.35);
@@ -673,8 +795,8 @@ export default function StageportFacultyPage() {
           gap: 1rem;
         }
         .layer-card {
-          background: #0f172a;
-          border: 1px solid #1f2937;
+          background: #241d18;
+          border: 1px solid #3b322c;
           border-radius: 12px;
           padding: 0.9rem 1rem;
           cursor: pointer;
@@ -696,12 +818,12 @@ export default function StageportFacultyPage() {
         }
         .layer-card p {
           margin: 0;
-          color: #a5b4fc;
+          color: #e4c18a;
           font-size: 0.88rem;
         }
         .layer-details {
-          background: #0f172a;
-          border: 1px solid #1f2937;
+          background: #241d18;
+          border: 1px solid #3b322c;
           border-radius: 14px;
           padding: 1rem 1.1rem;
           min-height: 220px;
@@ -723,8 +845,8 @@ export default function StageportFacultyPage() {
         .spec-pill {
           padding: 0.7rem 0.8rem;
           border-radius: 10px;
-          background: #0b1224;
-          border: 1px solid #1f2937;
+          background: #1d1714;
+          border: 1px solid #3b322c;
           font-size: 0.88rem;
         }
         .spec-label {
@@ -752,8 +874,8 @@ export default function StageportFacultyPage() {
         .ai-action-btn {
           padding: 0.75rem 0.9rem;
           border-radius: 12px;
-          border: 1px solid #1f2937;
-          background: #0b1224;
+          border: 1px solid #3b322c;
+          background: #1d1714;
           color: #e5e7eb;
           display: flex;
           align-items: center;
@@ -767,8 +889,8 @@ export default function StageportFacultyPage() {
           border-color: #6366f1;
         }
         .task-panel {
-          background: #0f172a;
-          border: 1px solid #1f2937;
+          background: #241d18;
+          border: 1px solid #3b322c;
           border-radius: 14px;
           padding: 1rem;
         }
@@ -798,8 +920,8 @@ export default function StageportFacultyPage() {
           gap: 0.7rem;
         }
         .progress-track {
-          background: #0b1224;
-          border: 1px solid #1f2937;
+          background: #1d1714;
+          border: 1px solid #3b322c;
           border-radius: 999px;
           width: 100%;
           height: 10px;
@@ -827,8 +949,8 @@ export default function StageportFacultyPage() {
           padding: 1rem;
         }
         .ai-modal {
-          background: #0b1224;
-          border: 1px solid #1f2937;
+          background: #1d1714;
+          border: 1px solid #3b322c;
           border-radius: 16px;
           max-width: 680px;
           width: 100%;
@@ -861,8 +983,8 @@ export default function StageportFacultyPage() {
         .ai-support-btn {
           border-radius: 10px;
           padding: 0.55rem 0.9rem;
-          border: 1px solid #1f2937;
-          background: #0f172a;
+          border: 1px solid #3b322c;
+          background: #241d18;
           color: #e5e7eb;
           cursor: pointer;
         }
@@ -880,7 +1002,7 @@ export default function StageportFacultyPage() {
         .spinner {
           width: 18px;
           height: 18px;
-          border: 3px solid #1f2937;
+          border: 3px solid #3b322c;
           border-top-color: #f97316;
           border-radius: 999px;
           animation: spin 1s linear infinite;
@@ -897,7 +1019,7 @@ export default function StageportFacultyPage() {
         .footer-note {
           font-size: 0.78rem;
           color: #6b7280;
-          border-top: 1px solid #1f2937;
+          border-top: 1px solid #3b322c;
           padding-top: 1.2rem;
           text-align: center;
         }
@@ -940,39 +1062,47 @@ export default function StageportFacultyPage() {
 
         <section className="hero">
           <div>
-            <div className="hero-kicker">Transparent math • 28-day evolution clock</div>
+            <div className="audience-toggle" role="tablist" aria-label="Audience mode toggle">
+              <button
+                type="button"
+                data-testid="toggle-audience-dance"
+                className={`audience-segment ${audienceMode === 'dance' ? 'active' : ''}`}
+                onClick={() => setAudienceMode('dance')}
+              >
+                DANCE
+              </button>
+              <button
+                type="button"
+                data-testid="toggle-audience-pivot"
+                className={`audience-segment ${audienceMode === 'pivot' ? 'active' : ''}`}
+                onClick={() => setAudienceMode('pivot')}
+              >
+                PIVOT
+              </button>
+            </div>
+            <div className="hero-kicker">{heroContent.kicker}</div>
             <h1 className="hero-title">
-              Turn rehearsals into <span className="hero-highlight">credentials</span>,
-              tokens and Title&nbsp;IX-ready reports.
+              {heroContent.title}
             </h1>
             <p className="hero-body">
-              StagePort is the operating system for movement-based studios.
-              We run every routine through transparent scoring, generate cryptographic
-              StageCred reports, and mint tokens that fund scholarships, travel, and leadership.
+              {heroContent.body}
             </p>
-            <p className="hero-sub">
-              Under the hood, your studio runs on a 28-day mutation engine:
-              every cycle we ship a new module, patch, or reporting upgrade so your
-              ledger stays alive, accurate, and impossible to ignore.
-            </p>
+            <p className="hero-sub">{heroContent.sub}</p>
             <div className="hero-actions">
-              <a href="stagecred_demo_url_here" target="_blank" rel="noopener">
+              <a href="/token-economy">
                 <button className="btn-primary">
                   <span className="icon">📊</span>
-                  View Live StageCred Report
+                  {heroContent.primaryCta}
                 </button>
               </a>
               <a href="#pricing">
                 <button className="btn-secondary">
                   <span className="icon">💳</span>
-                  See Studio Pricing
+                  {heroContent.secondaryCta}
                 </button>
               </a>
             </div>
-            <div className="hero-footnote">
-              Designed by a career choreographer & neurolinguistic consultant.
-              Built for studios who want receipts, not vibes.
-            </div>
+            <div className="hero-footnote">{heroContent.context}</div>
             <div className="badge-strip">
               <div className="badge-chip">Clock-28 Evolution Beats™</div>
               <div className="badge-chip">Py.rouette™ TES/PCS/GOE Engine</div>
@@ -1176,44 +1306,31 @@ export default function StageportFacultyPage() {
 
         <section className="section">
           <div className="section-kicker">Evolution beats</div>
-          <div className="section-title">Your studio runs on a 28-day mutation engine.</div>
+          <div className="section-title">{evolutionContent.title}</div>
           <p className="section-body">
-            Your body already knows the pattern: attention, build, peak, reset. StagePort
-            hooks your studio into the same biological schedule. Not quarterly. Not
-            “when things slow down.” Every 28 days, the system pushes a new module,
-            patch, or release across your ledger.
+            {evolutionContent.body1}
           </p>
-          <p className="section-body" style={{ marginTop: '-0.75rem' }}>
-            That rhythm drives pattern-recognition and endurance instead of burnout.
-            Dancers see fresh upgrades. Parents see steady receipts. You see a studio
-            that never stagnates, because the clock won’t let it.
-          </p>
+          {evolutionContent.body2 && <p className="section-body" style={{ marginTop: '-0.75rem' }}>{evolutionContent.body2}</p>}
           <div className="offers-grid" style={{ gap: '0.9rem' }}>
             <div className="offer-card">
-              <div className="offer-name">Week 1 – Scan &amp; Score</div>
-              <div className="offer-tagline">Baseline the work onstage and in class.</div>
+              <div className="offer-name">{evolutionContent.week1Title}</div>
+              <div className="offer-tagline">{evolutionContent.week1Tagline}</div>
               <ul className="offer-list">
-                <li>Upload routines and rehearsals</li>
-                <li>Py.rouette engine scores TES/PCS/GOE</li>
-                <li>First StageCred reports land in inboxes</li>
+                {evolutionContent.week1Bullets.map((item) => <li key={item}>{item}</li>)}
               </ul>
             </div>
             <div className="offer-card">
-              <div className="offer-name">Week 2 – Ledger &amp; Tokens</div>
-              <div className="offer-tagline">Turn effort into something bankable.</div>
+              <div className="offer-name">{evolutionContent.week2Title}</div>
+              <div className="offer-tagline">{evolutionContent.week2Tagline}</div>
               <ul className="offer-list">
-                <li>StageCoin rules set for your studio</li>
-                <li>Leadership, consistency and artistry earn extra weight</li>
-                <li>Parents see how tokens fund scholarships and travel</li>
+                {evolutionContent.week2Bullets.map((item) => <li key={item}>{item}</li>)}
               </ul>
             </div>
             <div className="offer-card">
-              <div className="offer-name">Week 3–4 – Patch &amp; Release</div>
-              <div className="offer-tagline">Ship the next evolution beat.</div>
+              <div className="offer-name">{evolutionContent.week34Title}</div>
+              <div className="offer-tagline">{evolutionContent.week34Tagline}</div>
               <ul className="offer-list">
-                <li>Adjust rubrics based on what the data shows</li>
-                <li>Publish a new report view or parent dashboard tweak</li>
-                <li>Lock the cycle, then start the next 28-day pass</li>
+                {evolutionContent.week34Bullets.map((item) => <li key={item}>{item}</li>)}
               </ul>
             </div>
           </div>
@@ -1221,14 +1338,11 @@ export default function StageportFacultyPage() {
 
         <section className="section">
           <div className="section-kicker">The gap</div>
-          <div className="section-title">Robotics kids get ecosystems. Dancers get ribbons.</div>
+          <div className="section-title">{gapContent.title}</div>
           <p className="section-body">
-            In tech and STEM, students collect badges, scores, and credentials that feed real
-            pipelines into scholarships, internships, and careers. In dance, cheer, gymnastics
-            and performance, most girls get subjective scores, one-night trophies and no ledger.
-            StagePort fixes that with transparent scoring, cryptographic StageCred reports and
-            a token economy that reinvests back into the students who carry your studio.
+            {gapContent.body}
           </p>
+          <p className="section-body" style={{ marginTop: '-0.65rem', fontStyle: 'italic' }}>{gapContent.quote}</p>
         </section>
 
         <section className="section" id="pricing">
