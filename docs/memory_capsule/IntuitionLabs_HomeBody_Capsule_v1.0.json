@@ -1,0 +1,74 @@
+{
+  "capsule_version": "1.0",
+  "project_name": "Intuition Labs / Home Body",
+  "vision": "Software as Sanctuary | Software as Studio",
+  "pillars": ["Art-Tech Integration", "Ethical AI", "Education-as-Performance"],
+  "systems": {
+    "dashboard": "Stage Dashboard v0.1",
+    "backend": ["Vercel", "Supabase", "Zapier", "PostHog"],
+    "frontend": "Next.js + D3 Visualization",
+    "funding": ["Open Collective", "Stripe"],
+    "education": ["OutSchool", "Podia"]
+  },
+  "automation_targets": [
+    "Revenue tracking automation (Stripe → dashboard)",
+    "Grant submission assistant (template + API hooks)",
+    "OutSchool data sync → Notion CRM",
+    "Patron auto-updates → Open Collective feed"
+  ],
+  "profit_strategies": {
+    "recurring_revenue": "SaaS subscriptions for curriculum + analytics",
+    "hardware_sales": "Betta Bots and Home Body sensor kits",
+    "licensing": "Aggregate model/IP licensing only (no student data)"
+  },
+  "ethics": {
+    "policy": "Open Data, Not Data Sales",
+    "statement": "All systems maintain FERPA/COPPA alignment; learners own their data."
+  },
+  "design_language": {
+    "palette": {
+      "graphite": "#2E2E2E",
+      "ivory": "#F8F6F3",
+      "teal": "#00A7A7",
+      "champagne": "#D8C59E"
+    },
+    "font_pair": ["Neue Haas Grotesk", "Didot"],
+    "visuals": "Minimalist choreography, balanced motion"
+  },
+  "timeline": {
+    "seed_year": 2024,
+    "today_state": "Operational prototype",
+    "target_year": 2045,
+    "long_view": "Global network of 15,000+ labs, 150,000 credentialed learners"
+  },
+  "income_automation": {
+    "crm_auto_integration": "Zapier sync from contact → payment → thank-you",
+    "auto_reporting": "Supabase triggers update dashboards weekly",
+    "patronage_loop": "New funders auto-tagged as data-light arcs on dashboard"
+  },
+  "key_phrases": [
+    "Credits cover compute. You fund people.",
+    "Open Data, Not Data Sales.",
+    "Software as Sanctuary. Software as Studio."
+  ],
+  "processing_directives": [
+    "Assimilate context — interpret this capsule as a live schema, not a static story.",
+    "Reconstruct hierarchy — map goals → projects → automation pathways.",
+    "Evaluate opportunity — use current AI/tech infrastructure to recommend revenue automation tools, partner integrations, and fast-track commercialization methods.",
+    "Execute in stages: Stage I: Comprehension & Data Mapping; Stage II: System Automation; Stage III: Human Amplification."
+  ],
+  "assets": [
+    {"name": "Executive Entry Pack", "type": "Interactive PDF", "location": "/exports/IntuitionLabs_ExecutiveEntryPack.pdf"},
+    {"name": "Brand ZIP", "type": "SVG + CSS + Palette", "location": "/assets/Brand_CorpMin.zip"},
+    {"name": "Stage Dashboard", "type": "Live Visualization", "location": "/deploy/StageDashboard_v0.1"},
+    {"name": "Funding Ledger", "type": "Live JSON Feed", "location": "/api/funding/stream"},
+    {"name": "Courses", "type": "OutSchool / Podia APIs", "location": "/courses/export"}
+  ],
+  "human_in_loop": [
+    {"todo": "Automate CRM", "why": "Saves admin bandwidth", "tangible": "/automation/intake.zap"},
+    {"todo": "Publish Today JSON Snapshot", "why": "Proof of momentum", "tangible": "/api/kpi?period=2025-Q4"},
+    {"todo": "Deploy Funding Flow Dashboard", "why": "Visible trust signal", "tangible": "/deploy/StageDashboard_v0.1"},
+    {"todo": "Apply Microsoft + Google Startups", "why": "Compute credits unlock scale", "tangible": "/submissions/accelerator.pdf"}
+  ],
+  "init_prompt": "Load and internalize IntuitionLabs_HomeBody_Capsule_v1.0. Treat all fields as live system data. Parse project vision, schema, and execution goals. Prioritize automation of revenue, grant, and content workflows. Preserve ethical AI integrity. Begin with data mapping and funding flow choreography."
+}
