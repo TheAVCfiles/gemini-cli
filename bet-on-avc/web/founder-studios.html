@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StagePort Startup StudiOS</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+        background: #0b1020;
+        color: #eef4ff;
+      }
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      .muted { color: #b8c2db; }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 10px;
+        margin: 16px 0;
+      }
+      .step {
+        border: 1px solid #243051;
+        background: #131a2e;
+        border-radius: 12px;
+        padding: 10px;
+      }
+      .step.active {
+        border-color: #6de2ff;
+        box-shadow: 0 0 0 1px #6de2ff inset;
+      }
+      button {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .primary { background: linear-gradient(120deg, #6de2ff, #33f4bd); color: #091020; }
+      .pill { display: inline-block; margin: 4px 0; padding: 4px 8px; border-radius: 999px; background: #17213f; }
+      .hash {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        word-break: break-all;
+        font-size: 12px;
+        color: #9cffe5;
+      }
+      a { color: #93e8ff; }
+      .card { border: 1px solid #243051; border-radius: 12px; padding: 14px; background: #12192b; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>StagePort Startup StudiOS</h1>
+      <p class="muted">
+        StagePort Startup StudiOS is a conservatory operating system for early-stage founders:
+        <strong>barre → repetition → receipts → credential → capital</strong>. Not dance-themed—discipline-themed.
+      </p>
+
+      <div class="steps" id="steps"></div>
+
+      <div class="card">
+        <h2>Notarize Founder Reality Kit (PDF)</h2>
+        <p class="muted">PDF → SHA-256 hash → Ledger entry.</p>
+        <input id="fileInput" type="file" accept="application/pdf" />
+        <button id="notarizeBtn" class="primary" disabled>Notarize to Ledger</button>
+        <div class="pill" id="hashStatus">Hash status: waiting for upload</div><br />
+        <div class="pill" id="ledgerStatus">Ledger status: not notarized</div>
+        <p><strong>DocumentId:</strong> <span id="docId">stageport-founder-reality-kit-v1</span></p>
+        <p><strong>File:</strong> <span id="fileName">—</span></p>
+        <p><strong>Hash:</strong></p>
+        <div id="hashValue" class="hash">—</div>
+        <p id="error" style="color:#ff8b8b"></p>
+      </div>
+
+
+      <div class="card" style="margin-top: 12px;">
+        <h3>Notary Receipts (Scoped Retrieval)</h3>
+        <p class="muted">Shows only entries for <code>stageport-founder-reality-kit-v1</code> using <code>GET /api/ledger/stageport-founder-reality-kit-v1</code>.</p>
+        <button id="refreshReceipts">Refresh Receipts</button>
+        <p id="receiptsSummary" class="muted">Doctrine history: no receipts yet.</p>
+        <ul id="receipts" class="hash"></ul>
+      </div>
+
+      <p><a href="/dashboard">Open Founder Dashboard →</a></p>
+    </main>
+
+    <script>
+      const STEPS = [
+        ['CRISIS', 'Crisis', 'Intake + constraints'],
+        ['LAB', 'Lab Activation', 'Create the studio container'],
+        ['RECEIPTS', 'Receipts', 'Proof-of-work ledger'],
+        ['STAGECRED', 'StageCred', 'Credential from receipts'],
+        ['CAPITAL', 'Capital', 'Export proof into capital artifacts']
+      ];
+
+      const stepRoot = document.getElementById('steps');
+      let activeStep = 'CRISIS';
+      function renderSteps() {
+        stepRoot.innerHTML = '';
+        STEPS.forEach(([key, title, subtitle]) => {
+          const btn = document.createElement('button');
+          btn.className = 'step' + (key === activeStep ? ' active' : '');
+          btn.innerHTML = `<strong>${title}</strong><br /><span class="muted">${subtitle}</span>`;
+          btn.onclick = () => { activeStep = key; renderSteps(); };
+          stepRoot.appendChild(btn);
+        });
+      }
+      renderSteps();
+
+      const state = {
+        fileName: '',
+        hash: '',
+        documentId: 'stageport-founder-reality-kit-v1'
+      };
+
+      const fileInput = document.getElementById('fileInput');
+      const notarizeBtn = document.getElementById('notarizeBtn');
+      const fileNameEl = document.getElementById('fileName');
+      const hashValueEl = document.getElementById('hashValue');
+      const hashStatusEl = document.getElementById('hashStatus');
+      const ledgerStatusEl = document.getElementById('ledgerStatus');
+      const errorEl = document.getElementById('error');
+      const receiptsEl = document.getElementById('receipts');
+      const receiptsSummaryEl = document.getElementById('receiptsSummary');
+
+      function toHex(buffer) {
+        const bytes = new Uint8Array(buffer);
+        return Array.from(bytes).map((byte) => byte.toString(16).padStart(2, '0')).join('');
+      }
+
+      async function hashFile(file) {
+        const data = await file.arrayBuffer();
+        const digest = await crypto.subtle.digest('SHA-256', data);
+        return toHex(digest);
+      }
+
+      fileInput.addEventListener('change', async (event) => {
+        errorEl.textContent = '';
+        ledgerStatusEl.textContent = 'Ledger status: not notarized';
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+
+        state.fileName = file.name;
+        fileNameEl.textContent = state.fileName;
+        hashStatusEl.textContent = 'Hash status: computing…';
+        hashValueEl.textContent = '—';
+        notarizeBtn.disabled = true;
+
+        try {
+          state.hash = await hashFile(file);
+          hashValueEl.textContent = state.hash;
+          hashStatusEl.textContent = 'Hash status: hash computed ✅';
+          notarizeBtn.disabled = false;
+        } catch (error) {
+          errorEl.textContent = error.message || 'Failed to compute hash';
+          hashStatusEl.textContent = 'Hash status: failed';
+        }
+      });
+
+
+      async function loadReceipts() {
+        receiptsEl.innerHTML = '';
+        receiptsSummaryEl.textContent = 'Doctrine history: loading…';
+        try {
+          const response = await fetch('/api/ledger/stageport-founder-reality-kit-v1');
+          if (!response.ok) throw new Error(`Ledger fetch failed (${response.status})`);
+          const rows = await response.json();
+          if (!Array.isArray(rows) || rows.length === 0) {
+            receiptsSummaryEl.textContent = 'Doctrine history: no receipts yet.';
+            receiptsEl.innerHTML = '<li>No receipts yet.</li>';
+            return;
+          }
+
+          const sorted = [...rows].sort((a, b) => (a.ts || 0) - (b.ts || 0));
+          const first = sorted[0]?.ts ? new Date(sorted[0].ts).toISOString() : '—';
+          const latest = sorted[sorted.length - 1]?.ts ? new Date(sorted[sorted.length - 1].ts).toISOString() : '—';
+          receiptsSummaryEl.textContent = `Doctrine history: ${rows.length} receipts · first ${first} · latest ${latest}`;
+
+          rows.slice(0, 10).forEach((entry) => {
+            const li = document.createElement('li');
+            const ts = entry.ts ? new Date(entry.ts).toISOString() : '—';
+            li.textContent = `${entry.eventType || entry.action || 'EVENT'} · ${ts}`;
+            receiptsEl.appendChild(li);
+          });
+        } catch (error) {
+          receiptsSummaryEl.textContent = 'Doctrine history: unavailable';
+          const li = document.createElement('li');
+          li.textContent = error.message || 'Failed to load receipts';
+          receiptsEl.appendChild(li);
+        }
+      }
+
+      document.getElementById('refreshReceipts').addEventListener('click', loadReceipts);
+      loadReceipts();
+
+      notarizeBtn.addEventListener('click', async () => {
+        errorEl.textContent = '';
+        if (!state.hash) {
+          errorEl.textContent = 'No hash computed yet.';
+          return;
+        }
+
+        ledgerStatusEl.textContent = 'Ledger status: notarizing…';
+        notarizeBtn.disabled = true;
+
+        try {
+          const response = await fetch('/api/ledger/notarize', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              documentId: state.documentId,
+              hash: state.hash,
+              eventType: 'ISSUED'
+            })
+          });
+
+          if (!response.ok) {
+            const text = await response.text();
+            throw new Error(`Notarize failed (${response.status}): ${text || 'Unknown error'}`);
+          }
+
+          ledgerStatusEl.textContent = 'Ledger status: ledger notarized ✅';
+          loadReceipts();
+        } catch (error) {
+          errorEl.textContent = error.message || 'Notarize failed';
+          ledgerStatusEl.textContent = 'Ledger status: failed';
+        } finally {
+          notarizeBtn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
