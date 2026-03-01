@@ -15,6 +15,23 @@
                     <h1>💾 Cache Up</h1>
                     <p>Cache Up Before You Crash Out.</p>
                     <p>Keep your AI's vocabulary aligned with fast glossary checks and conflict alerts.</p>
+                    <div
+                        class="trust-badge"
+                        id="trust-widget"
+                        role="button"
+                        aria-haspopup="dialog"
+                        aria-controls="trust-modal"
+                        aria-expanded="false"
+                        tabindex="0"
+                        data-trust-widget
+                        data-trust-source="/assets/data/cache-up-trust.json"
+                    >
+                        <span class="trust-badge__icon" aria-hidden="true">★</span>
+                        <span class="trust-badge__label">
+                            <span>Trust score</span>
+                            <span class="trust-badge__value" id="trust-widget-score">—</span>
+                        </span>
+                    </div>
                     <a href="#free-scan" class="btn btn-primary">Try Cache Up Free</a>
                     <a href="#glossary-kit" class="btn btn-secondary">Free Glossary Kit</a>
                 </div>
@@ -185,5 +202,36 @@
             </div>
         </div>
     </footer>
+
+    <div
+        id="trust-modal"
+        class="trust-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="trust-modal-title"
+        aria-describedby="trust-modal-desc"
+        hidden
+        tabindex="-1"
+    >
+        <div class="trust-modal__backdrop" data-close="true"></div>
+        <div class="trust-modal__panel" role="document">
+            <button class="trust-modal__close" aria-label="Close" data-close="true">&times;</button>
+            <header>
+                <h2 id="trust-modal-title">Trust • <span id="trust-modal-score">—</span></h2>
+                <p id="trust-modal-desc" class="muted">
+                    Attraction: <span id="trust-modal-a">—</span> • M-Lift: <span id="trust-modal-m">—</span>
+                </p>
+            </header>
+            <section id="trust-modal-evidence" aria-live="polite"></section>
+            <footer>
+                <a id="trust-modal-how" href="#" target="_blank" rel="noopener" data-focus="initial">How trust is computed</a>
+                <div class="trust-modal__meta">
+                    <small>Last updated: <time id="trust-modal-updated">—</time></small>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="/assets/scripts/trust-widget.js"></script>
 </body>
 </html>
