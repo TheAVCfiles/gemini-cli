@@ -93,3 +93,21 @@ To avoid environment size limits, assemble this bundle locally as `AVC_Residency
 - Glitch_as_Entry_POC.html
 
 Provide a machine-readable manifest alongside the zip if reviewers require one.
+
+## Automating AVC Megabundle Assembly
+
+Use `scripts/build_avc_megabundle.py` to recreate the larger delivery bundles from the three provided zip inputs:
+
+1. Place `DeCrypt_Studio_SaaS_Seed_v1.zip`, `DeCrypt_Studio_SaaS_Seed_v2.zip`, and `DeCrypt_Studio_SaaS_v3_Dimensions.zip` in `/mnt/data` (or another directory).
+2. Run the helper script (defaults to `/mnt/data`):
+
+   ```bash
+   python scripts/build_avc_megabundle.py
+   ```
+
+   To use a different base directory, pass `--base /path/to/files`.
+
+The script produces two outputs in the base directory:
+
+- `AVC_MegaBundle_v1.zip` containing the seed and dimensions releases under `AVC_MegaBundle_v1/`.
+- `AVC_C_Artifact_v1.zip` containing console assets, JSON schemas, and dimensions under `AVC_C_Artifact_v1/`.
