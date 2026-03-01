@@ -7,6 +7,7 @@ The IntuitionLabs Ballet Bots program combines creative movement, robotics, and 
 - `class_overviews/`
   - [`ballet_bots.md`](./class_overviews/ballet_bots.md): Curriculum goals, narrative arc, and module breakdown.
   - [`minting_system_overview.md`](./class_overviews/minting_system_overview.md): Token and badge mechanics that reward learner progress.
+  - [`decrypt_the_girl_stage_reset.md`](./class_overviews/decrypt_the_girl_stage_reset.md): Room 006 apex blueprint, gameplay unlocks, and home-base mechanic for the Decrypt the Girl arc.
 - `teaching_materials/`
   - [`lesson_plans.md`](./teaching_materials/lesson_plans.md): Ready-to-run outlines for each session.
   - [`student_worksheets.md`](./teaching_materials/student_worksheets.md): Printable activities and reflection prompts.
