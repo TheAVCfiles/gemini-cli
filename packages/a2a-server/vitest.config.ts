@@ -4,7 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { fileURLToPath } from 'node:url';
+
 import { defineConfig } from 'vitest/config';
+
+const coreEntryPoint = fileURLToPath(new URL('../core/src/index.ts', import.meta.url));
 
 export default defineConfig({
   test: {
@@ -21,6 +25,11 @@ export default defineConfig({
         'cobertura',
         ['json-summary', { outputFile: 'coverage-summary.json' }],
       ],
+    },
+  },
+  resolve: {
+    alias: {
+      '@google/gemini-cli-core': coreEntryPoint,
     },
   },
 });
