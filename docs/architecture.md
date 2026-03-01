@@ -47,6 +47,10 @@ A typical interaction with the Gemini CLI follows this flow:
 6.  **Response to CLI:** The core package sends the final response back to the CLI package.
 7.  **Display to user:** The CLI package formats and displays the response to the user in the terminal.
 
+For a more detailed, step-by-step walkthrough of the prompts, tool calls, and
+streaming updates that happen within this loop, see the
+[conversation lifecycle](./architecture/conversation-lifecycle.md) guide.
+
 ## Key Design Principles
 
 - **Modularity:** Separating the CLI (frontend) from the Core (backend) allows for independent development and potential future extensions (e.g., different frontends for the same backend).
