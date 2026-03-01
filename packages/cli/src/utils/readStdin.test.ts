@@ -90,6 +90,21 @@ describe('readStdin', () => {
     vi.useRealTimers();
   });
 
+  it('should respect a custom timeout option', async () => {
+    vi.useFakeTimers();
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+
+    const promise = readStdin({ pipedInputTimeoutMs: 1234 });
+
+    expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), 1234);
+
+    vi.advanceTimersByTime(1234);
+    await expect(promise).resolves.toBe('');
+
+    setTimeoutSpy.mockRestore();
+    vi.useRealTimers();
+  });
+
   it('should clear timeout once when data is received and resolve with data', async () => {
     const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
     mockStdin.read
@@ -108,5 +123,26 @@ describe('readStdin', () => {
     onEndHandler();
 
     await expect(promise).resolves.toBe('chunk1chunk2');
+  });
+
+  it('should truncate input using the provided max size option', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    mockStdin.read
+      .mockReturnValueOnce('abcd')
+      .mockReturnValueOnce('efgh')
+      .mockReturnValueOnce(null);
+
+    const promise = readStdin({ maxSize: 5 });
+
+    onReadableHandler();
+    onEndHandler();
+
+    await expect(promise).resolves.toBe('abcde');
+    expect(mockStdin.destroy).toHaveBeenCalledOnce();
+    expect(warnSpy).toHaveBeenCalledWith(
+      'Warning: stdin input truncated to 5 bytes.',
+    );
+
+    warnSpy.mockRestore();
   });
 });
