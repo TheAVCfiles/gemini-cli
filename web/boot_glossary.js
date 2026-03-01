@@ -28,6 +28,10 @@ function normaliseTerm(term) {
   return (term || "").trim().toLowerCase();
 }
 
+function sortByTerm(entries = []) {
+  return [...entries].sort((a, b) => normaliseTerm(a.term).localeCompare(normaliseTerm(b.term)));
+}
+
 function buildAlphabetNav() {
   alphabetNav.innerHTML = "";
   letters.forEach((letter) => {
@@ -82,9 +86,6 @@ function renderEntries() {
     title.textContent = entry.term;
     const definition = document.createElement("p");
     definition.textContent = entry.definition;
-    const sources = document.createElement("p");
-    sources.className = "sources";
-    sources.textContent = entry.sources ? `Sources: ${entry.sources}` : "";
     item.appendChild(title);
     item.appendChild(definition);
     if (entry.notes) {
@@ -93,7 +94,12 @@ function renderEntries() {
       notes.textContent = entry.notes;
       item.appendChild(notes);
     }
-    item.appendChild(sources);
+    if (entry.sources) {
+      const sources = document.createElement("p");
+      sources.className = "sources";
+      sources.textContent = `Sources: ${entry.sources}`;
+      item.appendChild(sources);
+    }
     fragment.appendChild(item);
   });
   glossaryList.appendChild(fragment);
@@ -314,8 +320,8 @@ function handleUpload(event) {
       } else {
         entries = parseCsv(reader.result.toString());
       }
-      state.external = entries;
-      const report = computeConflicts(entries);
+      state.external = sortByTerm(entries);
+      const report = computeConflicts(state.external);
       renderConflicts(report);
       updateResultsMeta();
     } catch (error) {
@@ -341,7 +347,7 @@ async function fetchGlossary() {
       throw new Error(`Failed to load glossary.json (${response.status})`);
     }
     const data = await response.json();
-    state.canonical = Array.isArray(data) ? data : [];
+    state.canonical = sortByTerm(Array.isArray(data) ? data : []);
     updateFilteredEntries();
     buildAlphabetNav();
   } catch (error) {
