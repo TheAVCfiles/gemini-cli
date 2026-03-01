@@ -65,6 +65,25 @@ Abutment,Part of a structure supporting an arch or span,MWRA SpecBook
 
 ---
 
+## 📦 Create a distributable bundle
+
+Ship the glossary UI, Netlify functions, and deployment checklist as a
+timestamped archive with one command:
+
+```bash
+npm run bundle:mwra
+```
+
+The script collects the required assets, stages them in a temporary
+directory, and writes a `mwra-glossary_<timestamp>.zip` file to
+`builds/`. Use `-- --dry-run` or `-- --verbose` to forward flags to the
+underlying Python helper (`scripts/create_mwra_bundle.py`). The generated
+archive can be applied in downstream repositories via
+`apply_mwra_patch.sh` or uploaded directly for Firebase deployments
+described in `docs/firebase-hosting.md`.
+
+---
+
 ## 🤖 Ask endpoint
 
 `netlify/functions/ask.js` wraps OpenAI's Responses API. Provide an `OPENAI_API_KEY`
