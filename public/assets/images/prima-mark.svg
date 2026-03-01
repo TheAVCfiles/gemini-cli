@@ -1,0 +1,7 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#050505"/>
+  <rect x="156" y="156" width="200" height="200" rx="4" stroke="#333333" stroke-width="2"/>
+  <path d="M 156 156 C 156 356, 356 356, 356 156" stroke="#EACC71" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <circle cx="256" cy="356" r="4" fill="#FF2A2A"/>
+  <text x="256" y="420" text-anchor="middle" font-family="Courier New" font-weight="bold" font-size="24" letter-spacing="8" fill="#EACC71">PRIMA</text>
+</svg>
