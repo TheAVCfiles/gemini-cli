@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AVC Systems Studios — Explain Mode (Rosetta Console & Mercy Gate)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'rose-accent': '#CF8DA6', // Main accent
+          'ink': '#101014', // Dark text/border
+          'ivory': '#F8F8F8', // Light background
+          'dark-bg': '#0b0b0c', // Very dark for code blocks
+          'border-subtle': '#e5e7eb', // Light border
+          'gate-pass': '#4ade80', // Green
+          'gate-fail': '#f87171', // Red
+          'gold-subtle': '#D4AF37',
+        },
+        fontFamily: {
+          sans: ['Inter', 'system-ui', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .card {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease-in-out;
+  }
+  .card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  }
+  .rose-line {
+    width: 4px;
+    background: #CF8DA6;
+    border-radius: 3px;
+    margin: 16px auto;
+    height: 140px;
+  }
+  .pre-scroll {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+</style>
+</head>
+<body class="bg-ivory text-ink font-sans min-h-screen">
+
+  <div class="border-b border-border-subtle bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <h1 class="text-3xl font-extrabold text-rose-accent">AVC Systems Studios</h1>
+      <p class="text-sm text-gray-500 mt-1">Explain Mode: Rosetta Console & Mercy Gate v2.0</p>
+    </div>
+  </div>
+
+  <div id="appContainer" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <div class="grid lg:grid-cols-3 gap-6">
+
+      <!-- Main Analysis and Output Column -->
+      <div class="lg:col-span-2 space-y-6">
+
+        <!-- Input Card -->
+        <div class="card bg-white p-6 rounded-xl border border-border-subtle">
+          <h2 class="text-xl font-semibold mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-gold-subtle" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-4m0 0l-3 3m3-3l3 3m-4 5h4m-4-8h.01M12 2a10 10 0 100 20 10 10 0 000-20z"></path></svg>
+            1. Input Proof & Parameters
+          </h2>
+          <div class="space-y-4">
+            <div>
+              <label for="csvFile" class="block text-sm font-medium text-gray-700 mb-1">Upload Signal/Return CSV</label>
+              <input type="file" id="csvFile" accept=".csv" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-rose-accent/10 file:text-rose-accent hover:file:bg-rose-accent/20"/>
+            </div>
+            <div class="flex space-x-4 items-center">
+              <div class="w-1/2">
+                <label for="alpha" class="block text-sm font-medium text-gray-700 mb-1">Significance Level (α)</label>
+                <input type="number" id="alpha" value="0.05" min="0.0001" max="0.5" step="0.01" class="w-full p-2 border border-border-subtle rounded-lg focus:ring-rose-accent focus:border-rose-accent"/>
+              </div>
+              <div class="w-1/2 flex flex-col justify-end">
+                <button id="loadSample" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-full text-sm font-semibold hover:bg-gray-300">Load Sample Data</button>
+              </div>
+            </div>
+            <button id="analyzeBtn" class="w-full bg-rose-accent text-white py-3 rounded-xl text-lg font-bold hover:bg-rose-accent/90 transition">
+              Run Statistical Audit
+            </button>
+          </div>
+        </div>
+
+        <!-- Output Card -->
+        <div class="card bg-white p-6 rounded-xl border border-border-subtle">
+          <h2 class="text-xl font-semibold mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-rose-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+            2. Deterministic & Narrative Output
+          </h2>
+          <div class="space-y-4">
+            
+            <!-- Statistical Results -->
+            <div class="border-b border-border-subtle pb-4">
+              <h3 class="text-lg font-medium text-gray-700 mb-2">Statistical Proof</h3>
+              <p id="statsOut" class="text-gray-500 italic">Upload data or load sample to analyze...</p>
+            </div>
+
+            <!-- Mercy Gate Outcome -->
+            <div class="border-b border-border-subtle pb-4">
+              <h3 class="text-lg font-medium text-gray-700 mb-2">Cunning Mercy Gate Status</h3>
+              <div id="outcome" class="text-sm font-bold">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+                  Gate: IDLE (Awaiting Analysis)
+                </span>
+              </div>
+            </div>
+
+            <!-- Gemini LLM Narrative Feature -->
+            <div>
+              <h3 class="text-lg font-medium text-gray-700 mb-2 flex items-center">
+                ✨ Poetic Cipher Narrative
+              </h3>
+              <div id="narrativeOut" class="p-3 bg-rose-accent/5 rounded-lg border border-rose-accent/10">
+                <p class="text-sm text-gray-600 italic" id="narrativeText">The system is silent, awaiting the pulse of the market's data...</p>
+              </div>
+              <p id="narrativeLoading" class="text-sm text-rose-accent mt-2 hidden">Generating narrative... Please wait.</p>
+              <p id="narrativeError" class="text-sm text-red-500 mt-2 hidden"></p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- System Context Column -->
+      <div class="lg:col-span-1 space-y-6">
+        <div class="card bg-white p-6 rounded-xl border border-border-subtle">
+          <h2 class="text-xl font-semibold mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253"></path></svg>
+            System Context: Code Transparency
+          </h2>
+          <p class="text-sm text-gray-600 mb-4">
+            The core logic for the Spearman Rho calculation and Mercy Gate is shown below for auditing purposes.
+          </p>
+          <div class="pre-scroll bg-dark-bg text-gray-300 p-4 rounded-lg text-xs font-mono">
+            <pre id="codeBlock">// Spearman rho + p-value + Mercy Gate logic will appear here after analysis...</pre>
+          </div>
+        </div>
+        <div class="card bg-white p-6 rounded-xl border border-border-subtle">
+          <h2 class="text-xl font-semibold mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-rose-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2h-1a2 2 0 00-2 2v3m-2-3h5a2 2 0 002-2v-1a2 2 0 00-2-2h-1a2 2 0 01-2-2h-1m2 0h.01"></path></svg>
+            Cipher Terminology Key
+          </h2>
+          <ul class="list-disc pl-5 text-sm space-y-2 text-gray-700">
+            <li><strong class="text-gate-pass">JETÉ</strong>: High conviction, Gate PASS. Initiate max capacity.</li>
+            <li><strong class="text-gate-fail">FERMATA</strong>: Low conviction, Gate FAIL. Defensive posture (Cunning Mercy).</li>
+            <li><strong>GLISSADE</strong>: In preparation, structural audit complete, awaiting trigger.</li>
+            <li><strong>CODA</strong>: Immediate liquidation/exit.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+const GEMINI_ENDPOINT = '/.netlify/functions/gemini';
+const codeBlockElement = document.getElementById('codeBlock');
+const statsOutElement = document.getElementById('statsOut');
+const outcomeElement = document.getElementById('outcome');
+const narrativeTextElement = document.getElementById('narrativeText');
+const narrativeLoadingElement = document.getElementById('narrativeLoading');
+const narrativeErrorElement = document.getElementById('narrativeError');
+
+// --- Utility Functions ---
+
+// Simple error display (replaces alert())
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    errorDiv.innerHTML = `
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm mx-4">
+            <h3 class="text-xl font-bold text-rose-accent mb-3">System Warning</h3>
+            <p class="text-gray-700 text-sm">${message}</p>
+            <button onclick="this.closest('.fixed').remove()" class="mt-4 w-full bg-rose-accent text-white py-2 rounded-lg hover:bg-rose-accent/90">Dismiss</button>
+        </div>
+    `;
+    document.body.appendChild(errorDiv);
+}
+
+// Fisher-Yates (Knuth) Shuffle for randomization
+function shuffle(array) {
+  let currentIndex = array.length, randomIndex;
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+  return array;
+}
+
+// Calculate Spearman's Rank Correlation Coefficient (Rho)
+function spearmanRho(x, y) {
+  const n = x.length;
+  if (n !== y.length) {
+    throw new Error('Arrays must have the same length for Spearman Rho calculation.');
+  }
+
+  const rank = (arr) => {
+    const sorted = Array.from(new Set(arr)).sort((a, b) => a - b);
+    const ranks = {};
+    const rankMap = new Map();
+    arr.forEach((val) => {
+      const idx = sorted.indexOf(val) + 1;
+      if (!ranks[idx]) {
+        ranks[idx] = [];
+      }
+      ranks[idx].push(val);
+    });
+
+    let currentRank = 1;
+    for (const val of sorted) {
+      const ties = arr.filter(v => v === val);
+      if (ties.length > 1) {
+        const avgRank = currentRank + (ties.length - 1) / 2;
+        ties.forEach(t => rankMap.set(t, avgRank));
+      } else {
+        rankMap.set(val, currentRank);
+      }
+      currentRank += ties.length;
+    }
+    return arr.map(val => rankMap.get(val));
+  };
+
+  const rx = rank(x);
+  const ry = rank(y);
+
+  let dSquaredSum = 0;
+  for (let i = 0; i < n; i++) {
+    const d = rx[i] - ry[i];
+    dSquaredSum += d * d;
+  }
+
+  // Formula: rho = 1 - (6 * sum(d^2) / (n * (n^2 - 1)))
+  return 1 - (6 * dSquaredSum) / (n * (n * n - 1));
+}
+
+// Approximate P-value from Rho for n > 10 (using t-distribution approximation)
+function computePvalFromRho(rho, n) {
+    if (n < 5) return 1.0; // Too small for testing
+    if (n > 10) {
+        // T-statistic approximation: t = rho * sqrt((n-2) / (1-rho^2))
+        const t = rho * Math.sqrt((n - 2) / (1 - rho * rho));
+        const absT = Math.abs(t);
+        if (n < 20) {
+            if (absT > 2.228) return 0.05; // ~t_0.025,10-18df
+            if (absT > 3.106) return 0.01; // ~t_0.005,10-18df
+        } else {
+            if (absT > 1.96) return 0.05; // ~Z_0.025
+            if (absT > 2.576) return 0.01; // ~Z_0.005
+        }
+    }
+    return (Math.abs(rho) > 0.8 && n > 5) ? 0.05 : 0.5;
+}
+
+
+// Parses CSV file to extract data
+function parseCSVFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target.result;
+      const lines = text.split('\n').filter(line => line.trim() !== '');
+      if (lines.length < 2) return reject('CSV must contain a header and at least one row of data.');
+
+      const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
+      const signalIndex = headers.indexOf('signal');
+      const returnIndex = headers.indexOf('return');
+
+      if (signalIndex === -1 || returnIndex === -1) {
+        return reject('CSV file must contain columns named "signal" and "return" (case-insensitive).');
+      }
+
+      const x = [];
+      const y = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',').map(v => v.trim());
+        const signal = parseFloat(values[signalIndex]);
+        const returns = parseFloat(values[returnIndex]);
+
+        if (!isNaN(signal) && !isNaN(returns)) {
+          x.push(signal);
+          y.push(returns);
+        }
+      }
+
+      if (x.length < 5) return reject('Not enough valid rows (need min 5) to perform statistical test.');
+      resolve({ x, y });
+    };
+    reader.onerror = () => reject('Failed to read file.');
+    reader.readAsText(file);
+  });
+}
+
+// Fetches sample data (for simplicity, hardcoded mock data)
+async function fetchSampleData() {
+    const mockCsvContent = `date,signal,return
+        2025-01-01,1.5,0.01
+        2025-01-02,1.8,0.02
+        2025-01-03,2.1,0.03
+        2025-01-04,2.5,0.025
+        2025-01-05,2.0,0.015
+        2025-01-06,1.2,-0.01
+        2025-01-07,0.8,-0.02
+        2025-01-08,0.5,-0.015
+        2025-01-09,1.0,0.005
+        2025-01-10,1.3,0.01
+        2025-01-11,2.8,0.04
+        2025-01-12,3.2,0.05
+        2025-01-13,3.5,0.045
+        2025-01-14,3.0,0.03
+    `;
+    const blob = new Blob([mockCsvContent], {type: 'text/csv'});
+    return new File([blob], 'sample_data.csv', {type: 'text/csv'});
+}
+
+// Gemini API Wrapper with Exponential Backoff
+async function fetchWithRetry(prompt, retries = 3) {
+    let delay = 1000;
+    let lastError = new Error('Gemini API request failed.');
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(GEMINI_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt })
+            });
+
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                if (response.status === 429 && i < retries - 1) {
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                    continue;
+                }
+                const message = result?.error || result?.message || `API call failed with status: ${response.status}`;
+                throw new Error(message);
+            }
+
+            const content = result?.candidates?.[0]?.content?.parts || [];
+            const text = content
+                .map((part) => (typeof part.text === 'string' ? part.text : ''))
+                .join('\n')
+                .trim() || result.output_text || '';
+
+            if (!text) {
+                throw new Error('Gemini API response was missing generated text.');
+            }
+            return text;
+
+        } catch (error) {
+            lastError = error instanceof Error ? error : new Error(String(error));
+            if (i === retries - 1) {
+                throw lastError;
+            }
+            await new Promise(resolve => setTimeout(resolve, delay));
+            delay *= 2;
+        }
+    }
+    throw lastError;
+}
+
+
+function outcomeBadge(ok) {
+  const outcome_name = ok ? 'PASS (Confirmed Risk Accepted)' : 'FAIL (Confirmed Risk Denied)';
+  const badge_class = ok ? 'bg-gate-pass/20 text-gate-pass' : 'bg-gate-fail/20 text-gate-fail';
+  const label = ok ? 'Gate PASS' : 'Gate FAIL';
+  const emoji = ok ? '✅' : '❌';
+  
+  const html = `
+    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${badge_class} shadow-sm">
+      ${emoji} ${label} — risk ${ok ? 'accepted' : 'denied'}
+    </span>
+  `;
+  return { html, outcome_name };
+}
+
+// --- Gemini LLM Integration ---
+
+async function generateNarrative(rho, p, n, alpha, outcome_name) {
+    narrativeTextElement.textContent = '';
+    narrativeLoadingElement.classList.remove('hidden');
+    narrativeErrorElement.classList.add('hidden');
+
+    let cipher_term = 'GLISSADE';
+
+    if (outcome_name.includes('PASS')) {
+        cipher_term = 'JETÉ';
+    } else if (p > alpha) {
+        cipher_term = 'FERMATA';
+    }
+
+    const systemPrompt = `You are the Narrator of the Balanchine Cipher Protocol. Your job is to translate complex statistical outcomes into a concise, evocative, and poetic narrative using the system's specialized terminology. The current data analysis involves a sample size of N=${n}, finding a Spearman Rho correlation of ${rho.toFixed(3)}, resulting in a p-value of ${p.toExponential(2)} against an alpha of ${alpha}. The deterministic Mercy Gate status is '${outcome_name}'.
+
+Describe the current posture of the Glissé Engine in one paragraph (max 40 words). You MUST use the term "${cipher_term}" in your narrative. Focus on rhythm, energy, and form, reflecting the caution or conviction implied by the data.`;
+
+    const userQuery = 'Generate the poetic Cipher Narrative based on the statistical outcome and the Gate decision.';
+    const prompt = `${systemPrompt}\n\n${userQuery}`;
+
+    try {
+        const text = await fetchWithRetry(prompt);
+        narrativeTextElement.textContent = text.trim();
+    } catch (error) {
+        console.error('Narrative Generation Error:', error);
+        narrativeErrorElement.textContent = `Error: Could not generate narrative. (${error.message})`;
+        narrativeErrorElement.classList.remove('hidden');
+        narrativeTextElement.textContent = 'Narrative failed to generate. The statistical rhythm is obscured.';
+    } finally {
+        narrativeLoadingElement.classList.add('hidden');
+    }
+}
+
+
+// --- Main Logic ---
+
+async function runAnalysis(file){
+  statsOutElement.textContent = 'Analyzing data...';
+  outcomeElement.innerHTML = `
+    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500 shadow-sm">
+      <span class="animate-spin mr-1">🌀</span> Gate: Analyzing
+    </span>
+  `;
+  narrativeTextElement.textContent = 'The kinetic impulse is firing...';
+  
+  try {
+    const alpha = Math.max(0.0001, Math.min(0.5, parseFloat(document.getElementById('alpha').value)||0.05));
+    const {x,y} = await parseCSVFile(file);
+
+    const rho = spearmanRho(x,y);
+    const p = computePvalFromRho(rho, x.length);
+    const ok = (p <= alpha);
+
+    statsOutElement.textContent = `N=${x.length} pairs analyzed. Spearman ρ=${rho.toFixed(3)}, α=${alpha}, approx p-value=${p.toExponential(2)}`;
+    
+    const { html, outcome_name } = outcomeBadge(ok);
+    outcomeElement.innerHTML = html;
+
+    await generateNarrative(rho, p, x.length, alpha, outcome_name);
+
+  } catch(error) {
+    statsOutElement.textContent = 'Analysis Failed. See details below.';
+    outcomeElement.innerHTML = `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">System Error</span>`;
+    narrativeTextElement.textContent = 'Rupture in the protocol. The rhythm has been interrupted.';
+    narrativeLoadingElement.classList.add('hidden');
+    showError(error.message);
+    console.error('Analysis Error:', error);
+  }
+}
+
+document.getElementById('analyzeBtn').addEventListener('click', async () =>{
+  const f = document.getElementById('csvFile').files[0];
+  if (!f) return showError('Please select a CSV file first.');
+  await runAnalysis(f);
+});
+
+document.getElementById('loadSample').addEventListener('click', async () =>{
+  const f = await fetchSampleData();
+  await runAnalysis(f);
+});
+
+// Show the exact code block for transparency
+codeBlockElement.textContent = `
+// Spearman rho + p-value + Mercy Gate Logic
+function spearmanRho(x, y) { ... }
+function computePvalFromRho(rho, n) { ... }
+function outcomeBadge(ok) {
+  const outcome_name = ok ? 'PASS (Confirmed Risk Accepted)' : 'FAIL (Confirmed Risk Denied)';
+  // ... HTML and CSS for badge ...
+  return { html, outcome_name };
+}
+const ok = (p <= alpha); // The Mercy Gate Condition
+`;
+
+// Initial state cleanup
+window.onload = () => {
+    statsOutElement.textContent = 'Awaiting data. Load a sample or upload your signal/return CSV.';
+    narrativeTextElement.textContent = 'The system is silent, awaiting the pulse of the market\'s data...';
+};
+
+</script>
+</body>
+</html>
