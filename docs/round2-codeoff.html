@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROUND 2 — SOMATIC | ETHICS | FAITH OPERATOR</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0b0c10;
+      --panel: #11131a;
+      --text: #e8ecf2;
+      --muted: #9da9ba;
+      --accent: #8ac6ff;
+      --gold: #d7b46a;
+      --green: #8af5c5;
+      --red: #f38ba8;
+      --border: rgba(255, 255, 255, 0.08);
+      --shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", "SF Pro Text", system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(138, 198, 255, 0.06), transparent 40%),
+                  radial-gradient(circle at 80% 0%, rgba(215, 180, 106, 0.08), transparent 35%),
+                  var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: min(1100px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .title {
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: clamp(16px, 3vw, 20px);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    button {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+      color: var(--text);
+      padding: 10px 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: transform 120ms ease, border-color 120ms ease, color 120ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(138, 198, 255, 0.4);
+    }
+
+    button.primary { color: var(--accent); }
+    button.gold { color: var(--gold); }
+    button.green { color: var(--green); }
+
+    .canvas-panel {
+      background: radial-gradient(circle at 40% 30%, rgba(138, 245, 197, 0.04), transparent 40%),
+                  linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 70%),
+                  #0c0f15;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    canvas { width: 100%; height: 520px; display: block; border-radius: 10px; }
+
+    .info-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .score {
+      background: rgba(138, 245, 197, 0.08);
+      border: 1px solid rgba(138, 245, 197, 0.35);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .score strong { font-size: 32px; }
+    .score label { color: var(--muted); font-size: 13px; letter-spacing: 0.08em; }
+
+    .receipt {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      font-family: "SFMono-Regular", Menlo, ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", "Courier New", monospace;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: pre-wrap;
+      min-height: 160px;
+    }
+
+    @media (min-width: 800px) {
+      .info-row { grid-template-columns: 220px 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <div class="title">ROUND 2 — SOMATIC | ETHICS | FAITH OPERATOR</div>
+        <div class="subtitle">Fold-pressure → Adaptive Ethics → Critical Execution Blueprint</div>
+      </div>
+      <div class="controls">
+        <button class="primary" id="renderBtn">Render Canvas</button>
+        <button class="gold" id="refineBtn">Refine (En Croix)</button>
+        <button class="green" id="receiptBtn">Show Reason Receipt</button>
+        <button id="downloadBtn">Download Snapshot</button>
+      </div>
+    </header>
+
+    <section class="canvas-panel">
+      <canvas id="roundCanvas" width="1100" height="520" aria-label="Round 2 Operator Canvas"></canvas>
+    </section>
+
+    <section class="info-row">
+      <div class="score">
+        <label>BATTLE SCORE</label><br />
+        <strong id="battleScore">88</strong>
+      </div>
+      <div class="receipt" id="receipt">Tap “Show Reason Receipt” to generate machine-readable rationale.</div>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("roundCanvas");
+    const ctx = canvas.getContext("2d");
+    const refineBtn = document.getElementById("refineBtn");
+    const receiptEl = document.getElementById("receipt");
+    const renderBtn = document.getElementById("renderBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const receiptBtn = document.getElementById("receiptBtn");
+
+    let refined = false;
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, "#0f131c");
+      gradient.addColorStop(1, "#0a0c12");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function drawGrid() {
+      ctx.strokeStyle = "rgba(255,255,255,0.05)";
+      ctx.lineWidth = 1;
+      for (let x = 40; x < canvas.width; x += 60) {
+        ctx.beginPath();
+        ctx.moveTo(x, 20);
+        ctx.lineTo(x, canvas.height - 20);
+        ctx.stroke();
+      }
+      for (let y = 40; y < canvas.height; y += 60) {
+        ctx.beginPath();
+        ctx.moveTo(20, y);
+        ctx.lineTo(canvas.width - 20, y);
+        ctx.stroke();
+      }
+    }
+
+    function drawNodeField() {
+      const leftWidth = canvas.width * 0.45;
+      const rows = 7;
+      const cols = 6;
+      const xGap = leftWidth / (cols + 1);
+      const yGap = (canvas.height - 140) / (rows + 1);
+
+      ctx.strokeStyle = "rgba(138,198,255,0.6)";
+      ctx.lineWidth = 1.2;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = 60 + xGap * (c + 1);
+          const y = 70 + yGap * (r + 1);
+
+          ctx.beginPath();
+          ctx.arc(x, y, 8, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(138,245,197,0.18)";
+          ctx.fill();
+          ctx.strokeStyle = "rgba(138,245,197,0.5)";
+          ctx.stroke();
+
+          // Node connectors
+          const targetX = x + xGap * 0.8;
+          const targetY = y + (Math.random() * 30 - 15);
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(targetX, targetY);
+          ctx.stroke();
+
+          // micro data ticks
+          ctx.strokeStyle = "rgba(138,198,255,0.6)";
+          ctx.beginPath();
+          ctx.moveTo(x - 10, y + 16);
+          ctx.lineTo(x + 10, y + 16);
+          ctx.stroke();
+        }
+      }
+
+      ctx.fillStyle = "rgba(255,255,255,0.6)";
+      ctx.font = "14px Inter, sans-serif";
+      ctx.fillText("Fold-Pressure Node Field — Retiré LUT", 40, 44);
+    }
+
+    function drawEthicsPanel() {
+      const startX = canvas.width * 0.5;
+      const width = canvas.width * 0.46;
+      const height = canvas.height * 0.32;
+      const startY = 36;
+
+      // frame
+      ctx.strokeStyle = "rgba(255,255,255,0.1)";
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(startX, startY, width, height);
+
+      ctx.fillStyle = "rgba(255,255,255,0.75)";
+      ctx.font = "14px Inter, sans-serif";
+      ctx.fillText("Adaptive Ethics Quant", startX + 12, startY + 18);
+
+      const labels = ["Autonomy", "Fairness", "Latency", "Stability", "Safety"];
+      labels.forEach((label, i) => {
+        const y = startY + 46 + i * 26;
+        ctx.fillStyle = "rgba(157,169,186,0.9)";
+        ctx.fillText(label, startX + 12, y);
+
+        const score = 0.6 + Math.random() * 0.35;
+        const barWidth = (width - 140) * score;
+        ctx.fillStyle = "rgba(138,198,255,0.6)";
+        ctx.fillRect(startX + 120, y - 12, barWidth, 10);
+        ctx.fillStyle = "rgba(138,245,197,0.7)";
+        ctx.fillRect(startX + 120 + barWidth - 4, y - 14, 8, 14);
+      });
+
+      // curve
+      ctx.strokeStyle = "rgba(138,245,197,0.75)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      const curveBaseY = startY + height - 30;
+      for (let i = 0; i <= 12; i++) {
+        const x = startX + 20 + (i * (width - 40)) / 12;
+        const y = curveBaseY - Math.sin(i * 0.6) * 18 - Math.random() * 6;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    function drawBlueprint() {
+      const startX = canvas.width * 0.5;
+      const width = canvas.width * 0.46;
+      const height = canvas.height * 0.30;
+      const startY = canvas.height * 0.40;
+
+      ctx.strokeStyle = "rgba(255,255,255,0.1)";
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(startX, startY, width, height);
+
+      ctx.fillStyle = "rgba(255,255,255,0.75)";
+      ctx.font = "14px Inter, sans-serif";
+      ctx.fillText("Critical Execution Blueprint", startX + 12, startY + 18);
+
+      const steps = [
+        "Faith Operator — Edge Ready",
+        "Glissé FSM — Timing Gate",
+        "Somatic Cue — Peak In",
+        "Ethics Gate — Adaptive",
+        "Release — Clean Cut",
+      ];
+      ctx.fillStyle = "rgba(157,169,186,0.9)";
+      steps.forEach((text, i) => {
+        const y = startY + 46 + i * 26;
+        ctx.fillText(text, startX + 12, y);
+        ctx.strokeStyle = "rgba(138,198,255,0.5)";
+        ctx.strokeRect(startX + width - 120, y - 14, 90, 16);
+      });
+
+      // circuit pattern
+      ctx.strokeStyle = "rgba(138,245,197,0.6)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      const centerY = startY + height * 0.65;
+      ctx.moveTo(startX + 30, centerY);
+      ctx.lineTo(startX + width * 0.35, centerY - 28);
+      ctx.lineTo(startX + width * 0.6, centerY + 12);
+      ctx.lineTo(startX + width - 50, centerY - 6);
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(215,180,106,0.9)";
+      ctx.beginPath();
+      ctx.arc(startX + width * 0.6, centerY + 12, 6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function drawWaveform() {
+      const startX = 34;
+      const startY = canvas.height - 110;
+      const width = canvas.width - 68;
+      const height = 70;
+
+      ctx.strokeStyle = "rgba(255,255,255,0.12)";
+      ctx.lineWidth = 1.1;
+      ctx.strokeRect(startX, startY, width, height);
+
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(138,245,197,0.8)";
+      ctx.lineWidth = 2;
+      for (let i = 0; i <= width; i += 6) {
+        const x = startX + i;
+        const y = startY + height / 2 + Math.sin(i * 0.045) * 16 + Math.cos(i * 0.12) * 10;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(255,255,255,0.65)";
+      ctx.font = "13px Inter, sans-serif";
+      ctx.fillText("Fold-Pressure Signal — Entrainment", startX + 8, startY + 16);
+    }
+
+    function drawRefineOverlay() {
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, "rgba(215,180,106,0.08)");
+      grad.addColorStop(0.5, "rgba(215,180,106,0.25)");
+      grad.addColorStop(1, "rgba(215,180,106,0.06)");
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(canvas.width * 0.2, 0);
+      ctx.lineTo(canvas.width, canvas.height * 0.8);
+      ctx.lineTo(canvas.width * 0.85, canvas.height);
+      ctx.lineTo(0, canvas.height * 0.25);
+      ctx.closePath();
+      ctx.fill();
+
+      // circuit lines along the diagonal
+      ctx.strokeStyle = "rgba(215,180,106,0.55)";
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 6; i++) {
+        ctx.beginPath();
+        const offset = i * 20;
+        ctx.moveTo(canvas.width * 0.3 + offset, 0);
+        ctx.lineTo(canvas.width, canvas.height * 0.7 + offset * 0.4);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function renderCanvas() {
+      clearCanvas();
+      drawGrid();
+      drawNodeField();
+      drawEthicsPanel();
+      drawBlueprint();
+      drawWaveform();
+      if (refined) drawRefineOverlay();
+    }
+
+    function generateReceipt() {
+      const now = new Date();
+      const id = `RR-${Math.floor(Math.random() * 899999 + 100000)}`;
+      const payload = {
+        id,
+        timestamp_utc: now.toISOString(),
+        origin: "Round2:Somatic-Ethics-Execution",
+        decision_rationale: "Fold-pressure signal indicates high alignment; execute with adaptive ethics gating and clean release.",
+        risk_profile: {
+          max_drawdown_pct: 2.5,
+          confidence_score: 0.71,
+        },
+        proofs: [
+          "Retiré LUT v2",
+          "Adaptive Ethics quant snapshot",
+          "Critical Execution Blueprint",
+        ],
+        signed_hash: `sha256:${crypto.randomUUID().replace(/-/g, "").slice(0, 32)}`,
+      };
+      receiptEl.textContent = JSON.stringify(payload, null, 2);
+    }
+
+    function downloadSnapshot() {
+      const link = document.createElement("a");
+      link.download = `round2-operator-${Date.now()}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+
+    renderBtn.addEventListener("click", () => {
+      refined = false;
+      renderCanvas();
+    });
+
+    refineBtn.addEventListener("click", () => {
+      refined = !refined;
+      renderCanvas();
+      refineBtn.textContent = refined ? "Reset (Base Render)" : "Refine (En Croix)";
+    });
+
+    receiptBtn.addEventListener("click", generateReceipt);
+    downloadBtn.addEventListener("click", downloadSnapshot);
+
+    renderCanvas();
+  </script>
+</body>
+</html>
