@@ -5,7 +5,7 @@ function buildContext(glossary = []) {
     return "";
   }
   const items = glossary
-    .slice(0, 25)
+    .slice(0, 50)
     .map((entry) => `- ${entry.term}: ${entry.definition}`)
     .join("\n");
   return `Reference glossary entries:\n${items}\n`;
