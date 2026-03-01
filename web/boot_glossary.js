@@ -365,10 +365,10 @@ async function sendAsk(prompt) {
         glossary: state.filtered.slice(0, 50),
       }),
     });
-    if (!response.ok) {
-      throw new Error(`Request failed (${response.status})`);
-    }
     const payload = await response.json();
+    if (!response.ok) {
+      return payload.message || `Request failed (${response.status})`;
+    }
     return payload.answer || payload.message || JSON.stringify(payload, null, 2);
   } catch (error) {
     console.error(error);
