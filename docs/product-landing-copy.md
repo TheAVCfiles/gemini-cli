@@ -143,6 +143,35 @@ This document provides ready-to-deploy landing page copy for the highest-priorit
 - Offer a "5 Hybrid Art Prompts" download plus access to a private Discord channel.
 - Copy: "Grab the prompt pack and step into the Art Official Intelligence gallery."
 
+## Allinea
+
+**Hero**
+- Headline: "Signal Once. Align the Collective."
+- Subheadline: "Allinea conducts intelligent nudges, standups, and recaps so distributed teams stay synchronized."
+- Primary CTA Button: "Launch the Alignment Cadence"
+
+**Problem**
+- Slack scrolls bury the signal and decisions stall while teams wait for clarity.
+- Standups drift, updates go missing, and blockers surface too late to act.
+
+**Solution**
+- Scheduled nudges prompt crisp updates in under a minute.
+- Auto-curated recaps spotlight owners, blockers, and wins.
+- Smart escalations route the right ping to Slack, email, or SMS instantly.
+- Gemini-backed dashboards confirm who responded and who needs backup.
+
+**Proof & Benefits**
+- Remote teams launch standup cadences in five minutes and keep velocity high.
+- Leadership gets confident summaries without chasing threads or meetings.
+
+**CTA Repeat**
+- Headline: "Activate the Alignment."
+- Button: "Spin Up Your First Allinea"
+
+**Lead Magnet**
+- Offer an "Allinea Alignment Kit" with cadence cheatsheets and ready-to-fire prompt templates.
+- Copy: "Download the alignment kit and ship your first Allinea before the next standup."
+
 ---
 
 Each page should include a discreet footer noting that the project is operated under the NervösOS umbrella, while keeping individual brands visually distinct for private hosting during parallel development.
