@@ -1,0 +1,47 @@
+name: Build & Deploy All Sparks
+on:
+  push:
+    branches:
+      - main
+      - im-a-princess
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Build all sparks into ./public
+        run: |
+          set -euo pipefail
+          rm -rf public || true
+          mkdir -p public
+          for d in sparks/*; do
+            if [ -d "$d" ]; then
+              echo "### Building $d"
+              if [ -f "$d/package.json" ]; then
+                (cd "$d" && npm ci --silent && npm run build)
+                if [ -d "$d/public" ]; then
+                  mkdir -p public/$(basename "$d")
+                  cp -R "$d/public/"* public/$(basename "$d")/
+                fi
+              else
+                echo "No package.json in $d; skipping"
+              fi
+            fi
+          done
+      - name: Show built public tree
+        run: |
+          echo "Built public contents:"
+          ls -la public || true
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
