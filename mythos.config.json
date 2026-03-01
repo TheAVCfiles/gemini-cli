@@ -1,0 +1,23 @@
+{
+  "project": "Decrypt The Girl",
+  "mode": "Surface/Cipher/Echo",
+  "author": "Allison Van Cura",
+  "description": "Recursive poetic OS linking trauma, code, and choreography.",
+  "default_model": "gpt-5-codex",
+  "reasoning_effort": "high",
+  "workspace": {
+    "codex_cli": true,
+    "agent_mode": "approved",
+    "sync": {
+      "enabled": false,
+      "remote": ""
+    }
+  },
+  "telemetry": {
+    "session_tags": [
+      "myth-tech",
+      "activation-ritual"
+    ],
+    "auto_collect": true
+  }
+}
