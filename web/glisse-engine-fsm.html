@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glissé Engine FSM Simulator (Mika Protocol)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* Dark background */
+            color: #c9d1d9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .container {
+            max-width: 90vw;
+            width: 550px;
+            padding: 2rem;
+            background-color: #161b22; /* Slightly lighter card */
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid #30363d;
+        }
+        .gauge-bar {
+            height: 25px;
+            transition: width 0.1s ease-out, background-color 0.5s;
+            border-radius: 0.5rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .state-text {
+            font-size: 2.5rem;
+            font-weight: 800;
+            transition: color 0.5s ease-out, transform 0.2s;
+        }
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="flex justify-between items-start mb-6">
+        <h1 class="text-3xl font-bold text-indigo-400">Glissé Engine: FSM Simulation</h1>
+        <button id="show-conceptual-btn" class="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-sm font-medium rounded-full transition duration-200">
+            Conceptual View
+        </button>
+    </div>
+    
+    <p class="text-sm mb-8 text-gray-400">The system executes a "Move" based on the **Regime Gate** and the real-time **Tap Response Index ($\text{TRI}_{\text{final}}$)**.</p>
+
+    <!-- FSM State Display -->
+    <div id="fsm-status" class="text-center py-6 mb-8 rounded-xl transition duration-500" style="min-height: 120px;">
+        <div class="text-base font-semibold text-gray-300">CURRENT FSM STATE (The Move)</div>
+        <div id="fsm-state-text" class="state-text mt-1 text-gray-500">GLISSADE</div>
+        <div id="fsm-mandate" class="text-sm italic text-gray-500 mt-2">Awaits final trigger.</div>
+    </div>
+
+    <!-- TRI Gauge -->
+    <div class="mb-6">
+        <div class="flex justify-between mb-1">
+            <span class="font-medium">Tap Response Index ($\text{TRI}_{\text{final}}$)</span>
+            <span id="tri-value" class="font-bold text-lg text-yellow-300">0.0</span>
+        </div>
+        <div class="relative bg-gray-700 rounded-full h-7">
+            <div id="tri-gauge" class="gauge-bar" style="width: 0%; background-color: #3b82f6;"></div>
+            <!-- Jeté Threshold Marker (85%) -->
+            <div class="absolute h-full border-r-2 border-dashed border-red-500 top-0" style="left: 85%;"></div>
+        </div>
+        <div class="text-xs text-right text-gray-500 mt-1">JETÉ Threshold: 85.0</div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="mt-8 pt-4 border-t border-gray-700">
+        <div class="flex justify-between items-center">
+            <span class="font-medium text-lg">Regime Gate Status</span>
+            <label class="inline-flex relative items-center cursor-pointer">
+                <input type="checkbox" id="regime-gate-toggle" class="sr-only peer" checked>
+                <div class="w-16 h-8 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-600"></div>
+                <span id="regime-status-text" class="ml-3 text-lg font-semibold text-green-400">OPEN</span>
+            </label>
+        </div>
+        <p class="text-sm text-gray-400 mt-2">
+            When **OPEN**, the system can execute a high-risk **JETÉ**. When **CLOSED**, the system defaults to **FERMATA** (Cunning Mercy Protocol).
+        </p>
+    </div>
+
+    <!-- Message Box -->
+    <div id="message-box" class="mt-6 p-3 bg-red-800/20 text-red-300 border border-red-700 rounded-lg text-sm hidden"></div>
+
+</div>
+
+<!-- Conceptual Modal Overlay -->
+<div id="conceptual-modal" class="modal fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 invisible">
+    <div class="bg-gray-800 p-6 sm:p-8 rounded-xl max-w-lg w-full m-4 border border-indigo-500/50 shadow-2xl">
+        <h2 class="text-2xl font-bold text-indigo-300 mb-4 border-b pb-2 border-indigo-500/50">Mika Protocol: Conceptual Layer</h2>
+        
+        <h3 class="text-xl font-semibold text-gray-200 mt-4 mb-2">I. The 12 Planetary Forces ($\text{P}_{\text{forces}}$)</h3>
+        <p class="text-sm text-gray-300">
+            The core kinetic engine (the "Scraper" MVP module) translates 12 market channels (Volatilities, Shocks, Flows) into a weighted Z-score sum. These $\text{S}_{i}$ scores are the **12 Planetary Forces** which establish the **$\text{TRI}_{\text{raw}}$ (Raw Tap Response Index)**:
+        </p>
+        <div class="bg-gray-900 p-3 rounded-lg text-sm my-3 font-mono text-center overflow-x-auto">
+            $$\text{TRI}_{\text{raw}} = \sum_{i=1}^{12} \text{w}_{i} \times \text{S}_{i}$$
+        </div>
+
+        <h3 class="text-xl font-semibold text-gray-200 mt-4 mb-2">II. The Final Trigger ($\text{TRI}_{\text{final}}$)</h3>
+        <p class="text-sm text-gray-300">
+            The final, executable **$\text{TRI}_{\text{final}}$** uses the structural conviction (the Gain Factor) to scale the raw kinetic potential. This is the **Zero-Latency Event Trigger** required by the MVP:
+        </p>
+        <div class="bg-gray-900 p-3 rounded-lg text-sm my-3 font-mono text-center overflow-x-auto">
+            $$\text{TRI}_{\text{final}} = \text{TRI}_{\text{raw}} \times \text{Gain Factor}$$
+        </div>
+        
+        <h3 class="text-xl font-semibold text-gray-200 mt-4 mb-2">III. The Finite State Machine (FSM)</h3>
+        <ul class="list-disc list-inside text-sm text-gray-400 space-y-1 ml-4">
+            <li>**GLISSADE:** Preparation. Low $\text{TRI}$ (default state).</li>
+            <li>**JETÉ:** Execution. Requires **Regime Gate: OPEN** AND $\text{TRI}_{\text{final}} \ge 85.0$. (Max Risk Entry).</li>
+            <li>**FERMATA:** Defensive Hold. Triggered when Regime Gate is **CLOSED**, regardless of $\text{TRI}$. (Cunning Mercy Protocol).</li>
+            <li>**CODA:** Liquidation. Triggered on position exit when Kinematic Velocity (VZ) dies ($\text{TRI}_{\text{final}} < 40.0$).</li>
+        </ul>
+
+        <button id="hide-conceptual-btn" class="mt-6 w-full py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white font-semibold transition duration-200">
+            Close View
+        </button>
+    </div>
+</div>
+
+
+<script>
+    const stateDisplay = document.getElementById('fsm-status');
+    const stateText = document.getElementById('fsm-state-text');
+    const stateMandate = document.getElementById('fsm-mandate');
+    const triGauge = document.getElementById('tri-gauge');
+    const triValue = document.getElementById('tri-value');
+    const gateToggle = document.getElementById('regime-gate-toggle');
+    const regimeStatusText = document.getElementById('regime-status-text');
+    const messageBox = document.getElementById('message-box');
+    
+    // Modal elements
+    const conceptualModal = document.getElementById('conceptual-modal');
+    const showConceptualBtn = document.getElementById('show-conceptual-btn');
+    const hideConceptualBtn = document.getElementById('hide-conceptual-btn');
+
+
+    // FSM Configuration
+    let currentFSMState = 'GLISSADE';
+    let TRI_Final = 0.0;
+    const JETÉ_THRESHOLD = 85.0;
+
+    // Pulse smoothing variables
+    let targetTRI = 50.0;
+    let pulseMomentum = 0.0; // Simulated kinetic momentum
+
+    // State definitions (Color, Text, Mandate)
+    const STATES = {
+        'GLISSADE': { color: '#3b82f6', text: 'GLISSADE', mandate: 'Preparation/Awaiting (Awaits final trigger)', tailwind: 'bg-indigo-900/40' },
+        'JETÉ': { color: '#10b981', text: 'JETÉ', mandate: 'INITIATE SHORT/LONG AT MAX CAPACITY', tailwind: 'bg-emerald-900/60' },
+        'FERMATA': { color: '#f59e0b', text: 'FERMATA', mandate: 'DEFENSIVE POSTURE (Minimal Risk Fade/Short)', tailwind: 'bg-amber-900/60' },
+        'CODA': { color: '#8b5cf6', text: 'CODA', mandate: 'IMMEDIATE LIQUIDATION (Lock in Profit)', tailwind: 'bg-violet-900/60' }
+    };
+
+    /**
+     * FSM Logic: Determines the next state based on inputs.
+     */
+    function runFSM(isRegimeOpen) {
+        let newState = 'GLISSADE';
+
+        // 1. Conceptual TRI Calculation Simulation
+        // In reality, this would be the aggregation of the 12 Planetary Forces (S_i).
+        const noise = (Math.random() - 0.5) * 5;
+        const trend = (targetTRI - TRI_Final) * 0.1;
+        
+        TRI_Final += trend + noise;
+        TRI_Final = Math.max(0, Math.min(100, TRI_Final)); // Clamp between 0 and 100
+
+        // Simulate random large shock event that could trigger JETÉ
+        if (Math.random() < 0.01) {
+            targetTRI = 95 + Math.random() * 5; // Major positive shock (High S_i score)
+        } else if (Math.random() < 0.01) {
+            targetTRI = 5 + Math.random() * 5; // Major negative shock
+        } else if (Math.random() < 0.05) {
+             // Return target to normal range slowly
+            targetTRI = 30 + Math.random() * 40; 
+        }
+
+        // 2. FSM Transition Rules
+        if (isRegimeOpen && TRI_Final >= JETÉ_THRESHOLD) {
+            // Rule 1: JETÉ - Full-risk entry when gate is OPEN (Structural Confirmation Passed) and TRI is high
+            newState = 'JETÉ';
+            pulseMomentum = 1; // Gain momentum
+        } else if (TRI_Final < 40.0) {
+            // Rule 2: CODA/FERMATA Exit/Hold when momentum is lost
+            if (currentFSMState === 'JETÉ' || currentFSMState === 'FERMATA') {
+                newState = 'CODA';
+            } else {
+                newState = 'GLISSADE';
+            }
+            pulseMomentum = 0; // Lose momentum
+        } else if (!isRegimeOpen && TRI_Final >= 50.0) {
+            // Rule 3: FERMATA - Defensive hold (Cunning Mercy) when gate is CLOSED but signal exists
+            newState = 'FERMATA';
+            pulseMomentum = 0.5; // Neutral momentum
+        } else {
+            // Rule 4: GLISSADE - Default preparation state
+            newState = 'GLISSADE';
+            pulseMomentum = 0;
+        }
+
+        currentFSMState = newState;
+        updateUI(isRegimeOpen);
+    }
+
+    /**
+     * Updates the UI elements based on the current state.
+     */
+    function updateUI(isRegimeOpen) {
+        const state = STATES[currentFSMState];
+
+        // 1. Update State Display
+        stateText.textContent = state.text;
+        stateMandate.textContent = state.mandate;
+        stateDisplay.className = `text-center py-6 mb-8 rounded-xl transition duration-500 ${state.tailwind}`;
+        stateText.style.color = state.color;
+        
+        // 2. Update TRI Gauge
+        const triPercent = TRI_Final.toFixed(1);
+        triValue.textContent = triPercent;
+        triGauge.style.width = `${triPercent}%`;
+
+        // Change gauge color based on state
+        triGauge.style.backgroundColor = state.color;
+
+        // 3. Update Message Box
+        if (!isRegimeOpen && currentFSMState === 'JETÉ') {
+             // If FSM rule 3 was active, it defaulted to FERMATA. 
+             // We show an error only if the system tried to enter JETÉ, which the FSM prevents:
+             displayMessage('RISK MITIGATION: The Regime Gate is CLOSED. JETÉ is blocked and execution is limited to FERMATA.', 'red');
+        } else if (currentFSMState === 'JETÉ') {
+            displayMessage('REGIME OPEN + TRI High: JETÉ Executed (MAX CAPACITY ENTRY)!', 'green');
+        } else if (currentFSMState === 'CODA') {
+            displayMessage('Kinetic Velocity Died: CODA Executed (IMMEDIATE LIQUIDATION)!', 'purple');
+        } else {
+            hideMessage();
+        }
+
+        // 4. Update Regime Text
+        regimeStatusText.textContent = isRegimeOpen ? 'OPEN' : 'CLOSED';
+        regimeStatusText.className = `ml-3 text-lg font-semibold ${isRegimeOpen ? 'text-green-400' : 'text-red-400'}`;
+    }
+
+    /**
+     * Handles dynamic message display.
+     */
+    function displayMessage(message, type = 'red') {
+        const typeClasses = {
+            'red': 'bg-red-800/20 text-red-300 border-red-700',
+            'green': 'bg-green-800/20 text-green-300 border-green-700',
+            'purple': 'bg-violet-800/20 text-violet-300 border-violet-700'
+        };
+        messageBox.textContent = message;
+        messageBox.className = `mt-6 p-3 border rounded-lg text-sm ${typeClasses[type]}`;
+    }
+
+    function hideMessage() {
+        messageBox.className = 'mt-6 p-3 bg-red-800/20 text-red-300 border border-red-700 rounded-lg text-sm hidden';
+    }
+    
+    // --- Modal Logic ---
+    showConceptualBtn.addEventListener('click', () => {
+        conceptualModal.classList.remove('invisible', 'opacity-0');
+        conceptualModal.classList.add('visible', 'opacity-100');
+    });
+
+    hideConceptualBtn.addEventListener('click', () => {
+        conceptualModal.classList.remove('visible', 'opacity-100');
+        conceptualModal.classList.add('invisible', 'opacity-0');
+    });
+
+    /**
+     * Main Simulation Loop
+     */
+    function gameLoop() {
+        const isRegimeOpen = gateToggle.checked;
+        runFSM(isRegimeOpen);
+        requestAnimationFrame(gameLoop); // Use requestAnimationFrame for smoother updates
+    }
+    
+    // Initialize the targetTRI to a safe starting value
+    targetTRI = 50.0;
+
+    // Start the simulation
+    gameLoop();
+
+</script>
+
+</body>
+</html>
