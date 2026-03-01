@@ -26,8 +26,10 @@ export default defineConfig({
     ],
   },
   test: {
-    reporters: [['default'], ['junit', { outputFile: 'junit.xml' }]],
-    passWithNoTests: true,
+    reporters: ['default', 'junit'],
+    outputFile: {
+      junit: 'junit.xml',
+    },
     coverage: {
       provider: 'v8',
       reportsDirectory: './coverage',
