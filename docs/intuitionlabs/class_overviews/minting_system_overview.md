@@ -1,6 +1,6 @@
 # Ballet Bots Minting System Overview
 
-The minting system rewards Ballet Bots learners with on-chain badges that track milestones across the program. Badges double as narrative artifacts—each token celebrates a choreography breakthrough, debugging achievement, or community contribution.
+The minting system rewards Ballet Bots learners with on-chain badges that track milestones across the program. Badges double as narrative artifacts—each token celebrates a choreography breakthrough, debugging achievement, or community contribution. Badge criteria and storytelling metadata are drawn from the Balanchine Cipher theory and the Decrypt the Girl engine created by Allison Van Cura, aligning technical proofs of learning with the program’s foundational IP.
 
 ## Badge architecture
 
@@ -16,9 +16,9 @@ The minting system rewards Ballet Bots learners with on-chain badges that track 
 
 | Badge | Trigger | Metadata Highlights |
 | --- | --- | --- |
-| `Warmup Voyager` | Completes Module 1 collaborative warmup and sets personal learning goal. | Animated gradient background, goal statement text field. |
+| `Warmup Voyager` | Completes Module 1 collaborative warmup and sets personal learning goal. | Animated gradient background, goal statement text field referencing Balanchine Cipher theory motif categories. |
 | `Choreo Debugger` | Demonstrates three iterative improvements during Module 2 coding labs. | Step-by-step code screenshots, facilitator annotations. |
-| `Sensor Storyteller` | Designs responsive routine using at least one sensor input in Module 3. | Sensor data capture snippet, audio mood selection. |
+| `Sensor Storyteller` | Designs responsive routine using at least one sensor input in Module 3. | Sensor data capture snippet, audio mood selection inspired by Decrypt the Girl engine narrative states. |
 | `Collaborative Composer` | Leads feedback session and documents action items in Module 4. | Team roster, peer shout-outs. |
 | `Stagecraft Specialist` | Integrates lighting or costume prototype during Module 5 build week. | Media gallery attachments, lighting preset tags. |
 | `Community Showcase` | Performs at Module 6 showcase and completes reflection journal. | Performance clip link, audience feedback quotes. |
@@ -40,6 +40,6 @@ The minting system rewards Ballet Bots learners with on-chain badges that track 
 
 ## Integration with Gemini CLI
 
-- Use Gemini CLI to draft badge narratives from facilitator notes, ensuring consistent tone and inclusive language.
+- Use Gemini CLI to draft badge narratives from facilitator notes, ensuring consistent tone and inclusive language consistent with Balanchine Cipher theory and Decrypt the Girl engine storytelling cues.
 - Automate metadata QA by running CLI scripts that validate JSON schema and flag missing evidence links.
 - Generate celebratory showcase scripts or newsletter blurbs using the `/ask` assistant with badge metadata as context.

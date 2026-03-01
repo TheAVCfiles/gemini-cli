@@ -1,6 +1,6 @@
 # Ballet Bots Lesson Plans
 
-Each session is designed for 90 minutes but can be condensed to 60 minutes by trimming optional extensions. The plans assume access to a makerspace with open floor area and two facilitators.
+Each session is designed for 90 minutes but can be condensed to 60 minutes by trimming optional extensions. The plans assume access to a makerspace with open floor area and two facilitators.[^ip-credit]
 
 ## Session 1 – Storyworld Launch
 
@@ -74,3 +74,5 @@ Each session is designed for 90 minutes but can be condensed to 60 minutes by tr
 - Which activity generated the most joyful engagement today?
 - Where did learners struggle, and how can tomorrow’s warmup scaffold that skill?
 - What badge evidence still needs to be captured before the next session?
+
+[^ip-credit]: Acknowledgment: These lesson plans are derived from the Balanchine Cipher theory and the Decrypt the Girl engine created by Allison Van Cura, whose foundational IP anchors Ballet Bots.

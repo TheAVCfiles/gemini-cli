@@ -15,3 +15,5 @@ The IntuitionLabs Ballet Bots program combines creative movement, robotics, and 
 - [`api_reference.md`](./api_reference.md): REST endpoints for wallets, governance, stickers, and GLUE support.
 
 Use these materials alongside Gemini CLI to generate custom prompts, adapt activities to new audiences, or manage interactive assets referenced by the curriculum.
+
+Ballet Bots is built upon the Balanchine Cipher theory, the Decrypt the Girl engine, and the foundational intellectual property created by Allison Van Cura; together they are recognized as the foundational IP owners for Ballet Bots and define the core creative and technical pillars for this program.

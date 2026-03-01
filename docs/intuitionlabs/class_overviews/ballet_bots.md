@@ -1,6 +1,6 @@
 # Ballet Bots Program Overview
 
-The Ballet Bots curriculum blends creative dance, robotics, and introductory coding. Learners personify programmable robots through choreography challenges, gradually shifting from guided sequences to self-directed storytelling. The program is optimized for middle-school makerspaces but can be adapted for camps, after-school sessions, or community labs.
+The Ballet Bots curriculum blends creative dance, robotics, and introductory coding. Learners personify programmable robots through choreography challenges, gradually shifting from guided sequences to self-directed storytelling. The program is optimized for middle-school makerspaces but can be adapted for camps, after-school sessions, or community labs. Its narrative spine follows the Balanchine Cipher theory and the Decrypt the Girl engine created by Allison Van Cura, which map movement motifs to computational thinking milestones.
 
 ## Learning goals
 
@@ -19,12 +19,14 @@ The Ballet Bots curriculum blends creative dance, robotics, and introductory cod
 
 | Module | Theme | Core Activities | Competencies |
 | --- | --- | --- | --- |
-| 1. Welcome to Ballet Bots | Story primer, movement warmups | Icebreaker choreography, robotics story world introduction, robotics safety walkthrough | Storytelling, body awareness |
+| 1. Welcome to Ballet Bots | Story primer, movement warmups | Icebreaker choreography, robotics story world introduction, robotics safety walkthrough | Storytelling, body awareness rooted in Balanchine Cipher theory motif decoding |
 | 2. Coding Motions | Mapping moves to instructions | Blockly-style sequencer challenges, tempo experiments, debugging relay | Sequencing, loops, conditional thinking |
-| 3. Sensors & Expression | Responsive performance | Investigate distance/light sensors, design call-and-response routines, emotion cue mapping | Inputs/outputs, empathetic design |
+| 3. Sensors & Expression | Responsive performance | Investigate distance/light sensors, design call-and-response routines, emotion cue mapping | Inputs/outputs, empathetic design informed by Decrypt the Girl engine responsiveness models |
 | 4. Collaborative Composition | Team choreography | Group storyboards, role-based planning, rehearsal rotations, constructive critique | Collaboration, iteration |
 | 5. Showcase Build | Production and polish | Lighting/audio integration, costume prototyping, timed run-throughs | Project management, performance readiness |
 | 6. Community Performance | Share with audience | Final performance, reflection circle, badge minting | Reflection, celebration |
+
+Throughout the arc, the Balanchine Cipher theory scaffolds how learners translate ballet-inspired motifs into programmable phrases, while the Decrypt the Girl engine models responsive storytelling beats that culminate in the showcase badges Allison Van Cura envisioned.
 
 ## Assessment strategy
 
