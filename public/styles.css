@@ -94,6 +94,55 @@ body {
   margin: 0 0 2rem;
 }
 
+/* Trust badge widget */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2.5rem auto 0;
+  width: 100%;
+  max-width: 260px;
+}
+
+#trust-widget {
+  width: 220px;
+  height: 220px;
+  filter: drop-shadow(0 18px 38px rgba(10, 10, 10, 0.45));
+}
+
+#trust-badge {
+  overflow: visible;
+}
+
+#trust-badge:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 6px;
+}
+
+#trust-badge text {
+  letter-spacing: 0.08em;
+}
+
+.ring {
+  stroke-dasharray: 603.19;
+  stroke-dashoffset: 603.19;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.glow {
+  transition: opacity 0.8s ease;
+}
+
+.logo[data-active='true'] .glow {
+  opacity: 0.35;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    margin-top: 2rem;
+  }
+}
+
 /* Workflow visuals */
 .workflow-visual {
   text-align: center;

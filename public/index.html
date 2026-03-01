@@ -13,6 +13,42 @@
             <h1>NervösOS Products</h1>
             <p>Innovative AI tools and services designed for the future of work and creativity</p>
             <a href="#products" class="btn btn-primary">Explore Our Products</a>
+            <div class="logo" id="trust-widget" role="img" aria-label="Room 231 trust badge">
+              <!-- Inline SVG: keep viewBox 0 0 220 220 and center at 110,110 -->
+              <svg id="trust-badge" viewBox="0 0 220 220" width="220" height="220" aria-labelledby="trustTitle" role="img" tabindex="0">
+                <title id="trustTitle">Room 231 Trust</title>
+
+                <defs>
+                  <radialGradient id="medalGrad" cx="50%" cy="40%">
+                    <stop offset="0%" stop-color="#1a1a1a" />
+                    <stop offset="100%" stop-color="#0d0d0d" />
+                  </radialGradient>
+                </defs>
+
+                <!-- medallion -->
+                <circle cx="110" cy="110" r="76" fill="url(#medalGrad)" stroke="#121212" stroke-width="1" />
+
+                <!-- motif — replace with designer artwork if you want -->
+                <g id="motif" transform="translate(110,100)">
+                  <path d="M-40,-10 C -10,-40 10,-40 40,-10" stroke="#8d8d8d" stroke-width="3" fill="none" stroke-linecap="round" />
+                  <path d="M-40,10 C -10,40 10,40 40,10" stroke="#6f6f6f" stroke-width="3" fill="none" stroke-linecap="round" />
+                </g>
+
+                <!-- trust ring (outer) -->
+                <g transform="translate(110,110)" aria-hidden="true">
+                  <circle id="ring-back" r="96" fill="none" stroke="#2b2b2b" stroke-width="8" />
+                  <circle id="ring-anim" class="ring" r="96" fill="none" stroke="#CFA65E" stroke-width="8" stroke-linecap="round" transform="rotate(-90)" />
+                </g>
+
+                <!-- subtle outer glow -->
+                <circle id="glow" class="glow" cx="110" cy="110" r="110" fill="none" stroke="#000" stroke-width="0" opacity="0" />
+
+                <!-- label -->
+                <g id="label" transform="translate(110,180)" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#ddd">
+                  <text id="trust-text" y="0">Trust: —</text>
+                </g>
+              </svg>
+            </div>
         </div>
     </header>
 
@@ -90,5 +126,54 @@
             </div>
         </div>
     </footer>
+    <script>
+      (function () {
+        const widget = document.getElementById('trust-widget');
+        const badge = document.getElementById('trust-badge');
+        const ring = document.getElementById('ring-anim');
+        const glow = document.getElementById('glow');
+        const text = document.getElementById('trust-text');
+
+        if (!widget || !badge || !ring || !glow || !text) {
+          return;
+        }
+
+        const TRUST_SCORE = 0.93; // 93% trust rating
+        const radius = 96;
+        const circumference = 2 * Math.PI * radius;
+
+        ring.style.strokeDasharray = circumference.toFixed(2);
+        ring.style.strokeDashoffset = circumference.toFixed(2);
+
+        const trustLabel = `Room 231 Trust ${Math.round(TRUST_SCORE * 100)} percent`;
+        badge.setAttribute('aria-label', trustLabel);
+        widget.setAttribute('aria-label', trustLabel);
+
+        const duration = 1200;
+        let start;
+
+        function animate(timestamp) {
+          if (typeof start === 'undefined') {
+            start = timestamp;
+            widget.setAttribute('data-active', 'true');
+          }
+
+          const progress = Math.min((timestamp - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const targetOffset = circumference * (1 - TRUST_SCORE);
+          const currentOffset = circumference - (circumference - targetOffset) * eased;
+
+          ring.style.strokeDashoffset = currentOffset.toFixed(2);
+          glow.style.opacity = (0.35 * eased).toFixed(2);
+          text.textContent = `Trust: ${Math.round(TRUST_SCORE * 100)}%`;
+
+          if (progress < 1) {
+            window.requestAnimationFrame(animate);
+          }
+        }
+
+        window.requestAnimationFrame(animate);
+      })();
+    </script>
 </body>
 </html>
