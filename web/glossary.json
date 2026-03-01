@@ -70,6 +70,11 @@
     "sources": "MWRA SpecBook"
   },
   {
+    "term": "Digital Graffiti Installation",
+    "definition": "Interactive art performance environment that projects evolving graffiti-style visuals generated from real-time community prompt collaboration and AI synthesis.",
+    "sources": "Community Creative Lab"
+  },
+  {
     "term": "Emergency Generator",
     "definition": "Backup power unit that automatically engages to maintain critical plant operations during outages.",
     "sources": "Electrical Resiliency Plan"
