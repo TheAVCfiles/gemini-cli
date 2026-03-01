@@ -60,6 +60,83 @@
         </div>
     </section>
 
+    <section class="section section-white">
+        <div class="container">
+            <div class="two-columns combo-trainer">
+                <div>
+                    <h2>Drill Your Combo Timing</h2>
+                    <p>Load your assistant with movement cues, then practice hitting the beat like a choreographed prompter. The combo trainer keeps score on timing so your bot stays sharp under pressure.</p>
+                    <p>Equip a signature move, start the drill, and strike the beat. Perfect timing earns bonus confidence — and unlocks smoother prompt stacks.</p>
+                </div>
+                <div class="combo-module" id="combo-module">
+                    <div class="combo-header">
+                        <h3>Beat Alignment Lab</h3>
+                        <p>Practice landing actions inside a 1.8 second move window.</p>
+                    </div>
+                    <div class="combo-actions">
+                        <div class="action-card" data-action="SPIN" style="--accent:#d946ef;--accent-shadow:rgba(217,70,239,0.24);">
+                            <div class="action-main">
+                                <span class="action-emoji" aria-hidden="true">🔄</span>
+                                <div>
+                                    <div class="action-name">Spin</div>
+                                    <div class="action-note">Reset orientation. Flow stays crisp.</div>
+                                </div>
+                            </div>
+                            <button type="button" class="equip-btn">Equip</button>
+                        </div>
+                        <div class="action-card" data-action="STRIKE" style="--accent:#ef4444;--accent-shadow:rgba(239,68,68,0.24);">
+                            <div class="action-main">
+                                <span class="action-emoji" aria-hidden="true">👊</span>
+                                <div>
+                                    <div class="action-name">Strike</div>
+                                    <div class="action-note">Commit to the hit. No hesitation.</div>
+                                </div>
+                            </div>
+                            <button type="button" class="equip-btn">Equip</button>
+                        </div>
+                        <div class="action-card" data-action="JUMP" style="--accent:#06b6d4;--accent-shadow:rgba(6,182,212,0.24);">
+                            <div class="action-main">
+                                <span class="action-emoji" aria-hidden="true">⬆️</span>
+                                <div>
+                                    <div class="action-name">Jump</div>
+                                    <div class="action-note">Break inertia. Launch the sequence.</div>
+                                </div>
+                            </div>
+                            <button type="button" class="equip-btn">Equip</button>
+                        </div>
+                        <div class="action-card" data-action="POSE" style="--accent:#6366f1;--accent-shadow:rgba(99,102,241,0.24);">
+                            <div class="action-main">
+                                <span class="action-emoji" aria-hidden="true">💅</span>
+                                <div>
+                                    <div class="action-name">Pose</div>
+                                    <div class="action-note">Hold the beat. Lock in the story.</div>
+                                </div>
+                            </div>
+                            <button type="button" class="equip-btn">Equip</button>
+                        </div>
+                    </div>
+                    <div class="combo-loadout">
+                        <strong>Equipped loadout</strong>
+                        <span id="combo-loadout">None yet — equip your bot with a move.</span>
+                    </div>
+                    <div class="combo-status">
+                        <div id="combo-active">Equip moves to unlock the drill.</div>
+                        <div>Beat feedback: <strong id="combo-feedback">—</strong></div>
+                        <div class="combo-progress" aria-hidden="true">
+                            <div class="combo-progress-fill" id="combo-progress-fill"></div>
+                        </div>
+                        <div class="combo-timer" id="combo-timer">Timer idle.</div>
+                    </div>
+                    <div class="combo-controls">
+                        <button type="button" class="btn btn-primary" id="combo-start">Start Drill</button>
+                        <button type="button" class="btn btn-outline" id="combo-hit">Hit Beat</button>
+                        <button type="button" class="btn btn-ghost" id="combo-reset">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="workout-pack" class="section section-white">
         <div class="container">
             <div class="two-columns">
@@ -106,5 +183,178 @@
             </div>
         </div>
     </footer>
+    <script>
+    (() => {
+        const module = document.getElementById('combo-module');
+        if (!module) {
+            return;
+        }
+
+        const MOVE_TIME_MS = 1800;
+        const actions = {
+            SPIN: { name: 'Spin', emoji: '🔄' },
+            STRIKE: { name: 'Strike', emoji: '👊' },
+            JUMP: { name: 'Jump', emoji: '⬆️' },
+            POSE: { name: 'Pose', emoji: '💅' },
+        };
+
+        const cards = Array.from(module.querySelectorAll('.action-card'));
+        const loadoutEl = module.querySelector('#combo-loadout');
+        const activeEl = module.querySelector('#combo-active');
+        const feedbackEl = module.querySelector('#combo-feedback');
+        const timerEl = module.querySelector('#combo-timer');
+        const progressEl = module.querySelector('#combo-progress-fill');
+        const startBtn = module.querySelector('#combo-start');
+        const hitBtn = module.querySelector('#combo-hit');
+        const resetBtn = module.querySelector('#combo-reset');
+
+        const state = {
+            equipped: new Set(),
+            activeAction: null,
+            moveStart: 0,
+            ticker: null,
+            playing: false,
+        };
+
+        cards.forEach((card) => {
+            const id = card.dataset.action;
+            const equipBtn = card.querySelector('.equip-btn');
+            equipBtn.addEventListener('click', () => {
+                if (state.equipped.has(id)) {
+                    state.equipped.delete(id);
+                    card.classList.remove('equipped');
+                    equipBtn.textContent = 'Equip';
+                } else {
+                    state.equipped.add(id);
+                    card.classList.add('equipped');
+                    equipBtn.textContent = 'Equipped';
+                }
+                updateLoadout();
+                if (!state.playing) {
+                    activeEl.textContent = state.equipped.size
+                        ? 'Ready when you are. Press Start Drill.'
+                        : 'Equip moves to unlock the drill.';
+                }
+            });
+        });
+
+        function updateLoadout() {
+            if (state.equipped.size === 0) {
+                loadoutEl.textContent = 'None yet — equip your bot with a move.';
+                return;
+            }
+
+            const equippedMoves = Array.from(state.equipped)
+                .map((id) => `${actions[id].emoji} ${actions[id].name}`)
+                .join(', ');
+            loadoutEl.textContent = equippedMoves;
+        }
+
+        function clearActive() {
+            cards.forEach((card) => card.classList.remove('playing'));
+            state.activeAction = null;
+        }
+
+        function setIdle() {
+            state.playing = false;
+            startBtn.disabled = false;
+            hitBtn.disabled = true;
+            resetBtn.disabled = true;
+            if (state.ticker) {
+                clearInterval(state.ticker);
+                state.ticker = null;
+            }
+            progressEl.style.width = '0%';
+            timerEl.textContent = 'Timer idle.';
+            feedbackEl.textContent = '—';
+            clearActive();
+            activeEl.textContent = state.equipped.size
+                ? 'Ready when you are. Press Start Drill.'
+                : 'Equip moves to unlock the drill.';
+        }
+
+        function setRunning() {
+            state.playing = true;
+            startBtn.disabled = true;
+            hitBtn.disabled = false;
+            resetBtn.disabled = false;
+        }
+
+        function pickNextAction() {
+            const pool = state.equipped.size
+                ? Array.from(state.equipped)
+                : cards.map((card) => card.dataset.action);
+            const next = pool[Math.floor(Math.random() * pool.length)];
+            state.activeAction = next;
+            cards.forEach((card) => {
+                card.classList.toggle('playing', card.dataset.action === next);
+            });
+            activeEl.textContent = `${actions[next].emoji} ${actions[next].name} — hit on the beat.`;
+        }
+
+        function updateTimer() {
+            const elapsed = performance.now() - state.moveStart;
+            const pct = Math.min((elapsed / MOVE_TIME_MS) * 100, 100);
+            progressEl.style.width = `${pct}%`;
+            if (elapsed < MOVE_TIME_MS) {
+                timerEl.textContent = `Beat in ${(MOVE_TIME_MS - elapsed).toFixed(0)} ms`;
+            } else {
+                timerEl.textContent = `Beat passed by ${(elapsed - MOVE_TIME_MS).toFixed(0)} ms`;
+            }
+        }
+
+        function scheduleNextBeat() {
+            pickNextAction();
+            progressEl.style.width = '0%';
+            feedbackEl.textContent = 'Ready';
+            state.moveStart = performance.now();
+            updateTimer();
+            if (state.ticker) {
+                clearInterval(state.ticker);
+            }
+            state.ticker = setInterval(updateTimer, 60);
+        }
+
+        startBtn.addEventListener('click', () => {
+            setRunning();
+            scheduleNextBeat();
+        });
+
+        hitBtn.addEventListener('click', () => {
+            if (!state.playing) {
+                return;
+            }
+
+            const timeElapsed = performance.now() - state.moveStart;
+            const delta = MOVE_TIME_MS - timeElapsed;
+            const perfect = Math.abs(delta) <= 250;
+            const great = Math.abs(delta) <= 500;
+
+            if (perfect) {
+                feedbackEl.textContent = 'Perfect timing!';
+            } else if (great) {
+                feedbackEl.textContent = 'Great hit!';
+            } else if (delta > 0) {
+                feedbackEl.textContent = `Early by ${Math.abs(delta).toFixed(0)} ms`;
+            } else {
+                feedbackEl.textContent = `Late by ${Math.abs(delta).toFixed(0)} ms`;
+            }
+
+            if (state.activeAction) {
+                const actionName = `${actions[state.activeAction].emoji} ${actions[state.activeAction].name}`;
+                activeEl.textContent = `${actionName} executed — ${feedbackEl.textContent}`;
+            }
+
+            scheduleNextBeat();
+        });
+
+        resetBtn.addEventListener('click', () => {
+            setIdle();
+        });
+
+        setIdle();
+        updateLoadout();
+    })();
+    </script>
 </body>
 </html>
