@@ -1,150 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Decrypt Haus Prototype</title>
-    <style>
-      body {
-        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        margin: 0;
-        background: #0c0c0c;
-        color: #fff;
-      }
-      .screen {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        text-align: center;
-        transition: opacity 0.6s ease;
-      }
-      button {
-        background: #ff3366;
-        border: none;
-        padding: 14px 24px;
-        border-radius: 8px;
-        color: #fff;
-        font-weight: 600;
-        margin-top: 20px;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-      button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 25px rgba(255, 51, 102, 0.35);
-      }
-      input,
-      select {
-        padding: 10px;
-        margin: 6px;
-        border-radius: 6px;
-        border: none;
-        width: min(320px, 70%);
-        background: rgba(255, 255, 255, 0.08);
-        color: inherit;
-      }
-      input::placeholder {
-        color: rgba(255, 255, 255, 0.6);
-      }
-      .hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
-      .card {
-        background: #111;
-        padding: 28px;
-        border-radius: 18px;
-        box-shadow: 0 0 20px rgba(255, 51, 102, 0.45);
-        width: min(420px, 90vw);
-      }
-      .card h2 {
-        margin-bottom: 0.75rem;
-        font-size: 1.75rem;
-      }
-      .card p {
-        line-height: 1.6;
-        color: rgba(255, 255, 255, 0.9);
-      }
-      #dash h2 {
-        margin-bottom: 0.5rem;
-      }
-      @media (max-width: 600px) {
-        .screen {
-          padding: 1.5rem;
-        }
-        button {
-          width: 100%;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="intro" class="screen">
-      <h1>Decrypt Haus</h1>
-      <p>Tap to begin your orbit.</p>
-      <button type="button" onclick="next('form')">Start</button>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Decrypt Haus · Grid Access</title>
+<style>
+  :root { --bg:#0b0b0c; --fg:#f5f5f7; --muted:#a8a8ad; --acc:#ff3366; --card:#121214; }
+  body { margin:0; background:var(--bg); color:var(--fg); font-family: -apple-system, Inter, system-ui, Arial; }
+  .wrap { max-width:640px; margin:0 auto; padding:24px; }
+  .card { background:var(--card); border-radius:16px; padding:20px; box-shadow:0 6px 28px rgba(0,0,0,.35); }
+  h1 { font-size:22px; margin:0 0 12px; }
+  label { display:block; font-size:14px; color:var(--muted); margin-top:14px; }
+  input[type="text"], input[type="file"] { width:100%; padding:12px; border-radius:10px; border:1px solid #242428; background:#16161a; color:var(--fg); }
+  .row { display:flex; gap:10px; }
+  button { background:var(--acc); border:0; color:white; font-weight:600; padding:12px 16px; border-radius:10px; cursor:pointer; }
+  .btn-ghost { background:transparent; border:1px solid #2a2a2f; color:var(--fg); }
+  pre { background:#0e0e11; border-radius:10px; padding:12px; overflow:auto; max-height:280px; }
+  .ok { color:#80ffb4; }
+  .warn { color:#ffd166; }
+  .ring { height:220px; width:220px; border-radius:50%; background:
+    radial-gradient(circle at 50% 50%, rgba(255,51,102,.12), transparent 60%),
+    conic-gradient(from var(--angle,0deg), #6ca8ff, #9ec5ff, #e6f1ff, #6ca8ff); 
+    filter: blur(.2px) saturate(110%); margin: 18px auto;
+    display:flex; align-items:center; justify-content:center; position:relative; }
+  .ring:after{ content:""; height:140px; width:140px; border-radius:50%;
+    background: radial-gradient(circle at 50% 50%, rgba(255,51,102,.15), transparent 60%),
+    conic-gradient(from calc(var(--angle,0deg) * -1), #9ec5ff, #e6f1ff, #6ca8ff, #9ec5ff);
+    mix-blend: screen; opacity:.6;
+  }
+  .dot { position:absolute; height:10px; width:10px; border-radius:50%; background:white; 
+    top:10px; left:50%; transform:translateX(-50%); box-shadow:0 0 12px rgba(255,255,255,.7)}
+  small { color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>Grid Access · Elite ZIP Credential</h1>
+    <small>Soft proof or ownership → issued as a verifiable credential. Clinical bones, poetic lungs.</small>
+
+    <label>ZIP Code</label>
+    <input id="zip" type="text" placeholder="e.g., 90210, 10075" inputmode="numeric" />
+
+    <label>Soft Proof (lived experience)</label>
+    <input id="file" type="file" accept="image/*,application/pdf" />
+
+    <div class="row" style="margin-top:14px;">
+      <button id="geo">Use GPS</button>
+      <button class="btn-ghost" id="hashBtn">Hash File Only</button>
     </div>
 
-    <div id="form" class="screen hidden">
-      <h2>Your Birth Data</h2>
-      <input id="name" placeholder="Full Name" />
-      <input id="birth" type="date" />
-      <input id="time" type="time" />
-      <input id="place" placeholder="City, Country" />
-      <button type="button" onclick="generate()">Generate Insight</button>
+    <div class="ring" id="ring"><div class="dot" id="dot"></div></div>
+    <small id="phaseText">Resonance window inactive.</small>
+
+    <div class="row" style="margin-top:16px;">
+      <button id="submit">Request Access</button>
+      <button class="btn-ghost" id="buy">Buy Haus Key ($19)</button>
     </div>
 
-    <div id="card" class="screen hidden">
-      <div class="card">
-        <h2 id="title"></h2>
-        <p id="content"></p>
-      </div>
-      <button type="button" onclick="next('gate')">Access Deeper Layer</button>
-    </div>
+    <label style="margin-top:18px;">Credential (CTDL JSON)</label>
+    <pre id="out">{ /* waiting… */ }</pre>
+    <small>Proof-of-receipt is hashed and time-stamped; matches your Mirror-Gain provenance practice.  [oai_citation:2‡AVC_Systems_Studios_Professional_Dossier_2025_Academic.pdf](sediment://file_000000002c0861f5836920639d413868)</small>
+  </div>
+</div>
 
-    <div id="gate" class="screen hidden">
-      <h2>Tier Access</h2>
-      <p>Unlock analytics, hosting, and data tools.</p>
-      <button type="button" onclick="next('dash')">Subscribe ($9.99/mo)</button>
-    </div>
+<script>
+const out = document.getElementById('out');
+const ring = document.getElementById('ring');
+const phaseText = document.getElementById('phaseText');
+let gps = null;
 
-    <div id="dash" class="screen hidden">
-      <h2>Performance Dashboard</h2>
-      <p id="metrics"></p>
-      <button type="button" onclick="restart()">Restart</button>
-    </div>
+// Minimal “resonance” doodle — rotate rings ~60s
+let ang=0; setInterval(()=>{ ang=(ang+1)%360; ring.style.setProperty('--angle', ang+'deg'); }, 166);
 
-    <script>
-      const screens = document.querySelectorAll('.screen');
+// Soft resonance tease (fake until wired to Cycle Engine)
+function setResonance(r){ 
+  phaseText.textContent = r>=0.65 ? `High-clarity window active (R=${r.toFixed(2)})` : `Resonance ${r.toFixed(2)} — waiting…`;
+  phaseText.className = r>=0.65 ? 'ok' : 'warn';
+}
+setResonance(Math.random()*0.5+0.4);
 
-      function next(id) {
-        screens.forEach((screen) => screen.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
-      }
+// client-side hash
+async function sha256Hex(ab){
+  const d = await crypto.subtle.digest("SHA-256", ab);
+  const a = Array.from(new Uint8Array(d)); 
+  return a.map(b=>b.toString(16).padStart(2,'0')).join('');
+}
 
-      function generate() {
-        const name = document.getElementById('name').value || 'Seeker';
-        const titles = ['Lunar Logic', 'Solar Drift', 'Seoul Node Pulse'];
-        const lines = [
-          `${name}, your cycle aligns with collective risk appetite — trade empathy for clarity.`,
-          'Momentum builds in the second act; harvest data, not drama.',
-          'Echoes strong in ensemble mode — release one insight before midnight.',
-        ];
-        const title = titles[Math.floor(Math.random() * titles.length)];
-        const content = lines[Math.floor(Math.random() * lines.length)];
-        document.getElementById('title').innerText = title;
-        document.getElementById('content').innerText = content;
-        next('card');
-      }
+document.getElementById('geo').onclick = () => {
+  navigator.geolocation?.getCurrentPosition(
+    p => { gps = { lat:p.coords.latitude, lon:p.coords.longitude, acc:p.coords.accuracy }; alert('GPS captured.'); },
+    _ => alert('GPS permission denied.'));
+};
 
-      function restart() {
-        next('intro');
-      }
+document.getElementById('hashBtn').onclick = async () => {
+  const f = document.getElementById('file').files[0];
+  if(!f){ alert('Attach a file first.'); return; }
+  const buf = await f.arrayBuffer();
+  const h = await sha256Hex(buf);
+  out.textContent = JSON.stringify({ file_hash:`sha256:${h}`, name:f.name, size:f.size }, null, 2);
+};
 
-      document.getElementById('metrics').innerText =
-        'Insights generated: 12 | Resonance score: 0.78 | Tokens earned: 42 ¢';
-    </script>
-  </body>
+document.getElementById('buy').onclick = async () => {
+  // Replace with Stripe/Ko-fi session creation:
+  alert('Redirecting to checkout… (wire to Stripe/Ko-fi session URL)');
+  // window.location = '/create-checkout-session';
+};
+
+document.getElementById('submit').onclick = async () => {
+  const zip = (document.getElementById('zip').value||'').trim();
+  const f = document.getElementById('file').files[0];
+
+  let file_hash=null, file_meta=null;
+  if(f){
+    const buf = await f.arrayBuffer();
+    file_hash = 'sha256:'+await sha256Hex(buf);
+    file_meta = { name:f.name, size:f.size, type:f.type };
+  }
+
+  const payload = {
+    user_id: "@avc",
+    zip, verification_type: "soft_proof",
+    gps, file_hash, file_meta,
+    // optional market/context hooks for Cycle Engine later:
+    context: { risk: 0.61, btc_sent: 2.8 }
+  };
+
+  const res = await fetch('/verify/submit', {
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+  });
+  const json = await res.json();
+  out.textContent = JSON.stringify(json, null, 2);
+  setResonance(json.resonance ?? 0.72);
+};
+</script>
+</body>
 </html>
