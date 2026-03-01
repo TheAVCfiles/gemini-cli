@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#050505">
+<title>SYVAQ — Calculator • Holiday • Vision</title>
+
+<style>
+:root{
+  --void:#050505; --text-main:#e0e0e0; --heart-gold:#D4AF37; --accent:#9D00FF;
+  --soft-white:rgba(255,255,255,0.9);
+  --font-ui:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;
+  --mono:ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sat: env(safe-area-inset-top);
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+  --sar: env(safe-area-inset-right);
+}
+
+*{box-sizing:border-box}
+html,body{
+  height:100%; margin:0;
+  font-family:var(--font-ui);
+  background:var(--void);
+  color:var(--text-main);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+.app{
+  height:100dvh;
+  min-height:100svh;
+  width:100vw;
+  display:flex;
+  flex-direction:column;
+}
+
+header.app-header{
+  display:flex; align-items:center; gap:10px;
+  padding: calc(12px + var(--sat)) calc(14px + var(--sar)) 12px calc(14px + var(--sal));
+  z-index:9999;
+}
+
+.brand{
+  font-family:var(--mono);
+  color:var(--heart-gold);
+  font-weight:800;
+  letter-spacing:1.6px;
+  font-size:12px;
+}
+
+nav.demo-nav{ display:flex; gap:8px; margin-left:8px; }
+.nav-btn{
+  background:transparent;
+  color:var(--soft-white);
+  border:1px solid rgba(255,255,255,0.07);
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-family:var(--mono);
+  font-size:13px;
+}
+.nav-btn[aria-pressed="true"]{
+  border-color: rgba(157,0,255,0.85);
+  box-shadow:0 6px 22px rgba(157,0,255,0.10);
+  background:linear-gradient(180deg, rgba(157,0,255,0.08), rgba(0,0,0,0));
+}
+
+.scenes{ position:relative; flex:1; }
+.scene{ position:absolute; inset:0; display:none; }
+.scene.active{ display:block; }
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom: calc(22px + var(--sab));
+  transform:translateX(-50%);
+  background:rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.12);
+  padding:10px 12px;
+  border-radius:8px;
+  font-family:var(--mono);
+  font-size:.72rem;
+  color:rgba(255,255,255,.9);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s;
+}
+.toast.show{ opacity:1 }
+
+/* ---------- Calculator ---------- */
+#calc-mask-layer{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  padding:20px;
+  z-index:10;
+  transition:opacity 1.2s cubic-bezier(.25,1,.5,1), transform 1.2s cubic-bezier(.25,1,.5,1);
+  background:var(--void);
+}
+.calc-screen-area{ flex:1; display:flex; justify-content:flex-end; align-items:flex-end; padding:20px; margin-bottom:20px; }
+.calc-readout{ font-size:64px; font-weight:200; letter-spacing:-2px; color:#fff; }
+.calc-pad{ display:grid; grid-template-columns: repeat(4,1fr); gap:16px; padding-bottom:12px; }
+.calc-key{
+  aspect-ratio:1;
+  border-radius:50%;
+  background:#1c1c1c;
+  border:none;
+  font-size:32px;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  user-select:none;
+}
+.calc-key:active{ background:#333 }
+.calc-key.op{ background:#ff9f0a; color:white }
+.calc-key.top{ background:#a5a5a5; color:#000 }
+.calc-key.zero{ grid-column: span 2; aspect-ratio:auto; border-radius:45px; justify-content:flex-start; padding-left:36px; }
+
+#calc-trigger-key{ position:relative; overflow:hidden; }
+#calc-trigger-key::after{
+  content:"";
+  position:absolute; inset:0;
+  border-radius:50%;
+  border:2px solid var(--heart-gold);
+  opacity:0;
+  transform:scale(1.1);
+  transition:all .8s cubic-bezier(.25,1,.5,1);
+}
+#calc-trigger-key.holding::after{ opacity:.6; transform:scale(1) }
+
+#calc-core-layer{
+  position:absolute; inset:0;
+  background: radial-gradient(circle at 50% 30%, #2a1b3d 0%, #000 80%);
+  z-index:5;
+  opacity:0;
+  transform:scale(.95);
+  transition:all 1.2s cubic-bezier(.25,1,.5,1);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:32px;
+}
+
+body.calc-unlocked #calc-mask-layer{ opacity:0; pointer-events:none; transform:scale(1.05); }
+body.calc-unlocked #calc-core-layer{ opacity:1; transform:scale(1); }
+
+.calc-message-card{ width:100%; max-width:360px; padding:0 20px; text-align:center; position:relative; }
+.calc-star{ font-size:32px; color:var(--heart-gold); margin-bottom:24px; opacity:0; transform:translateY(20px); transition:all .8s cubic-bezier(.25,1,.5,1) .1s; }
+.calc-title{ font-family: "New York", "Times New Roman", serif; font-size:28px; font-weight:400; font-style:italic; color:var(--heart-gold); opacity:0; transform:translateY(20px); transition:all .8s cubic-bezier(.25,1,.5,1) .2s; }
+.calc-p{ color:var(--soft-white); opacity:0; transform:translateY(20px); transition:all .8s cubic-bezier(.25,1,.5,1) .3s; font-weight:300; }
+.calc-sign{ color:#888; opacity:0; transition:all .8s cubic-bezier(.25,1,.5,1) .4s; margin-top:40px; }
+body.calc-unlocked .calc-star,
+body.calc-unlocked .calc-title,
+body.calc-unlocked .calc-p,
+body.calc-unlocked .calc-sign{ opacity:1; transform:translateY(0) }
+
+.calc-close-btn{
+  position:absolute;
+  bottom:40px;
+  background:transparent;
+  border:1px solid rgba(255,255,255,.1);
+  color:rgba(255,255,255,.4);
+  padding:12px 24px;
+  border-radius:30px;
+  cursor:pointer;
+  font-size:12px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+/* ---------- Holiday ---------- */
+.holiday-grid-layer{
+  position:absolute; inset:0;
+  background-image:radial-gradient(rgba(138,43,226,.05) 1px, transparent 1px);
+  background-size:30px 30px;
+  z-index:0;
+}
+#holiday-world{ position:absolute; inset:0; z-index:1; touch-action:none; }
+#holiday-terminal{
+  position:absolute; inset:0; z-index:100;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono);
+  padding:2rem;
+  transition:opacity 1s;
+}
+.holiday-log-line{
+  color:#777; font-size:.85rem; margin-bottom:10px; max-width:380px;
+  border-left:3px solid transparent; padding-left:12px; opacity:0;
+  animation:fadeIn .45s forwards;
+}
+.holiday-log-active{ border-left:3px solid var(--heart-gold); color:var(--heart-gold); font-weight:800; text-shadow:0 0 10px rgba(212,175,55,.28) }
+@keyframes fadeIn{ to{opacity:1} }
+
+#holiday-hud{
+  position:absolute; inset:0; z-index:10;
+  display:flex; flex-direction:column; justify-content:space-between;
+  padding:22px;
+  pointer-events:none;
+}
+.holiday-brand{ font-family:var(--mono); font-size:.75rem; color:var(--heart-gold); font-weight:800; letter-spacing:2px; pointer-events:auto; }
+.holiday-status{ font-family:var(--mono); font-size:.65rem; color:rgba(255,255,255,.55); text-align:right; pointer-events:auto; }
+.holiday-center-stage{ position:absolute; top:40%; left:50%; transform:translate(-50%,-50%); text-align:center; pointer-events:none; }
+
+.holiday-hero{
+  font-size:2rem; color:#fff; text-shadow:0 0 32px var(--accent);
+  opacity:0; transform:scale(.96);
+  transition:all 1.1s ease;
+}
+.holiday-sub{
+  font-size:.95rem; color:#d6d6d6;
+  opacity:0;
+  transition:all 1.1s ease .15s;
+}
+#holiday-msg-1.visible, #holiday-msg-2.visible{ opacity:1; transform:scale(1); }
+
+#holiday-proof-card{
+  position:absolute;
+  bottom: calc(88px + var(--sab));
+  left:50%;
+  transform:translateX(-50%) translateY(40px);
+  width:92%; max-width:390px;
+  padding:22px;
+  border-radius:6px;
+  background:rgba(20,10,30,.86);
+  border:1px solid rgba(212,175,55,.32);
+  backdrop-filter:blur(12px);
+  opacity:0;
+  pointer-events:none;
+  transition:all .9s cubic-bezier(.19,1,.22,1);
+}
+#holiday-proof-card.visible{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+  pointer-events:auto;
+}
+#holiday-actions{ display:flex; gap:10px; margin-top:14px; pointer-events:auto; flex-wrap:wrap; }
+.holiday-btn{
+  font-family:var(--mono);
+  padding:10px 12px;
+  border-radius:6px;
+  border:1px solid rgba(212,175,55,.35);
+  background:rgba(212,175,55,.06);
+  color:rgba(255,255,255,.92);
+  cursor:pointer;
+}
+.holiday-btn.alt{ border:1px solid rgba(157,0,255,.35); background:rgba(157,0,255,.10) }
+
+.instruction{
+  font-family:var(--mono);
+  font-size:12px;
+  color:rgba(255,255,255,.8);
+  letter-spacing:1px;
+  text-transform:uppercase;
+  pointer-events:none;
+}
+
+/* ---------- Vision ---------- */
+#living-world{ position:absolute; inset:0; z-index:1; touch-action:none; }
+.vignette{ position:absolute; inset:0; z-index:0; background:radial-gradient(circle at 50% 50%, rgba(20,20,30,0) 40%, #030305 100%); pointer-events:none; }
+#living-hud{
+  position:absolute; inset:0; z-index:10;
+  display:flex; flex-direction:column; justify-content:space-between;
+  padding:24px;
+  pointer-events:none;
+}
+.living-hero{
+  font-size:3rem;
+  background:linear-gradient(135deg,#fff 0%,#aaa 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  opacity:0;
+  transform:translateY(8px);
+  transition:all .9s cubic-bezier(.2,.8,.2,1);
+}
+.living-sub{
+  font-family:var(--mono);
+  font-size:.75rem;
+  color:#00F0FF;
+  opacity:0;
+  transform:translateY(8px);
+  transition:all .9s ease .15s;
+}
+#living-msg-1.visible, #living-msg-2.visible{ opacity:1; transform:translateY(0); }
+
+#holo-gift{
+  position:absolute;
+  bottom: calc(100px + var(--sab));
+  left:50%;
+  transform:translateX(-50%) scale(.92);
+  width:300px;
+  background:rgba(10,10,15,.6);
+  border-radius:16px;
+  padding:20px;
+  opacity:0;
+  pointer-events:none;
+  transition:all .8s;
+  z-index:20;
+}
+#holo-gift.active{ opacity:1; pointer-events:auto; transform:translateX(-50%) scale(1); }
+</style>
+</head>
+
+<body>
+<div class="app" role="application">
+
+<header class="app-header" role="banner" aria-label="Demo selector">
+  <div class="brand">AVC // SYVAQ</div>
+  <nav class="demo-nav" role="tablist" aria-label="Choose demo">
+    <button class="nav-btn" role="tab" aria-pressed="true" id="btn-demo-calc">1 • Calculator</button>
+    <button class="nav-btn" role="tab" aria-pressed="false" id="btn-demo-holiday">2 • Holiday</button>
+    <button class="nav-btn" role="tab" aria-pressed="false" id="btn-demo-vision">3 • Vision</button>
+  </nav>
+  <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+    <button class="nav-btn" id="shareDemo">SHARE</button>
+    <div style="font-family:var(--mono);font-size:12px;color:#888">Merry Xmas Lilly</div>
+  </div>
+</header>
+
+<main class="scenes" id="scenes">
+
+<!-- ===== Calculator Scene ===== -->
+<section id="scene-calc" class="scene active" role="region" aria-label="Calculator demo">
+  <div id="calc-mask-layer">
+    <div class="calc-screen-area"><div class="calc-readout" id="calc-readout">0</div></div>
+    <div class="calc-pad" id="calc-pad" role="group" aria-label="Calculator keypad">
+      <button class="calc-key top" data-key="AC">AC</button>
+      <button class="calc-key top" data-key="+/-">+/-</button>
+      <button class="calc-key top" id="calc-trigger-key" aria-label="Hold to reveal">%</button>
+      <button class="calc-key op" data-key="÷">÷</button>
+
+      <button class="calc-key" data-key="7">7</button><button class="calc-key" data-key="8">8</button><button class="calc-key" data-key="9">9</button><button class="calc-key op" data-key="×">×</button>
+      <button class="calc-key" data-key="4">4</button><button class="calc-key" data-key="5">5</button><button class="calc-key" data-key="6">6</button><button class="calc-key op" data-key="-">-</button>
+      <button class="calc-key" data-key="1">1</button><button class="calc-key" data-key="2">2</button><button class="calc-key" data-key="3">3</button><button class="calc-key op" data-key="+">+</button>
+      <button class="calc-key zero" data-key="0">0</button><button class="calc-key" data-key=".">.</button><button class="calc-key op" data-key="=">=</button>
+    </div>
+  </div>
+
+  <div id="calc-core-layer" aria-hidden="true">
+    <div class="calc-message-card" role="dialog" aria-labelledby="calc-title" aria-describedby="calc-desc">
+      <div class="calc-star" aria-hidden="true">✦</div>
+      <h1 class="calc-title" id="calc-title">"The Ones Who Move<br>Inspire Awe."</h1>
+      <p class="calc-p" id="calc-desc">Lilly —<br><br>I built the walls so the heart could beat without fear.</p>
+      <p class="calc-p">This pas de deux has been my honor. Your motion is the magic; the structure is just the floorboards holding you up.</p>
+      <p class="calc-p">Rest now. The house is safe.</p>
+      <div class="calc-sign">With love & gratitude,<br>Allison</div>
+      <button class="calc-close-btn" id="calc-close" aria-label="Close message">Close</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Holiday Scene ===== -->
+<section id="scene-holiday" class="scene" role="region" aria-label="Holiday demo" aria-hidden="true">
+  <div class="holiday-grid-layer" aria-hidden="true"></div>
+  <canvas id="holiday-world" aria-hidden="false"></canvas>
+
+  <div id="holiday-terminal" aria-hidden="false">
+    <div id="holiday-logs" aria-live="polite" role="log"></div>
+  </div>
+
+  <div id="holiday-hud" aria-hidden="false" role="region">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;pointer-events:auto">
+      <div class="holiday-brand">AVC // SYVAQ</div>
+      <div class="holiday-status">
+        SYSTEM: ONLINE<br>
+        <span id="holiday-net-stat" style="color:#888">CHAOS DETECTED</span>
+      </div>
+    </div>
+
+    <div class="holiday-center-stage">
+      <div class="holiday-hero" id="holiday-msg-1">Merry Christmas, Lilly.</div>
+      <div class="holiday-sub" id="holiday-msg-2">Not everything needs you right now.<br/>The signal can sleep. The system will hold.</div>
+    </div>
+
+    <div id="holiday-proof-card" aria-hidden="true" role="region" aria-label="Founder holiday receipt">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:var(--heart-gold);font-family:var(--mono);font-weight:900">
+        FOUNDER HOLIDAY RECEIPT <span id="holiday-pill" style="font-size:12px;color:#888">UNSEALED</span>
+      </div>
+
+      <div style="font-family:var(--mono);color:#bdbdbd">
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span>ISSUED TO</span><strong>LILLY SIMPSON</strong></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span>COMPANY</span><strong>SYVAQ</strong></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span>GRANT</span><strong style="color:var(--heart-gold)">PERMISSION TO DISCONNECT</strong></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span>COVERAGE</span><strong>HER + HER FAMILY</strong></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span>STATUS</span><strong id="holiday-status-val" style="color:var(--heart-gold)">PENDING STABILIZATION</strong></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span>RECEIPT ID</span><strong id="holiday-receipt-id">—</strong></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span>TIMESTAMP</span><strong id="holiday-receipt-time">—</strong></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:18px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.18)">
+        <div style="font-size:.62rem;color:rgba(255,255,255,.62)">AVC SYSTEMS STUDIO<br>HUMAN CARE // MACHINE CALM</div>
+        <div style="text-align:right"><div style="font-family:'Snell Roundhand',cursive;font-size:1.55rem;color:var(--accent)">Allison</div></div>
+      </div>
+
+      <div id="holiday-actions">
+        <button class="holiday-btn alt" id="holiday-seal">SEAL RECEIPT</button>
+        <button class="holiday-btn" id="holiday-download">DOWNLOAD PNG</button>
+        <button class="holiday-btn" id="holiday-reset">RESET NOISE</button>
+      </div>
+    </div>
+
+    <div style="text-align:center;pointer-events:auto;margin-top:14px">
+      <div class="instruction" id="holiday-hint">TOUCH & HOLD ON THE SCREEN TO CLEAR THE NOISE</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Vision Scene ===== -->
+<section id="scene-vision" class="scene" role="region" aria-label="Vision demo" aria-hidden="true">
+  <div class="vignette" aria-hidden="true"></div>
+  <canvas id="living-world" aria-hidden="false"></canvas>
+
+  <div id="living-hud" aria-hidden="false">
+    <div style="opacity:1"><div class="brand" style="font-family:var(--mono);font-size:10px;color:#00F0FF">SYVAQ PROTOCOLS</div></div>
+
+    <div style="position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);pointer-events:none;text-align:center">
+      <div class="living-hero" id="living-msg-1">VISION<br>ONLINE</div>
+      <div class="living-sub" id="living-msg-2">Touch and hold to feed the light…</div>
+    </div>
+
+    <div style="text-align:center"><div class="instruction" id="living-hint">TOUCH & HOLD TO FEED THE LIGHT</div></div>
+
+    <div id="holo-gift" aria-hidden="true">
+      <div style="font-weight:600;color:#fff">Merry Christmas, Lilly</div>
+      <div style="font-size:11px;color:#888;margin-top:6px">
+        The system works because you breathe life into it.<br>
+        The magic is in the motion, not the machine.
+      </div>
+      <div style="margin-top:14px">
+        <button class="nav-btn" id="living-reset" style="pointer-events:auto">RE-IGNITE</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite">Saved.</div>
+</div>
+
+<script>
+/* ------------------- tiny helpers ------------------- */
+const toast = document.getElementById('toast');
+function showToast(msg='Saved.'){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'), 1200);
+}
+function vibrate(pattern){ try{ if(navigator.vibrate) navigator.vibrate(pattern); } catch(e){} }
+
+/* ------------------- iPhone share ------------------- */
+document.getElementById('shareDemo').addEventListener('click', async () => {
+  const url = location.href;
+  try {
+    await navigator.share({ title: document.title, text: "SYVAQ demo", url });
+  } catch (e) {
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast('Link copied.');
+    } catch(e2){
+      showToast('Copy failed.');
+    }
+  }
+});
+
+/* ------------------- scene router ------------------- */
+const btnCalc = document.getElementById('btn-demo-calc');
+const btnHoliday = document.getElementById('btn-demo-holiday');
+const btnVision = document.getElementById('btn-demo-vision');
+const scenes = {
+  calc: document.getElementById('scene-calc'),
+  holiday: document.getElementById('scene-holiday'),
+  vision: document.getElementById('scene-vision')
+};
+
+function setActive(which){
+  btnCalc.setAttribute('aria-pressed', which === 'calc');
+  btnHoliday.setAttribute('aria-pressed', which === 'holiday');
+  btnVision.setAttribute('aria-pressed', which === 'vision');
+
+  Object.keys(scenes).forEach(k=>{
+    const s = scenes[k];
+    const active = k === which;
+    s.classList.toggle('active', active);
+    s.setAttribute('aria-hidden', !active);
+  });
+
+  if(which === 'holiday'){ holidayStart(); }
+  else { holidayStop(); }
+
+  if(which === 'vision'){ visionStart(); }
+  else { visionStop(); }
+}
+btnCalc.addEventListener('click', ()=>setActive('calc'));
+btnHoliday.addEventListener('click', ()=>setActive('holiday'));
+btnVision.addEventListener('click', ()=>setActive('vision'));
+setActive('calc');
+
+/* ------------------- Calculator ------------------- */
+(function(){
+  const trigger = document.getElementById('calc-trigger-key');
+  const close = document.getElementById('calc-close');
+  const core = document.getElementById('calc-core-layer');
+  const readout = document.getElementById('calc-readout');
+
+  let timer = null;
+  let value = "0";
+  const setVal = v => (value = String(v), readout.textContent = value);
+
+  function unlock(){
+    vibrate([40,60,40]);
+    document.body.classList.add('calc-unlocked');
+    core.setAttribute('aria-hidden','false');
+  }
+  function relock(){
+    document.body.classList.remove('calc-unlocked');
+    core.setAttribute('aria-hidden','true');
+  }
+
+  // hold to reveal
+  function startHold(e){
+    e.preventDefault();
+    trigger.classList.add('holding');
+    if(timer) clearTimeout(timer);
+    vibrate(20);
+    timer = setTimeout(unlock, 900);
+  }
+  function endHold(e){
+    if(e) e.preventDefault();
+    trigger.classList.remove('holding');
+    if(timer){ clearTimeout(timer); timer = null; }
+  }
+  trigger.addEventListener('pointerdown', startHold);
+  trigger.addEventListener('pointerup', endHold);
+  trigger.addEventListener('pointercancel', endHold);
+  trigger.addEventListener('pointerleave', endHold);
+
+  close.addEventListener('click', relock);
+
+  // keypad demo behavior
+  document.querySelectorAll('#calc-pad .calc-key').forEach(k=>{
+    k.addEventListener('click', ()=>{
+      const key = k.dataset.key;
+      if(!key) return;
+      if(key === 'AC') return setVal('0');
+      if(key === '+/-') return setVal(value.startsWith('-') ? value.slice(1) : ('-'+value));
+      if(value === '0' && key !== '.') setVal(key);
+      else setVal(value + key);
+    });
+  });
+})();
+
+/* ------------------- Holiday (boot + particles) ------------------- */
+const holiday = {
+  booted:false,
+  running:false,
+  raf:null,
+  canvas:null,
+  ctx:null,
+  w:0,h:0,
+  input:{x:-1000,y:-1000,active:false},
+  particles:[],
+  count:150,
+  touchDist:230,
+  connectDist:115
+};
+
+function fnvHash(input){
+  let h = 2166136261;
+  for (let i=0;i<input.length;i++){ h ^= input.charCodeAt(i); h = Math.imul(h,16777619); }
+  return ("0000000"+(h>>>0).toString(16)).slice(-8).toUpperCase();
+}
+function nowStamp(){
+  const d=new Date(); const pad=n=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+const HOLIDAY_KEY="syvaq_holiday_receipt_v2";
+function makeReceipt(){
+  const stamp=nowStamp();
+  const base=`LILLY|SYVAQ|HOLIDAY|${stamp}|AVC`;
+  const id=`SYV-${fnvHash(base)}-${fnvHash(base.split("").reverse().join(""))}`;
+  return {id, stamp, sealed:false};
+}
+function loadReceipt(){ try{ return JSON.parse(localStorage.getItem(HOLIDAY_KEY)); }catch(e){ return null; } }
+function saveReceipt(r){ localStorage.setItem(HOLIDAY_KEY, JSON.stringify(r)); }
+let RECEIPT = loadReceipt() || makeReceipt();
+saveReceipt(RECEIPT);
+
+function renderReceipt(){
+  document.getElementById('holiday-receipt-id').textContent = RECEIPT.id;
+  document.getElementById('holiday-receipt-time').textContent = RECEIPT.stamp;
+  document.getElementById('holiday-pill').textContent = RECEIPT.sealed ? 'SEALED' : 'UNSEALED';
+  document.getElementById('holiday-status-val').textContent = RECEIPT.sealed ? 'ALL CLEAR' : 'PENDING STABILIZATION';
+}
+renderReceipt();
+
+document.getElementById('holiday-seal').addEventListener('click', ()=>{
+  RECEIPT.sealed=true; saveReceipt(RECEIPT); renderReceipt(); showToast('Receipt sealed.');
+});
+document.getElementById('holiday-reset').addEventListener('click', ()=>{
+  holiday.particles.forEach(p=>p.reset(false));
+  document.getElementById('holiday-proof-card').classList.remove('visible');
+  document.getElementById('holiday-msg-1').classList.remove('visible');
+  document.getElementById('holiday-msg-2').classList.remove('visible');
+  document.getElementById('holiday-hint').style.display='';
+  document.getElementById('holiday-net-stat').textContent='CHAOS DETECTED';
+  document.getElementById('holiday-status-val').textContent='PENDING STABILIZATION';
+  showToast('Noise restored.');
+});
+document.getElementById('holiday-download').addEventListener('click', ()=>{
+  // quick PNG (small)
+  const w=1080,h=1350;
+  const c=document.createElement('canvas'); c.width=w; c.height=h;
+  const ctx=c.getContext('2d');
+  ctx.fillStyle="#050208"; ctx.fillRect(0,0,w,h);
+  ctx.fillStyle="rgba(157,0,255,0.06)";
+  for(let y=0;y<h;y+=36) for(let x=0;x<w;x+=36){ ctx.beginPath(); ctx.arc(x,y,1,0,Math.PI*2); ctx.fill(); }
+  const pad=92, cx=pad, cy=170, cw=w-pad*2, ch=h-330;
+  roundRect(ctx,cx,cy,cw,ch,18); ctx.fillStyle="rgba(20,10,30,0.88)"; ctx.fill(); ctx.lineWidth=3; ctx.strokeStyle="rgba(212,175,55,0.30)"; ctx.stroke();
+  ctx.font="700 38px ui-monospace, Menlo, monospace"; ctx.fillStyle="#D4AF37"; ctx.fillText("FOUNDER HOLIDAY RECEIPT", cx+44, cy+86);
+  ctx.font="600 26px ui-monospace, Menlo, monospace"; ctx.fillStyle="rgba(255,255,255,0.72)";
+  ctx.fillText(RECEIPT.sealed ? "SEALED" : "UNSEALED", cx+cw-170, cy+86);
+  ctx.font="300 56px -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif";
+  ctx.fillStyle="#fff"; ctx.shadowColor="#9D00FF"; ctx.shadowBlur=22;
+  ctx.fillText("Merry Christmas, Lilly.", cx+44, cy+170); ctx.shadowBlur=0;
+
+  ctx.font="600 26px ui-monospace, Menlo, monospace";
+  const rows=[["ISSUED TO","LILLY SIMPSON"],["COMPANY","SYVAQ"],["GRANT","PERMISSION TO DISCONNECT"],["COVERAGE","HER + HER FAMILY"],["RECEIPT ID",RECEIPT.id],["TIMESTAMP",RECEIPT.stamp]];
+  let ry=cy+420;
+  rows.forEach(([k,v])=>{
+    ctx.fillStyle="rgba(255,255,255,0.58)"; ctx.fillText(k, cx+44, ry);
+    ctx.fillStyle=(k==="GRANT")?"#D4AF37":"rgba(255,255,255,0.92)";
+    const tw=ctx.measureText(v).width;
+    ctx.fillText(v, cx+cw-44-tw, ry);
+    ry+=62;
+  });
+  ctx.setLineDash([10,10]); ctx.strokeStyle="rgba(255,255,255,0.18)"; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(cx+44, cy+ch-180); ctx.lineTo(cx+cw-44, cy+ch-180); ctx.stroke(); ctx.setLineDash([]);
+  ctx.font="64px 'Snell Roundhand', cursive"; ctx.fillStyle="#9D00FF"; ctx.fillText("Allison", cx+cw-290, cy+ch-78);
+
+  const a=document.createElement('a'); a.download=`SYVAQ_Holiday_Receipt_${RECEIPT.id}.png`; a.href=c.toDataURL('image/png'); a.click();
+  showToast('Downloaded PNG.');
+});
+function roundRect(ctx,x,y,w,h,r){
+  const rr=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+rr,y);
+  ctx.arcTo(x+w,y,x+w,y+h,rr);
+  ctx.arcTo(x+w,y+h,x,y+h,rr);
+  ctx.arcTo(x,y+h,x,y,rr);
+  ctx.arcTo(x,y,x+w,y,rr);
+  ctx.closePath();
+}
+
+class HolidayParticle{
+  constructor(hard){ this.reset(hard); }
+  reset(hard){
+    this.x=Math.random()*holiday.w;
+    this.y=Math.random()*holiday.h;
+    const sp=hard?4.2:3.0;
+    this.vx=(Math.random()-0.5)*sp;
+    this.vy=(Math.random()-0.5)*sp;
+    this.size=Math.random()*2.1+0.55;
+    this.state='noise';
+  }
+  update(){
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<0) this.x=holiday.w; if(this.x>holiday.w) this.x=0;
+    if(this.y<0) this.y=holiday.h; if(this.y>holiday.h) this.y=0;
+
+    if(holiday.input.active){
+      const dx=holiday.input.x-this.x, dy=holiday.input.y-this.y;
+      const dist=Math.hypot(dx,dy);
+      if(dist<holiday.touchDist){
+        if(this.state==='noise'){ this.state='harmony'; this.vx*=0.06; this.vy*=0.06; }
+        this.vx += dx*0.00055; this.vy += dy*0.00055;
+      }
+    }
+    if(this.state==='harmony'){ this.vy += 0.0021; this.vx *= 0.989; }
+  }
+  draw(){
+    const ctx=holiday.ctx;
+    ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+    if(this.state==='noise'){
+      ctx.fillStyle="rgba(80,80,90,0.52)";
+      ctx.shadowBlur=0;
+    } else {
+      if(Math.random()>0.42){
+        ctx.fillStyle="rgb(212,175,55)";
+        ctx.shadowColor="rgb(212,175,55)";
+      } else {
+        ctx.fillStyle="rgb(157,0,255)";
+        ctx.shadowColor="rgb(157,0,255)";
+      }
+      ctx.shadowBlur=11;
+    }
+    ctx.fill(); ctx.shadowBlur=0;
+  }
+}
+
+function holidayResize(){
+  holiday.w = holiday.canvas.width = window.innerWidth;
+  holiday.h = holiday.canvas.height = window.innerHeight;
+}
+function bindPointer(el, state){
+  el.addEventListener('pointerdown', (e)=>{
+    state.active=true;
+    state.x=e.clientX; state.y=e.clientY;
+    el.setPointerCapture(e.pointerId);
+    const hint=document.getElementById('holiday-hint');
+    if(hint) hint.style.opacity=0;
+  });
+  el.addEventListener('pointermove', (e)=>{
+    if(!state.active) return;
+    state.x=e.clientX; state.y=e.clientY;
+  });
+  el.addEventListener('pointerup', ()=>{
+    state.active=false; state.x=-1000; state.y=-1000;
+  });
+  el.addEventListener('pointercancel', ()=>{
+    state.active=false; state.x=-1000; state.y=-1000;
+  });
+}
+
+function holidayBoot(){
+  const logs=[
+    "CHECKING SYSTEM HEALTH...",
+    "LOCKING IN FOUNDER CONTEXT...",
+    "HELLO, LILLY.",
+    "SYNCING: SYVAQ HEARTBEAT...",
+    "ACTIVATING HOLIDAY MODE...",
+    "READY."
+  ];
+  const terminal=document.getElementById("holiday-terminal");
+  const logContainer=document.getElementById("holiday-logs");
+  let idx=0;
+
+  function step(){
+    if(idx<logs.length){
+      Array.from(logContainer.children).forEach(c=>c.classList.remove('holiday-log-active'));
+      const div=document.createElement('div');
+      div.className='holiday-log-line holiday-log-active';
+      div.textContent=logs[idx++];
+      logContainer.appendChild(div);
+      setTimeout(step, 520);
+    } else {
+      setTimeout(()=>{
+        terminal.style.opacity='0';
+        setTimeout(()=>terminal.remove(), 650);
+      }, 450);
+    }
+  }
+  step();
+}
+
+function holidayAnimate(){
+  const ctx=holiday.ctx;
+  ctx.fillStyle="rgba(5,2,8,0.24)";
+  ctx.fillRect(0,0,holiday.w,holiday.h);
+
+  let safe=0;
+  for(let i=0;i<holiday.particles.length;i++){
+    const p=holiday.particles[i];
+    p.update(); p.draw();
+    if(p.state==='harmony') safe++;
+  }
+
+  // connect harmony
+  for(let i=0;i<holiday.particles.length;i++){
+    const p=holiday.particles[i];
+    if(p.state!=='harmony') continue;
+    for(let j=i+1;j<holiday.particles.length;j++){
+      const p2=holiday.particles[j];
+      if(p2.state!=='harmony') continue;
+      const d=Math.hypot(p.x-p2.x,p.y-p2.y);
+      if(d<holiday.connectDist){
+        ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y);
+        ctx.strokeStyle="rgba(212,175,55,0.20)";
+        ctx.lineWidth=0.55; ctx.stroke();
+      }
+    }
+  }
+
+  const percent = Math.floor((safe/holiday.count)*100);
+  if(percent>90){
+    document.getElementById('holiday-msg-1').classList.add('visible');
+    document.getElementById('holiday-msg-2').classList.add('visible');
+    document.getElementById('holiday-hint').style.display='none';
+    document.getElementById('holiday-net-stat').innerHTML = "<span style='color:var(--heart-gold)'>ALL CLEAR</span>";
+    document.getElementById('holiday-status-val').textContent = "ALL CLEAR";
+    if(!document.getElementById('holiday-proof-card').classList.contains('visible')){
+      setTimeout(()=>document.getElementById('holiday-proof-card').classList.add('visible'), 600);
+    }
+  }
+
+  // input glow
+  if(holiday.input.active){
+    const g=ctx.createRadialGradient(holiday.input.x,holiday.input.y,0,holiday.input.x,holiday.input.y,holiday.touchDist);
+    g.addColorStop(0, "rgba(157,0,255,0.11)");
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle=g;
+    ctx.beginPath(); ctx.arc(holiday.input.x,holiday.input.y,holiday.touchDist,0,Math.PI*2); ctx.fill();
+  }
+
+  holiday.raf = requestAnimationFrame(holidayAnimate);
+}
+
+function holidayStart(){
+  if(holiday.running) return;
+  holiday.canvas = document.getElementById('holiday-world');
+  holiday.ctx = holiday.canvas.getContext('2d');
+  holidayResize();
+  window.addEventListener('resize', holidayResize);
+
+  bindPointer(holiday.canvas, holiday.input);
+
+  holiday.particles = Array.from({length:holiday.count}, ()=>new HolidayParticle(true));
+  holiday.running=true;
+
+  if(!holiday.booted){ holidayBoot(); holiday.booted=true; }
+  holiday.raf = requestAnimationFrame(holidayAnimate);
+}
+
+function holidayStop(){
+  if(!holiday.running) return;
+  cancelAnimationFrame(holiday.raf);
+  holiday.running=false;
+}
+
+/* ------------------- Vision (hold-to-reveal) ------------------- */
+const vision = {
+  running:false,
+  raf:null,
+  canvas:null,
+  ctx:null,
+  w:0,h:0,
+  input:{x:-1000,y:-1000,active:false},
+  particles:[],
+  charge:0,
+  revealed:false
+};
+
+function visionResize(){
+  vision.w = vision.canvas.width = window.innerWidth;
+  vision.h = vision.canvas.height = window.innerHeight;
+}
+function visionBindPointer(){
+  const el=vision.canvas;
+  el.addEventListener('pointerdown', (e)=>{
+    vision.input.active=true;
+    vision.input.x=e.clientX; vision.input.y=e.clientY;
+    el.setPointerCapture(e.pointerId);
+    document.getElementById('living-hint').style.opacity=0;
+  });
+  el.addEventListener('pointermove', (e)=>{
+    if(!vision.input.active) return;
+    vision.input.x=e.clientX; vision.input.y=e.clientY;
+  });
+  const up=()=>{
+    vision.input.active=false;
+    vision.input.x=-1000; vision.input.y=-1000;
+  };
+  el.addEventListener('pointerup', up);
+  el.addEventListener('pointercancel', up);
+}
+
+class VParticle{
+  constructor(){
+    this.x=Math.random()*window.innerWidth;
+    this.y=Math.random()*window.innerHeight;
+    const a=Math.random()*Math.PI*2;
+    const s=Math.random()*2;
+    this.vx=Math.cos(a)*s;
+    this.vy=Math.sin(a)*s;
+    const colors=["#00F0FF","#FF003C","#FFD700","#FFFFFF"];
+    this.color=colors[Math.floor(Math.random()*colors.length)];
+    this.size=Math.random()*2+1;
+  }
+  update(){
+    this.vx += (Math.random()-0.5)*0.2;
+    this.vy += (Math.random()-0.5)*0.2;
+    this.vx *= 0.95; this.vy *= 0.95;
+
+    if(vision.input.active){
+      const dx=vision.input.x-this.x, dy=vision.input.y-this.y;
+      const dist=Math.hypot(dx,dy);
+      if(dist<260){ this.vx += dx*0.001; this.vy += dy*0.001; }
+    } else if(vision.revealed){
+      const dx=(vision.w/2)-this.x, dy=(vision.h/2)-this.y;
+      this.vx += dx*0.0005; this.vy += dy*0.0005;
+    }
+
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<0) this.x=vision.w; else if(this.x>vision.w) this.x=0;
+    if(this.y<0) this.y=vision.h; else if(this.y>vision.h) this.y=0;
+  }
+  draw(ctx){
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+    ctx.fillStyle=this.color;
+    ctx.fill();
+  }
+}
+
+function visionReveal(){
+  vision.revealed=true;
+  document.getElementById('living-hint').style.display='none';
+  setTimeout(()=>{
+    document.getElementById('living-msg-1').classList.add('visible');
+    document.getElementById('living-msg-2').classList.add('visible');
+    document.getElementById('holo-gift').classList.add('active');
+    vibrate([40,60,40]);
+  }, 350);
+}
+
+function visionAnimate(){
+  const ctx=vision.ctx;
+  ctx.fillStyle="rgba(3,3,5,0.20)";
+  ctx.fillRect(0,0,vision.w,vision.h);
+
+  ctx.globalCompositeOperation='lighter';
+  let near=0;
+  for(const p of vision.particles){
+    p.update();
+    if(vision.input.active && Math.hypot(vision.input.x-p.x, vision.input.y-p.y)<200) near++;
+    p.draw(ctx);
+  }
+  ctx.globalCompositeOperation='source-over';
+
+  if(vision.input.active && !vision.revealed){
+    vision.charge += near * 0.06;
+    const alpha=Math.min(vision.charge/220,1);
+    ctx.beginPath();
+    ctx.arc(vision.input.x, vision.input.y, 50+(vision.charge/3), 0, Math.PI*2);
+    ctx.strokeStyle=`rgba(0,240,255,${alpha})`;
+    ctx.lineWidth=2;
+    ctx.stroke();
+    if(vision.charge>260) visionReveal();
+  } else if(!vision.revealed){
+    vision.charge=Math.max(0, vision.charge-2);
+  }
+
+  vision.raf=requestAnimationFrame(visionAnimate);
+}
+
+function visionStart(){
+  if(vision.running) return;
+  vision.canvas=document.getElementById('living-world');
+  vision.ctx=vision.canvas.getContext('2d');
+  visionResize();
+  window.addEventListener('resize', visionResize);
+  visionBindPointer();
+  vision.particles = Array.from({length:120}, ()=>new VParticle());
+  vision.running=true;
+  vision.raf=requestAnimationFrame(visionAnimate);
+}
+function visionStop(){
+  if(!vision.running) return;
+  cancelAnimationFrame(vision.raf);
+  vision.running=false;
+}
+
+// re-ignite
+document.getElementById('living-reset').addEventListener('click', ()=>{
+  vision.charge=0; vision.revealed=false;
+  document.getElementById('living-msg-1').classList.remove('visible');
+  document.getElementById('living-msg-2').classList.remove('visible');
+  document.getElementById('holo-gift').classList.remove('active');
+  showToast('Re-ignited.');
+});
+</script>
+</body>
+</html>
