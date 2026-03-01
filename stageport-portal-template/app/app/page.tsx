@@ -7,6 +7,7 @@ import PortalFooter from '../../components/PortalFooter';
 const routes = [
   { href: '/kinetic-ledger', label: 'Kinetic Ledger' },
   { href: '/founderos/sandbox', label: 'FounderOS' },
+  { href: '/founder-studios', label: 'Founder StudiOS' },
   { href: '/app/founder', label: 'Founder Dashboard' },
   { href: '/app/sessions', label: 'Sessions' },
   { href: '/app/ledger', label: 'Ledger' },
