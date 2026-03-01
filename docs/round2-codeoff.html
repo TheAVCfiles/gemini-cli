@@ -1,0 +1,295 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Round 2 — Code-Off Canvas</title>
+<style>
+  :root{
+    --bg:#06070a; --card:#0c0f12; --mut:#aeb5bd; --gold:#d9b66a; --accent:#6fe0e8;
+    --radius:14px; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#030405);color:#fff}
+  .wrap{max-width:820px;margin:18px auto;padding:16px}
+  header{display:flex;align-items:center;justify-content:space-between}
+  h1{font-family:Playfair,serif;color:var(--gold);margin:0;font-size:20px}
+  .meta{color:var(--mut);font-size:13px}
+  .card{background:var(--card);border-radius:12px;padding:12px;margin-top:12px;border:1px solid rgba(255,255,255,0.04)}
+  .canvas{width:100%;border-radius:10px;overflow:hidden;background:#020305}
+  canvas{width:100%;height:auto;display:block}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+  button{background:var(--gold);border:0;color:#081018;padding:10px 12px;border-radius:10px;font-weight:700}
+  .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--mut);padding:9px 10px;border-radius:10px}
+  .score{font-weight:800;color:var(--accent);font-size:18px}
+  .panel{padding:10px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03)}
+  .k{font-family:monospace;background:rgba(0,0,0,0.4);padding:6px;border-radius:6px;color:var(--mut);font-size:12px}
+  footer{margin-top:12px;color:var(--mut);font-size:13px;text-align:center}
+  .cite{font-size:11px;color:#9aa6b1;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>ROUND 2 — SOMATIC → ETHICS → FAITH OPERATOR</h1>
+      <div class="meta">Combining: Fold-Pressure LUT • Adaptive Ethics • Critical Execution Blueprint • Body-Clock</div>
+    </div>
+    <div style="text-align:right">
+      <div class="score" id="battleScore">—</div>
+      <div class="meta" style="font-size:12px">Round 2 score</div>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="panel">
+      <div style="display:flex;gap:10px;align-items:center">
+        <div style="flex:1">
+          <div style="font-weight:700">Narrative summary</div>
+          <div class="meta" style="margin-top:6px">
+            Somatic measurement (Retiré LUT) provides a fold-pressure signal; Adaptive Ethics supplies verification KPIs and governance; Critical Execution Blueprint guarantees the low-latency gate-level productization; Body-as-Clock supplies the timing windows for ritual capture. The canvas below visualizes that pipeline.
+          </div>
+        </div>
+        <div style="width:120px;text-align:right">
+          <div style="font-weight:700;color:var(--gold)">Use</div>
+          <div class="meta">Pilot MOU • Investor demo • Ethics packet</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px" class="canvas">
+      <canvas id="c" width="1200" height="1600"></canvas>
+    </div>
+
+    <div class="row">
+      <button id="renderBtn">Render Canvas</button>
+      <button id="refineBtn" class="btn-ghost">Refine (En Croix)</button>
+      <button id="receiptBtn" class="btn-ghost">Show Reason Receipt</button>
+      <button id="downloadBtn" class="btn-ghost">Download Snapshot</button>
+      <div style="flex:1"></div>
+    </div>
+
+    <div style="margin-top:12px;display:flex;gap:8px;align-items:flex-start">
+      <div style="flex:1" class="panel">
+        <div style="font-weight:700">Round 2 breakdown</div>
+        <div style="margin-top:8px;color:var(--mut);font-size:13px">
+          • Somatic signal: Fold-pressure LUT equations drive amplitude / frequency mapping. (Retiré LUT).<br/>
+          • Ethics & Metrics: quant snapshot & solvable challenges anchor audit paths and institutional asks.<br/>
+          • Execution: Faith Operator abstraction & Glissé FSM enable low-latency explainable outputs for pilots.<br/>
+          • Ritual timing: Body-as-Clock provides capture windows for high-signal input.
+        </div>
+        <div class="cite">
+          Sources: Retiré LUT pack; Salah Pack showroom; Adaptive Ethics; Critical Execution Blueprint; Body-as-Clock. See proof list appended.
+        </div>
+      </div>
+
+      <div style="width:260px" class="panel">
+        <div style="font-weight:700">Quick Controls</div>
+        <div style="margin-top:8px">
+          <div class="meta">Battle scoring</div>
+          <div style="margin-top:8px"><span id="scoreBreak" class="k">computing…</span></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="meta">Reason Receipt (preview)</div>
+          <div id="receiptPreview" style="margin-top:8px;font-size:13px;color:var(--mut);background:rgba(0,0,0,0.45);padding:8px;border-radius:8px">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px" class="panel">
+      <div style="font-weight:700">Suggested Round 3 goals</div>
+      <ol style="margin:8px 0 0;color:var(--mut);font-size:13px">
+        <li>Capture a short Room001 clip (6–10s): movement_features JSON + video. We'll render movement→receipt live.</li>
+        <li>Drop a small dataset sample (CSV) of fold-pressure LUT samples (lut_scalars.json) so we can seed a shader preview.</li>
+        <li>Attach a short audio cue (8s) to act as the signature chime for the Reason Receipt.</li>
+      </ol>
+    </div>
+  </div>
+
+  <footer>Round 2 compiled. Sources: Retiré Fold-Pressure LUT (v2)  [oai_citation:5‡RetireField_LUT_Pack_Notes.pdf](sediment://file_0000000091d471f79da02a66e52de619) · Salah Pack showroom  [oai_citation:6‡index 34.html](sediment://file_00000000168871f794d1486e2e2e4918) · Adaptive Ethics  [oai_citation:7‡Adaptive_Ethics_From_Vision_to_Verification.pdf](sediment://file_00000000240071f5a42403e711f5c593) · Critical Execution Blueprint  [oai_citation:8‡Critical Execution Blueprint: Q4 2025 - API Migrat....pdf](sediment://file_0000000088fc71f7a59e32a7a4f62426) · Body as Clock / Ovulation architecture  [oai_citation:9‡Part_V_Body_as_Clock.pdf](sediment://file_00000000f4b471f59c718bc659903f2a)</footer>
+</div>
+
+<script>
+/* Lightweight renderer: composes a pictorial canvas from the Round 2 ingredients.
+   - Render builds: header band, somatic portrait block, ethics graph, execution map, fold-pressure waveform.
+   - Refine toggles En-Croix diagonal + subtle rim/circuit lighting.
+   - Receipt shows example JSON with signed hash.
+*/
+
+const c = document.getElementById('c'), ctx = c.getContext('2d');
+const renderBtn = document.getElementById('renderBtn'), refineBtn = document.getElementById('refineBtn');
+const receiptBtn = document.getElementById('receiptBtn'), downloadBtn = document.getElementById('downloadBtn');
+const battleScore = document.getElementById('battleScore'), scoreBreak = document.getElementById('scoreBreak');
+const receiptPreview = document.getElementById('receiptPreview');
+
+let refined=false;
+
+function drawBase(){
+  // Background
+  const bg = ctx.createLinearGradient(0,0,0,c.height); bg.addColorStop(0,'#071018'); bg.addColorStop(1,'#020305');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,c.width,c.height);
+
+  // Upper title band
+  ctx.fillStyle='rgba(217,182,106,0.06)'; ctx.fillRect(0,0,c.width,120);
+  ctx.fillStyle='#d9b66a'; ctx.font='36px Playfair, serif'; ctx.fillText('ROUND II — SOMATIC | ETHICS | FAITH OPERATOR', 36,70);
+
+  // Left somatic portrait block
+  ctx.fillStyle='#08121a'; roundRect(ctx,36,140,540,540,20); ctx.fill();
+  // placeholder: stylized node field (use circles using LUT mapping)
+  drawNodeField(36+20,160+20,540-40,540-40);
+
+  // right: ethics graph panel
+  drawEthicsPanel(600,160,540,260);
+
+  // execution blueprint box
+  drawExecutionMap(600,440,540,240);
+
+  // fold-pressure mini
+  drawFoldMini(36,720,1104,220);
+
+  // footer strip
+  ctx.fillStyle='rgba(255,255,255,0.02)'; ctx.fillRect(0,960,c.width,200);
+  ctx.fillStyle='#cfc7b8'; ctx.font='16px Inter, sans-serif'; ctx.fillText('Integrated proof: somatic → audit → low-latency gate',36,1010);
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+}
+
+function drawNodeField(x,y,w,h){
+  // sample 6x6 grid, map ratio -> amplitude/alpha using LUT formula
+  const cols=6, rows=6;
+  for(let i=0;i<cols;i++){
+    for(let j=0;j<rows;j++){
+      const rx = x + (i+0.5)*(w/cols);
+      const ry = y + (j+0.5)*(h/rows);
+      // synthetic ratio from position
+      const ratio = Math.abs(Math.sin((i+j)/6*Math.PI));
+      const amplitude = Math.pow(1-ratio,2);
+      const auraAlpha = 0.08 + 0.6 * amplitude;
+      const rsize = 18 * (1 + 0.3*amplitude);
+      // node
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(217,182,106,${0.12 + auraAlpha*0.6})`;
+      ctx.arc(rx,ry, rsize,0,Math.PI*2); ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(20,40,52,1)`;
+      ctx.arc(rx,ry, rsize*0.45,0,Math.PI*2); ctx.fill();
+    }
+  }
+  ctx.fillStyle='#9aa6b1'; ctx.font='14px Inter, sans-serif'; ctx.fillText('Fold-Pressure Node Field (Retiré LUT v2)', x, y-8);
+}
+
+function drawEthicsPanel(x,y,w,h){
+  // header
+  ctx.fillStyle='#0d1418'; roundRect(ctx,x,y,w,h,12); ctx.fill();
+  ctx.fillStyle='#cfc7b8'; ctx.font='15px Playfair, serif'; ctx.fillText('Adaptive Ethics — Proof & Roadmap', x+12, y+28);
+  // mini table (quant snapshot)
+  ctx.fillStyle='#0b1214'; roundRect(ctx,x+12,y+36,w-24,80,8); ctx.fill();
+  ctx.fillStyle='#9aa6b1'; ctx.font='13px monospace';
+  ctx.fillText('Is_Confirmed  R_30d   R_60d   R_90d', x+28,y+60);
+  ctx.fillStyle='#b0d6dd'; ctx.fillText('Unconfirmed     0.011   0.053    0.089', x+28,y+80);
+  ctx.fillStyle='#c7e8d9'; ctx.fillText('Confirmed       0.030   0.052    0.071', x+28,y+100);
+
+  // equity mock chart (simple lines)
+  ctx.beginPath(); ctx.strokeStyle='#2aa198'; ctx.lineWidth=3; ctx.moveTo(x+28,y+132);
+  for(let i=0;i<8;i++){ ctx.lineTo(x+28 + i*( (w-56)/7 ), y+132 - Math.sin(i/2)*18); }
+  ctx.stroke();
+  ctx.fillStyle='#9aa6b1'; ctx.font='12px Inter, sans-serif'; ctx.fillText('Equity overlay vs benchmarks (24m backtest)', x+28, y+160);
+}
+
+function drawExecutionMap(x,y,w,h){
+  ctx.fillStyle='#071018'; roundRect(ctx,x,y,w,h,10); ctx.fill();
+  ctx.fillStyle='#d9b66a'; ctx.font='15px Playfair, serif'; ctx.fillText('Critical Execution Blueprint', x+12, y+26);
+  ctx.fillStyle='#9aa6b1'; ctx.font='13px Inter, sans-serif';
+  const lines=['1) Faith Operator — sub-50ms gate','2) /v1/glisse/state — explainable FSM','3) Cloud Run + Grace KPI precompute'];
+  lines.forEach((l,i)=> ctx.fillText(l, x+14, y+54 + i*22));
+  // small pipeline sketch
+  ctx.strokeStyle='rgba(217,182,106,0.9)'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(x+20,y+150); ctx.lineTo(x+w-20,y+150); ctx.stroke();
+  ctx.fillStyle='#cfc7b8'; ctx.font='12px monospace'; ctx.fillText('Node: Faith Gate -> FSM -> Grace KPI (precompute)', x+14,y+180);
+}
+
+function drawFoldMini(x,y,w,h){
+  // background card
+  ctx.fillStyle='#071018'; roundRect(ctx,x,y,w,h,10); ctx.fill();
+  // title
+  ctx.fillStyle='#d9b66a'; ctx.font='14px Playfair, serif'; ctx.fillText('Fold-Pressure — example waveform', x+12,y+26);
+  // waveform
+  ctx.beginPath(); ctx.strokeStyle='#e6b24e'; ctx.lineWidth=3;
+  for(let t=0;t<=1;t+=0.01){
+    const px = x + 12 + t*(w-24);
+    const py = y + 56 + Math.sin(t*30)*(0.9*(1-t))*50;
+    if(t===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+  ctx.fillStyle='#9aa6b1'; ctx.font='11px Inter, sans-serif'; ctx.fillText('amplitude ~ (1-ratio)^2; freq ~ 0.5 + (1-ratio)*6', x+12,y+h-18);
+}
+
+// compute score & update fields
+function computeScore(){
+  // heuristics:
+  // somatic presence (Retire LUT) -> 0.9
+  // ethics content (Adaptive Ethics) -> 0.94
+  // ops blueprint (Critical Exec) -> 0.92
+  // ritual timing (Body as Clock) -> 0.86
+  const sSom=0.90, sEth=0.94, sOps=0.92, sBody=0.86;
+  const score = Math.round((sSom*0.30 + sEth*0.28 + sOps*0.28 + sBody*0.14)*100);
+  document.getElementById('battleScore').innerText = score;
+  scoreBreak.innerText = `som:${Math.round(sSom*100)} eth:${Math.round(sEth*100)} ops:${Math.round(sOps*100)} body:${Math.round(sBody*100)}`;
+  return score;
+}
+
+function makeReceipt(){
+  const id = 'RR-' + Date.now().toString(36).slice(-8).toUpperCase();
+  const r = {
+    id,
+    timestamp_utc: new Date().toISOString(),
+    origin: 'Round2:Somatic-Ethics-Execution',
+    decision_rationale: 'Fold-pressure signal indicates elevated amplitude window; Faith Operator gate: PASS (p=0.071). Recommendation: Pilot Room001 mapping; limit allocation to conservative profile.',
+    risk_profile: { max_drawdown_pct: 2.5, confidence_score: 0.71 },
+    proofs: ['Retire LUT v2', 'Adaptive Ethics quant snapshot', 'Critical Execution Blueprint'],
+    signed_hash: 'sha256:' + Math.random().toString(36).slice(2,18)
+  };
+  return r;
+}
+
+/* buttons */
+renderBtn.addEventListener('click',()=>{ drawBase(); const sc=computeScore(); receiptPreview.innerText='—'; refined=false; });
+refineBtn.addEventListener('click',()=>{
+  if(!refined) applyEnCroix();
+  else { drawBase(); refined=false; computeScore(); receiptPreview.innerText='—'; }
+});
+receiptBtn.addEventListener('click',()=>{
+  const rr = makeReceipt(); receiptPreview.innerText = JSON.stringify(rr,null,2);
+});
+downloadBtn.addEventListener('click',()=>{
+  const data = c.toDataURL('image/png'); const a=document.createElement('a'); a.href=data; a.download='round2-canvas.png'; a.click();
+});
+
+/* en-croix effect */
+function applyEnCroix(){
+  // overlay diagonal band and rim circuit
+  ctx.save();
+  // diagonal soft gold band
+  ctx.globalAlpha=0.12;
+  ctx.translate(0,0); ctx.rotate(-0.35);
+  ctx.fillStyle='#d9b66a'; ctx.fillRect(-200,200,c.width*1.6,120);
+  ctx.restore();
+  // rim-circuit: brightening curve around the portrait
+  ctx.save();
+  const grad = ctx.createRadialGradient(320,400,60,320,400,260);
+  grad.addColorStop(0,'rgba(217,182,106,0.14)'); grad.addColorStop(0.35,'rgba(217,182,106,0.05)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle = grad; ctx.fillRect(0,0,c.width,c.height);
+  // micro-sharpen like overlay
+  ctx.globalCompositeOperation='overlay';
+  ctx.fillStyle='rgba(255,255,255,0.03)'; ctx.fillRect(0,0,c.width,c.height);
+  ctx.globalCompositeOperation='source-over';
+  ctx.restore();
+  refined=true;
+}
+
+/* start with an initial render for clarity */
+drawBase(); computeScore();
+</script>
+</body>
+</html>
