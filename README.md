@@ -126,3 +126,13 @@ README.md
 - Re-run an ingest check with the Conflict Agent before publishing.
 - Redeploy on Netlify after updating the dataset or UI.
 - Rotate API keys and store them only in Netlify/GCF environment variables.
+
+---
+
+## 📦 Residency & funding deliverables
+
+Use `python scripts/build_residency_package.py` to assemble a polished submission
+bundle for DeCrypt The Girl residency, partnership, or capital opportunities. The
+script generates a one-page PDF summary, optional manifest, and a ready-to-send
+ZIP archive containing the curated artefacts you provide. See
+[`docs/residency_package.md`](docs/residency_package.md) for detailed usage.
