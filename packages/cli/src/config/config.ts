@@ -17,6 +17,7 @@ import type {
   MCPServerConfig,
 } from '@google/gemini-cli-core';
 import { extensionsCommand } from '../commands/extensions.js';
+import { profitCommand } from '../commands/profit.js';
 import {
   Config,
   loadServerHierarchicalMemory,
@@ -292,7 +293,8 @@ export async function parseArguments(settings: Settings): Promise<CliArgs> {
         }),
     )
     // Register MCP subcommands
-    .command(mcpCommand);
+    .command(mcpCommand)
+    .command(profitCommand);
 
   if (settings?.experimental?.extensionManagement ?? false) {
     yargsInstance.command(extensionsCommand);
