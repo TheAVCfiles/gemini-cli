@@ -1,0 +1,26 @@
+name: Auto-Sell SaaS Products
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 3 * * *"
+
+jobs:
+  build-and-sell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pip install stripe jinja2 pyyaml
+      - name: Package and Publish
+        run: python package_and_publish.py
+      - name: Generate Storefront
+        run: python saas_auto_landing.py
+      - name: Deploy to GitHub Pages
+        run: |
+          mkdir -p public
+          cp saas_auto_landing.html public/index.html
+          touch public/.nojekyll
+          git add public
+          git commit -m "Auto-update storefront"
+          git push
