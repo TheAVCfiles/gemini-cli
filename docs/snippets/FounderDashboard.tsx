@@ -68,8 +68,17 @@ async function hashTransition(from: OpState, to: OpState, event: string): Promis
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text }),
   });
-  const data = await res.json();
-  return data.sha256 as string;
+  const data: { sha256?: unknown } = await res.json();
+  const rawSha256 = data.sha256;
+  const sha256 = typeof rawSha256 === "string" && rawSha256.trim().length > 0 ? rawSha256.trim() : null;
+
+  if (!sha256) {
+    throw new Error(
+      `hashTransition: invalid sha256 returned from /api/documents/hash (event=${event})`
+    );
+  }
+
+  return sha256;
 }
 
 async function notarizeTransition(hash: string, eventType: string): Promise<void> {
@@ -124,8 +133,9 @@ export default function FounderDashboard() {
   const isLoading = documentsQuery.isLoading || ledgerQuery.isLoading;
 
   const journeyLedgerCount = journeyLedgerQuery.data?.length ?? 0;
+  const totalSteps = founderSteps.length;
   const journeyStepIdx = getStepIndex(journeyState);
-  const completedSteps = journeyStepIdx;
+  const completedSteps = Math.min(journeyStepIdx, totalSteps);
   const regime = runRegime(velocity);
 
   const fireTransition = useCallback(
@@ -138,6 +148,7 @@ export default function FounderDashboard() {
         await notarizeTransition(hash, event);
         setOpState(next);
         queryClient.invalidateQueries({ queryKey: ["/api/ledger"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/ledger/founder_journey"] });
       } finally {
         setIsNotarizing(false);
       }
@@ -306,13 +317,13 @@ export default function FounderDashboard() {
                     {founderSteps[getStepIndex(journeyState)]?.label ?? "Complete"}
                   </p>
                   <p className="text-xs text-muted-foreground font-light mt-1">
-                    {completedSteps} of 5 steps notarized · {journeyLedgerCount} ledger events
+                    {completedSteps} of {totalSteps} steps notarized · {journeyLedgerCount} ledger events
                   </p>
                 </div>
                 <div className="w-full bg-muted rounded-full h-1.5">
                   <div
                     className="bg-primary h-1.5 rounded-full transition-all duration-500"
-                    style={{ width: `${(completedSteps / 5) * 100}%` }}
+                    style={{ width: `${totalSteps === 0 ? 0 : (completedSteps / totalSteps) * 100}%` }}
                     data-testid="progress-journey"
                   />
                 </div>
