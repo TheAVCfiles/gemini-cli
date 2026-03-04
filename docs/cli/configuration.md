@@ -284,6 +284,35 @@ The following settings remain at the top level of the `settings.json` file.
       - `includeTools` (array of strings, optional): List of tool names to include from this MCP server. When specified, only the tools listed here will be available from this server (whitelist behavior). If not specified, all tools from the server are enabled by default.
       - `excludeTools` (array of strings, optional): List of tool names to exclude from this MCP server. Tools listed here will not be available to the model, even if they are exposed by the server. **Note:** `excludeTools` takes precedence over `includeTools` - if a tool is in both lists, it will be excluded.
 
+
+##### Example: connect to Notion MCP (remote HTTP)
+
+If you want Gemini CLI to discover Notion tools via MCP, add a `mcpServers` entry using the remote HTTP endpoint:
+
+```json
+{
+  "mcpServers": {
+    "notion": {
+      "httpUrl": "https://mcp.notion.com/mcp"
+    }
+  }
+}
+```
+
+For older MCP clients that require Server-Sent Events (SSE), you can use the `url` field instead:
+
+```json
+{
+  "mcpServers": {
+    "notion": {
+      "url": "https://mcp.notion.com/sse"
+    }
+  }
+}
+```
+
+After adding either configuration, restart Gemini CLI and run `/mcp` to confirm server discovery. If authentication is required, run `/mcp auth notion`.
+
 - **`telemetry`** (object)
   - **Description:** Configures logging and metrics collection for Gemini CLI. For more information, see [Telemetry](../telemetry.md).
   - **Default:** `undefined`
