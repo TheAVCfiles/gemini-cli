@@ -73,7 +73,7 @@ def block_bootstrap_tau_ci(
     block_size: int = 5,
     n_bootstrap: int = 1000,
     alpha: float = 0.05,
-    random_seed: int | None = 7,
+    random_seed: int | None = None,
 ) -> BootstrapResult:
     x_arr = _as_array(x)
     y_arr = _as_array(y)
