@@ -1,0 +1,34 @@
+{
+  "name": "MomentProtocol_ENGINE_v2",
+  "prima_profile": {
+    "line": 0.9,
+    "power": 0.4,
+    "revelation": 0.4
+  },
+  "elements": [
+    {
+      "id": "specs",
+      "type": "spec",
+      "files": [
+        "../engine/README.md"
+      ],
+      "description": "Navigation for Moment Protocol specs, Founding Faculty OS, and PrimaStack OS."
+    },
+    {
+      "id": "moments_schema",
+      "type": "schema",
+      "files": [
+        "../moments_schema.json"
+      ],
+      "description": "JSON schema for mapping dancers to guaranteed moments."
+    },
+    {
+      "id": "example_piece",
+      "type": "example",
+      "files": [
+        "../examples/tween_piece_template.json"
+      ],
+      "description": "Reference payload showing technical, performance, and relational moments."
+    }
+  ]
+}

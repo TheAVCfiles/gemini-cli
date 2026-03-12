@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Moment Protocol Piece Schema",
+  "type": "object",
+  "required": ["piece_id", "title", "level", "dancers", "moments"],
+  "properties": {
+    "piece_id": {
+      "type": "string",
+      "description": "Stable identifier for the piece (e.g., SPRING_SHOW_2026_TWEEN_01)."
+    },
+    "title": {
+      "type": "string",
+      "description": "Working or final title for the piece."
+    },
+    "level": {
+      "type": "string",
+      "description": "Level or cohort for the cast (e.g., Tween / Level 2-3)."
+    },
+    "dancers": {
+      "type": "array",
+      "description": "Roster of dancers and their mapped moments.",
+      "items": {
+        "type": "object",
+        "required": ["name", "role", "moment_id"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Dancer name or roster ID."
+          },
+          "role": {
+            "type": "string",
+            "description": "Staging shorthand such as line_1, center_kid, swing." 
+          },
+          "moment_id": {
+            "type": "string",
+            "description": "Identifier of the dancer’s allocated moment."
+          },
+          "understudy_for": {
+            "type": "string",
+            "description": "Optional link to a dancer they cover if absent."
+          }
+        }
+      }
+    },
+    "moments": {
+      "type": "array",
+      "description": "Defined moments that must be allocated before the piece is considered complete.",
+      "items": {
+        "type": "object",
+        "required": ["moment_id", "type", "music_timestamp", "staging", "requirements"],
+        "properties": {
+          "moment_id": {
+            "type": "string",
+            "description": "Stable identifier referenced by dancers." 
+          },
+          "type": {
+            "type": "string",
+            "enum": ["technical", "performance", "relational"],
+            "description": "Category of moment to balance the piece." 
+          },
+          "music_timestamp": {
+            "type": "string",
+            "description": "Timecode or counts for the moment (e.g., 01:12-01:18)."
+          },
+          "staging": {
+            "type": "string",
+            "description": "Plain-language staging direction for quick blocking recall." 
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Attendance, focus, and communication contracts tied to the moment."
+          },
+          "notes": {
+            "type": "string",
+            "description": "Context, emotional intent, or reminders for assistants." 
+          }
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Optional tags such as showcase, festival, or adaptive_ethics." 
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional metadata for lineage tracking or billing hooks.",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Semantic version for the piece record." 
+        },
+        "created_by": {
+          "type": "string",
+          "description": "Creator or assistant responsible for the entry." 
+        },
+        "last_updated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp for last edit." 
+        }
+      }
+    }
+  }
+}
