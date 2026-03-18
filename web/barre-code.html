@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Barre Code - Digital Dance & Performing Arts Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --surface: #0b1220;
+        --surface-light: #101b33;
+        --accent: linear-gradient(135deg, #f97316, #facc15);
+        --accent-solid: #f97316;
+        --accent-soft: rgba(249, 115, 22, 0.1);
+        --text: #f8fafc;
+        --text-soft: #cbd5f5;
+        --card: rgba(15, 23, 42, 0.66);
+        --card-border: rgba(148, 163, 184, 0.2);
+        --divider: rgba(100, 116, 139, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: radial-gradient(circle at top left, #172554 0%, #020617 60%, #020617 100%);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: linear-gradient(90deg, rgba(8, 12, 24, 0.95), rgba(10, 16, 28, 0.7));
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--divider);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem clamp(1.25rem, 4vw, 3rem);
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .brand {
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        font-size: 1.15rem;
+      }
+
+      nav ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      nav a {
+        color: var(--text-soft);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease, text-shadow 0.2s ease;
+      }
+
+      nav a:hover,
+      nav a:focus {
+        color: #fff;
+        text-shadow: 0 0 18px rgba(255, 255, 255, 0.55);
+      }
+
+      main {
+        padding: clamp(1.5rem, 4vw, 3rem);
+      }
+
+      section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: clamp(2.5rem, 4vw, 4rem) clamp(0rem, 2vw, 1.5rem);
+        border-radius: 28px;
+        background: rgba(9, 12, 24, 0.6);
+        border: 1px solid rgba(51, 65, 85, 0.35);
+        box-shadow: 0 32px 80px rgba(15, 23, 42, 0.35);
+        backdrop-filter: blur(18px);
+      }
+
+      section + section {
+        margin-top: clamp(2rem, 4vw, 3.5rem);
+      }
+
+      .hero {
+        background: linear-gradient(125deg, rgba(15, 23, 42, 0.9), rgba(30, 64, 175, 0.7));
+        display: grid;
+        gap: 2.5rem;
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-family: "Space Grotesk", sans-serif;
+        letter-spacing: -0.02em;
+      }
+
+      .hero p {
+        margin: 0;
+        font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+        color: var(--text-soft);
+        line-height: 1.7;
+        max-width: 640px;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        padding: 0.85rem 1.5rem;
+        border-radius: 999px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #0b1220;
+        box-shadow: 0 20px 40px rgba(249, 115, 22, 0.25);
+      }
+
+      .btn-outline {
+        background: rgba(2, 6, 23, 0.5);
+        border: 1px solid rgba(226, 232, 240, 0.45);
+        color: #fff;
+      }
+
+      .btn:hover,
+      .btn:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 36px rgba(226, 232, 240, 0.2);
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        color: rgba(226, 232, 240, 0.65);
+        text-transform: uppercase;
+        margin-bottom: 0.75rem;
+        display: inline-block;
+      }
+
+      h2 {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(2rem, 4vw, 2.75rem);
+        letter-spacing: -0.01em;
+        margin-bottom: 0.75rem;
+      }
+
+      .subhead {
+        color: var(--text-soft);
+        font-size: 1.05rem;
+        max-width: 680px;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+      }
+
+      .card-grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      @media (min-width: 720px) {
+        .card-grid.columns-2 {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .card-grid.columns-3 {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .card {
+        position: relative;
+        padding: 1.75rem;
+        border-radius: 24px;
+        border: 1px solid var(--card-border);
+        background: linear-gradient(160deg, rgba(15, 23, 42, 0.85), rgba(8, 12, 24, 0.6));
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+        transition: transform 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(248, 250, 252, 0.35);
+        box-shadow: 0 24px 45px rgba(15, 23, 42, 0.45);
+      }
+
+      .card-emoji {
+        font-size: 2rem;
+        display: inline-flex;
+        width: 3rem;
+        height: 3rem;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        background: rgba(30, 64, 175, 0.25);
+        margin-bottom: 1rem;
+      }
+
+      .card h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.3rem;
+      }
+
+      .card p {
+        margin: 0;
+        color: rgba(226, 232, 240, 0.75);
+        line-height: 1.6;
+      }
+
+      .judge-grid {
+        display: grid;
+        gap: 1.25rem;
+      }
+
+      @media (min-width: 900px) {
+        .judge-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .judge-card {
+        text-align: center;
+        padding: 2rem 1.5rem;
+        border-radius: 24px;
+        border: 1px solid rgba(94, 234, 212, 0.25);
+        background: linear-gradient(160deg, rgba(13, 25, 48, 0.9), rgba(10, 30, 46, 0.7));
+        position: relative;
+        overflow: hidden;
+      }
+
+      .judge-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at top center, rgba(56, 189, 248, 0.25), transparent 60%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 0;
+      }
+
+      .judge-card:hover::after {
+        opacity: 1;
+      }
+
+      .judge-card span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.25rem;
+        height: 3.25rem;
+        border-radius: 999px;
+        background: rgba(59, 130, 246, 0.2);
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .judge-card h3 {
+        margin: 0 0 0.25rem;
+        font-size: 1.35rem;
+        letter-spacing: 0.03em;
+        position: relative;
+        z-index: 1;
+      }
+
+      .judge-card p {
+        margin: 0;
+        color: rgba(226, 232, 240, 0.7);
+        position: relative;
+        z-index: 1;
+      }
+
+      .cta-panel {
+        margin-top: 2rem;
+        border-radius: 24px;
+        padding: 2rem;
+        background: linear-gradient(130deg, rgba(249, 115, 22, 0.18), rgba(59, 130, 246, 0.18));
+        border: 1px solid rgba(252, 211, 77, 0.45);
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .cta-panel h3 {
+        margin: 0;
+        font-size: 1.65rem;
+      }
+
+      .therapy {
+        display: grid;
+        gap: 2rem;
+      }
+
+      @media (min-width: 960px) {
+        .therapy {
+          grid-template-columns: 1.1fr 0.9fr;
+          align-items: start;
+        }
+      }
+
+      .therapy-card {
+        padding: 2rem;
+        border-radius: 28px;
+        background: linear-gradient(160deg, rgba(22, 163, 74, 0.35), rgba(2, 6, 23, 0.9));
+        border: 1px solid rgba(134, 239, 172, 0.45);
+        box-shadow: 0 32px 70px rgba(34, 197, 94, 0.2);
+      }
+
+      .therapy-card h3 {
+        margin: 0 0 0.4rem;
+        font-size: 1.75rem;
+        letter-spacing: 0.02em;
+      }
+
+      .therapy-card p {
+        margin: 0;
+        color: rgba(226, 232, 240, 0.8);
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+      }
+
+      .metric {
+        text-align: center;
+        padding: 1.5rem;
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.55);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .metric .value {
+        font-size: 2rem;
+        font-family: "Space Grotesk", sans-serif;
+        margin-bottom: 0.35rem;
+        display: block;
+      }
+
+      .components {
+        display: grid;
+        gap: 1rem;
+      }
+
+      @media (min-width: 720px) {
+        .components {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .component-card {
+        padding: 1.5rem;
+        border-radius: 22px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      footer {
+        padding: 2.5rem clamp(1.5rem, 4vw, 3rem) 3rem;
+        text-align: center;
+        color: rgba(148, 163, 184, 0.8);
+      }
+
+      footer nav {
+        margin-bottom: 1.5rem;
+      }
+
+      footer nav ul {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem 1.5rem;
+      }
+
+      footer nav a {
+        color: rgba(148, 163, 184, 0.8);
+        font-size: 0.95rem;
+      }
+
+      footer nav a:hover,
+      footer nav a:focus {
+        color: #fff;
+      }
+
+      @media (max-width: 720px) {
+        header {
+          position: static;
+        }
+
+        nav ul {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="nav">
+        <div class="brand">BARRE CODE</div>
+        <nav aria-label="Primary navigation">
+          <ul>
+            <li><a href="#programs">Programs</a></li>
+            <li><a href="#ai-judges">AI Judges</a></li>
+            <li><a href="#therapy">8765 Therapy</a></li>
+            <li><a href="#corporate">Corporate</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="about">
+        <div>
+          <span class="label">Digital Dance &amp; Performing Arts Studio</span>
+          <h1>Decode Your Movement</h1>
+          <p>
+            Where technology, narrative design, and the physics of dance converge into a single embodied
+            language.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#programs">Explore Classes</a>
+          <a class="btn btn-outline" href="#therapy">8765 Therapy</a>
+          <a class="btn btn-outline" href="#ai-judges">AI Judges</a>
+        </div>
+      </section>
+
+      <section id="programs">
+        <span class="label">Our Programs</span>
+        <h2>Neurodivergent-friendly, whole-child concept programs</h2>
+        <p class="subhead">
+          Merge technology, storytelling, and embodied practice through modular curriculum built for dancers at
+          every stage.
+        </p>
+        <div class="card-grid columns-3">
+          <article class="card">
+            <div class="card-emoji" aria-hidden="true">💫</div>
+            <h3>Movement as Linguistic Code</h3>
+            <p>Read choreography like a living script you can annotate, remix, and perform.</p>
+          </article>
+          <article class="card">
+            <div class="card-emoji" aria-hidden="true">🧬</div>
+            <h3>Applied Physics &amp; Mathematics</h3>
+            <p>Break phrases into force vectors, timing ratios, and spatial geometry with live visualizations.</p>
+          </article>
+          <article class="card">
+            <div class="card-emoji" aria-hidden="true">📖</div>
+            <h3>Narrative Architecture</h3>
+            <p>Build story-driven dance chapters and share modular scores with your ensemble.</p>
+          </article>
+          <article class="card" id="therapy">
+            <div class="card-emoji" aria-hidden="true">🎭</div>
+            <h3>8765: Adult Ballet Inversion</h3>
+            <p>Reverse, reclaim, and rise with a signature reset for former dancers.</p>
+          </article>
+          <article class="card" id="corporate">
+            <div class="card-emoji" aria-hidden="true">🏢</div>
+            <h3>Ballet Intelligence for Business</h3>
+            <p>Translate classical precision into creative strategy for high-performance teams.</p>
+          </article>
+          <article class="card">
+            <div class="card-emoji" aria-hidden="true">🤖</div>
+            <h3>Tech-Driven Learning Lab</h3>
+            <p>Access motion-capture tutorials, AI-powered feedback, and the digital repertoire vault.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="platform">
+        <span class="label">Platform Features</span>
+        <h2>Studio technology designed for embodied intelligence</h2>
+        <div class="card-grid columns-2">
+          <article class="card">
+            <div class="card-emoji" aria-hidden="true">🎥</div>
+            <h3>On-Demand Library</h3>
+            <p>Stream or download classes sorted by style, level, and technique with dynamic playlists.</p>
+          </article>
+          <article class="card">
+            <div class="card-emoji" aria-hidden="true">🔴</div>
+            <h3>Live Virtual Classes</h3>
+            <p>Join group workshops or 1:1 labs featuring real-time correction and companion notes.</p>
+          </article>
+          <article class="card">
+            <div class="card-emoji" aria-hidden="true">🧠</div>
+            <h3>Neurodivergent Support</h3>
+            <p>Activate multi-sensory cues, modular lesson pacing, and adaptive interface settings.</p>
+          </article>
+          <article class="card">
+            <div class="card-emoji" aria-hidden="true">💎</div>
+            <h3>Digital Repertoire Vault</h3>
+            <p>Access annotated choreography and archival footage inspired by Balanchine's trust repertory.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="ai-judges">
+        <span class="label">Starbound AI Judge Panel</span>
+        <h2>Meet your digital judges trained in classical and commercial styles</h2>
+        <div class="judge-grid">
+          <article class="judge-card">
+            <span aria-hidden="true">🩰</span>
+            <h3>Vaganova</h3>
+            <p>Classical precision with a focus on line, épaulement, and articulate footwork.</p>
+          </article>
+          <article class="judge-card">
+            <span aria-hidden="true">⭐</span>
+            <h3>Cecchetti</h3>
+            <p>Balance and placement analysis rooted in Italianate rigor and timing.</p>
+          </article>
+          <article class="judge-card">
+            <span aria-hidden="true">💫</span>
+            <h3>Balanchine</h3>
+            <p>Velocity, syncopation, and neo-classical musical phrasing feedback.</p>
+          </article>
+          <article class="judge-card">
+            <span aria-hidden="true">🌊</span>
+            <h3>Graham</h3>
+            <p>Modern contractions, release technique, and breath-driven storytelling.</p>
+          </article>
+          <article class="judge-card">
+            <span aria-hidden="true">🎭</span>
+            <h3>Fosse</h3>
+            <p>Commercial stylization scoring focused on isolation, dynamics, and intent.</p>
+          </article>
+          <article class="judge-card">
+            <span aria-hidden="true">🏀</span>
+            <h3>Commercial</h3>
+            <p>Hybrid jazz, hip hop, and street influence metrics tuned for live production.</p>
+          </article>
+        </div>
+        <div class="cta-panel">
+          <h3>Try the AI Critique Demo</h3>
+          <p>
+            Experience instant analysis with style-specific scores, frame-by-frame annotations, and personalized
+            training loops.
+          </p>
+          <a class="btn btn-primary" href="#contact">Analyze Sample Performance</a>
+        </div>
+      </section>
+
+      <section class="therapy" aria-labelledby="therapy-heading">
+        <div class="therapy-card">
+          <span class="label">8765: Adult Ballet Inversion Therapy</span>
+          <h2 id="therapy-heading">Reverse • Reclaim • Rise</h2>
+          <p>
+            Reactivate muscle memory, rebuild confidence, and unlock infinite artistic potential through a six-week
+            narrative restoration journey.
+          </p>
+          <div class="metrics">
+            <div class="metric">
+              <span class="value">92%</span>
+              Muscle Memory Reactivation
+            </div>
+            <div class="metric">
+              <span class="value">6</span>
+              Week Program
+            </div>
+            <div class="metric">
+              <span class="value">100%</span>
+              Confidence Restoration
+            </div>
+            <div class="metric">
+              <span class="value">∞</span>
+              Artistic Potential
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3>Program Components</h3>
+          <div class="components">
+            <article class="component-card">
+              <h4>Re-Entry Assessment</h4>
+              <p>Begin with gentle movement screening and a shared story circle to map goals.</p>
+            </article>
+            <article class="component-card">
+              <h4>Inversion Techniques</h4>
+              <p>Floor-based decompression and myofascial release for nervous system regulation.</p>
+            </article>
+            <article class="component-card">
+              <h4>Embodied Ballet Modules</h4>
+              <p>Relearn classical repertoire through biomechanics breakdown and adaptive drills.</p>
+            </article>
+            <article class="component-card">
+              <h4>Narrative Reclamation</h4>
+              <p>Integrate choreography with personal myth-making and collaborative performance labs.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact">
+      <nav aria-label="Footer">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#programs">Programs</a></li>
+          <li><a href="#platform">Community</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </nav>
+      <p>© 2025 Barre Code. Decoding movement, one dancer at a time.</p>
+    </footer>
+  </body>
+</html>
