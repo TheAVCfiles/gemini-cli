@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Persephone’s Quiet Return</title>
+    <style>
+      body {
+        background: #111;
+        color: #f6f2ee;
+        font-family: Inter, Arial, sans-serif;
+        margin: 0;
+        padding: 24px;
+      }
+      .card {
+        max-width: 600px;
+        margin: 18px auto;
+        background: #fff;
+        border-radius: 12px;
+        padding: 16px;
+        color: #111;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+      }
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .card-header .glyph {
+        font-size: 34px;
+        color: #e11d48;
+      }
+      .card-header h3 {
+        margin: 6px 0 0;
+      }
+      .subtitle {
+        color: #666;
+        font-size: 13px;
+        margin: 0;
+      }
+      .preview {
+        margin: 12px 0 16px;
+      }
+      .ritual-steps {
+        padding-left: 20px;
+        margin: 0 0 16px;
+      }
+      .ritual-steps li {
+        margin: 6px 0;
+      }
+      .card-body .media {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #f8f8f8;
+        border-radius: 10px;
+        padding: 12px;
+      }
+      .card-body img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+      .card-body .play {
+        padding: 10px 18px;
+        border-radius: 8px;
+        border: none;
+        background: #111;
+        color: #fff;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .card-cta {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        margin-top: 14px;
+      }
+      .btn {
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .btn-primary {
+        background: #e11d48;
+        color: #fff;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid #e11d48;
+        color: #e11d48;
+      }
+      @media (max-width: 420px) {
+        body {
+          padding: 12px;
+        }
+        .card {
+          margin: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="card-header">
+        <span class="glyph">⟟</span>
+        <div>
+          <h3>Persephone’s Quiet Return</h3>
+          <p class="subtitle">Sun in Scorpio — A hush for Samhain</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="preview">
+          Tonight: a small ritual to bury what must be released and plant what must
+          grow.
+        </p>
+        <ol class="ritual-steps">
+          <li>Light a black/amber candle.</li>
+          <li>Whisper one name, fold the paper thrice.</li>
+          <li>Bury at dusk and retrieve at dawn.</li>
+        </ol>
+        <div class="media">
+          <img src="thumb.jpg" alt="movement" />
+          <button class="play">▶ Play movement</button>
+        </div>
+      </div>
+      <div class="card-cta">
+        <button class="btn btn-primary">Perform • 45s</button>
+        <button class="btn btn-outline">Mint PoA • $3</button>
+      </div>
+    </div>
+  </body>
+</html>
