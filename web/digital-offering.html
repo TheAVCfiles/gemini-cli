@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Digital Offering Shrine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark light;
+        --ink: #0d0b1b;
+        --veil: #f7f2ff;
+        --ember: #f9a8d4;
+        --lapis: #7dd3fc;
+        --sage: #bbf7d0;
+        --midnight: #111827;
+        --accent: #c084fc;
+        --card-bg: rgba(14, 18, 36, 0.65);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --text-primary: #f9fafb;
+        --text-secondary: rgba(248, 250, 252, 0.75);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        color: var(--text-primary);
+        background: radial-gradient(circle at top left, rgba(236, 72, 153, 0.25), transparent 40%),
+          radial-gradient(circle at 20% 90%, rgba(20, 184, 166, 0.25), transparent 45%),
+          radial-gradient(circle at 80% 10%, rgba(59, 130, 246, 0.3), transparent 50%),
+          #05020f;
+      }
+
+      main {
+        position: relative;
+        padding: 4rem clamp(1.5rem, 3vw, 3.5rem) 6rem;
+        overflow: hidden;
+      }
+
+      main::before,
+      main::after {
+        content: "";
+        position: absolute;
+        width: 48rem;
+        height: 48rem;
+        border-radius: 50%;
+        filter: blur(140px);
+        opacity: 0.45;
+        z-index: -2;
+      }
+
+      main::before {
+        background: rgba(192, 132, 252, 0.65);
+        top: -18rem;
+        right: -15rem;
+      }
+
+      main::after {
+        background: rgba(45, 212, 191, 0.4);
+        bottom: -24rem;
+        left: -12rem;
+      }
+
+      header.hero {
+        max-width: 1160px;
+        margin: 0 auto 4rem;
+        text-align: center;
+        position: relative;
+      }
+
+      header.hero h1 {
+        font-family: "Cormorant Garamond", "Inter", serif;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+        font-size: clamp(2.8rem, 6vw, 4.6rem);
+        margin-bottom: 1.25rem;
+        text-transform: uppercase;
+      }
+
+      header.hero p.lead {
+        margin: 0 auto;
+        max-width: 760px;
+        font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+        color: var(--text-secondary);
+        line-height: 1.7;
+      }
+
+      header.hero .cta-row {
+        margin-top: 2.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+      }
+
+      .cta-btn {
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.85), rgba(129, 140, 248, 0.9));
+        color: white;
+        border: none;
+        padding: 0.85rem 1.8rem;
+        border-radius: 999px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        box-shadow: 0 18px 38px rgba(129, 140, 248, 0.32);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .cta-btn.secondary {
+        background: transparent;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        box-shadow: none;
+      }
+
+      .cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 24px 48px rgba(129, 140, 248, 0.45);
+      }
+
+      section {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 2.5vw, 1.75rem);
+        position: relative;
+        border-radius: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: linear-gradient(160deg, rgba(6, 8, 21, 0.75), rgba(6, 8, 21, 0.55));
+        box-shadow: 0 28px 70px rgba(15, 23, 42, 0.45);
+        backdrop-filter: blur(20px);
+      }
+
+      section + section {
+        margin-top: 3rem;
+      }
+
+      section h2 {
+        margin: 0 0 1.5rem;
+        font-family: "Cormorant Garamond", "Inter", serif;
+        font-size: clamp(2rem, 4vw, 2.8rem);
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      section p {
+        color: var(--text-secondary);
+        line-height: 1.75;
+        font-size: 1.05rem;
+      }
+
+      .altar-grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      @media (min-width: 880px) {
+        .altar-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .altar-card {
+        padding: 1.5rem;
+        border-radius: 24px;
+        background: rgba(14, 17, 33, 0.75);
+        border: 1px solid var(--glass-border);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 18px 45px rgba(8, 13, 31, 0.45);
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+
+      .altar-card h3 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.55rem;
+        margin: 0;
+        color: #f8fafc;
+        letter-spacing: 0.05em;
+      }
+
+      .altar-card p {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .altar-card .tag {
+        align-self: flex-start;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(129, 140, 248, 0.18);
+        border: 1px solid rgba(129, 140, 248, 0.35);
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+      }
+
+      .ritual-layout {
+        display: grid;
+        gap: 2.5rem;
+      }
+
+      @media (min-width: 992px) {
+        .ritual-layout {
+          grid-template-columns: 0.9fr 1.1fr;
+          align-items: start;
+        }
+      }
+
+      form#offering-form {
+        display: grid;
+        gap: 1rem;
+      }
+
+      label {
+        display: block;
+        font-size: 0.85rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: rgba(226, 232, 240, 0.8);
+        margin-bottom: 0.35rem;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        border-radius: 16px;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        background: rgba(4, 7, 20, 0.75);
+        color: #f8fafc;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.55);
+        box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.3);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 130px;
+      }
+
+      .slider-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        height: 6px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(236, 72, 153, 0.9), rgba(56, 189, 248, 0.95));
+        outline: none;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #f8fafc;
+        box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.35);
+        cursor: pointer;
+      }
+
+      .sigil-preview {
+        background: rgba(15, 23, 42, 0.85);
+        border-radius: 24px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .sigil-preview canvas,
+      .sigil-preview img {
+        width: 100%;
+        max-width: 380px;
+        align-self: center;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(8, 11, 25, 0.6);
+      }
+
+      .sigil-preview p {
+        font-size: 0.95rem;
+        text-align: center;
+      }
+
+      .energy-meter {
+        margin-top: 0.5rem;
+      }
+
+      .energy-track {
+        width: 100%;
+        height: 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .energy-fill {
+        height: 100%;
+        width: 0%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, rgba(236, 72, 153, 0.9), rgba(129, 140, 248, 0.95));
+        transition: width 0.6s ease;
+      }
+
+      .privacy-block {
+        margin-top: 1.5rem;
+        border-radius: 20px;
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        padding: 1.25rem;
+        background: rgba(15, 18, 33, 0.75);
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      .privacy-block span {
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(148, 163, 184, 0.8);
+      }
+
+      .altar-wall {
+        display: grid;
+        gap: 1.75rem;
+      }
+
+      @media (min-width: 960px) {
+        .altar-wall {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .offering-tile {
+        position: relative;
+        padding: 1.25rem;
+        border-radius: 24px;
+        background: rgba(12, 17, 32, 0.82);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        transition: transform 0.2s ease;
+      }
+
+      .offering-tile:hover {
+        transform: translateY(-4px);
+      }
+
+      .offering-tile img {
+        width: 100%;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .offering-tile h4 {
+        margin: 0;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.35rem;
+        letter-spacing: 0.05em;
+      }
+
+      .offering-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        color: rgba(209, 213, 219, 0.75);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .altar-empty {
+        font-style: italic;
+        color: rgba(226, 232, 240, 0.6);
+        text-align: center;
+        padding: 2.5rem 1rem;
+        border-radius: 24px;
+        border: 1px dashed rgba(226, 232, 240, 0.25);
+        background: rgba(8, 11, 21, 0.6);
+      }
+
+      .penpal-grid {
+        display: grid;
+        gap: 2rem;
+      }
+
+      @media (min-width: 960px) {
+        .penpal-grid {
+          grid-template-columns: 0.65fr 0.35fr;
+        }
+      }
+
+      .transmissions {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .transmission-card {
+        padding: 1.35rem;
+        border-radius: 22px;
+        background: rgba(16, 21, 36, 0.75);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        display: grid;
+        gap: 0.6rem;
+      }
+
+      .transmission-card strong {
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(226, 232, 240, 0.8);
+      }
+
+      .transmission-card p {
+        margin: 0;
+        color: rgba(226, 232, 240, 0.88);
+        line-height: 1.6;
+      }
+
+      form#penpal-form {
+        display: grid;
+        gap: 0.9rem;
+        background: rgba(11, 16, 29, 0.9);
+        border-radius: 24px;
+        padding: 1.5rem;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .blog-grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      @media (min-width: 880px) {
+        .blog-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .blog-card {
+        border-radius: 22px;
+        padding: 1.5rem;
+        background: rgba(15, 19, 33, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .blog-card span {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: rgba(192, 197, 220, 0.75);
+      }
+
+      .blog-card h3 {
+        margin: 0;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.55rem;
+      }
+
+      .collaboration-grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      @media (min-width: 960px) {
+        .collaboration-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .collaboration-card {
+        border-radius: 22px;
+        padding: 1.75rem;
+        background: rgba(10, 14, 28, 0.8);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      footer {
+        margin: 4rem auto 1.5rem;
+        max-width: 960px;
+        text-align: center;
+        color: rgba(209, 213, 219, 0.65);
+        font-size: 0.85rem;
+      }
+
+      .toast {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        padding: 1rem 1.25rem;
+        border-radius: 16px;
+        background: rgba(37, 99, 235, 0.95);
+        color: white;
+        font-weight: 600;
+        box-shadow: 0 20px 50px rgba(30, 64, 175, 0.4);
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 0.35s ease, transform 0.35s ease;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .toast.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="hero">
+        <h1>Digital Offering Shrine</h1>
+        <p class="lead">
+          A ceremonial space for gift givers, suitors, pen pals, and conspirators of kindness.
+          Each offering is transmuted into a luminous sigil, honoring privacy while broadcasting
+          gratitude as radiant public art across the altar wall.
+        </p>
+        <div class="cta-row">
+          <a class="cta-btn" href="#ritual">Cast an Offering</a>
+          <a class="cta-btn secondary" href="#altar-wall">Witness the Altar Wall</a>
+          <a class="cta-btn secondary" href="#penpals">Send a Pen Pal Transmission</a>
+        </div>
+      </header>
+
+      <section aria-labelledby="overview">
+        <h2 id="overview">The Shrine Architecture</h2>
+        <p>
+          This altar is coded as sanctuary: offerings are weighted, witnessed, and celebrated without
+          requiring the recipient to reciprocate. Crypto-visual sigils render every gift as a
+          luminous artifact. Privacy rituals shield recipients from exposure while allowing suitors
+          to leave marks of reverence, collaboration, or future opportunity.
+        </p>
+        <div class="altar-grid" role="list">
+          <article class="altar-card" role="listitem">
+            <span class="tag">Ritual Engine</span>
+            <h3>Weighted Offerings</h3>
+            <p>
+              Contributions channel into a narrative energy meter, tracking the breath of generosity
+              as each offering is exhaled, sealed, and archived.
+            </p>
+          </article>
+          <article class="altar-card" role="listitem">
+            <span class="tag">Privacy First</span>
+            <h3>Veiled Coordinates</h3>
+            <p>
+              Recipients remain unexposed—no addresses, no obligations. Only chosen stewards may
+              redeem physical offerings through masked drop points.
+            </p>
+          </article>
+          <article class="altar-card" role="listitem">
+            <span class="tag">Signal Boost</span>
+            <h3>Living Wall of Sigils</h3>
+            <p>
+              Every gift generates a unique cryptographic sigil—part data signature, part altar
+              artwork—published live to the communal shrine.
+            </p>
+          </article>
+          <article class="altar-card" role="listitem">
+            <span class="tag">Community</span>
+            <h3>Pen Pal Constellation</h3>
+            <p>
+              Submit transmissions to the circle, weaving letters, encouragement, and creative
+              invitations into a quiet correspondence channel.
+            </p>
+          </article>
+          <article class="altar-card" role="listitem">
+            <span class="tag">Support</span>
+            <h3>Collaborative Lift</h3>
+            <p>
+              Brands, studios, and benefactors can grant resources, access, or amplified spotlight
+              without compromising boundaries.
+            </p>
+          </article>
+          <article class="altar-card" role="listitem">
+            <span class="tag">Narrative</span>
+            <h3>Loop Closure</h3>
+            <p>
+              Each offering closes its own loop—documented, honored, and released—so that generosity
+              remains unburdened energy.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="ritual" aria-labelledby="ritual-title">
+        <h2 id="ritual-title">Cast an Offering</h2>
+        <div class="ritual-layout">
+          <form id="offering-form">
+            <div>
+              <label for="alias">Your altar alias</label>
+              <input
+                type="text"
+                id="alias"
+                name="alias"
+                placeholder="Starlit Patron, Soft Signal, Anonymous ..."
+                required
+              />
+            </div>
+            <div>
+              <label for="offering-type">Offering channel</label>
+              <select id="offering-type" name="offering-type" required>
+                <option value="Blessing">Blessing | intention-only</option>
+                <option value="Resource">Resource | tools, software, expertise</option>
+                <option value="Lux Suite">Lux Suite | indulgent ease, care, delight</option>
+                <option value="Collaboration">Collaboration | project, partnership, invite</option>
+                <option value="Signal Boost">Signal Boost | promotion, press, amplification</option>
+                <option value="Corporate Gift">Corporate Gift | from brand or org suite</option>
+              </select>
+            </div>
+            <div>
+              <label for="intention">Intention &amp; notes</label>
+              <textarea
+                id="intention"
+                name="intention"
+                placeholder="Describe the energy, resources, or enchantments you are offering..."
+                required
+              ></textarea>
+            </div>
+            <div>
+              <label for="energy">Energy weight</label>
+              <div class="slider-row">
+                <input type="range" id="energy" name="energy" min="1" max="100" value="42" />
+                <span id="energy-value">42</span>
+              </div>
+            </div>
+            <button type="submit" class="cta-btn">Cast offering &amp; mint sigil</button>
+          </form>
+          <aside class="sigil-preview" aria-live="polite">
+            <div>
+              <h3 style="margin: 0 0 0.75rem; font-family: 'Cormorant Garamond', serif;">
+                Sigil Preview
+              </h3>
+              <canvas id="sigil-canvas" width="320" height="320" role="img"></canvas>
+            </div>
+            <p>
+              Sigils are rendered with an intention-weighted algorithm. Every glyph is one-of-one,
+              signed to the blockchain-ready altar ledger without exposing personal coordinates.
+            </p>
+            <div class="energy-meter">
+              <div class="energy-track">
+                <div class="energy-fill" id="energy-fill"></div>
+              </div>
+              <p style="font-size: 0.85rem; margin-top: 0.35rem; text-align: center;">
+                Shrine energy accumulated: <span id="energy-total">0</span> points breathed into
+                the commons.
+              </p>
+            </div>
+            <div class="privacy-block">
+              <span>Protection Protocol</span>
+              <p>
+                Recipient identities are masked. Redemption flows through encrypted relays—no direct
+                obligation, no return channels unless invited.
+              </p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="altar-wall" aria-labelledby="altar-wall-title">
+        <h2 id="altar-wall-title">Living Altar Wall</h2>
+        <p>
+          Witness the crypto-visual offerings as they arrive. Each sigil is time-stamped, intention
+          encrypted, and displayed as luminous masonry within the shrine.
+        </p>
+        <div class="altar-wall" id="altar-wall-grid">
+          <div class="altar-empty" id="altar-empty">No offerings yet—your intention could be the first spark.</div>
+        </div>
+      </section>
+
+      <section id="penpals" aria-labelledby="penpals-title">
+        <h2 id="penpals-title">Pen Pal Constellation</h2>
+        <div class="penpal-grid">
+          <div>
+            <p>
+              Submit transmissions for written correspondence. Letters are archived in a veiled
+              inbox, optionally surfaced here as excerpts. Keep them kind, enchanted, and rooted in
+              consent.
+            </p>
+            <div class="transmissions" id="transmission-feed">
+              <article class="transmission-card">
+                <strong>Signal: Aurora Circuit</strong>
+                <p>
+                  "Thank you for weaving the altar. Your daily blog sparked our studio to sponsor a
+                  sabbatical desk—sending tools, massage credits, and travel miles."
+                </p>
+              </article>
+              <article class="transmission-card">
+                <strong>Signal: Mirror City Pen Pal</strong>
+                <p>
+                  "Penning a serialized note each week. No response needed—just soft encouragement
+                  delivered under lunar seal."
+                </p>
+              </article>
+            </div>
+          </div>
+          <form id="penpal-form">
+            <div>
+              <label for="penpal-alias">Your signature</label>
+              <input type="text" id="penpal-alias" placeholder="Luminous Pen Pal" required />
+            </div>
+            <div>
+              <label for="penpal-message">Transmission excerpt</label>
+              <textarea
+                id="penpal-message"
+                placeholder="A gentle paragraph to accompany the private letter..."
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="cta-btn">Send transmission</button>
+            <p style="font-size: 0.85rem; color: rgba(226, 232, 240, 0.7); margin: 0;">
+              Full letters are delivered privately; only opted-in excerpts appear on the public
+              shrine.
+            </p>
+          </form>
+        </div>
+      </section>
+
+      <section aria-labelledby="blog-title">
+        <h2 id="blog-title">Daily Blog Glimpses</h2>
+        <p>
+          Visit the daily log to witness spells-in-progress, studio devotions, and resource wish
+          lists. These glimpses invite alignment, co-creation, and future offerings.
+        </p>
+        <div class="blog-grid" id="blog-grid"></div>
+      </section>
+
+      <section aria-labelledby="collab-title">
+        <h2 id="collab-title">Collaborations &amp; Support</h2>
+        <div class="collaboration-grid">
+          <article class="collaboration-card">
+            <h3 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-size: 1.9rem;">
+              Corporate Gift Suite Portal
+            </h3>
+            <p>
+              Instantly deploy hospitality, care kits, or luxury subscriptions. Offerings route
+              through masked logistics partners so the recipient stays serene and anonymous while
+              savoring the gesture.
+            </p>
+            <ul style="margin: 0; padding-left: 1.2rem; color: rgba(226, 232, 240, 0.75);">
+              <li>Digital experience passes, spa residencies, creative sabbaticals</li>
+              <li>Software, studio gear, upgraded connectivity, or concierge services</li>
+              <li>Corporate matching for charitable causes named in the daily blog</li>
+            </ul>
+          </article>
+          <article class="collaboration-card">
+            <h3 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-size: 1.9rem;">
+              Collaboration Invitations
+            </h3>
+            <p>
+              Pitch collaborations, residencies, or stage appearances. Outline how the narrative
+              exchange unfolds, what support is provided, and what boundaries remain sacred.
+            </p>
+            <p>
+              Use the offering form to upload decks or reference links. A private steward will
+              respond only when alignment glows emerald.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <footer>
+        Crafted as a sanctuary for generosity. Offer freely, honor privacy, and let the sigils keep
+        shimmering.
+      </footer>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">Offering sealed to the altar.</div>
+
+    <script>
+      const canvas = document.getElementById("sigil-canvas");
+      const ctx = canvas.getContext("2d");
+      const energySlider = document.getElementById("energy");
+      const energyValue = document.getElementById("energy-value");
+      const energyTotal = document.getElementById("energy-total");
+      const energyFill = document.getElementById("energy-fill");
+      const altarWall = document.getElementById("altar-wall-grid");
+      const altarEmpty = document.getElementById("altar-empty");
+      const toast = document.getElementById("toast");
+      const blogGrid = document.getElementById("blog-grid");
+      const transmissionFeed = document.getElementById("transmission-feed");
+
+      let accumulatedEnergy = 0;
+
+      const dailyGlimpses = [
+        {
+          title: "Studio candles burning slow &amp; gold",
+          tag: "Process Note",
+          summary:
+            "Soft-launching a wishing well interface. Practicing code as ritual—releasing new prompts, stocking the altar cabinet with incense scripts.",
+        },
+        {
+          title: "Field report: collaborations in bloom",
+          tag: "Collaboration",
+          summary:
+            "Three suitors offered residencies, one brand wired a travel retainer. Documenting the decision matrix and what support felt most magical.",
+        },
+        {
+          title: "Resource wish list \u0026 gratitude",
+          tag: "Wish List",
+          summary:
+            "Requesting ergonomic tools, creative software, and a sound bath membership. Grateful for every energy exchange that keeps the shrine bright.",
+        },
+      ];
+
+      function renderBlogCards() {
+        dailyGlimpses.forEach((entry) => {
+          const card = document.createElement("article");
+          card.className = "blog-card";
+          card.innerHTML = `
+            <span>${entry.tag}</span>
+            <h3>${entry.title}</h3>
+            <p>${entry.summary}</p>
+            <a href="#" style="color: var(--lapis); text-decoration: none; font-weight: 600;">
+              Read full entry
+            </a>
+          `;
+          blogGrid.appendChild(card);
+        });
+      }
+
+      renderBlogCards();
+
+      function hashSeed(seed) {
+        let hash = 0;
+        for (let i = 0; i < seed.length; i++) {
+          hash = (hash << 5) - hash + seed.charCodeAt(i);
+          hash |= 0;
+        }
+        return hash >>> 0;
+      }
+
+      function createRng(seed) {
+        let state = hashSeed(seed) || 1;
+        return function () {
+          state = (state * 1664525 + 1013904223) % 4294967296;
+          return state / 4294967296;
+        };
+      }
+
+      function drawSigil(seed) {
+        const rng = createRng(seed);
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const gradient = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 1.2);
+        gradient.addColorStop(0, `hsla(${Math.floor(rng() * 360)}, 80%, 65%, 0.95)`);
+        gradient.addColorStop(1, "rgba(5, 3, 12, 0.95)");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.globalCompositeOperation = "lighter";
+        const rings = 3 + Math.floor(rng() * 5);
+        for (let i = 0; i < rings; i++) {
+          const radius = (h / 2) * (0.25 + rng() * 0.65);
+          ctx.beginPath();
+          ctx.arc(w / 2, h / 2, radius, 0, Math.PI * 2);
+          ctx.strokeStyle = `hsla(${Math.floor(rng() * 360)}, 80%, ${55 + rng() * 25}%, ${0.25 + rng() * 0.3})`;
+          ctx.lineWidth = 2 + rng() * 3;
+          ctx.stroke();
+        }
+
+        const glyphs = 12 + Math.floor(rng() * 9);
+        for (let i = 0; i < glyphs; i++) {
+          ctx.beginPath();
+          const angle = rng() * Math.PI * 2;
+          const inner = 40 + rng() * 60;
+          const outer = h / 2 - 20 - rng() * 40;
+          const x1 = w / 2 + Math.cos(angle) * inner;
+          const y1 = h / 2 + Math.sin(angle) * inner;
+          const x2 = w / 2 + Math.cos(angle) * outer;
+          const y2 = h / 2 + Math.sin(angle) * outer;
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.strokeStyle = `hsla(${Math.floor(rng() * 360)}, 95%, 75%, 0.5)`;
+          ctx.lineWidth = 1 + rng() * 2;
+          ctx.stroke();
+
+          ctx.beginPath();
+          const rx = w / 2 + Math.cos(angle + rng() * 0.9) * (inner + rng() * 80);
+          const ry = h / 2 + Math.sin(angle + rng() * 0.9) * (inner + rng() * 80);
+          const r = 6 + rng() * 14;
+          ctx.fillStyle = `hsla(${Math.floor(rng() * 360)}, 80%, 65%, 0.45)`;
+          ctx.shadowBlur = 20;
+          ctx.shadowColor = ctx.fillStyle;
+          ctx.arc(rx, ry, r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
+        ctx.globalCompositeOperation = "source-over";
+
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([6, 6]);
+        ctx.arc(w / 2, h / 2, h / 2 - 12, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      drawSigil("default");
+
+      energySlider.addEventListener("input", () => {
+        energyValue.textContent = energySlider.value;
+      });
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("visible");
+        setTimeout(() => toast.classList.remove("visible"), 2800);
+      }
+
+      function createOfferingTile({ alias, intention, type, energy, sigilUrl, timestamp }) {
+        const tile = document.createElement("article");
+        tile.className = "offering-tile";
+        tile.innerHTML = `
+          <div class="offering-meta">
+            <span>${type}</span>
+            <span>${timestamp}</span>
+          </div>
+          <img src="${sigilUrl}" alt="Sigil minted for ${alias}" loading="lazy" />
+          <h4>${alias}</h4>
+          <p>${intention}</p>
+          <p style="font-size: 0.85rem; color: rgba(226, 232, 240, 0.7);">
+            Energy sealed: ${energy}
+          </p>
+        `;
+        return tile;
+      }
+
+      function updateEnergyMeter() {
+        const normalized = Math.min(accumulatedEnergy / 500, 1) * 100;
+        energyFill.style.width = `${normalized}%`;
+        energyTotal.textContent = accumulatedEnergy;
+      }
+
+      document.getElementById("offering-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const alias = event.target.alias.value.trim() || "Anonymous";
+        const type = event.target["offering-type"].value;
+        const intention = event.target.intention.value.trim();
+        const energy = Number(event.target.energy.value);
+
+        if (!intention) {
+          return;
+        }
+
+        const timestamp = new Date().toLocaleString(undefined, {
+          hour: "numeric",
+          minute: "2-digit",
+          month: "short",
+          day: "numeric",
+        });
+
+        const sigilSeed = `${alias}-${type}-${intention}-${Date.now()}`;
+        drawSigil(sigilSeed);
+        const sigilUrl = canvas.toDataURL("image/png");
+
+        const tile = createOfferingTile({ alias, intention, type, energy, sigilUrl, timestamp });
+        if (altarEmpty) {
+          altarEmpty.remove();
+        }
+        altarWall.prepend(tile);
+
+        accumulatedEnergy += energy;
+        updateEnergyMeter();
+        showToast("Offering sealed to the altar.");
+        event.target.reset();
+        energySlider.value = 42;
+        energyValue.textContent = "42";
+        drawSigil("default");
+      });
+
+      document.getElementById("penpal-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const alias = document.getElementById("penpal-alias").value.trim() || "Soft Signal";
+        const message = document.getElementById("penpal-message").value.trim();
+        if (!message) {
+          return;
+        }
+
+        const card = document.createElement("article");
+        card.className = "transmission-card";
+        card.innerHTML = `
+          <strong>Signal: ${alias}</strong>
+          <p>${message}</p>
+        `;
+
+        transmissionFeed.prepend(card);
+        showToast("Transmission received under veil.");
+        event.target.reset();
+      });
+    </script>
+  </body>
+</html>
