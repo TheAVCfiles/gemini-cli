@@ -38,6 +38,7 @@ This documentation is organized into the following sections:
   - **[Realtime voice agent quickstart](./examples/realtime-voice-agent.md):** Launch a browser-based assistant that uses ephemeral client secrets for the OpenAI Realtime API.
   - **[Room_009: Domestic Syntax manifest](./examples/room-009-domestic-syntax.json):** Narrative-rich room schema demonstrating Mother Systems worldbuilding data.
   - **[APop Allstars — 12-week dance curriculum](./examples/apop-allstars-12-week-curriculum.md):** Mermaid Gantt chart outlining the physical, emotional, and creative training arc.
+  - **[Mythos deployment timeline](./examples/mythos-deployment-timeline.md):** Phase map for the Myth becomes Method rollout sequence.
   - **[IntuitionLabs Ballet Bots curriculum assets](./intuitionlabs/README.md):** Reference materials for an arts-and-robotics learning program that leverages Gemini CLI for content generation.
   - **[IntuitionLabs SaaS product catalog](./intuitionlabs/saas_products.md):** Pricing, fulfillment, and publishing workflows for the Adaptive Ethics Framework, Glissé Engine, and MythOS Cloud Access.
   - **[StudioOS print-ready capsule drop kit](./studioos-print-ready-capsule-drop-kit.md):** Comprehensive research report on a tri-panel, couture onboarding ritual with digital credentialing integration.
