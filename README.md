@@ -104,6 +104,20 @@ server pointed at `web/`.
 
 ---
 
+## 🕺 MoveNet Pose Lab
+
+`web/movenet-pose-lab.html` is a standalone camera playground powered by
+TensorFlow.js and the MoveNet Lightning pose detector. It opens your webcam,
+overlays the live skeleton with keypoint confidence filtering, and streams basic
+metrics (FPS and visible joints) so you can gauge model performance locally. All
+processing happens in the browser—no frames leave the device.
+
+The page lazy-loads the detector and lets you start/stop the media stream at any
+time, making it useful for quick experiments or rehearsing choreography before
+sending clips to the Demon Huntrix tooling.
+
+---
+
 ## 📂 File map
 
 ```
