@@ -1,6 +1,6 @@
 # Ballet Bots Student Worksheets
 
-These printable resources pair with each session’s goals. Facilitators can duplicate and adapt them to local needs.
+These printable resources pair with each session’s goals. Facilitators can duplicate and adapt them to local needs.[^ip-credit]
 
 ## Worksheet A – Goal Setting & Movement Vocabulary (Session 1)
 
@@ -67,3 +67,5 @@ These printable resources pair with each session’s goals. Facilitators can dup
 4. I’m excited to use my badge to share…
 
 **Family follow-up:** Provide QR code for badge claim plus conversation starters for at-home reflection.
+
+[^ip-credit]: Acknowledgment: These worksheets adapt learning prompts from the Balanchine Cipher theory and the Decrypt the Girl engine created by Allison Van Cura, recognizing their foundational IP for Ballet Bots.
