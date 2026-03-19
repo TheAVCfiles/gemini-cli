@@ -30,6 +30,8 @@ interface FolderStructureOptions {
   fileService?: FileDiscoveryService;
   /** File filtering ignore options. */
   fileFilteringOptions?: FileFilteringOptions;
+  /** Optional label to display for the root directory in the rendered output. */
+  rootLabel?: string;
 }
 // Define a type for the merged options where fileIncludePattern remains optional
 type MergedFolderStructureOptions = Required<
@@ -38,6 +40,7 @@ type MergedFolderStructureOptions = Required<
   fileIncludePattern?: RegExp;
   fileService?: FileDiscoveryService;
   fileFilteringOptions?: FileFilteringOptions;
+  rootLabel: string;
 };
 
 /** Represents the full, unfiltered information about a folder and its contents. */
@@ -306,6 +309,7 @@ export async function getFolderStructure(
     fileService: options?.fileService,
     fileFilteringOptions:
       options?.fileFilteringOptions ?? DEFAULT_FILE_FILTERING_OPTIONS,
+    rootLabel: options?.rootLabel ?? resolvedPath,
   };
 
   try {
@@ -340,7 +344,11 @@ export async function getFolderStructure(
       summary += ` Folders or files indicated with ${TRUNCATION_INDICATOR} contain more items not shown, were ignored, or the display limit (${mergedOptions.maxItems} items) was reached.`;
     }
 
-    return `${summary}\n\n${resolvedPath}${path.sep}\n${structureLines.join('\n')}`;
+    const rootHeader = mergedOptions.rootLabel.endsWith(path.sep)
+      ? mergedOptions.rootLabel
+      : `${mergedOptions.rootLabel}${path.sep}`;
+
+    return `${summary}\n\n${rootHeader}\n${structureLines.join('\n')}`;
   } catch (error: unknown) {
     console.error(`Error getting folder structure for ${resolvedPath}:`, error);
     return `Error processing directory "${resolvedPath}": ${getErrorMessage(error)}`;
