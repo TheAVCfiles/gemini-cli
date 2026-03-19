@@ -36,6 +36,7 @@ This documentation is organized into the following sections:
 - **Examples:**
   - **[Vertex AI Search integration](./examples/vertex-ai-search.md):** Step-by-step guidance for connecting Gemini CLI agents to Vertex AI Search.
   - **[Realtime voice agent quickstart](./examples/realtime-voice-agent.md):** Launch a browser-based assistant that uses ephemeral client secrets for the OpenAI Realtime API.
+  - **[Founders Alignment retainer automation](./examples/founders-alignment-retainer-offer.json):** Gmail follow-up workflow that waits 24 hours before sending a Stripe-linked retainer invitation.
   - **[Room_009: Domestic Syntax manifest](./examples/room-009-domestic-syntax.json):** Narrative-rich room schema demonstrating Mother Systems worldbuilding data.
   - **[APop Allstars — 12-week dance curriculum](./examples/apop-allstars-12-week-curriculum.md):** Mermaid Gantt chart outlining the physical, emotional, and creative training arc.
   - **[IntuitionLabs Ballet Bots curriculum assets](./intuitionlabs/README.md):** Reference materials for an arts-and-robotics learning program that leverages Gemini CLI for content generation.
