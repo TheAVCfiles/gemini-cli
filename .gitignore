@@ -39,6 +39,7 @@ packages/*/coverage/
 data/
 
 # Generated files
+__pycache__/
 packages/cli/src/generated/
 packages/core/src/generated/
 .integration-tests/
