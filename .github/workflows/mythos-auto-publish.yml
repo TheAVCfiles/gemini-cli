@@ -1,0 +1,20 @@
+name: MythOS Auto-Publish
+
+on:
+  schedule:
+    - cron: "0 2 * * *"   # 2 AM ET nightly
+  workflow_dispatch:       # lets you click “Run” manually
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Package & Publish
+        run: python package_and_publish.py
