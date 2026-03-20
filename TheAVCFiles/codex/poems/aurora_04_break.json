@@ -1,0 +1,23 @@
+{
+  "id": "aurora_04_break",
+  "title": "When the Static Took My Name",
+  "type": "poem",
+  "mode": "Echo",
+  "archetype": ["Aurora", "Static"],
+  "constellation": ["BroadcastBreak", "Mothernet"],
+  "timecode": "AC-3",
+  "alignment": {
+    "zodiac": "Pisces",
+    "tarot": "The Moon",
+    "glyph": "Glyph-03"
+  },
+  "emotional_key": ["rupture", "awakening"],
+  "themes": ["identity", "fear", "narrative"],
+  "function": "Interruption",
+  "text": "…poem here…",
+  "relations": {
+    "mirrors": ["esther_01_origin"],
+    "unlocks": ["witness_07_entry"],
+    "glitches": ["static_02_frame"]
+  }
+}
