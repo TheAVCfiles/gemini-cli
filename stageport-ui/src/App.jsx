@@ -1,546 +1,483 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Activity,
-  BarChart3,
-  CloudRain,
-  Database,
-  Fingerprint,
-  Flame,
-  Lock,
-  ShieldCheck,
-  Sun,
-  Terminal,
-  TrendingUp,
-  Unlock,
-  Wind,
-  Zap,
-} from 'lucide-react';
+import { useMemo, useState } from 'react';
 
-const KILL_SWITCH_THRESHOLD = 0.35;
+const LANGUAGES = [
+  'Python',
+  'JavaScript',
+  'TypeScript',
+  'Java',
+  'C',
+  'C++',
+  'C#',
+  'Go',
+  'Rust',
+  'Swift',
+  'Kotlin',
+  'PHP',
+  'Ruby',
+  'R',
+  'Scala',
+  'Dart',
+  'Objective-C',
+  'Shell',
+  'SQL',
+  'MATLAB',
+  'Perl',
+  'Lua',
+  'Haskell',
+  'Elixir',
+  'Julia',
+];
 
-const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+const SAMPLE_SNIPPETS = {
+  JavaScript: `function fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
 
-const calcRsi = (series, period = 14) => {
-  if (series.length <= period) {
-    return 50;
-  }
+console.log(fibonacci(8));`,
+  Python: `def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
 
-  const window = series.slice(-period - 1);
-  let gains = 0;
-  let losses = 0;
-  for (let i = 1; i < window.length; i += 1) {
-    const delta = window[i].val - window[i - 1].val;
-    if (delta >= 0) {
-      gains += delta;
-    } else {
-      losses += Math.abs(delta);
-    }
-  }
-
-  if (losses === 0) {
-    return 100;
-  }
-
-  const rs = gains / losses;
-  return 100 - 100 / (1 + rs);
+print(fibonacci(8))`,
+  TypeScript: `type User = {
+  id: number;
+  name: string;
 };
 
-const App = () => {
-  const [pVal, setPVal] = useState(0.032);
-  const [weight, setWeight] = useState(92);
-  const [ciStatus] = useState('Excludes 0');
-  const [ciRange] = useState({ lower: 1.2, upper: 5.8 });
-  const [isLive] = useState(true);
+function greet(user: User): string {
+  return \`Hello, \${user.name}\`;
+}
 
-  const [rainIntensity, setRainIntensity] = useState(0.78);
-  const [sunIntensity, setSunIntensity] = useState(0.35);
-  const [lightningIntensity, setLightningIntensity] = useState(0.44);
+console.log(greet({ id: 1, name: "Allison" }));`,
+};
 
-  const [signalHistory, setSignalHistory] = useState(() =>
-    Array.from({ length: 40 }, (_, i) => ({
-      val: 2.5 + Math.sin(i / 5) + Math.random() * 0.35,
-      rain: clamp(0.65 + Math.sin(i / 6) * 0.2 + (Math.random() - 0.5) * 0.1),
-      sun: clamp(0.4 + Math.cos(i / 4) * 0.25 + (Math.random() - 0.5) * 0.1),
-      lightning: clamp(0.3 + Math.sin(i / 3) * 0.3 + (Math.random() - 0.5) * 0.15),
-      time: i,
-    })),
-  );
+function normalizeLanguage(value) {
+  const match = LANGUAGES.find((lang) => lang.toLowerCase() === value.trim().toLowerCase());
+  return match ?? value.trim();
+}
 
-  const [logs, setLogs] = useState([
-    { t: '03:44:01', m: 'AUTH_KEY verified', type: 'success' },
-    { t: '03:44:12', m: 'Initializing block bootstrap engine...', type: 'info' },
-    { t: '03:44:15', m: 'n_boot=1000 resamples complete.', type: 'success' },
-    { t: '03:44:18', m: 'τ* detected at Lag -4.', type: 'info' },
-    { t: '03:44:20', m: 'CI: [1.2, 5.8] (Excludes 0)', type: 'success' },
-  ]);
+function LanguageAutocomplete({ label, value, onChange }) {
+  const [query, setQuery] = useState(value);
+  const [open, setOpen] = useState(false);
 
-  const [brierScore, setBrierScore] = useState(0.18);
-  const [tradeLog, setTradeLog] = useState([]);
-  const [sentimentData, setSentimentData] = useState({ buzzIntensity: 62, tilt: 0.22 });
+  const filtered = useMemo(() => {
+    const lowered = query.trim().toLowerCase();
+    if (!lowered) return LANGUAGES;
+    return LANGUAGES.filter((lang) => lang.toLowerCase().includes(lowered));
+  }, [query]);
 
-  const isStructuralConfirmed = weight >= 80;
-  const isCiValid = ciStatus === 'Excludes 0';
-  const isPValuePass = pVal < 0.05;
-  const isRegimeOpen = isStructuralConfirmed && isCiValid && isPValuePass;
-  const killSwitchTriggered = brierScore > KILL_SWITCH_THRESHOLD;
-
-  const recommendations = useMemo(
-    () => [
-      { signal: 'RAIN', confidence: rainIntensity, color: 'text-blue-400', bg: 'bg-blue-500/15' },
-      { signal: 'SUN', confidence: sunIntensity, color: 'text-amber-400', bg: 'bg-amber-500/15' },
-      { signal: 'ZAP', confidence: lightningIntensity, color: 'text-rose-400', bg: 'bg-rose-500/15' },
-      {
-        signal: 'HEDGE',
-        confidence: clamp(1 - (sunIntensity + lightningIntensity) / 2),
-        color: 'text-violet-400',
-        bg: 'bg-violet-500/15',
-      },
-    ],
-    [rainIntensity, sunIntensity, lightningIntensity],
-  );
-
-  const completedTrades = tradeLog.filter((trade) => trade.outcome !== null);
-  const wins = completedTrades.filter((trade) => trade.outcome > 0).length;
-  const losses = completedTrades.filter((trade) => trade.outcome <= 0).length;
-  const cumulativePnl = completedTrades.reduce((acc, trade) => acc + trade.outcome, 0);
-  const missedOpportunities = completedTrades.filter((trade) => trade.regret > 0).length;
-  const rsi = calcRsi(signalHistory);
-  const latestSignal = signalHistory[signalHistory.length - 1]?.val ?? 0;
-  const atr = 0.18;
-  const upperBand = latestSignal + atr;
-  const lowerBand = latestSignal - atr;
-
-  const actionFor = (asset) => {
-    if (asset === 'QQQ') {
-      return 'MONITOR';
-    }
-
-    if (asset === 'ETH') {
-      return isRegimeOpen ? 'SCALED ENTRY' : 'CONFIRM (NO ENTRY)';
-    }
-
-    return isRegimeOpen ? 'SCALED ENTRY' : 'OBSERVE ONLY';
+  const handleSelect = (language) => {
+    setQuery(language);
+    onChange(language);
+    setOpen(false);
   };
-
-  const assetData = useMemo(
-    () => [
-      {
-        asset: 'LIT',
-        pivot: 72.15,
-        s1: 71.39,
-        s2: 70.83,
-        r1: 73.47,
-        r2: 74.57,
-      },
-      {
-        asset: 'ETH',
-        pivot: 1981.96,
-        s1: 1944.13,
-        s2: 1902.62,
-        r1: 2023.47,
-        r2: 2061.3,
-      },
-      {
-        asset: 'QQQ',
-        pivot: 601.61,
-        s1: 596.75,
-        s2: 591.59,
-        r1: 606.77,
-        r2: 611.63,
-      },
-    ],
-    [],
-  );
-
-  const executeTrade = (signal, confidence) => {
-    if (killSwitchTriggered) {
-      return;
-    }
-
-    const edge = confidence - (1 - confidence);
-    const kellySize = clamp(edge, 0, 0.25);
-    const outcome = Number(((Math.random() - 0.45) * 2.2).toFixed(2));
-    const regret = Number(Math.max(0, confidence * 1.2 - outcome).toFixed(2));
-
-    const trade = {
-      id: Date.now(),
-      signal,
-      confidence,
-      kellySize,
-      timestamp: new Date().toLocaleTimeString('en-US', { hour12: false }),
-      outcome,
-      regret,
-    };
-
-    setTradeLog((prev) => [trade, ...prev].slice(0, 12));
-  };
-
-  useEffect(() => {
-    if (!isLive) {
-      return undefined;
-    }
-
-    const pollInterval = setInterval(() => {
-      setSignalHistory((prev) => {
-        const nextVal = prev[prev.length - 1].val + (Math.random() - 0.5) * 0.35;
-        const next = {
-          val: nextVal,
-          rain: clamp(rainIntensity + (Math.random() - 0.5) * 0.08),
-          sun: clamp(sunIntensity + (Math.random() - 0.5) * 0.08),
-          lightning: clamp(lightningIntensity + (Math.random() - 0.5) * 0.1),
-          time: Date.now(),
-        };
-
-        setRainIntensity(next.rain);
-        setSunIntensity(next.sun);
-        setLightningIntensity(next.lightning);
-
-        return [...prev.slice(1), next];
-      });
-
-      setSentimentData((prev) => ({
-        buzzIntensity: Math.max(1, Math.round(prev.buzzIntensity + (Math.random() - 0.5) * 12)),
-        tilt: clamp(prev.tilt + (Math.random() - 0.5) * 0.18, -1, 1),
-      }));
-
-      setBrierScore((prev) => clamp(prev + (Math.random() - 0.5) * 0.03, 0.02, 0.65));
-
-      if (Math.random() > 0.8) {
-        const now = new Date().toLocaleTimeString('en-US', { hour12: false });
-        const msgs = ['Regime status verified.', 'Heartbeat active.', 'Signal audit complete.'];
-        setLogs((prev) => [
-          { t: now, m: msgs[Math.floor(Math.random() * msgs.length)], type: 'info' },
-          ...prev.slice(0, 8),
-        ]);
-      }
-    }, 3000);
-
-    return () => clearInterval(pollInterval);
-  }, [isLive, lightningIntensity, rainIntensity, sunIntensity]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-emerald-500/30">
-      <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-[1600px] mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-emerald-500 p-2 rounded shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-              <ShieldCheck className="w-5 h-5 text-slate-950" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold tracking-tight text-white uppercase flex items-center gap-2">
-                PRIMA Fortress Dashboard
-                <span className="text-xs bg-slate-800 px-2 py-0.5 rounded text-emerald-400 font-mono">v2.2</span>
-              </h1>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 text-xs font-semibold">
-            <span className="text-slate-500">KILL SWITCH</span>
-            <span
-              className={`px-3 py-1 rounded-full border font-mono ${
-                killSwitchTriggered
-                  ? 'bg-rose-500/10 border-rose-500/50 text-rose-300'
-                  : 'bg-emerald-500/10 border-emerald-500/50 text-emerald-300'
-              }`}
-            >
-              {killSwitchTriggered ? 'TRADING HALTED' : 'TRADING ENABLED'}
-            </span>
-          </div>
+    <div style={{ position: 'relative' }}>
+      <label style={styles.label}>{label}</label>
+      <input
+        value={query}
+        onFocus={() => setOpen(true)}
+        onChange={(event) => {
+          const next = event.target.value;
+          setQuery(next);
+          setOpen(true);
+          const exact = LANGUAGES.find((lang) => lang.toLowerCase() === next.trim().toLowerCase());
+          if (exact) {
+            onChange(exact);
+          }
+        }}
+        onBlur={() => {
+          window.setTimeout(() => {
+            setOpen(false);
+            const normalized = normalizeLanguage(query);
+            if (LANGUAGES.includes(normalized)) {
+              setQuery(normalized);
+              onChange(normalized);
+            } else {
+              setQuery(value);
+            }
+          }, 100);
+        }}
+        placeholder="Type to search language..."
+        style={styles.input}
+      />
+      {open && (
+        <div style={styles.dropdown}>
+          {filtered.length ? (
+            filtered.map((lang) => (
+              <button
+                key={lang}
+                type="button"
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={() => handleSelect(lang)}
+                style={{
+                  ...styles.option,
+                  ...(lang === value ? styles.optionSelected : {}),
+                }}
+              >
+                {lang}
+              </button>
+            ))
+          ) : (
+            <div style={styles.noResult}>No language match.</div>
+          )}
         </div>
-      </header>
-
-      <main className="max-w-[1600px] mx-auto p-4 lg:p-6 grid grid-cols-12 gap-6">
-        <div className="col-span-12 lg:col-span-3 space-y-6">
-          <section className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-            <div className="px-4 py-3 border-b border-slate-800 bg-slate-800/30">
-              <h2 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2">
-                <Fingerprint className="w-3.5 h-3.5 text-emerald-500" /> Origin Audit
-              </h2>
-            </div>
-            <div className="p-4 bg-slate-950/50 text-[10px] font-mono space-y-2">
-              <div className="flex justify-between">
-                <span className="text-slate-600 uppercase">Provider</span>
-                <span className="text-slate-300">AVCSYSTEMSSTUDIOS</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-600 uppercase">Identity</span>
-                <span className="text-emerald-500">@xoAVCxo</span>
-              </div>
-            </div>
-          </section>
-
-          <section className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-            <div className="px-4 py-3 border-b border-slate-800 bg-slate-800/30">
-              <h2 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-slate-400">
-                <Terminal className="w-3.5 h-3.5" /> Filters
-              </h2>
-            </div>
-            <div className="p-5 space-y-6">
-              <div className="space-y-3">
-                <div className="flex justify-between items-end text-[11px] uppercase text-slate-500 font-semibold tracking-wider">
-                  <span>P-Value</span>
-                  <span className={`text-lg font-mono font-bold ${isPValuePass ? 'text-emerald-400' : 'text-rose-400'}`}>
-                    {pVal.toFixed(3)}
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="0.1"
-                  step="0.001"
-                  value={pVal}
-                  onChange={(e) => setPVal(parseFloat(e.target.value))}
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-                />
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex justify-between items-end text-[11px] uppercase text-slate-500 font-semibold tracking-wider">
-                  <span>Weight (W)</span>
-                  <span className={`text-lg font-mono font-bold ${isStructuralConfirmed ? 'text-emerald-400' : 'text-rose-400'}`}>
-                    {weight}
-                  </span>
-                </div>
-                <input
-                  type="number"
-                  value={weight}
-                  onChange={(e) => setWeight(parseInt(e.target.value, 10) || 0)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-white font-mono text-sm"
-                />
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between items-end text-[11px] uppercase text-slate-500 font-semibold tracking-wider">
-                  <span>Brier Score</span>
-                  <span className={`text-lg font-mono font-bold ${killSwitchTriggered ? 'text-rose-400' : 'text-emerald-400'}`}>
-                    {brierScore.toFixed(3)}
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="0.6"
-                  step="0.001"
-                  value={brierScore}
-                  onChange={(e) => setBrierScore(parseFloat(e.target.value))}
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-violet-400"
-                />
-              </div>
-            </div>
-          </section>
-
-          <section className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl h-[300px] flex flex-col">
-            <div className="px-4 py-3 border-b border-slate-800 bg-slate-800/30">
-              <h2 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2">
-                <Activity className="w-3.5 h-3.5 text-blue-500" /> Engine Logs
-              </h2>
-            </div>
-            <div className="flex-1 overflow-y-auto p-4 font-mono text-[10px] space-y-1.5">
-              {logs.map((log, i) => (
-                <div key={i} className="flex gap-2 leading-tight">
-                  <span className="text-slate-600">[{log.t}]</span>
-                  <span className={log.type === 'success' ? 'text-emerald-400' : 'text-slate-400'}>{log.m}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-
-        <div className="col-span-12 lg:col-span-9 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {[
-              {
-                label: 'Structural Status',
-                value: isStructuralConfirmed ? `CONFIRMED (W=${weight})` : 'UNCONFIRMED',
-                icon: Database,
-              },
-              {
-                label: 'Confidence Int.',
-                value: ciStatus,
-                sub: `Range: [${ciRange.lower}, ${ciRange.upper}]`,
-                icon: Zap,
-              },
-              {
-                label: 'Significance',
-                value: isPValuePass ? 'SIG PASS' : 'NO EDGE',
-                sub: 'Target < 0.05',
-                icon: BarChart3,
-              },
-              {
-                label: 'Sentiment Tilt',
-                value: sentimentData.tilt >= 0 ? 'BULLISH' : 'BEARISH',
-                sub: `${sentimentData.tilt >= 0 ? '+' : ''}${(sentimentData.tilt * 100).toFixed(1)}%`,
-                icon: Flame,
-              },
-            ].map((stat, i) => (
-              <div key={i} className="bg-slate-900 border border-slate-800 p-5 rounded-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-5">
-                  <stat.icon className="w-10 h-10" />
-                </div>
-                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">{stat.label}</span>
-                <div className={`text-lg font-mono font-bold mt-1 ${isRegimeOpen ? 'text-emerald-400' : 'text-slate-300'}`}>
-                  {stat.value}
-                </div>
-                {stat.sub && <div className="text-[10px] text-slate-600 font-mono mt-1 italic">{stat.sub}</div>}
-              </div>
-            ))}
-          </div>
-
-          <section className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl p-6">
-            <h2 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-slate-300 mb-6">
-              <TrendingUp className="w-3.5 h-3.5 text-purple-500" /> Advanced Signal Telemetry
-            </h2>
-            <div className="h-44 w-full">
-              <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 1000 120">
-                <line x1="0" x2="1000" y1={100 - upperBand * 20} y2={100 - upperBand * 20} stroke="#a78bfa" strokeDasharray="4 4" opacity="0.65" />
-                <line x1="0" x2="1000" y1={100 - lowerBand * 20} y2={100 - lowerBand * 20} stroke="#a78bfa" strokeDasharray="4 4" opacity="0.65" />
-                <path
-                  d={`M ${signalHistory
-                    .map((d, i) => `${(i / (signalHistory.length - 1)) * 1000},${100 - d.val * 20}`)
-                    .join(' L ')}`}
-                  fill="none"
-                  stroke={isRegimeOpen ? '#10b981' : '#475569'}
-                  strokeWidth="2"
-                  vectorEffect="non-scaling-stroke"
-                />
-                <path
-                  d={`M ${signalHistory
-                    .map((d, i) => `${(i / (signalHistory.length - 1)) * 1000},${112 - d.lightning * 35}`)
-                    .join(' L ')}`}
-                  fill="none"
-                  stroke="#f43f5e"
-                  strokeWidth="1.6"
-                  opacity="0.85"
-                />
-              </svg>
-            </div>
-            <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
-              <div className="bg-slate-950 border border-slate-800 rounded-lg p-3 flex items-center gap-2">
-                <CloudRain className="w-4 h-4 text-blue-400" /> RAIN {(rainIntensity * 100).toFixed(0)}%
-              </div>
-              <div className="bg-slate-950 border border-slate-800 rounded-lg p-3 flex items-center gap-2">
-                <Sun className="w-4 h-4 text-amber-300" /> SUN {(sunIntensity * 100).toFixed(0)}%
-              </div>
-              <div className="bg-slate-950 border border-slate-800 rounded-lg p-3 flex items-center gap-2">
-                <Zap className="w-4 h-4 text-rose-400" /> ZAP {(lightningIntensity * 100).toFixed(0)}%
-              </div>
-              <div className="bg-slate-950 border border-slate-800 rounded-lg p-3 flex items-center gap-2">
-                <Wind className="w-4 h-4 text-violet-300" /> RSI {rsi.toFixed(1)}
-              </div>
-            </div>
-          </section>
-
-          <section className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl p-6">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-white mb-4">Trade Execution Panel</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-3">
-                {recommendations.map((rec) => (
-                  <div key={rec.signal} className={`flex items-center justify-between rounded-lg border border-slate-700 ${rec.bg} px-3 py-2`}>
-                    <div>
-                      <div className="text-[11px] uppercase text-slate-400">{rec.signal} Signal</div>
-                      <div className={`font-mono font-bold ${rec.color}`}>Confidence {(rec.confidence * 100).toFixed(1)}%</div>
-                    </div>
-                    <button
-                      onClick={() => executeTrade(rec.signal, rec.confidence)}
-                      disabled={killSwitchTriggered}
-                      className="px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-xs uppercase disabled:opacity-40"
-                    >
-                      Execute
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <div className="bg-slate-950 border border-slate-800 rounded-lg p-4">
-                <div className="text-[11px] uppercase text-slate-500 mb-2">Recent Trades (Kelly Sizing)</div>
-                <ul className="space-y-1 text-xs font-mono max-h-48 overflow-y-auto pr-1">
-                  {tradeLog.length === 0 && <li className="text-slate-500">No simulated trades yet.</li>}
-                  {tradeLog.map((trade) => (
-                    <li key={trade.id} className="text-slate-300">
-                      {trade.timestamp} • {trade.signal} • Conf {trade.confidence.toFixed(2)} • Kelly {(trade.kellySize * 100).toFixed(1)}% • PnL{' '}
-                      <span className={trade.outcome >= 0 ? 'text-emerald-400' : 'text-rose-400'}>{trade.outcome.toFixed(2)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-white mb-3">Historical Performance</h2>
-              <div className="space-y-2 font-mono text-sm">
-                <div className="flex justify-between"><span className="text-slate-400">Win/Loss Ratio</span><span>{wins}:{losses}</span></div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Cumulative PnL</span>
-                  <span className={cumulativePnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}>{cumulativePnl.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between"><span className="text-slate-400">Regret Events</span><span>{missedOpportunities}</span></div>
-              </div>
-            </div>
-
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-white mb-3">Sentiment Analysis Overlay</h2>
-              <div className="space-y-3">
-                <div>
-                  <div className="flex justify-between text-xs text-slate-400 mb-1"><span>Buzz Intensity</span><span>{sentimentData.buzzIntensity}</span></div>
-                  <div className="h-2 rounded bg-slate-800 overflow-hidden">
-                    <div className="h-full bg-cyan-400" style={{ width: `${Math.min(sentimentData.buzzIntensity, 100)}%` }} />
-                  </div>
-                </div>
-                <div className="flex justify-between items-center text-sm font-mono">
-                  <span className="text-slate-400">Sentiment Tilt</span>
-                  <span className={sentimentData.tilt >= 0 ? 'text-emerald-400' : 'text-rose-400'}>
-                    {sentimentData.tilt >= 0 ? 'Bullish' : 'Bearish'} ({(sentimentData.tilt * 100).toFixed(1)}%)
-                  </span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-            <div className="px-4 py-4 border-b border-slate-800 bg-slate-800/30">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-white">Institutional Day Sheet</h2>
-            </div>
-            <table className="w-full text-left border-collapse font-mono text-xs">
-              <thead>
-                <tr className="bg-slate-950/50 text-[10px] uppercase text-slate-500 border-b border-slate-800">
-                  <th className="px-4 py-3">Asset</th>
-                  <th className="px-4 py-3">Pivot</th>
-                  <th className="px-4 py-3">S1 / S2</th>
-                  <th className="px-4 py-3">R1 / R2</th>
-                  <th className="px-4 py-3">Action Rule</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800">
-                {assetData.map((row, i) => (
-                  <tr key={i} className="hover:bg-slate-800/20">
-                    <td className="px-4 py-4 font-bold">{row.asset}</td>
-                    <td className="px-4 py-4">{row.pivot.toFixed(2)}</td>
-                    <td className="px-4 py-4 text-rose-400">
-                      {row.s1.toFixed(2)} / {row.s2.toFixed(2)}
-                    </td>
-                    <td className="px-4 py-4 text-emerald-400">
-                      {row.r1.toFixed(2)} / {row.r2.toFixed(2)}
-                    </td>
-                    <td className="px-4 py-4">
-                      <span
-                        className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold ${
-                          actionFor(row.asset).includes('ENTRY')
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                            : 'bg-slate-800 text-slate-500'
-                        }`}
-                      >
-                        {actionFor(row.asset)}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-        </div>
-      </main>
+      )}
     </div>
   );
-};
+}
 
-export default App;
+function buildConversionPrompt({ sourceLanguage, targetLanguage, sourceCode }) {
+  return `You are an expert multilingual software engineer.
+Convert the following code from ${sourceLanguage} to ${targetLanguage}.
+Rules:
+- Preserve original logic and behavior.
+- Use idiomatic ${targetLanguage} syntax.
+- Return only translated code.
+
+Source code:\n\n${sourceCode}`;
+}
+
+async function requestTranslation({ endpoint, apiKey, sourceLanguage, targetLanguage, sourceCode }) {
+  const prompt = buildConversionPrompt({ sourceLanguage, targetLanguage, sourceCode });
+
+  if (!endpoint) {
+    return `// Demo mode (no endpoint configured)
+// Source language: ${sourceLanguage}
+// Target language: ${targetLanguage}
+
+/*
+Configure a backend endpoint to run real conversions.
+Expected contract:
+POST /api/convert
+{
+  "sourceLanguage": "${sourceLanguage}",
+  "targetLanguage": "${targetLanguage}",
+  "sourceCode": "...",
+  "prompt": "..."
+}
+*/
+
+${sourceCode}`;
+  }
+
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
+    },
+    body: JSON.stringify({
+      sourceLanguage,
+      targetLanguage,
+      sourceCode,
+      prompt,
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || 'Code conversion request failed.');
+  }
+
+  const data = await response.json();
+  return data.output || data.result || data.code || '';
+}
+
+export default function App() {
+  const [sourceLanguage, setSourceLanguage] = useState('JavaScript');
+  const [targetLanguage, setTargetLanguage] = useState('Python');
+  const [sourceCode, setSourceCode] = useState(SAMPLE_SNIPPETS.JavaScript);
+  const [translatedCode, setTranslatedCode] = useState('');
+  const [endpoint, setEndpoint] = useState('');
+  const [apiKey, setApiKey] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const canConvert =
+    sourceCode.trim().length > 0 &&
+    sourceLanguage &&
+    targetLanguage &&
+    sourceLanguage !== targetLanguage;
+
+  const onSwap = () => {
+    const previousSourceLanguage = sourceLanguage;
+    const previousSourceCode = sourceCode;
+
+    setSourceLanguage(targetLanguage);
+    setTargetLanguage(previousSourceLanguage);
+    setSourceCode(translatedCode || previousSourceCode);
+    setTranslatedCode(previousSourceCode);
+  };
+
+  const onLoadSample = () => {
+    setSourceCode(SAMPLE_SNIPPETS[sourceLanguage] || SAMPLE_SNIPPETS.JavaScript);
+  };
+
+  const onConvert = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      const translated = await requestTranslation({
+        endpoint,
+        apiKey,
+        sourceLanguage,
+        targetLanguage,
+        sourceCode,
+      });
+      setTranslatedCode(translated);
+    } catch (requestError) {
+      setError(requestError.message || 'Something failed during conversion.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onCopy = async () => {
+    if (!translatedCode) return;
+    await navigator.clipboard.writeText(translatedCode);
+  };
+
+  return (
+    <div style={styles.page}>
+      <div style={styles.container}>
+        <h1 style={styles.title}>CodeVerter</h1>
+        <p style={styles.description}>
+          Convert code between 25 major programming languages with a model-agnostic backend.
+        </p>
+
+        <div style={styles.settingsGrid}>
+          <div>
+            <label style={styles.label}>Model endpoint</label>
+            <input
+              value={endpoint}
+              onChange={(event) => setEndpoint(event.target.value)}
+              placeholder="https://your-domain.com/api/convert"
+              style={styles.input}
+            />
+          </div>
+          <div>
+            <label style={styles.label}>API key (optional)</label>
+            <input
+              value={apiKey}
+              onChange={(event) => setApiKey(event.target.value)}
+              placeholder="Bearer token"
+              style={styles.input}
+            />
+          </div>
+        </div>
+
+        <div style={styles.panes}>
+          <section style={styles.panel}>
+            <div style={styles.panelHeader}>
+              <h2 style={styles.panelTitle}>Source</h2>
+              <button type="button" onClick={onLoadSample} style={styles.ghostButton}>
+                Load sample
+              </button>
+            </div>
+            <LanguageAutocomplete
+              label="From language"
+              value={sourceLanguage}
+              onChange={setSourceLanguage}
+            />
+            <label style={styles.label}>Input code</label>
+            <textarea
+              value={sourceCode}
+              onChange={(event) => setSourceCode(event.target.value)}
+              spellCheck={false}
+              style={styles.textarea}
+            />
+          </section>
+
+          <div style={styles.middleActions}>
+            <button type="button" onClick={onSwap} style={styles.ghostButton}>
+              Swap
+            </button>
+            <button
+              type="button"
+              disabled={!canConvert || loading}
+              onClick={onConvert}
+              style={{
+                ...styles.primaryButton,
+                ...((!canConvert || loading) ? styles.primaryButtonDisabled : {}),
+              }}
+            >
+              {loading ? 'Converting...' : 'Convert Code'}
+            </button>
+          </div>
+
+          <section style={styles.panel}>
+            <div style={styles.panelHeader}>
+              <h2 style={styles.panelTitle}>Output</h2>
+              <button type="button" onClick={onCopy} style={styles.ghostButton}>
+                Copy
+              </button>
+            </div>
+            <LanguageAutocomplete label="To language" value={targetLanguage} onChange={setTargetLanguage} />
+            <label style={styles.label}>Translated code</label>
+            <textarea
+              value={translatedCode}
+              onChange={(event) => setTranslatedCode(event.target.value)}
+              spellCheck={false}
+              placeholder="Converted code will appear here..."
+              style={styles.textarea}
+            />
+          </section>
+        </div>
+
+        {error ? <div style={styles.error}>{error}</div> : null}
+      </div>
+    </div>
+  );
+}
+
+const styles = {
+  page: {
+    background: '#f1f5f9',
+    minHeight: '100vh',
+    padding: '32px 16px',
+    color: '#0f172a',
+    fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
+  },
+  container: {
+    maxWidth: 1200,
+    margin: '0 auto',
+  },
+  title: {
+    margin: 0,
+    fontSize: '2.2rem',
+  },
+  description: {
+    color: '#475569',
+    marginBottom: 20,
+  },
+  settingsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+    gap: 12,
+    marginBottom: 16,
+  },
+  panes: {
+    display: 'grid',
+    gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)',
+    gap: 14,
+    alignItems: 'stretch',
+  },
+  panel: {
+    background: '#ffffff',
+    border: '1px solid #cbd5e1',
+    borderRadius: 14,
+    padding: 16,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
+  },
+  panelHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  panelTitle: {
+    margin: 0,
+    fontSize: 20,
+  },
+  middleActions: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  label: {
+    fontSize: 12,
+    fontWeight: 700,
+    textTransform: 'uppercase',
+    letterSpacing: '0.06em',
+    color: '#475569',
+  },
+  input: {
+    width: '100%',
+    border: '1px solid #cbd5e1',
+    borderRadius: 10,
+    padding: '10px 12px',
+    fontSize: 14,
+    boxSizing: 'border-box',
+  },
+  textarea: {
+    width: '100%',
+    minHeight: 420,
+    border: '1px solid #cbd5e1',
+    borderRadius: 10,
+    padding: 12,
+    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+    fontSize: 13,
+    lineHeight: 1.5,
+    boxSizing: 'border-box',
+    resize: 'vertical',
+  },
+  dropdown: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    background: '#ffffff',
+    border: '1px solid #cbd5e1',
+    borderRadius: 10,
+    marginTop: 4,
+    maxHeight: 180,
+    overflowY: 'auto',
+    zIndex: 50,
+    padding: 6,
+    boxSizing: 'border-box',
+  },
+  option: {
+    width: '100%',
+    textAlign: 'left',
+    border: 'none',
+    background: 'transparent',
+    borderRadius: 8,
+    padding: '8px 10px',
+    cursor: 'pointer',
+  },
+  optionSelected: {
+    background: '#0f172a',
+    color: '#ffffff',
+  },
+  noResult: {
+    color: '#64748b',
+    padding: '8px 10px',
+  },
+  primaryButton: {
+    background: '#0f172a',
+    color: '#ffffff',
+    border: 'none',
+    borderRadius: 10,
+    padding: '10px 14px',
+    fontWeight: 700,
+    cursor: 'pointer',
+  },
+  primaryButtonDisabled: {
+    opacity: 0.55,
+    cursor: 'not-allowed',
+  },
+  ghostButton: {
+    background: '#ffffff',
+    color: '#0f172a',
+    border: '1px solid #cbd5e1',
+    borderRadius: 10,
+    padding: '9px 12px',
+    fontWeight: 600,
+    cursor: 'pointer',
+  },
+  error: {
+    marginTop: 14,
+    border: '1px solid #fecaca',
+    background: '#fef2f2',
+    color: '#991b1b',
+    borderRadius: 10,
+    padding: '10px 12px',
+  },
+};
