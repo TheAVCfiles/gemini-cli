@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeVerter PRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body class="bg-[#121212] text-white min-h-screen">
+    <div id="root" class="p-6"></div>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      const LANGUAGES = [
+        "JavaScript",
+        "Python",
+        "TypeScript",
+        "Java",
+        "Go",
+        "Rust",
+        "C#",
+        "C++",
+      ];
+
+      function App() {
+        const [sourceLang, setSourceLang] = useState("JavaScript");
+        const [targetLang, setTargetLang] = useState("Python");
+        const [sourceCode, setSourceCode] = useState("");
+        const [outputCode, setOutputCode] = useState("");
+        const [evaluation, setEvaluation] = useState(null);
+        const [loading, setLoading] = useState(false);
+        const [error, setError] = useState("");
+
+        const handleConvert = async () => {
+          if (!sourceCode.trim()) return;
+
+          setLoading(true);
+          setError("");
+          setOutputCode("");
+          setEvaluation(null);
+
+          try {
+            const response = await fetch("http://127.0.0.1:5000/api/convert", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                sourceLanguage: sourceLang,
+                targetLanguage: targetLang,
+                sourceCode,
+              }),
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+              throw new Error(data.error || "Translation failed");
+            }
+
+            setOutputCode(data.translated_code || "");
+            setEvaluation({
+              source: data.source_evaluation,
+              target: data.target_evaluation,
+            });
+          } catch (conversionError) {
+            setError(conversionError.message);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        const sourceScore = evaluation?.source?.score ?? 0;
+        const targetScore = evaluation?.target?.score ?? 0;
+        const delta = targetScore - sourceScore;
+
+        return (
+          <div className="max-w-7xl mx-auto space-y-6 pb-12">
+            <div className="bg-[#1e1e1e] p-6 rounded-2xl border border-[#333]">
+              <h1 className="text-3xl font-bold tracking-tight text-white">
+                CodeVerter <span className="text-blue-500">PRO</span>
+              </h1>
+              <p className="mt-2 text-gray-400">Translate and optimize architecture in a single pass.</p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-[#1e1e1e] p-5 rounded-2xl border border-[#333]">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="font-semibold text-white">Source</h2>
+                  <select value={sourceLang} onChange={(e) => setSourceLang(e.target.value)} className="bg-[#2a2a2a] text-white border border-[#444] rounded p-1 text-sm outline-none">
+                    {LANGUAGES.map((language) => (
+                      <option key={language}>{language}</option>
+                    ))}
+                  </select>
+                </div>
+                <textarea value={sourceCode} onChange={(e) => setSourceCode(e.target.value)} placeholder="Paste legacy code here..." className="w-full h-96 p-4 bg-[#121212] text-gray-300 border border-[#333] rounded-xl outline-none text-sm"></textarea>
+                <button onClick={handleConvert} disabled={loading} className="w-full mt-4 bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 disabled:opacity-50">
+                  {loading ? "Analyzing & Translating..." : "Execute"}
+                </button>
+                {error && <div className="mt-3 text-red-500 text-sm">{error}</div>}
+              </div>
+
+              <div className="bg-[#1e1e1e] p-5 rounded-2xl border border-[#333]">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="font-semibold text-white">Target Artifact</h2>
+                  <select value={targetLang} onChange={(e) => setTargetLang(e.target.value)} className="bg-[#2a2a2a] text-white border border-[#444] rounded p-1 text-sm outline-none">
+                    {LANGUAGES.map((language) => (
+                      <option key={language}>{language}</option>
+                    ))}
+                  </select>
+                </div>
+                <textarea value={outputCode} readOnly placeholder="Optimized output..." className="w-full h-96 p-4 bg-[#121212] text-emerald-400 border border-[#333] rounded-xl outline-none text-sm"></textarea>
+                <button
+                  onClick={() => navigator.clipboard.writeText(outputCode)}
+                  className="w-full mt-4 bg-[#2a2a2a] text-white py-3 rounded-xl font-semibold hover:bg-[#333]"
+                >
+                  Copy Output
+                </button>
+              </div>
+            </div>
+
+            {evaluation && (
+              <div className="bg-[#1e1e1e] p-6 rounded-2xl border border-[#333]">
+                <h2 className="text-xl font-bold text-white mb-6">Cognitive Delta</h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-[#121212] p-4 rounded-xl border border-[#333] text-center">
+                    <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Source Score</div>
+                    <div className="text-4xl font-bold text-red-400">{sourceScore}</div>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Net Improvement</div>
+                      <div className={`text-3xl font-bold ${delta >= 0 ? "text-blue-500" : "text-rose-500"}`}>
+                        {delta >= 0 ? `+${delta}` : delta}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-[#121212] p-4 rounded-xl border border-[#333] text-center border-b-4 border-b-emerald-500">
+                    <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Target Score</div>
+                    <div className="text-4xl font-bold text-emerald-400">{targetScore}</div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div>
+                    <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Legacy Analysis</h3>
+                    <p className="text-gray-300 text-sm leading-relaxed">{evaluation.source?.summary || "No summary available."}</p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Transformations Applied</h3>
+                    <div className="space-y-3">
+                      {(evaluation.target?.improvements_made || []).map((improvement, index) => (
+                        <div key={index} className="bg-[#121212] p-3 rounded border border-[#333] border-l-2 border-l-blue-500">
+                          <div className="text-xs text-blue-400 font-bold uppercase mb-1">{improvement.rule}</div>
+                          <div className="text-gray-300 text-sm">{improvement.action}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
