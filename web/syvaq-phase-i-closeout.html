@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>SYVAQ · Phase I Closeout · March 19, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07080f;
+  --bg2:#0a0b14;
+  --surface:#0d0f1a;
+  --surface2:#111320;
+  --border:rgba(196,178,130,.10);
+  --border-hi:rgba(196,178,130,.22);
+  --border-glow:rgba(196,178,130,.38);
+  --gold:#c4a85c;
+  --gold-dim:#8a7440;
+  --gold-glow:rgba(196,168,92,.12);
+  --gold-glow2:rgba(196,168,92,.06);
+  --ice:#5a9ecf;
+  --ok:#4aad8c;
+  --warn:#cf5560;
+  --text:#ddd8cc;
+  --muted:#57606e;
+  --dim:#383d47;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --mono:'JetBrains Mono','Courier New',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{background:#030406;color:var(--text);font-family:var(--mono);}
+body{min-height:100vh;}
+
+/* GRID TEXTURE */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(196,168,92,.016) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(196,168,92,.016) 1px,transparent 1px);
+  background-size:34px 34px;
+}
+
+/* TOP RULE */
+.top-rule{
+  height:1.5px;width:100%;
+  background:linear-gradient(90deg,transparent,var(--gold),rgba(196,178,130,.5) 55%,transparent);
+  position:relative;z-index:2;
+}
+
+/* HERO */
+.hero{
+  padding:60px 64px 52px;
+  background:radial-gradient(ellipse at 50% -10%,rgba(196,168,92,.08),transparent 55%),var(--bg);
+  border-bottom:1px solid var(--border);
+  position:relative;z-index:1;
+}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:52px;}
+.logo-img{height:52px;display:block;filter:brightness(1.05);}
+.doc-plate{text-align:right;}
+.doc-id{font-size:9px;letter-spacing:.18em;color:var(--muted);line-height:2.2;text-transform:uppercase;}
+.status-chip{
+  display:inline-flex;align-items:center;gap:7px;margin-top:10px;
+  padding:5px 13px;border:1px solid var(--border-hi);border-radius:3px;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
+}
+.status-chip .dot{
+  width:5px;height:5px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 6px var(--gold);
+  animation:glow 2.4s ease-in-out infinite;
+}
+@keyframes glow{0%,100%{opacity:1}50%{opacity:.35}}
+
+.eyebrow{font-size:9.5px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.hl{font-family:var(--serif);font-size:64px;font-weight:300;line-height:.92;letter-spacing:-.01em;color:var(--text);}
+.hl em{font-style:italic;color:var(--gold);}
+.hl-sub{margin-top:16px;padding-left:2px;display:flex;gap:14px;align-items:flex-start;}
+.hl-rule{width:1.5px;background:linear-gradient(to bottom,var(--gold),transparent);flex-shrink:0;align-self:stretch;margin-top:4px;}
+.hl-txt{font-family:var(--mono);font-size:12px;font-weight:300;color:var(--muted);line-height:1.9;max-width:560px;}
+.hl-txt strong{font-weight:400;color:var(--text);}
+
+.meta-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--border);border-radius:6px;overflow:hidden;
+  margin-top:38px;background:rgba(255,255,255,.015);
+}
+.mc{padding:16px 22px;border-right:1px solid var(--border);}
+.mc:last-child{border-right:none;}
+.ml{font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.mv{font-size:12px;letter-spacing:.06em;color:var(--text);line-height:1.5;}
+
+/* BETA BOUNDARY */
+.beta-bar{
+  padding:14px 64px;background:rgba(196,168,92,.04);
+  border-bottom:1px solid var(--border);position:relative;z-index:1;
+  display:flex;align-items:center;gap:16px;
+}
+.beta-tag{
+  font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);border:1px solid var(--border-hi);
+  padding:4px 11px;border-radius:2px;white-space:nowrap;flex-shrink:0;
+}
+.beta-txt{font-size:11px;font-weight:300;color:var(--muted);line-height:1.65;letter-spacing:.04em;}
+.beta-txt strong{font-weight:400;color:var(--text);}
+
+/* SECTIONS */
+.sec{padding:52px 64px;border-bottom:1px solid var(--border);position:relative;z-index:1;}
+.sec-rule{display:flex;align-items:baseline;gap:16px;margin-bottom:28px;}
+.sec-n{font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);flex-shrink:0;}
+.sec-t{font-family:var(--serif);font-size:32px;font-weight:300;letter-spacing:.01em;line-height:1.05;}
+.prose{font-size:12px;font-weight:300;color:var(--muted);line-height:1.95;max-width:580px;letter-spacing:.04em;}
+.prose strong{font-weight:400;color:var(--text);}
+
+/* DEMO LAUNCH */
+.demo-frame{
+  border:1px solid var(--border-hi);border-radius:8px;
+  background:linear-gradient(135deg,rgba(196,168,92,.04),rgba(90,158,207,.02) 60%,transparent);
+  padding:44px 40px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.demo-frame::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:.6;
+}
+.demo-orbit{
+  position:relative;width:80px;height:80px;margin:0 auto 22px;
+}
+.demo-core{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+}
+.demo-ring{
+  width:80px;height:80px;border-radius:50%;
+  border:1px solid var(--border-hi);
+  animation:spin 12s linear infinite;
+}
+.demo-ring::after{
+  content:'';position:absolute;top:-2px;left:30%;
+  width:5px;height:5px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 10px var(--gold);
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.demo-center{
+  width:28px;height:28px;border-radius:50%;background:var(--gold);
+  opacity:.15;box-shadow:0 0 24px var(--gold);
+}
+.demo-title{font-family:var(--serif);font-size:26px;font-weight:300;margin-bottom:8px;letter-spacing:.02em;}
+.demo-sub{font-size:11px;font-weight:300;color:var(--muted);margin-bottom:28px;letter-spacing:.08em;line-height:1.7;}
+.demo-btn{
+  display:inline-block;padding:14px 40px;border:1px solid var(--gold);
+  color:var(--gold);font-family:var(--mono);font-size:10px;letter-spacing:.28em;
+  text-transform:uppercase;text-decoration:none;cursor:pointer;
+  background:var(--gold-glow2);border-radius:3px;
+  transition:background .3s,box-shadow .3s;
+}
+.demo-btn:hover{background:var(--gold-glow);box-shadow:0 0 28px rgba(196,168,92,.12);}
+.demo-note{margin-top:14px;font-size:9px;letter-spacing:.16em;color:var(--dim);}
+.demo-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px;text-align:left;}
+.dstep{padding:16px;border:1px solid var(--border);border-radius:5px;background:rgba(255,255,255,.015);}
+.ds-n{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.ds-t{font-size:12px;color:var(--text);margin-bottom:4px;}
+.ds-d{font-size:10px;font-weight:300;color:var(--muted);line-height:1.6;letter-spacing:.04em;}
+
+/* CONTAINMENT TABLE */
+.tbl{width:100%;border-collapse:collapse;margin-top:16px;}
+.tbl th{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);padding:0 0 12px;text-align:left;font-weight:300;border-bottom:1px solid var(--border);}
+.tbl td{padding:14px 0;font-size:11px;font-weight:300;border-bottom:1px solid var(--border);letter-spacing:.04em;vertical-align:top;line-height:1.6;}
+.tbl td:first-child{color:var(--muted);font-size:9.5px;width:130px;letter-spacing:.08em;}
+.tbl td:nth-child(2){color:var(--text);padding-right:24px;}
+.tbl td:last-child{color:var(--ok);font-size:10px;letter-spacing:.06em;}
+.tbl tr:last-child td{border-bottom:none;}
+
+/* PHASE II UPSELL — the money shot */
+.phase2-sec{
+  padding:64px 64px;border-bottom:1px solid var(--border);
+  background:radial-gradient(ellipse at 30% 50%,rgba(196,168,92,.04),transparent 60%),var(--bg);
+  position:relative;z-index:1;
+}
+.phase2-inner{max-width:960px;}
+.phase2-header{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;margin-bottom:52px;}
+.phase2-eyebrow{font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.phase2-hl{font-family:var(--serif);font-size:52px;font-weight:300;line-height:.95;letter-spacing:-.01em;}
+.phase2-hl em{font-style:italic;}
+.phase2-body{font-size:12px;font-weight:300;color:var(--muted);line-height:1.95;letter-spacing:.04em;margin-top:18px;}
+.phase2-body strong{font-weight:400;color:var(--text);}
+.activation-card{
+  border:1px solid var(--border-hi);border-radius:6px;
+  background:linear-gradient(135deg,rgba(196,168,92,.05),rgba(196,168,92,.02) 60%,transparent);
+  padding:28px;position:relative;overflow:hidden;
+}
+.activation-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.ac-label{font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
+.ac-price{font-family:var(--serif);font-size:56px;font-weight:300;color:var(--text);line-height:1;}
+.ac-price-note{font-size:10px;color:var(--muted);letter-spacing:.14em;margin-top:6px;}
+.ac-divider{height:1px;background:var(--border);margin:20px 0;}
+.ac-item{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;}
+.ac-item:last-child{margin-bottom:0;}
+.ac-item-name{font-size:10px;color:var(--muted);letter-spacing:.08em;}
+.ac-item-val{font-size:11px;color:var(--text);letter-spacing:.06em;}
+.ac-item-val.highlight{color:var(--gold);}
+.window-tag{
+  display:flex;align-items:center;gap:8px;margin-top:20px;
+  padding:10px 14px;border:1px solid var(--border);border-radius:4px;
+  background:rgba(255,255,255,.02);
+}
+.window-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 6px var(--gold);animation:glow 2.4s ease-in-out infinite;flex-shrink:0;}
+.window-txt{font-size:9.5px;color:var(--muted);letter-spacing:.1em;line-height:1.5;}
+
+/* DELIVERABLE UNLOCKS */
+.unlock-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px;}
+.unlock-card{
+  padding:20px;border:1px solid var(--border);border-radius:5px;
+  background:rgba(255,255,255,.015);position:relative;
+}
+.unlock-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.unlock-card:hover::before{opacity:.6;}
+.unlock-icon{font-size:18px;margin-bottom:12px;display:block;}
+.unlock-n{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.unlock-title{font-size:13px;color:var(--text);margin-bottom:6px;letter-spacing:.04em;}
+.unlock-desc{font-size:10px;font-weight:300;color:var(--muted);line-height:1.65;letter-spacing:.04em;}
+
+/* DELIVERY REGISTER */
+.reg-group-lbl{
+  font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);
+  padding:14px 0 10px;display:flex;align-items:center;gap:12px;
+}
+.reg-group-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
+.reg-row{
+  display:grid;grid-template-columns:26px 1fr 52px 80px;
+  padding:13px 0;border-bottom:1px solid rgba(196,168,92,.06);align-items:start;
+}
+.reg-row:last-child{border-bottom:none;}
+.reg-n{font-size:9px;color:var(--dim);letter-spacing:.08em;padding-top:1px;}
+.reg-name{font-size:12px;color:var(--text);letter-spacing:.04em;margin-bottom:2px;}
+.reg-path{font-size:9px;color:var(--muted);letter-spacing:.04em;font-family:var(--mono);}
+.reg-type{font-size:9px;color:var(--muted);letter-spacing:.06em;padding-right:8px;padding-top:1px;}
+.tag-ok{font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ok);background:rgba(74,173,140,.08);border:1px solid rgba(74,173,140,.2);padding:2px 8px;border-radius:2px;white-space:nowrap;display:inline-block;}
+.tag-sg{font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);background:rgba(196,168,92,.08);border:1px solid var(--border-hi);padding:2px 8px;border-radius:2px;white-space:nowrap;display:inline-block;}
+
+/* PHASE ARC */
+.phase-arc{display:flex;gap:8px;margin-top:8px;}
+.p-col{flex:1;padding:22px 18px;border-radius:5px;border:1px solid var(--border);background:rgba(255,255,255,.015);}
+.p-col.active{background:rgba(196,168,92,.04);border-color:var(--border-hi);}
+.p-col-n{font-size:7px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.p-col.active .p-col-n{color:var(--gold);}
+.p-col-t{font-family:var(--serif);font-size:18px;font-weight:300;margin-bottom:7px;line-height:1.2;}
+.p-col-d{font-size:10px;font-weight:300;color:var(--muted);line-height:1.7;letter-spacing:.04em;}
+.p-col-price{font-family:var(--serif);font-size:22px;margin-top:14px;}
+.p-col.active .p-col-price{color:var(--ok);}
+.p-col:not(.active) .p-col-price{color:var(--gold);}
+.p-tag{display:inline-block;margin-top:8px;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+.p-done{background:rgba(74,173,140,.08);color:var(--ok);border:1px solid rgba(74,173,140,.22);}
+.p-open{background:rgba(196,168,92,.06);color:var(--gold);border:1px solid var(--border-hi);}
+.p-future{background:rgba(255,255,255,.03);color:var(--dim);border:1px solid var(--border);}
+
+/* LEGAL CLAUSES */
+.lc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;}
+.lc{padding:20px;border:1px solid var(--border);border-radius:5px;background:rgba(255,255,255,.015);}
+.lc-t{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.lc p{font-size:10.5px;font-weight:300;color:var(--muted);line-height:1.75;letter-spacing:.04em;}
+
+/* IP BLOCKS */
+.ip-block{
+  padding:20px 24px;border-radius:5px;background:rgba(255,255,255,.015);
+  border:1px solid var(--border);border-left:2px solid var(--gold);margin-top:10px;
+}
+.ip-block p{font-size:11px;font-weight:300;color:var(--muted);line-height:1.85;letter-spacing:.04em;}
+.ip-block strong{font-weight:400;color:var(--text);}
+
+/* ACCEPTANCE */
+.ac-list{margin-top:8px;}
+.acr{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid rgba(196,168,92,.06);}
+.acr:last-child{border-bottom:none;}
+.chk-box{
+  width:18px;height:18px;border-radius:3px;border:1px solid var(--border-hi);
+  flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;
+}
+.chk-box.done{border-color:var(--ok);background:rgba(74,173,140,.08);color:var(--ok);font-size:10px;}
+.acr-txt{font-size:11px;font-weight:300;color:var(--muted);line-height:1.65;letter-spacing:.04em;}
+.acr-txt strong{font-weight:400;color:var(--text);}
+
+/* SIGNATURES */
+.sigs{
+  padding:52px 64px;display:grid;grid-template-columns:1fr 1fr;gap:48px;
+  border-bottom:1px solid var(--border);position:relative;z-index:1;
+}
+.sig-lbl{font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+.sig-rule{height:1px;background:var(--border);margin-bottom:10px;}
+.sig-name{font-family:var(--serif);font-size:18px;font-style:italic;color:rgba(221,216,204,.4);}
+.sig-title{font-size:9px;font-weight:300;color:var(--dim);letter-spacing:.12em;margin-top:4px;}
+.sig-fields{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px;}
+.sig-field{border-bottom:1px solid var(--border);padding-bottom:6px;font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);}
+
+/* FOOTER */
+.foot{
+  padding:20px 64px;display:flex;justify-content:space-between;align-items:center;
+  position:relative;z-index:1;
+}
+.fl{font-size:9px;font-weight:300;color:var(--dim);line-height:2;letter-spacing:.06em;}
+.fr{font-size:9px;font-weight:300;color:var(--dim);text-align:right;line-height:2;letter-spacing:.06em;}
+.foot-mark{font-family:var(--serif);font-size:14px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero,.sec,.phase2-sec,.sigs,.foot{padding:36px 24px;}
+  .beta-bar{padding:14px 24px;flex-direction:column;align-items:flex-start;}
+  .hero-top{flex-direction:column;gap:20px;}
+  .doc-plate{text-align:left;}
+  .meta-grid{grid-template-columns:1fr 1fr;}
+  .hl{font-size:44px;}
+  .unlock-grid,.lc-grid,.phase-arc{grid-template-columns:1fr;}
+  .phase2-header{grid-template-columns:1fr;}
+  .demo-steps{grid-template-columns:1fr;}
+  .sigs{grid-template-columns:1fr;}
+}
+@media(max-width:640px){
+  .hl{font-size:34px;}
+  .meta-grid{grid-template-columns:1fr;}
+  .mc{border-right:none;border-bottom:1px solid var(--border);}
+  .mc:last-child{border-bottom:none;}
+  .tbl{display:block;overflow-x:auto;}
+}
+</style>
+</head>
+<body>
+<div class="top-rule"></div>
+<div class="hero">
+  <div class="hero-top">
+    <img class="logo-img" src="" alt="SYVAQ">
+    <div class="doc-plate">
+      <div class="doc-id">SYVAQ_Phase_I_Master_Closeout_2026-03-19<br>ST-SYVAQ-2026-02-24-vPHASEI · v2.1 · Confidential<br>Governing Law: State of New York</div>
+      <div class="status-chip"><div class="dot"></div>Phase I · Delivered March 19, 2026</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">Phase I Systems Triage · Master Closeout Packet</div>
+  <div class="hl">Everything promised<br>in Phase I, <em>delivered.</em></div>
+  <div class="hl-sub">
+    <div class="hl-rule"></div>
+    <div class="hl-txt">
+      Delivered to <strong>Lilly Simpson, CEO — SYVAQ Technologies LLC</strong><br>
+      This package constitutes the complete Phase I closeout delivery as of March 19, 2026. All contractual Phase I deliverables have been transmitted. The Safety Signal Artifact remains a local, contained, non-production demonstration module subject to the Beta Boundary. Infrastructure activation, live routing, hosting, persistence, and deployment remain Phase II work and require a separate written agreement. <strong>Phase I proves behavior. Phase II activates infrastructure.</strong>
+    </div>
+  </div>
+  <div class="meta-grid">
+    <div class="mc"><div class="ml">Delivered</div><div class="mv">March 19, 2026</div></div>
+    <div class="mc"><div class="ml">Agreement</div><div class="mv">ST-SYVAQ-2026-02-24-vPHASEI<br>v2.1 · March 2, 2026</div></div>
+    <div class="mc"><div class="ml">Phase I Fee</div><div class="mv">$2,500 USD<br>Paid &amp; Confirmed</div></div>
+    <div class="mc"><div class="ml">Phase Status</div><div class="mv">Phase I Complete<br>Beta Boundary Active</div></div>
+  </div>
+</div>
+
+<div class="beta-bar">
+  <div class="beta-tag">Beta Boundary Active</div>
+  <div class="beta-txt"><strong>60-day internal evaluation window begins March 19, 2026 and closes May 18, 2026.</strong> Maximum 50 internal demonstrations total. No public release, no production deployment, no routing, no live data, no hosting, no external beta, and no commercialization are authorized during this window unless separately contracted in writing.</div>
+</div>
+
+<div class="sec">
+  <div class="sec-rule"><span class="sec-n">00</span><h2 class="sec-t">Safety Signal Artifact v0.1</h2></div>
+  <p class="prose" style="margin-bottom:28px;">The behavior exists. The architecture is proven. The session flow, the trusted circle logic, the escalation pathway — all present, documented, and locally executable. <strong>This is what Phase I delivers: not a concept, a proof.</strong></p>
+
+  <div class="demo-frame">
+    <div class="demo-orbit">
+      <div class="demo-ring"></div>
+      <div class="demo-core"><div class="demo-center"></div></div>
+    </div>
+    <div class="demo-title">Open the Safety Signal Demo</div>
+    <div class="demo-sub">Fully local · zero internet · zero installation · runs in any browser<br>Boot → Verification → Protected Mode → Signal Session → Escalation</div>
+    <a class="demo-btn" href="Demo/index.html">Launch Demonstration →</a>
+    <div class="demo-note">Local execution · Session secured · No data transmitted · Contained mode · Beta Boundary applies · Phase I Artifact v0.1 · March 19, 2026</div>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="fl"><div class="foot-mark">SYVAQ</div>Phase I Master Closeout Packet · SYVAQ_Phase_I_Master_Closeout_2026-03-19<br>ST-SYVAQ-2026-02-24-vPHASEI · v2.1 · March 2, 2026 Consolidated Record</div>
+  <div class="fr">Prepared by AVC Systems Studio / Intuition Labs R&amp;D<br>Confidential — SYVAQ Technologies LLC Internal Use Only<br>All architectural IP retained by AVC Systems Studio / Intuition Labs R&amp;D · March 19, 2026</div>
+</div>
+<div class="top-rule"></div>
+</body>
+</html>
