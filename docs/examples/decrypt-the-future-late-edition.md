@@ -49,6 +49,14 @@ Files used in the client-side preview and production pipelines:
     {
       "headline": "Mercury texts the Fed",
       "blurb": "Short-term noise, long-term threads..."
+    },
+    {
+      "headline": "Venus Shops for Luxury Goods",
+      "blurb": "Consumer discretionary stocks see a bump..."
+    },
+    {
+      "headline": "Mars Declares War on Deadlines",
+      "blurb": "Productivity surges across all sectors..."
     }
   ],
   "signals": {
