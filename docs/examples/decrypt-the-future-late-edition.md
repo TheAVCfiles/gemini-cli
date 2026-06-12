@@ -71,7 +71,6 @@ Files used in the client-side preview and production pipelines:
   },
   "client": {
     "id": "client_avc_19920225",
-    "name": "Allison Van Cura",
     "tier": "Premier"
   }
 }
