@@ -15,3 +15,7 @@ Use this codex to:
 3. Keep control of tone, authority, and custody of your story.
 
 Each file is intentionally short, skimmable, and reference-friendly.
+
+## Addendum Index
+
+- `12_Bias_Basis_Audit.md` — StagePort audit format for measuring model-driven identity drift, credibility tax, clinical drift, and administrative support asymmetry across counterfactual founder containers.
