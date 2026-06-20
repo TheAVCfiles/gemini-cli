@@ -40,6 +40,17 @@ This brief converts the existing StagePort memnode and product specs into a prac
 - **Outputs:** Role assignments, IX-friendly change log, receipts bundle for legal/archive.
 - **Infra hooks:** Keep FSM and risk weights server-side; ship only signed decisions to clients. Maintain per-surface node schema for HOME/CALLBOARD rollups.
 
+### Founderfeit Audit (persona + credibility drift)
+- **Product names:** Token Counterfeit for the cost-layer workflow audit; Founderfeit for the persona/audit layer.
+- **Inputs:** Company artifacts, controlled founder identity containers, evidence packets, task prompts, execution traces, and token-level transcripts.
+- **Processing:** Run identical proof bundles through controlled founder profiles to detect model-driven narrative drift, unnecessary credibility checks, clinical drift, semantic friction, biased hesitation, unequal administrative initiative, and delayed execution.
+- **Outputs:** Founderfeit differential report, credibility-tax score, token-burn breakdown, administrative-initiative score, narrative-drift findings, and remediation notes for prompt routing or workflow policy.
+- **Core metric:** `Credibility Tax = Tokens spent before execution / Total tokens spent`.
+- **Secondary metric:** `Administrative Initiative = Useful autonomous work produced before the user has to re-explain, defend, or manage the model`.
+- **Taglines:** "Same proof. Different founder. Different cost." and "When the founder changes, does the work change?"
+- **Live stream title:** "Token Counterfeit: The Cost of Being Believed by AI".
+- **Infra hooks:** Store founder containers separately from company evidence; hash prompt/evidence bundles so audits compare identical proof across identity variants. Keep persona labels pseudonymous in exports unless the operator explicitly approves disclosure. Use synthetic audit personas only; do not fabricate real credentials, employment history, contracts, medical claims, or legal status.
+
 ## Implementation Steps (MVP)
 1. **Wire node schemas:** Apply the StagePort node schema to HOME and CALLBOARD to define inputs/outputs, owners, and safety grades for the first release.
 2. **Data minimization pass:** Implement pipelines that drop raw capture media after feature extraction; retain only derived metrics and IX audit hashes.
