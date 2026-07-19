@@ -111,6 +111,19 @@ const coderAgentCard: AgentCard = {
       inputModes: ['text'],
       outputModes: ['text'],
     },
+    {
+      id: 'compliance_tracking',
+      name: 'Compliance Tracking',
+      description:
+        'Tracks compliance requirements, audit readiness, regulatory gaps, and evidence collection for frameworks such as SOC 2, ISO 27001, GDPR, HIPAA, and PCI DSS.',
+      tags: ['compliance', 'audit', 'SOC 2', 'ISO 27001', 'GDPR', 'regulatory'],
+      examples: [
+        'Create a SOC 2 audit prep checklist with evidence owners.',
+        'Build a GDPR gap analysis and prioritized remediation plan.',
+      ],
+      inputModes: ['text'],
+      outputModes: ['text'],
+    },
   ],
   supportsAuthenticatedExtendedCard: false,
 };
