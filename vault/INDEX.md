@@ -13,7 +13,7 @@ The vault is the repository source of truth for durable source material, analysi
 
 ## Raw Captures
 
-_No raw captures have been archived yet._
+- `inbox/raw/2026-07-18-compliance-tracking-skill.md` — raw source specimen for compliance tracking readiness/evidence workflow and branch-gated archive practices.
 
 ## Analysis
 
